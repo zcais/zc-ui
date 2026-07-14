@@ -4,7 +4,7 @@
 
 Vue 3 企业级 UI 组件库
 
-[![CI](https://github.com/zhichang2022/zc-ui/actions/workflows/ci.yml/badge.svg)](https://github.com/zhichang2022/zc-ui/actions/workflows/ci.yml)
+[![CI](https://github.com/zcais/zc-ui/actions/workflows/ci.yml/badge.svg)](https://github.com/zcais/zc-ui/actions/workflows/ci.yml)
 [![npm version](https://img.shields.io/npm/v/@zc-ui/components.svg)](https://www.npmjs.com/package/@zc-ui/components)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Vue](https://img.shields.io/badge/Vue-3.4+-42b883.svg)](https://vuejs.org/)
@@ -108,14 +108,14 @@ Tooltip、Dialog、Pagination、Message、Notification、Loading
 
 ## 📖 文档
 
-- 🏠 [在线文档](https://zc-ui.github.io/zc-ui/)
+- 🏠 [在线文档](https://zcais.github.io/zc-ui/)
 - 📦 [npm 包](https://www.npmjs.com/package/@zc-ui/components)
 
 ## 💻 开发
 
 ```bash
 # 克隆项目
-git clone https://github.com/zhichang2022/zc-ui.git
+git clone https://github.com/zcais/zc-ui.git
 cd zc-ui
 
 # 安装依赖

@@ -29,7 +29,7 @@
   npm install @zc-ui/components
   ```
 
-  完整使用文档请参考 [在线文档](https://zc-ui.github.io/zc-ui/)。
+  完整使用文档请参考 [在线文档](https://zcais.github.io/zc-ui/)。
 
 ### Patch Changes
 
@@ -67,7 +67,7 @@
   npm install @zc-ui/components
   ```
 
-  完整使用文档请参考 [在线文档](https://zc-ui.github.io/zc-ui/)。
+  完整使用文档请参考 [在线文档](https://zcais.github.io/zc-ui/)。
 
 ### Patch Changes
 
@@ -105,7 +105,7 @@
   npm install @zc-ui/components
   ```
 
-  完整使用文档请参考 [在线文档](https://zc-ui.github.io/zc-ui/)。
+  完整使用文档请参考 [在线文档](https://zcais.github.io/zc-ui/)。
 
 ### Patch Changes
 

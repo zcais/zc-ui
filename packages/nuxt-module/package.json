@@ -4,14 +4,14 @@
   "description": "Nuxt 3 module for ZC UI — auto-imports components, composables, and the default theme.",
   "license": "MIT",
   "author": "ZC UI Team",
-  "homepage": "https://zc-ui.github.io/zc-ui",
+  "homepage": "https://zcais.github.io/zc-ui",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zhichang2022/zc-ui.git",
+    "url": "git+https://github.com/zcais/zc-ui.git",
     "directory": "packages/nuxt-module"
   },
   "bugs": {
-    "url": "https://github.com/zhichang2022/zc-ui/issues"
+    "url": "https://github.com/zcais/zc-ui/issues"
   },
   "keywords": [
     "nuxt",

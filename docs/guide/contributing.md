@@ -2,7 +2,7 @@
 
 感谢你对 ZC UI 项目的关注！本文档将帮助你了解如何参与项目贡献。
 
-完整指南请参阅 [CONTRIBUTING.md](https://github.com/zhichang2022/zc-ui/blob/main/CONTRIBUTING.md)，以下为核心要点摘要。
+完整指南请参阅 [CONTRIBUTING.md](https://github.com/zcais/zc-ui/blob/main/CONTRIBUTING.md)，以下为核心要点摘要。
 
 ## 环境准备
 
@@ -20,7 +20,7 @@ git clone https://github.com/your-username/zc-ui.git
 cd zc-ui
 
 # 2. 添加上游仓库
-git remote add upstream https://github.com/zhichang2022/zc-ui.git
+git remote add upstream https://github.com/zcais/zc-ui.git
 
 # 3. 安装依赖
 pnpm install
@@ -200,9 +200,9 @@ describe('ZcButton', () => {
 
 ## 问题反馈
 
-- [GitHub Issues](https://github.com/zhichang2022/zc-ui/issues) — Bug 报告和功能请求
-- [GitHub Discussions](https://github.com/zhichang2022/zc-ui/discussions) — 问题讨论
+- [GitHub Issues](https://github.com/zcais/zc-ui/issues) — Bug 报告和功能请求
+- [GitHub Discussions](https://github.com/zcais/zc-ui/discussions) — 问题讨论
 
 ## License
 
-本项目基于 [MIT License](https://github.com/zhichang2022/zc-ui/blob/main/LICENSE) 发布。提交的代码将同样基于该许可。
+本项目基于 [MIT License](https://github.com/zcais/zc-ui/blob/main/LICENSE) 发布。提交的代码将同样基于该许可。

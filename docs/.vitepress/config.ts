@@ -196,7 +196,7 @@ export default defineConfig({
       ],
     },
 
-    socialLinks: [{ icon: 'github', link: 'https://github.com/zhichang2022/zc-ui' }],
+    socialLinks: [{ icon: 'github', link: 'https://github.com/zcais/zc-ui' }],
 
     search: {
       provider: 'local',

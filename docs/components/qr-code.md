@@ -10,7 +10,7 @@
 
 ```vue
 <template>
-  <ZcQRCode value="https://github.com/zhichang2022/zc-ui" />
+  <ZcQRCode value="https://github.com/zcais/zc-ui" />
 </template>
 ```
 

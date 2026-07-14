@@ -50,7 +50,7 @@ pnpm add @zc-ui/theme
 如果你想获取最新的开发版本，可以从源码构建：
 
 ```bash
-git clone https://github.com/zhichang2022/zc-ui.git
+git clone https://github.com/zcais/zc-ui.git
 cd zc-ui
 pnpm install
 pnpm build
