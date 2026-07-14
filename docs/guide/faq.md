@@ -232,5 +232,5 @@ ZC UI 支持 SSR。详见 [SSR / Nuxt 兼容指南](./auto-import#ssr-模式)。
 
 如果你遇到了文档中未覆盖的问题：
 
-- [提交 GitHub Issue](https://github.com/zc-ui/zc-ui/issues) — Bug 报告
-- [GitHub Discussions](https://github.com/zc-ui/zc-ui/discussions) — 使用问题讨论
+- [提交 GitHub Issue](https://github.com/zhichang2022/zc-ui/issues) — Bug 报告
+- [GitHub Discussions](https://github.com/zhichang2022/zc-ui/discussions) — 使用问题讨论

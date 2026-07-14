@@ -18,7 +18,7 @@ git clone https://github.com/your-username/zc-ui.git
 cd zc-ui
 
 # 2. 添加上游仓库
-git remote add upstream https://github.com/zc-ui/zc-ui.git
+git remote add upstream https://github.com/zhichang2022/zc-ui.git
 
 # 3. 安装依赖
 pnpm install
@@ -418,8 +418,8 @@ jobs:
 
 ## 问题反馈
 
-- [GitHub Issues](https://github.com/zc-ui/zc-ui/issues) — Bug 报告和功能请求
-- [GitHub Discussions](https://github.com/zc-ui/zc-ui/discussions) — 问题讨论
+- [GitHub Issues](https://github.com/zhichang2022/zc-ui/issues) — Bug 报告和功能请求
+- [GitHub Discussions](https://github.com/zhichang2022/zc-ui/discussions) — 问题讨论
 
 ## License
 

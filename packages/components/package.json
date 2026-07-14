@@ -7,11 +7,11 @@
   "homepage": "https://zc-ui.github.io/zc-ui",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zc-ui/zc-ui.git",
+    "url": "git+https://github.com/zhichang2022/zc-ui.git",
     "directory": "packages/components"
   },
   "bugs": {
-    "url": "https://github.com/zc-ui/zc-ui/issues"
+    "url": "https://github.com/zhichang2022/zc-ui/issues"
   },
   "keywords": [
     "vue",

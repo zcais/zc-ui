@@ -4,8 +4,8 @@
 
 完整的 CHANGELOG 文件请查阅：
 
-- [GitHub Releases](https://github.com/zc-ui/zc-ui/releases)
-- [CHANGELOG.md（仓库根目录）](https://github.com/zc-ui/zc-ui/blob/main/CHANGELOG.md)
+- [GitHub Releases](https://github.com/zhichang2022/zc-ui/releases)
+- [CHANGELOG.md（仓库根目录）](https://github.com/zhichang2022/zc-ui/blob/main/CHANGELOG.md)
 
 ## 版本规范
 
@@ -21,7 +21,7 @@ ZC UI 遵循 [Semantic Versioning (语义化版本)](https://semver.org/lang/zh-
 
 ### 在 GitHub 上
 
-1. 访问 [Releases 页面](https://github.com/zc-ui/zc-ui/releases) 查看每个版本的详细变更
+1. 访问 [Releases 页面](https://github.com/zhichang2022/zc-ui/releases) 查看每个版本的详细变更
 2. 每个 Release 包含：版本号、发布日期、变更摘要、变更详情
 
 ### 通过 npm
@@ -102,5 +102,5 @@ pnpm changeset
 4. 合并 Version PR 后，CI 自动发布到 npm
 
 ::: tip
-你可以通过查看 [`.changeset/` 目录](https://github.com/zc-ui/zc-ui/tree/main/.changeset) 了解未发布的变更。
+你可以通过查看 [`.changeset/` 目录](https://github.com/zhichang2022/zc-ui/tree/main/.changeset) 了解未发布的变更。
 :::
