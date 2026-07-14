@@ -1,0 +1,47 @@
+/**
+ * ZcIconOctahedronPlus
+ *
+ * Auto-generated from @tabler/icons — do not edit manually.
+ * Source: icons/outline/octahedron-plus.svg
+ */
+
+import { h, type FunctionalComponent } from 'vue'
+import { withInstall } from '@zc-ui/utils'
+import type { ZcIconProps } from '../types'
+import { registerIcon } from '../icon-registry'
+
+const _body =
+  '<path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M21.498 12.911l.206 -.208a.984 .984 0 0 0 0 -1.407l-8.845 -8.948a1.233 1.233 0 0 0 -1.718 0l-8.845 8.949a.984 .984 0 0 0 0 1.407l8.845 8.949a1.234 1.234 0 0 0 1.718 -.001l.08 -.081" /><path d="M2 12c.004 .086 .103 .178 .296 .246l8.845 2.632c.459 .163 1.259 .163 1.718 0l2.634 -.784m5.41 -1.61l.801 -.238c.195 -.07 .294 -.156 .296 -.243" /><path d="M12 2.12v19.76" /><path d="M16 19h6" /><path d="M19 16v6" />'
+
+// Register this icon's SVG data into the global icon pool
+registerIcon('octahedron-plus', { path: _body, viewBox: '0 0 24 24', strokeWidth: 2, fill: 'none' })
+
+const _comp: FunctionalComponent<ZcIconProps> = (props) => {
+  return h('svg', {
+    xmlns: 'http://www.w3.org/2000/svg',
+    width: props.size ?? 24,
+    height: props.size ?? 24,
+    viewBox: '0 0 24 24',
+    fill: 'none',
+    stroke: props.color ?? 'currentColor',
+    'stroke-width': props.absoluteStrokeWidth
+      ? Number(props.strokeWidth ?? 2) / (Number(props.size ?? 24) / 24)
+      : (props.strokeWidth ?? 2),
+    'stroke-linecap': 'round',
+    'stroke-linejoin': 'round',
+    class: ['zc-icon', props.class, { 'zc-icon--spin': props.spin }],
+    innerHTML: _body,
+  })
+}
+
+_comp.props = {
+  size: { type: [Number, String], default: 24 },
+  color: { type: String, default: 'currentColor' },
+  strokeWidth: { type: [Number, String], default: 2 },
+  absoluteStrokeWidth: { type: Boolean, default: false },
+  spin: { type: Boolean, default: false },
+  class: { type: [String, Object, Array], default: '' },
+}
+_comp.displayName = 'ZcIconOctahedronPlus'
+
+export const ZcIconOctahedronPlus = withInstall(_comp, 'ZcIconOctahedronPlus')

@@ -1,0 +1,25 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "baseUrl": ".",
+    "declaration": true,
+    "declarationDir": "./dist/types",
+    "composite": true,
+    "paths": {
+      "@zc-ui/utils": ["../utils/src"],
+      "@zc-ui/hooks": ["../hooks/src"],
+      "@zc-ui/locale": ["../locale/src"],
+      "@zc-ui/theme": ["../theme/src"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.vue"],
+  "exclude": ["node_modules", "dist"],
+  "references": [
+    { "path": "../utils" },
+    { "path": "../hooks" },
+    { "path": "../locale" },
+    { "path": "../theme" }
+  ]
+}

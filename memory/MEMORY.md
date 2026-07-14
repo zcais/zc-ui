@@ -1,0 +1,1 @@
+- [VitePress li margin leaks into list components](vitepress-li-margin-leaks-into-list-components.md) — .vp-doc li+li pushes zc-ui <ul>/<li> components; fix scoped overrides with :deep()

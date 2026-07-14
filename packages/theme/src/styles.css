@@ -1,0 +1,293 @@
+@import 'tailwindcss';
+
+/* ============================================================
+ * CSS Cascade Layers
+ *
+ * Establishes a predictable priority order so that:
+ *   - ZC UI component styles don't accidentally override user CSS
+ *   - Runtime theme overrides always take precedence
+ *
+ * Priority (low → high):
+ *   zc-reset → zc-tokens → zc-base → zc-components → zc-overrides
+ * ============================================================ */
+@layer zc-reset, zc-tokens, zc-base, zc-components, zc-overrides;
+
+/* ============================================================
+ * ZC UI Tailwind CSS v4 Theme Integration
+ *
+ * Maps design tokens from @zc-ui/theme into Tailwind's
+ * CSS-first theme configuration.
+ *
+ * Color usage:
+ *   bg-zc-primary-500, text-zc-danger-300, border-zc-info-700, ...
+ *
+ * Dark mode:
+ *   <html class="dark"> activates dark overrides.
+ *   Use dark: prefix: class="dark:bg-zc-info-900"
+ * ============================================================ */
+
+/* Dark mode: triggered by `.dark` class on <html> */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer zc-tokens {
+@theme {
+  /* ---- Primary (blue) ---- */
+  --color-zc-primary-50: #ecf5ff;
+  --color-zc-primary-100: #d9ecff;
+  --color-zc-primary-200: #c6e2ff;
+  --color-zc-primary-300: #a0cfff;
+  --color-zc-primary-400: #79bbff;
+  --color-zc-primary-500: #409eff;
+  --color-zc-primary-600: #337ecc;
+  --color-zc-primary-700: #2a6cb3;
+  --color-zc-primary-800: #1d4f7f;
+  --color-zc-primary-900: #0d2640;
+  --color-zc-primary-950: #06121e;
+
+  /* ---- Success (green) ---- */
+  --color-zc-success-50: #f0f9eb;
+  --color-zc-success-100: #e1f3d8;
+  --color-zc-success-200: #cfe8c3;
+  --color-zc-success-300: #b3e19d;
+  --color-zc-success-400: #95d575;
+  --color-zc-success-500: #67c23a;
+  --color-zc-success-600: #529b2e;
+  --color-zc-success-700: #427a27;
+  --color-zc-success-800: #325a1c;
+  --color-zc-success-900: #1f3a10;
+  --color-zc-success-950: #0e1d07;
+
+  /* ---- Warning (orange) ---- */
+  --color-zc-warning-50: #fdf6ec;
+  --color-zc-warning-100: #faecd8;
+  --color-zc-warning-200: #f8e3c5;
+  --color-zc-warning-300: #f3d19e;
+  --color-zc-warning-400: #ecbe77;
+  --color-zc-warning-500: #e6a23c;
+  --color-zc-warning-600: #b88230;
+  --color-zc-warning-700: #946626;
+  --color-zc-warning-800: #6f4c1c;
+  --color-zc-warning-900: #4a3212;
+  --color-zc-warning-950: #241907;
+
+  /* ---- Danger (red) ---- */
+  --color-zc-danger-50: #fef0f0;
+  --color-zc-danger-100: #fde2e2;
+  --color-zc-danger-200: #fcd3d3;
+  --color-zc-danger-300: #fab6b6;
+  --color-zc-danger-400: #f78989;
+  --color-zc-danger-500: #f56c6c;
+  --color-zc-danger-600: #c45656;
+  --color-zc-danger-700: #9d4444;
+  --color-zc-danger-800: #763231;
+  --color-zc-danger-900: #4f211f;
+  --color-zc-danger-950: #2a1010;
+
+  /* ---- Info (gray) ---- */
+  --color-zc-info-50: #f4f4f5;
+  --color-zc-info-100: #e9e9eb;
+  --color-zc-info-200: #dedfe0;
+  --color-zc-info-300: #c8c9cc;
+  --color-zc-info-400: #a6a9ad;
+  --color-zc-info-500: #909399;
+  --color-zc-info-600: #73767a;
+  --color-zc-info-700: #5c5e62;
+  --color-zc-info-800: #45474a;
+  --color-zc-info-900: #2e3032;
+  --color-zc-info-950: #171819;
+
+  /* ---- Text colors ---- */
+  --color-zc-text-primary: #303133;
+  --color-zc-text-regular: #606266;
+  --color-zc-text-secondary: #909399;
+  --color-zc-text-placeholder: #a8abb2;
+
+  /* ---- Border colors ---- */
+  --color-zc-border-base: #dcdfe6;
+  --color-zc-border-light: #e4e7ed;
+  --color-zc-border-lighter: #ebeef5;
+  --color-zc-border-extralight: #f2f6fc;
+
+  /* ---- Fill colors ---- */
+  --color-zc-fill-base: #f0f2f5;
+  --color-zc-fill-light: #f5f7fa;
+  --color-zc-fill-lighter: #fafafa;
+
+  /* ---- Background colors ---- */
+  --color-zc-bg-base: #ffffff;
+  --color-zc-bg: #ffffff;
+  --color-zc-white: #ffffff;
+
+  /* ---- Disabled text ---- */
+  --color-zc-text-disabled: #c0c4cc;
+
+  /* ---- Font sizes ---- */
+  --text-zc-xs: 12px;
+  --text-zc-sm: 13px;
+  --text-zc-base: 14px;
+  --text-zc-md: 16px;
+  --text-zc-lg: 18px;
+  --text-zc-xl: 20px;
+
+  /* ---- Border radius ---- */
+  --radius-zc-sm: 2px;
+  --radius-zc-base: 4px;
+  --radius-zc-md: 6px;
+  --radius-zc-lg: 8px;
+  --radius-zc-round: 20px;
+  --radius-zc-circle: 50%;
+
+  /* ---- Spacing ---- */
+  --spacing-zc-xs: 4px;
+  --spacing-zc-sm: 8px;
+  --spacing-zc-base: 12px;
+  --spacing-zc-md: 16px;
+  --spacing-zc-lg: 24px;
+  --spacing-zc-xl: 32px;
+
+  /* ---- Shadows (box-shadow) ---- */
+  --shadow-zc-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-zc-base: 0 2px 8px 0 rgba(0, 0, 0, 0.08);
+  --shadow-zc-md: 0 4px 12px 0 rgba(0, 0, 0, 0.1);
+  --shadow-zc-lg: 0 8px 24px 0 rgba(0, 0, 0, 0.12);
+  --shadow-zc-xl: 0 16px 48px 0 rgba(0, 0, 0, 0.16);
+  --shadow-zc-dark: 0 4px 12px 0 rgba(0, 0, 0, 0.5);
+
+  /* ---- Transition durations ---- */
+  --transition-duration-zc-fast: 0.15s;
+  --transition-duration-zc-base: 0.25s;
+  --transition-duration-zc-slow: 0.35s;
+
+  /* ---- Transition timing functions ---- */
+  --ease-zc-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-zc-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-zc-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-zc-sharp: cubic-bezier(0.4, 0, 0.6, 1);
+
+  /* ---- Z-index layers ---- */
+  --z-zc-base: 1;
+  --z-zc-dropdown: 1000;
+  --z-zc-sticky: 1100;
+  --z-zc-fixed: 1200;
+  --z-zc-modal: 1300;
+  --z-zc-popover: 1400;
+  --z-zc-tooltip: 1500;
+  --z-zc-message: 1600;
+}
+} /* end @layer zc-tokens */
+
+ /* ============================================================
+ * Dark mode overrides
+ *
+ * Activated by adding `.dark` class to <html>.
+ * - Color scales (50–950) are inverted via color-mix():
+ *     50–400  → dark surface tinted with the color
+ *     500      → kept as-is (brand color)
+ *     600–950  → lightened for readability on dark surfaces
+ * - Semantic tokens (text/border/fill/shadow) use hand-picked values.
+ * Usage: toggleDark() / setTheme('dark') from @zc-ui/theme
+ * ============================================================ */
+
+@layer zc-overrides {
+
+.dark {
+  /* ---- Primary scale (dark) ---- */
+  --color-zc-primary-50: color-mix(in srgb, #409eff 5%, #1a1a1a);
+  --color-zc-primary-100: color-mix(in srgb, #409eff 8%, #1a1a1a);
+  --color-zc-primary-200: color-mix(in srgb, #409eff 12%, #1a1a1a);
+  --color-zc-primary-300: color-mix(in srgb, #409eff 16%, #1a1a1a);
+  --color-zc-primary-400: color-mix(in srgb, #409eff 24%, #1a1a1a);
+  --color-zc-primary-500: #409eff;
+  --color-zc-primary-600: color-mix(in srgb, #409eff 85%, #ffffff);
+  --color-zc-primary-700: color-mix(in srgb, #409eff 70%, #ffffff);
+  --color-zc-primary-800: color-mix(in srgb, #409eff 55%, #ffffff);
+  --color-zc-primary-900: color-mix(in srgb, #409eff 40%, #ffffff);
+  --color-zc-primary-950: color-mix(in srgb, #409eff 30%, #ffffff);
+
+  /* ---- Success scale (dark) ---- */
+  --color-zc-success-50: color-mix(in srgb, #67c23a 5%, #1a1a1a);
+  --color-zc-success-100: color-mix(in srgb, #67c23a 8%, #1a1a1a);
+  --color-zc-success-200: color-mix(in srgb, #67c23a 12%, #1a1a1a);
+  --color-zc-success-300: color-mix(in srgb, #67c23a 16%, #1a1a1a);
+  --color-zc-success-400: color-mix(in srgb, #67c23a 24%, #1a1a1a);
+  --color-zc-success-500: #67c23a;
+  --color-zc-success-600: color-mix(in srgb, #67c23a 85%, #ffffff);
+  --color-zc-success-700: color-mix(in srgb, #67c23a 70%, #ffffff);
+  --color-zc-success-800: color-mix(in srgb, #67c23a 55%, #ffffff);
+  --color-zc-success-900: color-mix(in srgb, #67c23a 40%, #ffffff);
+  --color-zc-success-950: color-mix(in srgb, #67c23a 30%, #ffffff);
+
+  /* ---- Warning scale (dark) ---- */
+  --color-zc-warning-50: color-mix(in srgb, #e6a23c 5%, #1a1a1a);
+  --color-zc-warning-100: color-mix(in srgb, #e6a23c 8%, #1a1a1a);
+  --color-zc-warning-200: color-mix(in srgb, #e6a23c 12%, #1a1a1a);
+  --color-zc-warning-300: color-mix(in srgb, #e6a23c 16%, #1a1a1a);
+  --color-zc-warning-400: color-mix(in srgb, #e6a23c 24%, #1a1a1a);
+  --color-zc-warning-500: #e6a23c;
+  --color-zc-warning-600: color-mix(in srgb, #e6a23c 85%, #ffffff);
+  --color-zc-warning-700: color-mix(in srgb, #e6a23c 70%, #ffffff);
+  --color-zc-warning-800: color-mix(in srgb, #e6a23c 55%, #ffffff);
+  --color-zc-warning-900: color-mix(in srgb, #e6a23c 40%, #ffffff);
+  --color-zc-warning-950: color-mix(in srgb, #e6a23c 30%, #ffffff);
+
+  /* ---- Danger scale (dark) ---- */
+  --color-zc-danger-50: color-mix(in srgb, #f56c6c 5%, #1a1a1a);
+  --color-zc-danger-100: color-mix(in srgb, #f56c6c 8%, #1a1a1a);
+  --color-zc-danger-200: color-mix(in srgb, #f56c6c 12%, #1a1a1a);
+  --color-zc-danger-300: color-mix(in srgb, #f56c6c 16%, #1a1a1a);
+  --color-zc-danger-400: color-mix(in srgb, #f56c6c 24%, #1a1a1a);
+  --color-zc-danger-500: #f56c6c;
+  --color-zc-danger-600: color-mix(in srgb, #f56c6c 85%, #ffffff);
+  --color-zc-danger-700: color-mix(in srgb, #f56c6c 70%, #ffffff);
+  --color-zc-danger-800: color-mix(in srgb, #f56c6c 55%, #ffffff);
+  --color-zc-danger-900: color-mix(in srgb, #f56c6c 40%, #ffffff);
+  --color-zc-danger-950: color-mix(in srgb, #f56c6c 30%, #ffffff);
+
+  /* ---- Info scale (dark) ---- */
+  --color-zc-info-50: color-mix(in srgb, #909399 5%, #1a1a1a);
+  --color-zc-info-100: color-mix(in srgb, #909399 8%, #1a1a1a);
+  --color-zc-info-200: color-mix(in srgb, #909399 12%, #1a1a1a);
+  --color-zc-info-300: color-mix(in srgb, #909399 16%, #1a1a1a);
+  --color-zc-info-400: color-mix(in srgb, #909399 24%, #1a1a1a);
+  --color-zc-info-500: #909399;
+  --color-zc-info-600: color-mix(in srgb, #909399 85%, #ffffff);
+  --color-zc-info-700: color-mix(in srgb, #909399 70%, #ffffff);
+  --color-zc-info-800: color-mix(in srgb, #909399 55%, #ffffff);
+  --color-zc-info-900: color-mix(in srgb, #909399 40%, #ffffff);
+  --color-zc-info-950: color-mix(in srgb, #909399 30%, #ffffff);
+
+  /* ---- Text colors ---- */
+  --color-zc-text-primary: #e5eaf3;
+  --color-zc-text-regular: #cfd3dc;
+  --color-zc-text-secondary: #a3a6ad;
+  --color-zc-text-placeholder: #8d9095;
+
+  /* ---- Border colors ---- */
+  --color-zc-border-base: #4c4d4f;
+  --color-zc-border-light: #414243;
+  --color-zc-border-lighter: #363637;
+  --color-zc-border-extralight: #2b2b2c;
+
+  /* ---- Fill colors ---- */
+  --color-zc-fill-base: #303030;
+  --color-zc-fill-light: #262727;
+  --color-zc-fill-lighter: #1d1d1d;
+
+  /* ---- Background colors ---- */
+  --color-zc-bg-base: #1d1d1d;
+  --color-zc-bg: #1d1d1d;
+  --color-zc-white: #1a1a1a;
+
+  /* ---- Disabled text ---- */
+  --color-zc-text-disabled: #5c5e62;
+
+  /* ---- Shadow adjustments (deeper for dark mode) ---- */
+  --shadow-zc-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-zc-base: 0 2px 8px 0 rgba(0, 0, 0, 0.4);
+  --shadow-zc-md: 0 4px 12px 0 rgba(0, 0, 0, 0.5);
+  --shadow-zc-lg: 0 8px 24px 0 rgba(0, 0, 0, 0.6);
+  --shadow-zc-xl: 0 16px 48px 0 rgba(0, 0, 0, 0.7);
+  --shadow-zc-dark: 0 4px 12px 0 rgba(0, 0, 0, 0.8);
+}
+
+} /* end @layer zc-overrides */

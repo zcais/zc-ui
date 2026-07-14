@@ -1,0 +1,47 @@
+/**
+ * ZcIconBrandUbuntu
+ *
+ * Auto-generated from @tabler/icons — do not edit manually.
+ * Source: icons/outline/brand-ubuntu.svg
+ */
+
+import { h, type FunctionalComponent } from 'vue'
+import { withInstall } from '@zc-ui/utils'
+import type { ZcIconProps } from '../types'
+import { registerIcon } from '../icon-registry'
+
+const _body =
+  '<path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M10 5a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M17.723 7.41a7.992 7.992 0 0 0 -3.74 -2.162m-3.971 0a7.993 7.993 0 0 0 -3.789 2.216m-1.881 3.215a8 8 0 0 0 -.342 2.32c0 .738 .1 1.453 .287 2.132m1.96 3.428a7.993 7.993 0 0 0 3.759 2.19m4 0a7.993 7.993 0 0 0 3.747 -2.186m1.962 -3.43a8.008 8.008 0 0 0 .287 -2.131c0 -.764 -.107 -1.503 -.307 -2.203" /><path d="M3 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M17 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />'
+
+// Register this icon's SVG data into the global icon pool
+registerIcon('brand-ubuntu', { path: _body, viewBox: '0 0 24 24', strokeWidth: 2, fill: 'none' })
+
+const _comp: FunctionalComponent<ZcIconProps> = (props) => {
+  return h('svg', {
+    xmlns: 'http://www.w3.org/2000/svg',
+    width: props.size ?? 24,
+    height: props.size ?? 24,
+    viewBox: '0 0 24 24',
+    fill: 'none',
+    stroke: props.color ?? 'currentColor',
+    'stroke-width': props.absoluteStrokeWidth
+      ? Number(props.strokeWidth ?? 2) / (Number(props.size ?? 24) / 24)
+      : (props.strokeWidth ?? 2),
+    'stroke-linecap': 'round',
+    'stroke-linejoin': 'round',
+    class: ['zc-icon', props.class, { 'zc-icon--spin': props.spin }],
+    innerHTML: _body,
+  })
+}
+
+_comp.props = {
+  size: { type: [Number, String], default: 24 },
+  color: { type: String, default: 'currentColor' },
+  strokeWidth: { type: [Number, String], default: 2 },
+  absoluteStrokeWidth: { type: Boolean, default: false },
+  spin: { type: Boolean, default: false },
+  class: { type: [String, Object, Array], default: '' },
+}
+_comp.displayName = 'ZcIconBrandUbuntu'
+
+export const ZcIconBrandUbuntu = withInstall(_comp, 'ZcIconBrandUbuntu')

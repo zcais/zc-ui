@@ -1,0 +1,59 @@
+{
+  "name": "@zc-ui/nuxt",
+  "version": "1.0.0",
+  "description": "Nuxt 3 module for ZC UI — auto-imports components, composables, and the default theme.",
+  "license": "MIT",
+  "author": "ZC UI Team",
+  "homepage": "https://zc-ui.github.io/zc-ui",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zc-ui/zc-ui.git",
+    "directory": "packages/nuxt-module"
+  },
+  "bugs": {
+    "url": "https://github.com/zc-ui/zc-ui/issues"
+  },
+  "keywords": [
+    "nuxt",
+    "nuxt3",
+    "nuxt-module",
+    "vue",
+    "vue3",
+    "ui",
+    "zc-ui"
+  ],
+  "type": "module",
+  "main": "./dist/module.cjs",
+  "module": "./dist/module.mjs",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/module.mjs",
+      "require": "./dist/module.cjs"
+    },
+    "./runtime/*": "./src/runtime/*"
+  },
+  "files": [
+    "dist",
+    "src/runtime"
+  ],
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "scripts": {
+    "build": "vite build",
+    "typecheck": "vue-tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@nuxt/kit": "^3.10.0",
+    "@zc-ui/components": "workspace:*",
+    "@zc-ui/utils": "workspace:*",
+    "@zc-ui/theme": "workspace:*"
+  },
+  "peerDependencies": {
+    "nuxt": "^3.0.0"
+  }
+}

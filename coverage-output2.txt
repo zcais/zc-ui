@@ -1,0 +1,2738 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.8 [39m[90mD:/safeware/web/zc-ui[39m
+      [2mCoverage enabled with [22m[33mv8[39m
+
+ [31m❯[39m packages/components/src/table/__tests__/table-virtual.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+[90mstderr[2m | packages/components/src/__tests__/cascader.spec.ts[2m > [22m[2mZcCascader[2m > [22m[2mrenders virtual list structure when virtualScroll is enabled
+[22m[39m[Vue warn]: onMounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement. 
+  at <Transition name="zc-cascader-dropdown" persisted="" > 
+  at <ZcCascader options= [
+  {
+    value: [32m'level1-0'[39m,
+    label: [32m'Level 1 - 0'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-1'[39m,
+    label: [32m'Level 1 - 1'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-2'[39m,
+    label: [32m'Level 1 - 2'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-3'[39m,
+    label: [32m'Level 1 - 3'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-4'[39m,
+    label: [32m'Level 1 - 4'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-5'[39m,
+    label: [32m'Level 1 - 5'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-6'[39m,
+    label: [32m'Level 1 - 6'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-7'[39m,
+    label: [32m'Level 1 - 7'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-8'[39m,
+    label: [32m'Level 1 - 8'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-9'[39m,
+    label: [32m'Level 1 - 9'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-10'[39m,
+    label: [32m'Level 1 - 10'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-11'[39m,
+    label: [32m'Level 1 - 11'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-12'[39m,
+    label: [32m'Level 1 - 12'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-13'[39m,
+    label: [32m'Level 1 - 13'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-14'[39m,
+    label: [32m'Level 1 - 14'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-15'[39m,
+    label: [32m'Level 1 - 15'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-16'[39m,
+    label: [32m'Level 1 - 16'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-17'[39m,
+    label: [32m'Level 1 - 17'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-18'[39m,
+    label: [32m'Level 1 - 18'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-19'[39m,
+    label: [32m'Level 1 - 19'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-20'[39m,
+    label: [32m'Level 1 - 20'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-21'[39m,
+    label: [32m'Level 1 - 21'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-22'[39m,
+    label: [32m'Level 1 - 22'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-23'[39m,
+    label: [32m'Level 1 - 23'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-24'[39m,
+    label: [32m'Level 1 - 24'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-25'[39m,
+    label: [32m'Level 1 - 25'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-26'[39m,
+    label: [32m'Level 1 - 26'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-27'[39m,
+    label: [32m'Level 1 - 27'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-28'[39m,
+    label: [32m'Level 1 - 28'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-29'[39m,
+    label: [32m'Level 1 - 29'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-30'[39m,
+    label: [32m'Level 1 - 30'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-31'[39m,
+    label: [32m'Level 1 - 31'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-32'[39m,
+    label: [32m'Level 1 - 32'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-33'[39m,
+    label: [32m'Level 1 - 33'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-34'[39m,
+    label: [32m'Level 1 - 34'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-35'[39m,
+    label: [32m'Level 1 - 35'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-36'[39m,
+    label: [32m'Level 1 - 36'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-37'[39m,
+    label: [32m'Level 1 - 37'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-38'[39m,
+    label: [32m'Level 1 - 38'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-39'[39m,
+    label: [32m'Level 1 - 39'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-40'[39m,
+    label: [32m'Level 1 - 40'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-41'[39m,
+    label: [32m'Level 1 - 41'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-42'[39m,
+    label: [32m'Level 1 - 42'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-43'[39m,
+    label: [32m'Level 1 - 43'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-44'[39m,
+    label: [32m'Level 1 - 44'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-45'[39m,
+    label: [32m'Level 1 - 45'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-46'[39m,
+    label: [32m'Level 1 - 46'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-47'[39m,
+    label: [32m'Level 1 - 47'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-48'[39m,
+    label: [32m'Level 1 - 48'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-49'[39m,
+    label: [32m'Level 1 - 49'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-50'[39m,
+    label: [32m'Level 1 - 50'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-51'[39m,
+    label: [32m'Level 1 - 51'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-52'[39m,
+    label: [32m'Level 1 - 52'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-53'[39m,
+    label: [32m'Level 1 - 53'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-54'[39m,
+    label: [32m'Level 1 - 54'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-55'[39m,
+    label: [32m'Level 1 - 55'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-56'[39m,
+    label: [32m'Level 1 - 56'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-57'[39m,
+    label: [32m'Level 1 - 57'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-58'[39m,
+    label: [32m'Level 1 - 58'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-59'[39m,
+    label: [32m'Level 1 - 59'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-60'[39m,
+    label: [32m'Level 1 - 60'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-61'[39m,
+    label: [32m'Level 1 - 61'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-62'[39m,
+    label: [32m'Level 1 - 62'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-63'[39m,
+    label: [32m'Level 1 - 63'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-64'[39m,
+    label: [32m'Level 1 - 64'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-65'[39m,
+    label: [32m'Level 1 - 65'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-66'[39m,
+    label: [32m'Level 1 - 66'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-67'[39m,
+    label: [32m'Level 1 - 67'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-68'[39m,
+    label: [32m'Level 1 - 68'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-69'[39m,
+    label: [32m'Level 1 - 69'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-70'[39m,
+    label: [32m'Level 1 - 70'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-71'[39m,
+    label: [32m'Level 1 - 71'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-72'[39m,
+    label: [32m'Level 1 - 72'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-73'[39m,
+    label: [32m'Level 1 - 73'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-74'[39m,
+    label: [32m'Level 1 - 74'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-75'[39m,
+    label: [32m'Level 1 - 75'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-76'[39m,
+    label: [32m'Level 1 - 76'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-77'[39m,
+    label: [32m'Level 1 - 77'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-78'[39m,
+    label: [32m'Level 1 - 78'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-79'[39m,
+    label: [32m'Level 1 - 79'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-80'[39m,
+    label: [32m'Level 1 - 80'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-81'[39m,
+    label: [32m'Level 1 - 81'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-82'[39m,
+    label: [32m'Level 1 - 82'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-83'[39m,
+    label: [32m'Level 1 - 83'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-84'[39m,
+    label: [32m'Level 1 - 84'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-85'[39m,
+    label: [32m'Level 1 - 85'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-86'[39m,
+    label: [32m'Level 1 - 86'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-87'[39m,
+    label: [32m'Level 1 - 87'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-88'[39m,
+    label: [32m'Level 1 - 88'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-89'[39m,
+    label: [32m'Level 1 - 89'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-90'[39m,
+    label: [32m'Level 1 - 90'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-91'[39m,
+    label: [32m'Level 1 - 91'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-92'[39m,
+    label: [32m'Level 1 - 92'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-93'[39m,
+    label: [32m'Level 1 - 93'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-94'[39m,
+    label: [32m'Level 1 - 94'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-95'[39m,
+    label: [32m'Level 1 - 95'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-96'[39m,
+    label: [32m'Level 1 - 96'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-97'[39m,
+    label: [32m'Level 1 - 97'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-98'[39m,
+    label: [32m'Level 1 - 98'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-99'[39m,
+    label: [32m'Level 1 - 99'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  ... 400 more items
+] virtualScroll=true ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+[Vue warn]: onBeforeUnmount is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement. 
+  at <Transition name="zc-cascader-dropdown" persisted="" > 
+  at <ZcCascader options= [
+  {
+    value: [32m'level1-0'[39m,
+    label: [32m'Level 1 - 0'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-1'[39m,
+    label: [32m'Level 1 - 1'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-2'[39m,
+    label: [32m'Level 1 - 2'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-3'[39m,
+    label: [32m'Level 1 - 3'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-4'[39m,
+    label: [32m'Level 1 - 4'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-5'[39m,
+    label: [32m'Level 1 - 5'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-6'[39m,
+    label: [32m'Level 1 - 6'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-7'[39m,
+    label: [32m'Level 1 - 7'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-8'[39m,
+    label: [32m'Level 1 - 8'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-9'[39m,
+    label: [32m'Level 1 - 9'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-10'[39m,
+    label: [32m'Level 1 - 10'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-11'[39m,
+    label: [32m'Level 1 - 11'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-12'[39m,
+    label: [32m'Level 1 - 12'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-13'[39m,
+    label: [32m'Level 1 - 13'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-14'[39m,
+    label: [32m'Level 1 - 14'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-15'[39m,
+    label: [32m'Level 1 - 15'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-16'[39m,
+    label: [32m'Level 1 - 16'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-17'[39m,
+    label: [32m'Level 1 - 17'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-18'[39m,
+    label: [32m'Level 1 - 18'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-19'[39m,
+    label: [32m'Level 1 - 19'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-20'[39m,
+    label: [32m'Level 1 - 20'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-21'[39m,
+    label: [32m'Level 1 - 21'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-22'[39m,
+    label: [32m'Level 1 - 22'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-23'[39m,
+    label: [32m'Level 1 - 23'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-24'[39m,
+    label: [32m'Level 1 - 24'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-25'[39m,
+    label: [32m'Level 1 - 25'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-26'[39m,
+    label: [32m'Level 1 - 26'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-27'[39m,
+    label: [32m'Level 1 - 27'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-28'[39m,
+    label: [32m'Level 1 - 28'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-29'[39m,
+    label: [32m'Level 1 - 29'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-30'[39m,
+    label: [32m'Level 1 - 30'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-31'[39m,
+    label: [32m'Level 1 - 31'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-32'[39m,
+    label: [32m'Level 1 - 32'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-33'[39m,
+    label: [32m'Level 1 - 33'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-34'[39m,
+    label: [32m'Level 1 - 34'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-35'[39m,
+    label: [32m'Level 1 - 35'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-36'[39m,
+    label: [32m'Level 1 - 36'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-37'[39m,
+    label: [32m'Level 1 - 37'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-38'[39m,
+    label: [32m'Level 1 - 38'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-39'[39m,
+    label: [32m'Level 1 - 39'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-40'[39m,
+    label: [32m'Level 1 - 40'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-41'[39m,
+    label: [32m'Level 1 - 41'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-42'[39m,
+    label: [32m'Level 1 - 42'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-43'[39m,
+    label: [32m'Level 1 - 43'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-44'[39m,
+    label: [32m'Level 1 - 44'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-45'[39m,
+    label: [32m'Level 1 - 45'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-46'[39m,
+    label: [32m'Level 1 - 46'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-47'[39m,
+    label: [32m'Level 1 - 47'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-48'[39m,
+    label: [32m'Level 1 - 48'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-49'[39m,
+    label: [32m'Level 1 - 49'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-50'[39m,
+    label: [32m'Level 1 - 50'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-51'[39m,
+    label: [32m'Level 1 - 51'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-52'[39m,
+    label: [32m'Level 1 - 52'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-53'[39m,
+    label: [32m'Level 1 - 53'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-54'[39m,
+    label: [32m'Level 1 - 54'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-55'[39m,
+    label: [32m'Level 1 - 55'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-56'[39m,
+    label: [32m'Level 1 - 56'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-57'[39m,
+    label: [32m'Level 1 - 57'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-58'[39m,
+    label: [32m'Level 1 - 58'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-59'[39m,
+    label: [32m'Level 1 - 59'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-60'[39m,
+    label: [32m'Level 1 - 60'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-61'[39m,
+    label: [32m'Level 1 - 61'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-62'[39m,
+    label: [32m'Level 1 - 62'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-63'[39m,
+    label: [32m'Level 1 - 63'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-64'[39m,
+    label: [32m'Level 1 - 64'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-65'[39m,
+    label: [32m'Level 1 - 65'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-66'[39m,
+    label: [32m'Level 1 - 66'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-67'[39m,
+    label: [32m'Level 1 - 67'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-68'[39m,
+    label: [32m'Level 1 - 68'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-69'[39m,
+    label: [32m'Level 1 - 69'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-70'[39m,
+    label: [32m'Level 1 - 70'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-71'[39m,
+    label: [32m'Level 1 - 71'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-72'[39m,
+    label: [32m'Level 1 - 72'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-73'[39m,
+    label: [32m'Level 1 - 73'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-74'[39m,
+    label: [32m'Level 1 - 74'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-75'[39m,
+    label: [32m'Level 1 - 75'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-76'[39m,
+    label: [32m'Level 1 - 76'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-77'[39m,
+    label: [32m'Level 1 - 77'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-78'[39m,
+    label: [32m'Level 1 - 78'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-79'[39m,
+    label: [32m'Level 1 - 79'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-80'[39m,
+    label: [32m'Level 1 - 80'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-81'[39m,
+    label: [32m'Level 1 - 81'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-82'[39m,
+    label: [32m'Level 1 - 82'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-83'[39m,
+    label: [32m'Level 1 - 83'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-84'[39m,
+    label: [32m'Level 1 - 84'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-85'[39m,
+    label: [32m'Level 1 - 85'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-86'[39m,
+    label: [32m'Level 1 - 86'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-87'[39m,
+    label: [32m'Level 1 - 87'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-88'[39m,
+    label: [32m'Level 1 - 88'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-89'[39m,
+    label: [32m'Level 1 - 89'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-90'[39m,
+    label: [32m'Level 1 - 90'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-91'[39m,
+    label: [32m'Level 1 - 91'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-92'[39m,
+    label: [32m'Level 1 - 92'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-93'[39m,
+    label: [32m'Level 1 - 93'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-94'[39m,
+    label: [32m'Level 1 - 94'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-95'[39m,
+    label: [32m'Level 1 - 95'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-96'[39m,
+    label: [32m'Level 1 - 96'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-97'[39m,
+    label: [32m'Level 1 - 97'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-98'[39m,
+    label: [32m'Level 1 - 98'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  {
+    value: [32m'level1-99'[39m,
+    label: [32m'Level 1 - 99'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m
+    ]
+  },
+  ... 400 more items
+] virtualScroll=true ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+ [32m✓[39m packages/components/src/__tests__/date-picker.spec.ts [2m([22m[2m16 tests[22m[2m)[22m[33m 368[2mms[22m[39m
+[90mstderr[2m | packages/components/src/__tests__/cascader.spec.ts[2m > [22m[2mZcCascader[2m > [22m[2mvirtual mode has correct total height
+[22m[39m[Vue warn]: onMounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement. 
+  at <Transition name="zc-cascader-dropdown" persisted="" > 
+  at <ZcCascader options= [
+  { value: [33m0[39m, label: [32m'Option 0'[39m, children: [] },
+  { value: [33m1[39m, label: [32m'Option 1'[39m, children: [] },
+  { value: [33m2[39m, label: [32m'Option 2'[39m, children: [] },
+  { value: [33m3[39m, label: [32m'Option 3'[39m, children: [] },
+  { value: [33m4[39m, label: [32m'Option 4'[39m, children: [] },
+  { value: [33m5[39m, label: [32m'Option 5'[39m, children: [] },
+  { value: [33m6[39m, label: [32m'Option 6'[39m, children: [] },
+  { value: [33m7[39m, label: [32m'Option 7'[39m, children: [] },
+  { value: [33m8[39m, label: [32m'Option 8'[39m, children: [] },
+  { value: [33m9[39m, label: [32m'Option 9'[39m, children: [] },
+  { value: [33m10[39m, label: [32m'Option 10'[39m, children: [] },
+  { value: [33m11[39m, label: [32m'Option 11'[39m, children: [] },
+  { value: [33m12[39m, label: [32m'Option 12'[39m, children: [] },
+  { value: [33m13[39m, label: [32m'Option 13'[39m, children: [] },
+  { value: [33m14[39m, label: [32m'Option 14'[39m, children: [] },
+  { value: [33m15[39m, label: [32m'Option 15'[39m, children: [] },
+  { value: [33m16[39m, label: [32m'Option 16'[39m, children: [] },
+  { value: [33m17[39m, label: [32m'Option 17'[39m, children: [] },
+  { value: [33m18[39m, label: [32m'Option 18'[39m, children: [] },
+  { value: [33m19[39m, label: [32m'Option 19'[39m, children: [] },
+  { value: [33m20[39m, label: [32m'Option 20'[39m, children: [] },
+  { value: [33m21[39m, label: [32m'Option 21'[39m, children: [] },
+  { value: [33m22[39m, label: [32m'Option 22'[39m, children: [] },
+  { value: [33m23[39m, label: [32m'Option 23'[39m, children: [] },
+  { value: [33m24[39m, label: [32m'Option 24'[39m, children: [] },
+  { value: [33m25[39m, label: [32m'Option 25'[39m, children: [] },
+  { value: [33m26[39m, label: [32m'Option 26'[39m, children: [] },
+  { value: [33m27[39m, label: [32m'Option 27'[39m, children: [] },
+  { value: [33m28[39m, label: [32m'Option 28'[39m, children: [] },
+  { value: [33m29[39m, label: [32m'Option 29'[39m, children: [] },
+  { value: [33m30[39m, label: [32m'Option 30'[39m, children: [] },
+  { value: [33m31[39m, label: [32m'Option 31'[39m, children: [] },
+  { value: [33m32[39m, label: [32m'Option 32'[39m, children: [] },
+  { value: [33m33[39m, label: [32m'Option 33'[39m, children: [] },
+  { value: [33m34[39m, label: [32m'Option 34'[39m, children: [] },
+  { value: [33m35[39m, label: [32m'Option 35'[39m, children: [] },
+  { value: [33m36[39m, label: [32m'Option 36'[39m, children: [] },
+  { value: [33m37[39m, label: [32m'Option 37'[39m, children: [] },
+  { value: [33m38[39m, label: [32m'Option 38'[39m, children: [] },
+  { value: [33m39[39m, label: [32m'Option 39'[39m, children: [] },
+  { value: [33m40[39m, label: [32m'Option 40'[39m, children: [] },
+  { value: [33m41[39m, label: [32m'Option 41'[39m, children: [] },
+  { value: [33m42[39m, label: [32m'Option 42'[39m, children: [] },
+  { value: [33m43[39m, label: [32m'Option 43'[39m, children: [] },
+  { value: [33m44[39m, label: [32m'Option 44'[39m, children: [] },
+  { value: [33m45[39m, label: [32m'Option 45'[39m, children: [] },
+  { value: [33m46[39m, label: [32m'Option 46'[39m, children: [] },
+  { value: [33m47[39m, label: [32m'Option 47'[39m, children: [] },
+  { value: [33m48[39m, label: [32m'Option 48'[39m, children: [] },
+  { value: [33m49[39m, label: [32m'Option 49'[39m, children: [] },
+  { value: [33m50[39m, label: [32m'Option 50'[39m, children: [] },
+  { value: [33m51[39m, label: [32m'Option 51'[39m, children: [] },
+  { value: [33m52[39m, label: [32m'Option 52'[39m, children: [] },
+  { value: [33m53[39m, label: [32m'Option 53'[39m, children: [] },
+  { value: [33m54[39m, label: [32m'Option 54'[39m, children: [] },
+  { value: [33m55[39m, label: [32m'Option 55'[39m, children: [] },
+  { value: [33m56[39m, label: [32m'Option 56'[39m, children: [] },
+  { value: [33m57[39m, label: [32m'Option 57'[39m, children: [] },
+  { value: [33m58[39m, label: [32m'Option 58'[39m, children: [] },
+  { value: [33m59[39m, label: [32m'Option 59'[39m, children: [] },
+  { value: [33m60[39m, label: [32m'Option 60'[39m, children: [] },
+  { value: [33m61[39m, label: [32m'Option 61'[39m, children: [] },
+  { value: [33m62[39m, label: [32m'Option 62'[39m, children: [] },
+  { value: [33m63[39m, label: [32m'Option 63'[39m, children: [] },
+  { value: [33m64[39m, label: [32m'Option 64'[39m, children: [] },
+  { value: [33m65[39m, label: [32m'Option 65'[39m, children: [] },
+  { value: [33m66[39m, label: [32m'Option 66'[39m, children: [] },
+  { value: [33m67[39m, label: [32m'Option 67'[39m, children: [] },
+  { value: [33m68[39m, label: [32m'Option 68'[39m, children: [] },
+  { value: [33m69[39m, label: [32m'Option 69'[39m, children: [] },
+  { value: [33m70[39m, label: [32m'Option 70'[39m, children: [] },
+  { value: [33m71[39m, label: [32m'Option 71'[39m, children: [] },
+  { value: [33m72[39m, label: [32m'Option 72'[39m, children: [] },
+  { value: [33m73[39m, label: [32m'Option 73'[39m, children: [] },
+  { value: [33m74[39m, label: [32m'Option 74'[39m, children: [] },
+  { value: [33m75[39m, label: [32m'Option 75'[39m, children: [] },
+  { value: [33m76[39m, label: [32m'Option 76'[39m, children: [] },
+  { value: [33m77[39m, label: [32m'Option 77'[39m, children: [] },
+  { value: [33m78[39m, label: [32m'Option 78'[39m, children: [] },
+  { value: [33m79[39m, label: [32m'Option 79'[39m, children: [] },
+  { value: [33m80[39m, label: [32m'Option 80'[39m, children: [] },
+  { value: [33m81[39m, label: [32m'Option 81'[39m, children: [] },
+  { value: [33m82[39m, label: [32m'Option 82'[39m, children: [] },
+  { value: [33m83[39m, label: [32m'Option 83'[39m, children: [] },
+  { value: [33m84[39m, label: [32m'Option 84'[39m, children: [] },
+  { value: [33m85[39m, label: [32m'Option 85'[39m, children: [] },
+  { value: [33m86[39m, label: [32m'Option 86'[39m, children: [] },
+  { value: [33m87[39m, label: [32m'Option 87'[39m, children: [] },
+  { value: [33m88[39m, label: [32m'Option 88'[39m, children: [] },
+  { value: [33m89[39m, label: [32m'Option 89'[39m, children: [] },
+  { value: [33m90[39m, label: [32m'Option 90'[39m, children: [] },
+  { value: [33m91[39m, label: [32m'Option 91'[39m, children: [] },
+  { value: [33m92[39m, label: [32m'Option 92'[39m, children: [] },
+  { value: [33m93[39m, label: [32m'Option 93'[39m, children: [] },
+  { value: [33m94[39m, label: [32m'Option 94'[39m, children: [] },
+  { value: [33m95[39m, label: [32m'Option 95'[39m, children: [] },
+  { value: [33m96[39m, label: [32m'Option 96'[39m, children: [] },
+  { value: [33m97[39m, label: [32m'Option 97'[39m, children: [] },
+  { value: [33m98[39m, label: [32m'Option 98'[39m, children: [] },
+  { value: [33m99[39m, label: [32m'Option 99'[39m, children: [] },
+  ... 900 more items
+] virtualScroll=true ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+[Vue warn]: onBeforeUnmount is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement. 
+  at <Transition name="zc-cascader-dropdown" persisted="" > 
+  at <ZcCascader options= [
+  { value: [33m0[39m, label: [32m'Option 0'[39m, children: [] },
+  { value: [33m1[39m, label: [32m'Option 1'[39m, children: [] },
+  { value: [33m2[39m, label: [32m'Option 2'[39m, children: [] },
+  { value: [33m3[39m, label: [32m'Option 3'[39m, children: [] },
+  { value: [33m4[39m, label: [32m'Option 4'[39m, children: [] },
+  { value: [33m5[39m, label: [32m'Option 5'[39m, children: [] },
+  { value: [33m6[39m, label: [32m'Option 6'[39m, children: [] },
+  { value: [33m7[39m, label: [32m'Option 7'[39m, children: [] },
+  { value: [33m8[39m, label: [32m'Option 8'[39m, children: [] },
+  { value: [33m9[39m, label: [32m'Option 9'[39m, children: [] },
+  { value: [33m10[39m, label: [32m'Option 10'[39m, children: [] },
+  { value: [33m11[39m, label: [32m'Option 11'[39m, children: [] },
+  { value: [33m12[39m, label: [32m'Option 12'[39m, children: [] },
+  { value: [33m13[39m, label: [32m'Option 13'[39m, children: [] },
+  { value: [33m14[39m, label: [32m'Option 14'[39m, children: [] },
+  { value: [33m15[39m, label: [32m'Option 15'[39m, children: [] },
+  { value: [33m16[39m, label: [32m'Option 16'[39m, children: [] },
+  { value: [33m17[39m, label: [32m'Option 17'[39m, children: [] },
+  { value: [33m18[39m, label: [32m'Option 18'[39m, children: [] },
+  { value: [33m19[39m, label: [32m'Option 19'[39m, children: [] },
+  { value: [33m20[39m, label: [32m'Option 20'[39m, children: [] },
+  { value: [33m21[39m, label: [32m'Option 21'[39m, children: [] },
+  { value: [33m22[39m, label: [32m'Option 22'[39m, children: [] },
+  { value: [33m23[39m, label: [32m'Option 23'[39m, children: [] },
+  { value: [33m24[39m, label: [32m'Option 24'[39m, children: [] },
+  { value: [33m25[39m, label: [32m'Option 25'[39m, children: [] },
+  { value: [33m26[39m, label: [32m'Option 26'[39m, children: [] },
+  { value: [33m27[39m, label: [32m'Option 27'[39m, children: [] },
+  { value: [33m28[39m, label: [32m'Option 28'[39m, children: [] },
+  { value: [33m29[39m, label: [32m'Option 29'[39m, children: [] },
+  { value: [33m30[39m, label: [32m'Option 30'[39m, children: [] },
+  { value: [33m31[39m, label: [32m'Option 31'[39m, children: [] },
+  { value: [33m32[39m, label: [32m'Option 32'[39m, children: [] },
+  { value: [33m33[39m, label: [32m'Option 33'[39m, children: [] },
+  { value: [33m34[39m, label: [32m'Option 34'[39m, children: [] },
+  { value: [33m35[39m, label: [32m'Option 35'[39m, children: [] },
+  { value: [33m36[39m, label: [32m'Option 36'[39m, children: [] },
+  { value: [33m37[39m, label: [32m'Option 37'[39m, children: [] },
+  { value: [33m38[39m, label: [32m'Option 38'[39m, children: [] },
+  { value: [33m39[39m, label: [32m'Option 39'[39m, children: [] },
+  { value: [33m40[39m, label: [32m'Option 40'[39m, children: [] },
+  { value: [33m41[39m, label: [32m'Option 41'[39m, children: [] },
+  { value: [33m42[39m, label: [32m'Option 42'[39m, children: [] },
+  { value: [33m43[39m, label: [32m'Option 43'[39m, children: [] },
+  { value: [33m44[39m, label: [32m'Option 44'[39m, children: [] },
+  { value: [33m45[39m, label: [32m'Option 45'[39m, children: [] },
+  { value: [33m46[39m, label: [32m'Option 46'[39m, children: [] },
+  { value: [33m47[39m, label: [32m'Option 47'[39m, children: [] },
+  { value: [33m48[39m, label: [32m'Option 48'[39m, children: [] },
+  { value: [33m49[39m, label: [32m'Option 49'[39m, children: [] },
+  { value: [33m50[39m, label: [32m'Option 50'[39m, children: [] },
+  { value: [33m51[39m, label: [32m'Option 51'[39m, children: [] },
+  { value: [33m52[39m, label: [32m'Option 52'[39m, children: [] },
+  { value: [33m53[39m, label: [32m'Option 53'[39m, children: [] },
+  { value: [33m54[39m, label: [32m'Option 54'[39m, children: [] },
+  { value: [33m55[39m, label: [32m'Option 55'[39m, children: [] },
+  { value: [33m56[39m, label: [32m'Option 56'[39m, children: [] },
+  { value: [33m57[39m, label: [32m'Option 57'[39m, children: [] },
+  { value: [33m58[39m, label: [32m'Option 58'[39m, children: [] },
+  { value: [33m59[39m, label: [32m'Option 59'[39m, children: [] },
+  { value: [33m60[39m, label: [32m'Option 60'[39m, children: [] },
+  { value: [33m61[39m, label: [32m'Option 61'[39m, children: [] },
+  { value: [33m62[39m, label: [32m'Option 62'[39m, children: [] },
+  { value: [33m63[39m, label: [32m'Option 63'[39m, children: [] },
+  { value: [33m64[39m, label: [32m'Option 64'[39m, children: [] },
+  { value: [33m65[39m, label: [32m'Option 65'[39m, children: [] },
+  { value: [33m66[39m, label: [32m'Option 66'[39m, children: [] },
+  { value: [33m67[39m, label: [32m'Option 67'[39m, children: [] },
+  { value: [33m68[39m, label: [32m'Option 68'[39m, children: [] },
+  { value: [33m69[39m, label: [32m'Option 69'[39m, children: [] },
+  { value: [33m70[39m, label: [32m'Option 70'[39m, children: [] },
+  { value: [33m71[39m, label: [32m'Option 71'[39m, children: [] },
+  { value: [33m72[39m, label: [32m'Option 72'[39m, children: [] },
+  { value: [33m73[39m, label: [32m'Option 73'[39m, children: [] },
+  { value: [33m74[39m, label: [32m'Option 74'[39m, children: [] },
+  { value: [33m75[39m, label: [32m'Option 75'[39m, children: [] },
+  { value: [33m76[39m, label: [32m'Option 76'[39m, children: [] },
+  { value: [33m77[39m, label: [32m'Option 77'[39m, children: [] },
+  { value: [33m78[39m, label: [32m'Option 78'[39m, children: [] },
+  { value: [33m79[39m, label: [32m'Option 79'[39m, children: [] },
+  { value: [33m80[39m, label: [32m'Option 80'[39m, children: [] },
+  { value: [33m81[39m, label: [32m'Option 81'[39m, children: [] },
+  { value: [33m82[39m, label: [32m'Option 82'[39m, children: [] },
+  { value: [33m83[39m, label: [32m'Option 83'[39m, children: [] },
+  { value: [33m84[39m, label: [32m'Option 84'[39m, children: [] },
+  { value: [33m85[39m, label: [32m'Option 85'[39m, children: [] },
+  { value: [33m86[39m, label: [32m'Option 86'[39m, children: [] },
+  { value: [33m87[39m, label: [32m'Option 87'[39m, children: [] },
+  { value: [33m88[39m, label: [32m'Option 88'[39m, children: [] },
+  { value: [33m89[39m, label: [32m'Option 89'[39m, children: [] },
+  { value: [33m90[39m, label: [32m'Option 90'[39m, children: [] },
+  { value: [33m91[39m, label: [32m'Option 91'[39m, children: [] },
+  { value: [33m92[39m, label: [32m'Option 92'[39m, children: [] },
+  { value: [33m93[39m, label: [32m'Option 93'[39m, children: [] },
+  { value: [33m94[39m, label: [32m'Option 94'[39m, children: [] },
+  { value: [33m95[39m, label: [32m'Option 95'[39m, children: [] },
+  { value: [33m96[39m, label: [32m'Option 96'[39m, children: [] },
+  { value: [33m97[39m, label: [32m'Option 97'[39m, children: [] },
+  { value: [33m98[39m, label: [32m'Option 98'[39m, children: [] },
+  { value: [33m99[39m, label: [32m'Option 99'[39m, children: [] },
+  ... 900 more items
+] virtualScroll=true ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+ [32m✓[39m packages/components/src/__tests__/dropdown.spec.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 326[2mms[22m[39m
+[90mstderr[2m | packages/components/src/__tests__/cascader.spec.ts[2m > [22m[2mZcCascader[2m > [22m[2mcan select option in virtual scroll mode
+[22m[39m[Vue warn]: onMounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement. 
+  at <Transition name="zc-cascader-dropdown" persisted="" > 
+  at <ZcCascader options= [
+  {
+    value: [32m'group1'[39m,
+    label: [32m'Group 1'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m
+    ]
+  }
+] virtualScroll=true ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+[Vue warn]: onBeforeUnmount is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement. 
+  at <Transition name="zc-cascader-dropdown" persisted="" > 
+  at <ZcCascader options= [
+  {
+    value: [32m'group1'[39m,
+    label: [32m'Group 1'[39m,
+    children: [
+      [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m, [36m[Object][39m, [36m[Object][39m
+    ]
+  }
+] virtualScroll=true ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+ [32m✓[39m packages/components/src/__tests__/color-picker.spec.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 461[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/message.spec.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 513[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/dialog.spec.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 587[2mms[22m[39m
+ [31m❯[39m packages/components/src/__tests__/cascader.spec.ts [2m([22m[2m20 tests[22m[2m | [22m[31m3 failed[39m[2m)[22m[33m 630[2mms[22m[39m
+     [32m✓[39m renders with default props[32m 71[2mms[22m[39m
+     [32m✓[39m applies size class[32m 14[2mms[22m[39m
+     [32m✓[39m applies small size class[32m 11[2mms[22m[39m
+     [32m✓[39m applies disabled class[32m 12[2mms[22m[39m
+     [32m✓[39m shows placeholder when no value[32m 13[2mms[22m[39m
+     [32m✓[39m displays selected value labels[32m 15[2mms[22m[39m
+     [32m✓[39m does not show placeholder class when has value[32m 11[2mms[22m[39m
+[31m     [31m×[31m renders virtual list structure when virtualScroll is enabled[39m[32m 60[2mms[22m[39m
+     [32m✓[39m does not render virtual list when virtualScroll is disabled[32m 268[2mms[22m[39m
+[31m     [31m×[31m virtual mode has correct total height[39m[32m 25[2mms[22m[39m
+[31m     [31m×[31m can select option in virtual scroll mode[39m[32m 9[2mms[22m[39m
+     [32m✓[39m opens dropdown on click[32m 14[2mms[22m[39m
+     [32m✓[39m applies focused and open class when visible[32m 13[2mms[22m[39m
+     [32m✓[39m does not open panel when disabled[32m 8[2mms[22m[39m
+     [32m✓[39m expands next level on node click[32m 23[2mms[22m[39m
+     [32m✓[39m shows search input when filterable[32m 14[2mms[22m[39m
+     [32m✓[39m shows clear button when clearable and has value[32m 12[2mms[22m[39m
+     [32m✓[39m emits change on clear[32m 12[2mms[22m[39m
+     [32m✓[39m renders arrow icon[32m 8[2mms[22m[39m
+     [32m✓[39m shows tags in multiple mode[32m 12[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/time-picker.spec.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 653[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/popover.spec.ts [2m([22m[2m38 tests[22m[2m)[22m[33m 739[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/typography.spec.ts [2m([22m[2m70 tests[22m[2m)[22m[33m 510[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/tour.spec.ts [2m([22m[2m46 tests[22m[2m)[22m[33m 969[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/mention.spec.ts [2m([22m[2m63 tests[22m[2m)[22m[33m 1342[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/accessibility-display.spec.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 464[2mms[22m[39m
+[90mstdout[2m | packages/components/src/__tests__/performance.spec.ts[2m > [22m[2mPerformance Benchmarks[2m > [22m[2mTable Rendering[2m > [22m[2mshould render 100 rows within threshold
+[22m[39m  Table(100 rows): 647.65ms
+
+ [32m✓[39m packages/components/src/__tests__/carousel.spec.ts [2m([22m[2m23 tests[22m[2m)[22m[33m 1077[2mms[22m[39m
+     [33m[2m✓[22m[39m renders carousel [33m 436[2mms[22m[39m
+[90mstderr[2m | packages/components/src/__tests__/table.spec.ts[2m > [22m[2mZcTable[2m > [22m[2mvirtual scroll[2m > [22m[2mwarns in dev when virtual + pagination
+[22m[39m[ZcTable] Virtual scrolling and pagination are not compatible. Pagination takes precedence; virtual scrolling will be disabled.
+
+[90mstderr[2m | packages/components/src/__tests__/table.spec.ts[2m > [22m[2mZcTable[2m > [22m[2mvirtual scroll[2m > [22m[2mwarns in dev when virtual + treeProps
+[22m[39m[ZcTable] Virtual scrolling and tree table (treeProps) are not compatible. Tree structure will be ignored in virtual mode.
+
+ [32m✓[39m packages/components/src/__tests__/table.spec.ts [2m([22m[2m85 tests[22m[2m)[22m[33m 3670[2mms[22m[39m
+       [33m[2m✓[22m[39m renders fewer rows than total in virtual mode [33m 1295[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/list.spec.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 240[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/tree.spec.ts [2m([22m[2m21 tests[22m[2m)[22m[33m 4297[2mms[22m[39m
+     [33m[2m✓[22m[39m renders virtual list container when virtual is enabled [33m 827[2mms[22m[39m
+     [33m[2m✓[22m[39m does not render virtual list when virtual is disabled [33m 916[2mms[22m[39m
+     [33m[2m✓[22m[39m renders virtual scroll structure with correct total height [33m 2066[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/notification.spec.ts [2m([22m[2m21 tests[22m[2m)[22m[33m 515[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/tabs.spec.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 511[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/radio.spec.ts [2m([22m[2m25 tests[22m[2m)[22m[32m 267[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/select.spec.ts [2m([22m[2m64 tests[22m[2m)[22m[33m 5204[2mms[22m[39m
+     [33m[2m✓[22m[39m displays remote search results in filteredOptions [33m 421[2mms[22m[39m
+       [33m[2m✓[22m[39m renders virtual scroll structure with correct total height [33m 415[2mms[22m[39m
+       [33m[2m✓[22m[39m works with remote loading in virtual scroll mode [33m 444[2mms[22m[39m
+       [33m[2m✓[22m[39m renders fewer than 50 DOM option nodes with large dataset [33m 1750[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/skeleton-item.spec.ts [2m([22m[2m30 tests[22m[2m)[22m[32m 266[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/steps.spec.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 299[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/skeleton.spec.ts [2m([22m[2m21 tests[22m[2m)[22m[33m 304[2mms[22m[39m
+[90mstderr[2m | packages/components/src/__tests__/config-provider.spec.ts[2m > [22m[2mZcConfigProvider[2m > [22m[2museGlobalConfig returns safe default context when no provider
+[22m[39m[Vue warn]: inject() can only be used inside setup() or functional components.
+
+[90mstderr[2m | packages/components/src/__tests__/config-provider.spec.ts[2m > [22m[2mZcConfigProvider[2m > [22m[2museGlobalConfig returns undefined for specific key when no provider
+[22m[39m[Vue warn]: inject() can only be used inside setup() or functional components.
+
+ [32m✓[39m packages/components/src/__tests__/config-provider.spec.ts [2m([22m[2m36 tests[22m[2m)[22m[33m 561[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/affix.spec.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 137[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/loading.spec.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 589[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/form.spec.ts [2m([22m[2m20 tests[22m[2m)[22m[33m 704[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/tree-select.spec.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 796[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/scrollbar.spec.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 190[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/statistic.spec.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 204[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/drawer.spec.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 537[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/button.spec.ts [2m([22m[2m30 tests[22m[2m)[22m[33m 301[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/upload.spec.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 493[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/form-array.spec.ts [2m([22m[2m25 tests[22m[2m)[22m[32m 275[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/accessibility-interactive.spec.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 390[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/input.spec.ts [2m([22m[2m19 tests[22m[2m)[22m[33m 323[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/container.spec.ts [2m([22m[2m28 tests[22m[2m)[22m[32m 161[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/qr-code.spec.ts [2m([22m[2m32 tests[22m[2m)[22m[33m 304[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/backtop.spec.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 258[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/alert.spec.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 367[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/auto-complete.spec.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 353[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/badge.spec.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 184[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/tooltip.spec.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 394[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/collapse.spec.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 566[2mms[22m[39m
+[90mstderr[2m | packages/components/src/__tests__/segmented.spec.ts[2m > [22m[2mZcSegmented[2m > [22m[2mrenders items from default slot with VNodes carrying value/label props
+[22m[39m[Vue warn]: Slot "default" invoked outside of the render function: this will not track dependencies used in the slot. Invoke the slot function inside the render function instead. 
+  at <ZcSegmented modelValue="list" ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+ [32m✓[39m packages/components/src/__tests__/checkbox.spec.ts [2m([22m[2m24 tests[22m[2m)[22m[33m 402[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/segmented.spec.ts [2m([22m[2m31 tests[22m[2m)[22m[33m 703[2mms[22m[39m
+[90mstdout[2m | packages/components/src/__tests__/performance.spec.ts[2m > [22m[2mPerformance Benchmarks[2m > [22m[2mTable Rendering[2m > [22m[2mshould render 1000 rows within threshold
+[22m[39m  Table(1000 rows): 10611.18ms
+
+ [32m✓[39m packages/components/src/__tests__/rate.spec.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 399[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/pagination.spec.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 327[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/popconfirm.spec.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 352[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/grid.spec.ts [2m([22m[2m32 tests[22m[2m)[22m[33m 405[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/divider.spec.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 281[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/menu.spec.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 272[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/switch.spec.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 325[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/input-number.spec.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 287[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/progress.spec.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 303[2mms[22m[39m
+[90mstdout[2m | packages/components/src/__tests__/performance.spec.ts[2m > [22m[2mPerformance Benchmarks[2m > [22m[2mTable Rendering[2m > [22m[2mshould mount and unmount 100 rows without memory leaks
+[22m[39m  Table(100 rows) mount/unmount x10 avg: 153.19ms
+
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+ [32m✓[39m packages/components/src/__tests__/watermark.spec.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 275[2mms[22m[39m
+[90mstdout[2m | packages/components/src/__tests__/performance.spec.ts[2m > [22m[2mPerformance Benchmarks[2m > [22m[2mButton Rendering[2m > [22m[2mshould render 1000 buttons within threshold
+[22m[39m  Button(1000 instances): 772.63ms
+
+ [32m✓[39m packages/components/src/__tests__/countdown.spec.ts [2m([22m[2m21 tests[22m[2m)[22m[32m 286[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/row-col.spec.ts [2m([22m[2m36 tests[22m[2m)[22m[33m 428[2mms[22m[39m
+[90mstdout[2m | packages/components/src/__tests__/performance.spec.ts[2m > [22m[2mPerformance Benchmarks[2m > [22m[2mTag Rendering[2m > [22m[2mshould render 1000 tags within threshold
+[22m[39m  Tag(1000 instances): 450.75ms
+
+ [32m✓[39m packages/components/src/__tests__/timeline.spec.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 155[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/empty.spec.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 202[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useClickOutside.spec.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 115[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/space.spec.ts [2m([22m[2m27 tests[22m[2m)[22m[32m 175[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/card.spec.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 192[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useVirtualList.spec.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 164[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/result.spec.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 168[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/transfer.spec.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 470[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useId.spec.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 79[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/flex.spec.ts [2m([22m[2m32 tests[22m[2m)[22m[32m 292[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/icon.spec.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 163[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/anchor.spec.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 270[2mms[22m[39m
+[90mstdout[2m | packages/components/src/__tests__/performance.spec.ts[2m > [22m[2mPerformance Benchmarks[2m > [22m[2mInput Rendering[2m > [22m[2mshould render 500 inputs within threshold
+[22m[39m  Input(500 instances): 2743.81ms
+
+[90mstdout[2m | packages/components/src/__tests__/performance.spec.ts[2m > [22m[2mPerformance Benchmarks[2m > [22m[2mMixed Components[2m > [22m[2mshould render a complex form within threshold
+[22m[39m  Mixed form(50 rows x 3 components): 182.92ms
+
+ [32m✓[39m packages/components/src/__tests__/performance.spec.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 16962[2mms[22m[39m
+       [33m[2m✓[22m[39m should render 100 rows within threshold [33m 655[2mms[22m[39m
+       [33m[2m✓[22m[39m should render 1000 rows within threshold [33m 10613[2mms[22m[39m
+       [33m[2m✓[22m[39m should mount and unmount 100 rows without memory leaks [33m 1534[2mms[22m[39m
+       [33m[2m✓[22m[39m should render 1000 buttons within threshold [33m 774[2mms[22m[39m
+       [33m[2m✓[22m[39m should render 1000 tags within threshold [33m 452[2mms[22m[39m
+       [33m[2m✓[22m[39m should render 500 inputs within threshold [33m 2745[2mms[22m[39m
+ [32m✓[39m packages/locale/src/__tests__/composable.spec.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 178[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/image.spec.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 288[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/avatar.spec.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 153[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useEventListener.spec.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 53[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/accessibility-form.spec.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 361[2mms[22m[39m
+ [32m✓[39m packages/theme/src/__tests__/runtime-theme.spec.ts [2m([22m[2m23 tests[22m[2m)[22m[33m 379[2mms[22m[39m
+ [32m✓[39m packages/theme/src/__tests__/presets.spec.ts [2m([22m[2m35 tests[22m[2m)[22m[32m 66[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/tag.spec.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 145[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/slider.spec.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 207[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/breadcrumb.spec.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 282[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useMediaQuery.spec.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useEscapeKeydown.spec.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 44[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/descriptions.spec.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 266[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useIntersectionObserver.spec.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 205[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useClipboard.spec.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 46[2mms[22m[39m
+ [32m✓[39m packages/theme/src/__tests__/color-generator.spec.ts [2m([22m[2m31 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m packages/utils/src/__tests__/dom.spec.ts [2m([22m[2m29 tests[22m[2m)[22m[32m 100[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useScroll.spec.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 146[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useResizeObserver.spec.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 202[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/ssr.spec.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 276[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useDark.spec.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 39[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useSize.spec.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 155[2mms[22m[39m
+ [32m✓[39m packages/theme/src/__tests__/namespace.spec.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m packages/utils/src/__tests__/index.spec.ts [2m([22m[2m34 tests[22m[2m)[22m[32m 45[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useStorage.spec.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 39[2mms[22m[39m
+ [32m✓[39m packages/locale/src/__tests__/index.spec.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useDebounce.spec.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useForwardRef.spec.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m packages/resolver/src/__tests__/resolver.spec.ts [2m([22m[2m27 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m packages/theme/src/__tests__/component-theme.spec.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m packages/utils/src/__tests__/install.spec.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useToggle.spec.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useTimeoutFn.spec.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m packages/locale/src/__tests__/dictionary.spec.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m packages/theme/src/__tests__/css-layers.spec.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m packages/utils/src/__tests__/format.spec.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useZIndex.spec.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m packages/locale/src/__tests__/translate.spec.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Suites 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m packages/components/src/table/__tests__/table-virtual.spec.ts[2m [ packages/components/src/table/__tests__/table-virtual.spec.ts ][22m
+[31m[1mError[22m: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] [0mExpected `}` but found `EOF`
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m packages/components/src/table/__tests__/table-virtual.spec.ts:527:3 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m 40 │[0m [38;5;249md[0m[38;5;249me[0m[38;5;249ms[0m[38;5;249mc[0m[38;5;249mr[0m[38;5;249mi[0m[38;5;249mb[0m[38;5;249me[0m[38;5;249m([0m[38;5;249m'[0m[38;5;249mZ[0m[38;5;249mc[0m[38;5;249mT[0m[38;5;249ma[0m[38;5;249mb[0m[38;5;249ml[0m[38;5;249me[0m[38;5;249m [0m[38;5;249mV[0m[38;5;249mi[0m[38;5;249mr[0m[38;5;249mt[0m[38;5;249mu[0m[38;5;249ma[0m[38;5;249ml[0m[38;5;249m [0m[38;5;249mS[0m[38;5;249mc[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249ml[0m[38;5;249ml[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249m'[0m[38;5;249m,[0m[38;5;249m [0m[38;5;249m([0m[38;5;249m)[0m[38;5;249m [0m[38;5;249m=[0m[38;5;249m>[0m[38;5;249m [0m{
+ [38;5;240m    │[0m                                             ┬  
+ [38;5;240m    │[0m                                             ╰── Opened here
+ [38;5;240m    │[0m 
+ [38;5;246m527 │[0m [38;5;249m}[0m[38;5;249m)[0m
+ [38;5;240m    │[0m   │ 
+ [38;5;240m    │[0m   ╰─ `}` expected
+[38;5;246m─────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mD:/safeware/web/zc-ui/packages/components/src/table/__tests__/table-virtual.spec.ts[39m
+[90m [2m❯[22m transformWithOxc node_modules/.pnpm/vite@8.0.16_@types+node@25.9.3_jiti@2.7.0_yaml@2.9.0/node_modules/vite/dist/node/chunks/node.js:[2m3344:19[22m[39m
+[90m [2m❯[22m TransformPluginContext.transform node_modules/.pnpm/vite@8.0.16_@types+node@25.9.3_jiti@2.7.0_yaml@2.9.0/node_modules/vite/dist/node/chunks/node.js:[2m3415:26[22m[39m
+[90m [2m❯[22m EnvironmentPluginContainer.transform node_modules/.pnpm/vite@8.0.16_@types+node@25.9.3_jiti@2.7.0_yaml@2.9.0/node_modules/vite/dist/node/chunks/node.js:[2m30387:51[22m[39m
+[90m [2m❯[22m loadAndTransform node_modules/.pnpm/vite@8.0.16_@types+node@25.9.3_jiti@2.7.0_yaml@2.9.0/node_modules/vite/dist/node/chunks/node.js:[2m24646:26[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 3 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m packages/components/src/__tests__/cascader.spec.ts[2m > [22mZcCascader[2m > [22mrenders virtual list structure when virtualScroll is enabled
+[41m[1m FAIL [22m[49m packages/components/src/__tests__/cascader.spec.ts[2m > [22mZcCascader[2m > [22mvirtual mode has correct total height
+[41m[1m FAIL [22m[49m packages/components/src/__tests__/cascader.spec.ts[2m > [22mZcCascader[2m > [22mcan select option in virtual scroll mode
+[31m[1mTypeError[22m: Cannot read properties of undefined (reading 'value')[39m
+[36m [2m❯[22m packages/components/src/cascader/cascader.vue:[2m437:43[22m[39m
+    [90m435|[39m                     <div
+    [90m436|[39m                       v-for="option in (virtualPanels[panelIdx] as any…
+    [90m437|[39m                       :key="String(option.value)"
+    [90m   |[39m                                           [31m^[39m
+    [90m438|[39m                       :class="[
+    [90m439|[39m                         ns.e('node'),
+[90m [2m❯[22m renderList node_modules/.pnpm/@vue+runtime-core@3.5.38/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:[2m3207:18[22m[39m
+[90m [2m❯[22m packages/components/src/cascader/cascader.vue:[2m449:27[22m[39m
+[90m [2m❯[22m renderList node_modules/.pnpm/@vue+runtime-core@3.5.38/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:[2m3177:16[22m[39m
+[90m [2m❯[22m packages/components/src/cascader/cascader.vue:[2m453:19[22m[39m
+[90m [2m❯[22m Proxy.renderFnWithContext node_modules/.pnpm/@vue+runtime-core@3.5.38/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:[2m699:13[22m[39m
+[90m [2m❯[22m Proxy.<anonymous> node_modules/.pnpm/@vue+test-utils@2.4.11_@vue_2eabc8346f451f2b41408a149a0bff27/node_modules/@vue/test-utils/dist/vue-test-utils.cjs.js:[2m7823:63[22m[39m
+[90m [2m❯[22m renderComponentRoot node_modules/.pnpm/@vue+runtime-core@3.5.38/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:[2m4558:16[22m[39m
+[90m [2m❯[22m ReactiveEffect.componentUpdateFn [as fn] node_modules/.pnpm/@vue+runtime-core@3.5.38/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:[2m6085:46[22m[39m
+[90m [2m❯[22m ReactiveEffect.run node_modules/.pnpm/@vue+reactivity@3.5.38/node_modules/@vue/reactivity/dist/reactivity.cjs.js:[2m264:19[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m108 passed[39m[22m[90m (110)[39m
+[2m      Tests [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m1916 passed[39m[22m[90m (1919)[39m
+[2m   Start at [22m 10:03:07
+[2m   Duration [22m 33.85s[2m (transform 59.44s, setup 0ms, import 121.76s, tests 60.69s, environment 236.67s)[22m
+

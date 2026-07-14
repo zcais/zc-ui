@@ -1,0 +1,47 @@
+/**
+ * ZcIconGrillOff
+ *
+ * Auto-generated from @tabler/icons — do not edit manually.
+ * Source: icons/outline/grill-off.svg
+ */
+
+import { h, type FunctionalComponent } from 'vue'
+import { withInstall } from '@zc-ui/utils'
+import type { ZcIconProps } from '../types'
+import { registerIcon } from '../icon-registry'
+
+const _body =
+  '<path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M8 8h-3a6 6 0 0 0 6 6h2c.315 0 .624 -.024 .926 -.071m2.786 -1.214a5.99 5.99 0 0 0 2.284 -4.49l0 -.225h-7" /><path d="M18.827 18.815a2 2 0 1 1 -2.663 -2.633" /><path d="M9 14l-3 6" /><path d="M15 18h-8" /><path d="M15 5v-1" /><path d="M12 5v-1" /><path d="M9 5v-1" /><path d="M3 3l18 18" />'
+
+// Register this icon's SVG data into the global icon pool
+registerIcon('grill-off', { path: _body, viewBox: '0 0 24 24', strokeWidth: 2, fill: 'none' })
+
+const _comp: FunctionalComponent<ZcIconProps> = (props) => {
+  return h('svg', {
+    xmlns: 'http://www.w3.org/2000/svg',
+    width: props.size ?? 24,
+    height: props.size ?? 24,
+    viewBox: '0 0 24 24',
+    fill: 'none',
+    stroke: props.color ?? 'currentColor',
+    'stroke-width': props.absoluteStrokeWidth
+      ? Number(props.strokeWidth ?? 2) / (Number(props.size ?? 24) / 24)
+      : (props.strokeWidth ?? 2),
+    'stroke-linecap': 'round',
+    'stroke-linejoin': 'round',
+    class: ['zc-icon', props.class, { 'zc-icon--spin': props.spin }],
+    innerHTML: _body,
+  })
+}
+
+_comp.props = {
+  size: { type: [Number, String], default: 24 },
+  color: { type: String, default: 'currentColor' },
+  strokeWidth: { type: [Number, String], default: 2 },
+  absoluteStrokeWidth: { type: Boolean, default: false },
+  spin: { type: Boolean, default: false },
+  class: { type: [String, Object, Array], default: '' },
+}
+_comp.displayName = 'ZcIconGrillOff'
+
+export const ZcIconGrillOff = withInstall(_comp, 'ZcIconGrillOff')

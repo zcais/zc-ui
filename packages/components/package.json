@@ -1,0 +1,64 @@
+{
+  "name": "@zc-ui/components",
+  "version": "1.0.0",
+  "description": "ZC UI component library",
+  "license": "MIT",
+  "author": "ZC UI Team",
+  "homepage": "https://zc-ui.github.io/zc-ui",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zc-ui/zc-ui.git",
+    "directory": "packages/components"
+  },
+  "bugs": {
+    "url": "https://github.com/zc-ui/zc-ui/issues"
+  },
+  "keywords": [
+    "vue",
+    "vue3",
+    "ui",
+    "components",
+    "component-library",
+    "zc-ui"
+  ],
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./styles": "./dist/style.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [
+    "**/*.css",
+    "**/*.vue"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "scripts": {
+    "build": "vite build",
+    "typecheck": "vue-tsc --noEmit -p tsconfig.json"
+  },
+  "peerDependencies": {
+    "vue": "^3.4.0"
+  },
+  "dependencies": {
+    "@zc-ui/utils": "workspace:*",
+    "@zc-ui/hooks": "workspace:*",
+    "@zc-ui/locale": "workspace:*",
+    "@zc-ui/theme": "workspace:*",
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "@types/qrcode": "^1.5.6"
+  }
+}

@@ -1,0 +1,47 @@
+/**
+ * ZcIconStormOff
+ *
+ * Auto-generated from @tabler/icons — do not edit manually.
+ * Source: icons/outline/storm-off.svg
+ */
+
+import { h, type FunctionalComponent } from 'vue'
+import { withInstall } from '@zc-ui/utils'
+import type { ZcIconProps } from '../types'
+import { registerIcon } from '../icon-registry'
+
+const _body =
+  '<path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M9.884 9.874a3 3 0 1 0 4.24 4.246m.57 -3.441a3.012 3.012 0 0 0 -1.41 -1.39" /><path d="M7.037 7.063a7 7 0 0 0 9.907 9.892m1.585 -2.426a7 7 0 0 0 -9.058 -9.059" /><path d="M5.369 14.236c-1.605 -3.428 -1.597 -6.673 -1 -9.849" /><path d="M18.63 9.76a14.323 14.323 0 0 1 1.368 6.251m-.37 3.608c-.087 .46 -.187 .92 -.295 1.377" /><path d="M3 3l18 18" />'
+
+// Register this icon's SVG data into the global icon pool
+registerIcon('storm-off', { path: _body, viewBox: '0 0 24 24', strokeWidth: 2, fill: 'none' })
+
+const _comp: FunctionalComponent<ZcIconProps> = (props) => {
+  return h('svg', {
+    xmlns: 'http://www.w3.org/2000/svg',
+    width: props.size ?? 24,
+    height: props.size ?? 24,
+    viewBox: '0 0 24 24',
+    fill: 'none',
+    stroke: props.color ?? 'currentColor',
+    'stroke-width': props.absoluteStrokeWidth
+      ? Number(props.strokeWidth ?? 2) / (Number(props.size ?? 24) / 24)
+      : (props.strokeWidth ?? 2),
+    'stroke-linecap': 'round',
+    'stroke-linejoin': 'round',
+    class: ['zc-icon', props.class, { 'zc-icon--spin': props.spin }],
+    innerHTML: _body,
+  })
+}
+
+_comp.props = {
+  size: { type: [Number, String], default: 24 },
+  color: { type: String, default: 'currentColor' },
+  strokeWidth: { type: [Number, String], default: 2 },
+  absoluteStrokeWidth: { type: Boolean, default: false },
+  spin: { type: Boolean, default: false },
+  class: { type: [String, Object, Array], default: '' },
+}
+_comp.displayName = 'ZcIconStormOff'
+
+export const ZcIconStormOff = withInstall(_comp, 'ZcIconStormOff')

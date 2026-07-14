@@ -1,0 +1,276 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.8 [39m[90mD:/safeware/web/zc-ui[39m
+      [2mCoverage enabled with [22m[33mv8[39m
+
+ [31m❯[39m packages/components/src/__tests__/cascader.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+ [32m✓[39m packages/hooks/src/__tests__/useDark.spec.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 35[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useSize.spec.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 66[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/transfer.spec.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 227[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/auto-complete.spec.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 358[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/loading.spec.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 496[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/tabs.spec.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 627[2mms[22m[39m
+     [33m[2m✓[22m[39m shows correct active tab [33m 343[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/time-picker.spec.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 672[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/tour.spec.ts [2m([22m[2m46 tests[22m[2m)[22m[33m 1012[2mms[22m[39m
+[90mstderr[2m | packages/components/src/table/__tests__/table-virtual.spec.ts[2m > [22m[2mZcTable Virtual Scrolling[2m > [22m[2mVirtual Mode Activation[2m > [22m[2mshould not enable virtual mode when pagination is enabled
+[22m[39m[ZcTable] Virtual scrolling and pagination are not compatible. Pagination takes precedence; virtual scrolling will be disabled.
+
+ [32m✓[39m packages/components/src/__tests__/typography.spec.ts [2m([22m[2m70 tests[22m[2m)[22m[33m 794[2mms[22m[39m
+[90mstdout[2m | packages/components/src/__tests__/performance.spec.ts[2m > [22m[2mPerformance Benchmarks[2m > [22m[2mTable Rendering[2m > [22m[2mshould render 100 rows within threshold
+[22m[39m  Table(100 rows): 718.03ms
+
+ [32m✓[39m packages/components/src/__tests__/empty.spec.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 235[2mms[22m[39m
+ [31m❯[39m packages/components/src/__tests__/accessibility-display.spec.ts [2m([22m[2m15 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 585[2mms[22m[39m
+     [32m✓[39m should have role="progressbar"[32m 176[2mms[22m[39m
+     [32m✓[39m should have aria-valuenow, aria-valuemin, aria-valuemax[32m 7[2mms[22m[39m
+     [32m✓[39m should render close button as <button> element[32m 55[2mms[22m[39m
+     [32m✓[39m should have aria-label on close button[32m 8[2mms[22m[39m
+     [32m✓[39m should have role="status"[32m 50[2mms[22m[39m
+     [32m✓[39m should have aria-label with custom value[32m 6[2mms[22m[39m
+     [32m✓[39m should have aria-label with display value by default[32m 3[2mms[22m[39m
+[31m     [31m×[31m should have role="status" and aria-busy="true"[39m[32m 18[2mms[22m[39m
+     [32m✓[39m should have role="status"[32m 207[2mms[22m[39m
+     [32m✓[39m should have aria-hidden on default SVG[32m 11[2mms[22m[39m
+     [32m✓[39m should have role="alert"[32m 10[2mms[22m[39m
+     [32m✓[39m should render close button as <button> element[32m 8[2mms[22m[39m
+     [32m✓[39m should have aria-label on close button[32m 4[2mms[22m[39m
+     [32m✓[39m should have aria-hidden on icon SVG[32m 4[2mms[22m[39m
+     [32m✓[39m should have role="status" and aria-live="polite"[32m 9[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/mention.spec.ts [2m([22m[2m63 tests[22m[2m)[22m[33m 2069[2mms[22m[39m
+     [33m[2m✓[22m[39m does not show suggestions initially [33m 302[2mms[22m[39m
+[90mstderr[2m | packages/components/src/__tests__/table.spec.ts[2m > [22m[2mZcTable[2m > [22m[2mvirtual scroll[2m > [22m[2mwarns in dev when virtual + pagination
+[22m[39m[ZcTable] Virtual scrolling and pagination are not compatible. Pagination takes precedence; virtual scrolling will be disabled.
+
+[90mstderr[2m | packages/components/src/__tests__/table.spec.ts[2m > [22m[2mZcTable[2m > [22m[2mvirtual scroll[2m > [22m[2mwarns in dev when virtual + treeProps
+[22m[39m[ZcTable] Virtual scrolling and tree table (treeProps) are not compatible. Tree structure will be ignored in virtual mode.
+
+ [32m✓[39m packages/components/src/__tests__/color-picker.spec.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 739[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/form.spec.ts [2m([22m[2m20 tests[22m[2m)[22m[33m 572[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/table.spec.ts [2m([22m[2m85 tests[22m[2m)[22m[33m 3963[2mms[22m[39m
+       [33m[2m✓[22m[39m renders fewer rows than total in virtual mode [33m 1257[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/tree.spec.ts [2m([22m[2m21 tests[22m[2m)[22m[33m 4770[2mms[22m[39m
+     [33m[2m✓[22m[39m renders virtual list container when virtual is enabled [33m 898[2mms[22m[39m
+     [33m[2m✓[22m[39m does not render virtual list when virtual is disabled [33m 1730[2mms[22m[39m
+     [33m[2m✓[22m[39m renders virtual scroll structure with correct total height [33m 1667[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/select.spec.ts [2m([22m[2m64 tests[22m[2m)[22m[33m 4921[2mms[22m[39m
+     [33m[2m✓[22m[39m displays remote search results in filteredOptions [33m 419[2mms[22m[39m
+       [33m[2m✓[22m[39m renders virtual scroll structure with correct total height [33m 403[2mms[22m[39m
+       [33m[2m✓[22m[39m works with remote loading in virtual scroll mode [33m 459[2mms[22m[39m
+       [33m[2m✓[22m[39m renders fewer than 50 DOM option nodes with large dataset [33m 1155[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/countdown.spec.ts [2m([22m[2m21 tests[22m[2m)[22m[32m 254[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/space.spec.ts [2m([22m[2m27 tests[22m[2m)[22m[32m 235[2mms[22m[39m
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+ [32m✓[39m packages/components/src/__tests__/form-array.spec.ts [2m([22m[2m25 tests[22m[2m)[22m[33m 403[2mms[22m[39m
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+ [32m✓[39m packages/components/src/__tests__/watermark.spec.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 261[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/carousel.spec.ts [2m([22m[2m23 tests[22m[2m)[22m[33m 659[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/input-number.spec.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 277[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/divider.spec.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 294[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/popover.spec.ts [2m([22m[2m38 tests[22m[2m)[22m[33m 892[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/alert.spec.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 378[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/message.spec.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 698[2mms[22m[39m
+     [33m[2m✓[22m[39m auto-closes after duration [33m 396[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/dialog.spec.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 689[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/notification.spec.ts [2m([22m[2m21 tests[22m[2m)[22m[33m 621[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/date-picker.spec.ts [2m([22m[2m16 tests[22m[2m)[22m[33m 699[2mms[22m[39m
+[90mstderr[2m | packages/components/src/__tests__/segmented.spec.ts[2m > [22m[2mZcSegmented[2m > [22m[2mrenders items from default slot with VNodes carrying value/label props
+[22m[39m[Vue warn]: Slot "default" invoked outside of the render function: this will not track dependencies used in the slot. Invoke the slot function inside the render function instead. 
+  at <ZcSegmented modelValue="list" ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+ [32m✓[39m packages/components/src/__tests__/segmented.spec.ts [2m([22m[2m31 tests[22m[2m)[22m[33m 338[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/qr-code.spec.ts [2m([22m[2m32 tests[22m[2m)[22m[33m 385[2mms[22m[39m
+[90mstderr[2m | packages/components/src/__tests__/config-provider.spec.ts[2m > [22m[2mZcConfigProvider[2m > [22m[2museGlobalConfig returns safe default context when no provider
+[22m[39m[Vue warn]: inject() can only be used inside setup() or functional components.
+
+[90mstderr[2m | packages/components/src/__tests__/config-provider.spec.ts[2m > [22m[2mZcConfigProvider[2m > [22m[2museGlobalConfig returns undefined for specific key when no provider
+[22m[39m[Vue warn]: inject() can only be used inside setup() or functional components.
+
+ [32m✓[39m packages/components/src/__tests__/grid.spec.ts [2m([22m[2m32 tests[22m[2m)[22m[33m 327[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/config-provider.spec.ts [2m([22m[2m36 tests[22m[2m)[22m[33m 551[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/collapse.spec.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 356[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/icon.spec.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 208[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/drawer.spec.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 457[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/tree-select.spec.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 508[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/switch.spec.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 269[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/checkbox.spec.ts [2m([22m[2m24 tests[22m[2m)[22m[33m 319[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/row-col.spec.ts [2m([22m[2m36 tests[22m[2m)[22m[32m 266[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/descriptions.spec.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 188[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/progress.spec.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 262[2mms[22m[39m
+[90mstdout[2m | packages/components/src/__tests__/performance.spec.ts[2m > [22m[2mPerformance Benchmarks[2m > [22m[2mTable Rendering[2m > [22m[2mshould render 1000 rows within threshold
+[22m[39m  Table(1000 rows): 10908.90ms
+
+ [32m✓[39m packages/components/src/__tests__/skeleton-item.spec.ts [2m([22m[2m30 tests[22m[2m)[22m[33m 506[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/backtop.spec.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 363[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/radio.spec.ts [2m([22m[2m25 tests[22m[2m)[22m[33m 596[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/image.spec.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 201[2mms[22m[39m
+[90mstdout[2m | packages/components/src/__tests__/performance.spec.ts[2m > [22m[2mPerformance Benchmarks[2m > [22m[2mTable Rendering[2m > [22m[2mshould mount and unmount 100 rows without memory leaks
+[22m[39m  Table(100 rows) mount/unmount x10 avg: 167.31ms
+
+ [32m✓[39m packages/components/src/__tests__/input.spec.ts [2m([22m[2m19 tests[22m[2m)[22m[33m 396[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/pagination.spec.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 295[2mms[22m[39m
+[90mstdout[2m | packages/components/src/__tests__/performance.spec.ts[2m > [22m[2mPerformance Benchmarks[2m > [22m[2mButton Rendering[2m > [22m[2mshould render 1000 buttons within threshold
+[22m[39m  Button(1000 instances): 600.56ms
+
+ [32m✓[39m packages/components/src/__tests__/menu.spec.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 332[2mms[22m[39m
+ [32m✓[39m packages/theme/src/__tests__/runtime-theme.spec.ts [2m([22m[2m23 tests[22m[2m)[22m[32m 198[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/badge.spec.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 351[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/popconfirm.spec.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 288[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/tooltip.spec.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 359[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/skeleton.spec.ts [2m([22m[2m21 tests[22m[2m)[22m[33m 486[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/upload.spec.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 416[2mms[22m[39m
+[90mstdout[2m | packages/components/src/__tests__/performance.spec.ts[2m > [22m[2mPerformance Benchmarks[2m > [22m[2mTag Rendering[2m > [22m[2mshould render 1000 tags within threshold
+[22m[39m  Tag(1000 instances): 601.17ms
+
+ [32m✓[39m packages/components/src/__tests__/flex.spec.ts [2m([22m[2m32 tests[22m[2m)[22m[32m 215[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/dropdown.spec.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 793[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/ssr.spec.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 112[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/rate.spec.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 293[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/tag.spec.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 136[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/anchor.spec.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 224[2mms[22m[39m
+[90mstdout[2m | packages/components/src/__tests__/performance.spec.ts[2m > [22m[2mPerformance Benchmarks[2m > [22m[2mInput Rendering[2m > [22m[2mshould render 500 inputs within threshold
+[22m[39m  Input(500 instances): 3138.19ms
+
+[90mstdout[2m | packages/components/src/__tests__/performance.spec.ts[2m > [22m[2mPerformance Benchmarks[2m > [22m[2mMixed Components[2m > [22m[2mshould render a complex form within threshold
+[22m[39m  Mixed form(50 rows x 3 components): 177.42ms
+
+ [32m✓[39m packages/components/src/__tests__/performance.spec.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 17901[2mms[22m[39m
+       [33m[2m✓[22m[39m should render 100 rows within threshold [33m 777[2mms[22m[39m
+       [33m[2m✓[22m[39m should render 1000 rows within threshold [33m 10910[2mms[22m[39m
+       [33m[2m✓[22m[39m should mount and unmount 100 rows without memory leaks [33m 1674[2mms[22m[39m
+       [33m[2m✓[22m[39m should render 1000 buttons within threshold [33m 604[2mms[22m[39m
+       [33m[2m✓[22m[39m should render 1000 tags within threshold [33m 603[2mms[22m[39m
+       [33m[2m✓[22m[39m should render 500 inputs within threshold [33m 3139[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useEventListener.spec.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 176[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/breadcrumb.spec.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 158[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/accessibility-form.spec.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 191[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/slider.spec.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 156[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/container.spec.ts [2m([22m[2m28 tests[22m[2m)[22m[33m 422[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/card.spec.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 231[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/accessibility-interactive.spec.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 439[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/button.spec.ts [2m([22m[2m30 tests[22m[2m)[22m[33m 423[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/steps.spec.ts [2m([22m[2m16 tests[22m[2m)[22m[33m 540[2mms[22m[39m
+ [32m✓[39m packages/locale/src/__tests__/composable.spec.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 197[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/statistic.spec.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 430[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/result.spec.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 226[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/avatar.spec.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 190[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useForwardRef.spec.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/scrollbar.spec.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 448[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/timeline.spec.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 249[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useId.spec.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 208[2mms[22m[39m
+ [32m✓[39m packages/utils/src/__tests__/dom.spec.ts [2m([22m[2m29 tests[22m[2m)[22m[32m 74[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useEscapeKeydown.spec.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 124[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useVirtualList.spec.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 217[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useClipboard.spec.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 95[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useClickOutside.spec.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 232[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useResizeObserver.spec.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 99[2mms[22m[39m
+ [32m✓[39m packages/theme/src/__tests__/presets.spec.ts [2m([22m[2m35 tests[22m[2m)[22m[32m 149[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useScroll.spec.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 85[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/list.spec.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 594[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/affix.spec.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 461[2mms[22m[39m
+ [32m✓[39m packages/utils/src/__tests__/index.spec.ts [2m([22m[2m34 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useTimeoutFn.spec.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useMediaQuery.spec.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 128[2mms[22m[39m
+ [32m✓[39m packages/theme/src/__tests__/color-generator.spec.ts [2m([22m[2m31 tests[22m[2m)[22m[32m 45[2mms[22m[39m
+ [32m✓[39m packages/theme/src/__tests__/namespace.spec.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 37[2mms[22m[39m
+ [32m✓[39m packages/utils/src/__tests__/format.spec.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useIntersectionObserver.spec.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 117[2mms[22m[39m
+ [32m✓[39m packages/locale/src/__tests__/index.spec.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useStorage.spec.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m packages/resolver/src/__tests__/resolver.spec.ts [2m([22m[2m27 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m packages/utils/src/__tests__/install.spec.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m packages/theme/src/__tests__/component-theme.spec.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useDebounce.spec.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useToggle.spec.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m packages/locale/src/__tests__/dictionary.spec.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [31m❯[39m packages/components/src/table/__tests__/table-virtual.spec.ts [2m([22m[2m19 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 29715[2mms[22m[39m
+       [33m[2m✓[22m[39m should not enable virtual mode when virtual=false [33m 554[2mms[22m[39m
+       [33m[2m✓[22m[39m should enable virtual mode when virtual=true and no pagination [33m 529[2mms[22m[39m
+       [32m✓[39m should not enable virtual mode when pagination is enabled[32m 69[2mms[22m[39m
+       [33m[2m✓[22m[39m should use default estimatedRowHeight when not provided [33m 619[2mms[22m[39m
+       [33m[2m✓[22m[39m should use custom estimatedRowHeight when provided [33m 431[2mms[22m[39m
+[31m       [31m×[31m should render minimal DOM nodes with large dataset (1000 rows)[39m[33m 11075[2mms[22m[39m
+       [32m✓[39m should sort correctly in virtual mode[32m 269[2mms[22m[39m
+       [33m[2m✓[22m[39m should emit sort-change event in virtual mode [33m 319[2mms[22m[39m
+       [33m[2m✓[22m[39m should filter correctly in virtual mode [33m 420[2mms[22m[39m
+       [33m[2m✓[22m[39m should select rows correctly in virtual mode [33m 588[2mms[22m[39m
+       [33m[2m✓[22m[39m should select all rows correctly in virtual mode [33m 724[2mms[22m[39m
+       [33m[2m✓[22m[39m should expose virtualScrollTo method [33m 365[2mms[22m[39m
+       [33m[2m✓[22m[39m should scroll to specific index [33m 665[2mms[22m[39m
+       [33m[2m✓[22m[39m should handle boundary index (0) [33m 373[2mms[22m[39m
+       [33m[2m✓[22m[39m should handle boundary index (last row) [33m 465[2mms[22m[39m
+       [32m✓[39m should handle out-of-bound index gracefully[32m 271[2mms[22m[39m
+       [33m[2m✓[22m[39m should handle 1000 rows efficiently [33m 11731[2mms[22m[39m
+       [32m✓[39m should render fixed columns correctly in virtual mode[32m 229[2mms[22m[39m
+       [32m✓[39m should show empty state when data is empty in virtual mode[32m 10[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useZIndex.spec.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m packages/theme/src/__tests__/css-layers.spec.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m packages/locale/src/__tests__/translate.spec.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Suites 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m packages/components/src/__tests__/cascader.spec.ts[2m [ packages/components/src/__tests__/cascader.spec.ts ][22m
+[31m[1mError[22m: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] [0mUnexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m packages/components/src/__tests__/cascader.spec.ts:231:1 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m231 │[0m }[38;5;249m)[0m
+ [38;5;240m    │[0m ┬  
+ [38;5;240m    │[0m ╰── 
+[38;5;246m─────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mD:/safeware/web/zc-ui/packages/components/src/__tests__/cascader.spec.ts[39m
+[90m [2m❯[22m transformWithOxc node_modules/.pnpm/vite@8.0.16_@types+node@25.9.3_jiti@2.7.0_yaml@2.9.0/node_modules/vite/dist/node/chunks/node.js:[2m3344:19[22m[39m
+[90m [2m❯[22m TransformPluginContext.transform node_modules/.pnpm/vite@8.0.16_@types+node@25.9.3_jiti@2.7.0_yaml@2.9.0/node_modules/vite/dist/node/chunks/node.js:[2m3415:26[22m[39m
+[90m [2m❯[22m EnvironmentPluginContainer.transform node_modules/.pnpm/vite@8.0.16_@types+node@25.9.3_jiti@2.7.0_yaml@2.9.0/node_modules/vite/dist/node/chunks/node.js:[2m30387:51[22m[39m
+[90m [2m❯[22m loadAndTransform node_modules/.pnpm/vite@8.0.16_@types+node@25.9.3_jiti@2.7.0_yaml@2.9.0/node_modules/vite/dist/node/chunks/node.js:[2m24646:26[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯[22m[39m
+
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m packages/components/src/__tests__/accessibility-display.spec.ts[2m > [22mAccessibility: Skeleton[2m > [22mshould have role="status" and aria-busy="true"
+[31m[1mAssertionError[22m: expected undefined to be 'status' // Object.is equality[39m
+
+[32m- Expected:[39m
+"status"
+
+[31m+ Received:[39m
+undefined
+
+[36m [2m❯[22m packages/components/src/__tests__/accessibility-display.spec.ts:[2m64:40[22m[39m
+    [90m 62|[39m   [34mit[39m([32m'should have role="status" and aria-busy="true"'[39m[33m,[39m () [33m=>[39m {
+    [90m 63|[39m     [35mconst[39m wrapper [33m=[39m [34mmount[39m([33mZcSkeleton[39m[33m,[39m { props[33m:[39m { loading[33m:[39m [35mtrue[39m } })
+    [90m 64|[39m     [34mexpect[39m(wrapper[33m.[39m[34mattributes[39m([32m'role'[39m))[33m.[39m[34mtoBe[39m([32m'status'[39m)
+    [90m   |[39m                                        [31m^[39m
+    [90m 65|[39m     [34mexpect[39m(wrapper[33m.[39m[34mattributes[39m([32m'aria-busy'[39m))[33m.[39m[34mtoBe[39m([32m'true'[39m)
+    [90m 66|[39m     [34mexpect[39m(wrapper[33m.[39m[34mattributes[39m([32m'aria-live'[39m))[33m.[39m[34mtoBe[39m([32m'polite'[39m)
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m packages/components/src/table/__tests__/table-virtual.spec.ts[2m > [22mZcTable Virtual Scrolling[2m > [22mDOM Node Count[2m > [22mshould render minimal DOM nodes with large dataset (1000 rows)
+[31m[1mError[22m: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+[36m [2m❯[22m packages/components/src/table/__tests__/table-virtual.spec.ts:[2m138:5[22m[39m
+    [90m136|[39m
+    [90m137|[39m   [34mdescribe[39m([32m'DOM Node Count'[39m[33m,[39m () [33m=>[39m {
+    [90m138|[39m     it('should render minimal DOM nodes with large dataset (1000 rows)…
+    [90m   |[39m     [31m^[39m
+    [90m139|[39m       [35mconst[39m largeData [33m=[39m [34mgenerateData[39m([34m1000[39m)
+    [90m140|[39m       [35mconst[39m wrapper [33m=[39m [34mmount[39m([33mZcTable[39m[33m,[39m {
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m107 passed[39m[22m[90m (110)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m1916 passed[39m[22m[90m (1918)[39m
+[2m   Start at [22m 09:58:13
+[2m   Duration [22m 37.93s[2m (transform 62.66s, setup 0ms, import 132.09s, tests 94.48s, environment 253.35s)[22m
+

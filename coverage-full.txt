@@ -1,0 +1,420 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.8 [39m[90mD:/safeware/web/zc-ui[39m
+      [2mCoverage enabled with [22m[33mv8[39m
+
+[90mstderr[2m | packages/components/src/__tests__/segmented.spec.ts[2m > [22m[2mZcSegmented[2m > [22m[2mrenders items from default slot with VNodes carrying value/label props
+[22m[39m[Vue warn]: Slot "default" invoked outside of the render function: this will not track dependencies used in the slot. Invoke the slot function inside the render function instead. 
+  at <ZcSegmented modelValue="list" ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+ [32m✓[39m packages/components/src/__tests__/segmented.spec.ts [2m([22m[2m31 tests[22m[2m)[22m[33m 340[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/dialog.spec.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 384[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/collapse.spec.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 335[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/tree-select.spec.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 423[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/carousel.spec.ts [2m([22m[2m23 tests[22m[2m)[22m[33m 460[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/loading.spec.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 524[2mms[22m[39m
+[90mstderr[2m | packages/components/src/__tests__/config-provider.spec.ts[2m > [22m[2mZcConfigProvider[2m > [22m[2museGlobalConfig returns safe default context when no provider
+[22m[39m[Vue warn]: inject() can only be used inside setup() or functional components.
+
+ [32m✓[39m packages/components/src/__tests__/time-picker.spec.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 667[2mms[22m[39m
+[90mstderr[2m | packages/components/src/__tests__/config-provider.spec.ts[2m > [22m[2mZcConfigProvider[2m > [22m[2museGlobalConfig returns undefined for specific key when no provider
+[22m[39m[Vue warn]: inject() can only be used inside setup() or functional components.
+
+[90mstdout[2m | packages/components/src/__tests__/performance.spec.ts[2m > [22m[2mPerformance Benchmarks[2m > [22m[2mTable Rendering[2m > [22m[2mshould render 100 rows within threshold
+[22m[39m  Table(100 rows): 418.02ms
+
+ [32m✓[39m packages/components/src/__tests__/popover.spec.ts [2m([22m[2m38 tests[22m[2m)[22m[33m 698[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/config-provider.spec.ts [2m([22m[2m36 tests[22m[2m)[22m[33m 369[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/tour.spec.ts [2m([22m[2m46 tests[22m[2m)[22m[33m 931[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/form.spec.ts [2m([22m[2m20 tests[22m[2m)[22m[33m 559[2mms[22m[39m
+[90mstderr[2m | packages/components/src/table/__tests__/table-virtual.spec.ts[2m > [22m[2mZcTable Virtual Scrolling[2m > [22m[2mVirtual Mode Activation[2m > [22m[2mshould not enable virtual mode when pagination is enabled
+[22m[39m[ZcTable] Virtual scrolling and pagination are not compatible. Pagination takes precedence; virtual scrolling will be disabled.
+
+ [32m✓[39m packages/components/src/__tests__/mention.spec.ts [2m([22m[2m63 tests[22m[2m)[22m[33m 1483[2mms[22m[39m
+[90mstderr[2m | packages/components/src/__tests__/table.spec.ts[2m > [22m[2mZcTable[2m > [22m[2mvirtual scroll[2m > [22m[2mwarns in dev when virtual + pagination
+[22m[39m[ZcTable] Virtual scrolling and pagination are not compatible. Pagination takes precedence; virtual scrolling will be disabled.
+
+[90mstderr[2m | packages/components/src/__tests__/table.spec.ts[2m > [22m[2mZcTable[2m > [22m[2mvirtual scroll[2m > [22m[2mwarns in dev when virtual + treeProps
+[22m[39m[ZcTable] Virtual scrolling and tree table (treeProps) are not compatible. Tree structure will be ignored in virtual mode.
+
+ [32m✓[39m packages/components/src/__tests__/table.spec.ts [2m([22m[2m85 tests[22m[2m)[22m[33m 3750[2mms[22m[39m
+       [33m[2m✓[22m[39m renders fewer rows than total in virtual mode [33m 1141[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/tree.spec.ts [2m([22m[2m21 tests[22m[2m)[22m[33m 4332[2mms[22m[39m
+     [33m[2m✓[22m[39m renders virtual list container when virtual is enabled [33m 1213[2mms[22m[39m
+     [33m[2m✓[22m[39m does not render virtual list when virtual is disabled [33m 1035[2mms[22m[39m
+     [33m[2m✓[22m[39m renders virtual scroll structure with correct total height [33m 1644[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/transfer.spec.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 213[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/drawer.spec.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 304[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/tabs.spec.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 515[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/select.spec.ts [2m([22m[2m64 tests[22m[2m)[22m[33m 4908[2mms[22m[39m
+     [33m[2m✓[22m[39m displays remote search results in filteredOptions [33m 430[2mms[22m[39m
+       [33m[2m✓[22m[39m renders virtual scroll structure with correct total height [33m 349[2mms[22m[39m
+       [33m[2m✓[22m[39m works with remote loading in virtual scroll mode [33m 420[2mms[22m[39m
+       [33m[2m✓[22m[39m renders fewer than 50 DOM option nodes with large dataset [33m 1711[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/upload.spec.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 266[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/message.spec.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 373[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/notification.spec.ts [2m([22m[2m21 tests[22m[2m)[22m[33m 494[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/row-col.spec.ts [2m([22m[2m36 tests[22m[2m)[22m[33m 334[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/color-picker.spec.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 644[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/checkbox.spec.ts [2m([22m[2m24 tests[22m[2m)[22m[33m 514[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/rate.spec.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 363[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/grid.spec.ts [2m([22m[2m32 tests[22m[2m)[22m[33m 483[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/typography.spec.ts [2m([22m[2m70 tests[22m[2m)[22m[33m 950[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/accessibility-interactive.spec.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 357[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/tooltip.spec.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 474[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/date-picker.spec.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 297[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/accessibility-form.spec.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 107[2mms[22m[39m
+ [32m✓[39m packages/theme/src/__tests__/runtime-theme.spec.ts [2m([22m[2m23 tests[22m[2m)[22m[32m 190[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/pagination.spec.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 309[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/popconfirm.spec.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 282[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/alert.spec.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 296[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/auto-complete.spec.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 485[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/switch.spec.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 237[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/dropdown.spec.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 252[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/input.spec.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 252[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/skeleton.spec.ts [2m([22m[2m21 tests[22m[2m)[22m[32m 206[2mms[22m[39m
+[90mstdout[2m | packages/components/src/__tests__/performance.spec.ts[2m > [22m[2mPerformance Benchmarks[2m > [22m[2mTable Rendering[2m > [22m[2mshould render 1000 rows within threshold
+[22m[39m  Table(1000 rows): 9968.16ms
+
+ [32m✓[39m packages/components/src/__tests__/button.spec.ts [2m([22m[2m30 tests[22m[2m)[22m[32m 145[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/progress.spec.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 346[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/qr-code.spec.ts [2m([22m[2m32 tests[22m[2m)[22m[33m 686[2mms[22m[39m
+[90mstdout[2m | packages/components/src/__tests__/performance.spec.ts[2m > [22m[2mPerformance Benchmarks[2m > [22m[2mTable Rendering[2m > [22m[2mshould mount and unmount 100 rows without memory leaks
+[22m[39m  Table(100 rows) mount/unmount x10 avg: 130.17ms
+
+ [32m✓[39m packages/components/src/__tests__/flex.spec.ts [2m([22m[2m32 tests[22m[2m)[22m[33m 371[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/input-number.spec.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 289[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/steps.spec.ts [2m([22m[2m16 tests[22m[2m)[22m[33m 378[2mms[22m[39m
+[90mstdout[2m | packages/components/src/__tests__/performance.spec.ts[2m > [22m[2mPerformance Benchmarks[2m > [22m[2mButton Rendering[2m > [22m[2mshould render 1000 buttons within threshold
+[22m[39m  Button(1000 instances): 639.56ms
+
+ [32m✓[39m packages/components/src/__tests__/ssr.spec.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 150[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/breadcrumb.spec.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 207[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/divider.spec.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 190[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/image.spec.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 287[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/countdown.spec.ts [2m([22m[2m21 tests[22m[2m)[22m[33m 383[2mms[22m[39m
+[90mstdout[2m | packages/components/src/__tests__/performance.spec.ts[2m > [22m[2mPerformance Benchmarks[2m > [22m[2mTag Rendering[2m > [22m[2mshould render 1000 tags within threshold
+[22m[39m  Tag(1000 instances): 766.54ms
+
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+ [32m✓[39m packages/components/src/__tests__/watermark.spec.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 208[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/form-array.spec.ts [2m([22m[2m25 tests[22m[2m)[22m[33m 360[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/anchor.spec.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 187[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/descriptions.spec.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 260[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/radio.spec.ts [2m([22m[2m25 tests[22m[2m)[22m[33m 341[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/skeleton-item.spec.ts [2m([22m[2m30 tests[22m[2m)[22m[33m 305[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/backtop.spec.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 222[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/menu.spec.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 441[2mms[22m[39m
+[90mstdout[2m | packages/components/src/__tests__/performance.spec.ts[2m > [22m[2mPerformance Benchmarks[2m > [22m[2mInput Rendering[2m > [22m[2mshould render 500 inputs within threshold
+[22m[39m  Input(500 instances): 2755.87ms
+
+[90mstdout[2m | packages/components/src/__tests__/performance.spec.ts[2m > [22m[2mPerformance Benchmarks[2m > [22m[2mMixed Components[2m > [22m[2mshould render a complex form within threshold
+[22m[39m  Mixed form(50 rows x 3 components): 150.20ms
+
+ [32m✓[39m packages/hooks/src/__tests__/useIntersectionObserver.spec.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 103[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/performance.spec.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 16028[2mms[22m[39m
+       [33m[2m✓[22m[39m should render 100 rows within threshold [33m 434[2mms[22m[39m
+       [33m[2m✓[22m[39m should render 1000 rows within threshold [33m 9970[2mms[22m[39m
+       [33m[2m✓[22m[39m should mount and unmount 100 rows without memory leaks [33m 1303[2mms[22m[39m
+       [33m[2m✓[22m[39m should render 1000 buttons within threshold [33m 640[2mms[22m[39m
+       [33m[2m✓[22m[39m should render 1000 tags within threshold [33m 767[2mms[22m[39m
+       [33m[2m✓[22m[39m should render 500 inputs within threshold [33m 2757[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/slider.spec.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 181[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useResizeObserver.spec.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 117[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/statistic.spec.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 163[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/list.spec.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 372[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/empty.spec.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 415[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/card.spec.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 347[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/scrollbar.spec.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 170[2mms[22m[39m
+ [32m✓[39m packages/locale/src/__tests__/composable.spec.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 79[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useVirtualList.spec.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 122[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/badge.spec.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 241[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/icon.spec.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 162[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/result.spec.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 328[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/cascader.spec.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 445[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/space.spec.ts [2m([22m[2m27 tests[22m[2m)[22m[32m 244[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useSize.spec.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 83[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/avatar.spec.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 233[2mms[22m[39m
+ [32m✓[39m packages/utils/src/__tests__/dom.spec.ts [2m([22m[2m29 tests[22m[2m)[22m[32m 71[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useScroll.spec.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 75[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/tag.spec.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 245[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/timeline.spec.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 233[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useClickOutside.spec.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 118[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/affix.spec.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 140[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useId.spec.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 90[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/accessibility-display.spec.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 502[2mms[22m[39m
+ [32m✓[39m packages/components/src/__tests__/container.spec.ts [2m([22m[2m28 tests[22m[2m)[22m[33m 468[2mms[22m[39m
+ [32m✓[39m packages/theme/src/__tests__/presets.spec.ts [2m([22m[2m35 tests[22m[2m)[22m[32m 74[2mms[22m[39m
+ [32m✓[39m packages/utils/src/__tests__/index.spec.ts [2m([22m[2m34 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useEventListener.spec.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 86[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useDark.spec.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 41[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useClipboard.spec.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 58[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useEscapeKeydown.spec.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 53[2mms[22m[39m
+ [32m✓[39m packages/theme/src/__tests__/namespace.spec.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m packages/theme/src/__tests__/color-generator.spec.ts [2m([22m[2m31 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useStorage.spec.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useMediaQuery.spec.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m packages/locale/src/__tests__/dictionary.spec.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m packages/resolver/src/__tests__/resolver.spec.ts [2m([22m[2m27 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useTimeoutFn.spec.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useForwardRef.spec.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m packages/locale/src/__tests__/index.spec.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useDebounce.spec.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m packages/theme/src/__tests__/component-theme.spec.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m packages/utils/src/__tests__/install.spec.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useZIndex.spec.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m packages/hooks/src/__tests__/useToggle.spec.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m packages/utils/src/__tests__/format.spec.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m packages/theme/src/__tests__/css-layers.spec.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m packages/locale/src/__tests__/translate.spec.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m packages/components/src/table/__tests__/table-virtual.spec.ts [2m([22m[2m19 tests[22m[2m)[22m[33m 26326[2mms[22m[39m
+       [33m[2m✓[22m[39m should not enable virtual mode when virtual=false [33m 580[2mms[22m[39m
+       [33m[2m✓[22m[39m should enable virtual mode when virtual=true and no pagination [33m 489[2mms[22m[39m
+       [33m[2m✓[22m[39m should use default estimatedRowHeight when not provided [33m 768[2mms[22m[39m
+       [33m[2m✓[22m[39m should use custom estimatedRowHeight when provided [33m 499[2mms[22m[39m
+       [33m[2m✓[22m[39m should render minimal DOM nodes with large dataset (1000 rows) [33m 10691[2mms[22m[39m
+       [33m[2m✓[22m[39m should sort correctly in virtual mode [33m 355[2mms[22m[39m
+       [33m[2m✓[22m[39m should emit sort-change event in virtual mode [33m 305[2mms[22m[39m
+       [33m[2m✓[22m[39m should filter correctly in virtual mode [33m 409[2mms[22m[39m
+       [33m[2m✓[22m[39m should select rows correctly in virtual mode [33m 616[2mms[22m[39m
+       [33m[2m✓[22m[39m should select all rows correctly in virtual mode [33m 706[2mms[22m[39m
+       [33m[2m✓[22m[39m should scroll to specific index [33m 593[2mms[22m[39m
+       [33m[2m✓[22m[39m should handle boundary index (last row) [33m 612[2mms[22m[39m
+       [33m[2m✓[22m[39m should handle 1000 rows efficiently [33m 8532[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m110 passed[39m[22m[90m (110)[39m
+[2m      Tests [22m [1m[32m1936 passed[39m[22m[90m (1936)[39m
+[2m   Start at [22m 10:34:20
+[2m   Duration [22m 33.48s[2m (transform 54.08s, setup 0ms, import 107.31s, tests 83.77s, environment 233.43s)[22m
+
+[34m % [39m[2mCoverage report from [22m[33mv8[39m
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   73.42 |    66.32 |   75.62 |   75.38 |                   
+ ...ents/src/affix |   70.68 |    45.94 |   77.77 |      74 |                   
+  affix.vue        |   70.68 |    45.94 |   77.77 |      74 | ...99,107,115-117 
+ ...ents/src/alert |     100 |      100 |     100 |     100 |                   
+  alert.vue        |     100 |      100 |     100 |     100 |                   
+ ...nts/src/anchor |   66.26 |     27.5 |   63.63 |   69.01 |                   
+  anchor-link.vue  |   86.66 |       25 |      50 |   84.61 | 50-51             
+  anchor.vue       |   61.76 |    27.77 |   71.42 |   65.51 | ...26,133,145-146 
+ .../auto-complete |   67.04 |    48.07 |   73.91 |   69.62 |                   
+  ...-complete.vue |   67.04 |    48.07 |   73.91 |   69.62 | ...42,161-163,220 
+ ...nts/src/avatar |   90.47 |      100 |   85.71 |   89.47 |                   
+  avatar.vue       |   90.47 |      100 |   85.71 |   89.47 | 34-35             
+ ...ts/src/backtop |   69.23 |    62.16 |   58.33 |   69.56 |                   
+  backtop.vue      |   69.23 |    62.16 |   58.33 |   69.56 | ...11-112,128-129 
+ ...ents/src/badge |     100 |      100 |     100 |     100 |                   
+  badge.vue        |     100 |      100 |     100 |     100 |                   
+ ...src/breadcrumb |   63.63 |       30 |   57.14 |      65 |                   
+  ...rumb-item.vue |      50 |       30 |      40 |      50 | 33-34,40-45       
+  breadcrumb.vue   |     100 |      100 |     100 |     100 |                   
+ ...nts/src/button |   91.66 |    94.44 |     100 |     100 |                   
+  button.vue       |   91.66 |    94.44 |     100 |     100 | 62                
+ ...nents/src/card |     100 |      100 |     100 |     100 |                   
+  card.vue         |     100 |      100 |     100 |     100 |                   
+ ...s/src/carousel |   73.97 |    63.47 |   66.66 |   77.04 |                   
+  ...usel-item.vue |    92.1 |    76.92 |      80 |   93.75 | 33,74             
+  carousel.vue     |   67.59 |    59.55 |   64.51 |   71.11 | ...14,219,322-323 
+ ...s/src/cascader |   44.44 |    46.55 |      44 |   45.85 |                   
+  cascader.vue     |   44.44 |    46.55 |      44 |   45.85 | ...40-445,469-475 
+ ...s/src/checkbox |   93.33 |    91.89 |   83.33 |   94.44 |                   
+  ...box-group.vue |      95 |       50 |   83.33 |   94.73 | 50                
+  checkbox.vue     |    92.5 |    94.28 |   83.33 |   94.28 | 88-92             
+ ...onents/src/col |     100 |    80.55 |     100 |     100 |                   
+  col.vue          |     100 |    80.55 |     100 |     100 | ...06-108,142-144 
+ ...s/src/collapse |   66.15 |    65.62 |   70.58 |   65.51 |                   
+  ...apse-item.vue |      60 |      100 |      70 |   55.55 | 58-76             
+  collapse.vue     |   71.42 |       50 |   71.42 |   74.19 | 41-46,61-63       
+ ...c/color-picker |   39.04 |    30.58 |   45.45 |    40.1 |                   
+  color-picker.vue |   39.04 |    30.58 |   45.45 |    40.1 | ...33,383,401-412 
+ ...onfig-provider |      79 |    79.41 |   70.58 |   81.52 |                   
+  ...-provider.vue |   85.18 |    79.03 |   94.73 |   89.04 | 213-215,234-239   
+  global-config.ts |     100 |      100 |     100 |     100 |                   
+  ...obalConfig.ts |      40 |    83.33 |   18.18 |      40 | 36-44             
+ .../src/container |     100 |      100 |     100 |     100 |                   
+  aside.vue        |     100 |      100 |     100 |     100 |                   
+  container.vue    |     100 |      100 |     100 |     100 |                   
+  footer.vue       |     100 |      100 |     100 |     100 |                   
+  header.vue       |     100 |      100 |     100 |     100 |                   
+  main.vue         |     100 |      100 |     100 |     100 |                   
+ .../src/countdown |   98.55 |    96.87 |     100 |     100 |                   
+  countdown.vue    |   98.55 |    96.87 |     100 |     100 | 108               
+ ...rc/date-picker |   65.51 |    44.21 |   80.95 |   64.93 |                   
+  date-picker.vue  |   65.51 |    44.21 |   80.95 |   64.93 | ...17-347,449,487 
+ ...c/descriptions |   72.41 |    62.96 |   42.85 |   73.07 |                   
+  ...ions-item.vue |      90 |       50 |       0 |      90 | 57                
+  descriptions.vue |   68.75 |       64 |      50 |   69.04 | ...49,53-59,77-79 
+ ...nts/src/dialog |   79.22 |    72.22 |   81.81 |      80 |                   
+  dialog.vue       |   79.22 |    72.22 |   81.81 |      80 | ...87-192,200,205 
+ ...ts/src/divider |     100 |      100 |     100 |     100 |                   
+  divider.vue      |     100 |      100 |     100 |     100 |                   
+ ...nts/src/drawer |   43.68 |    37.97 |   59.09 |   43.75 |                   
+  drawer.vue       |   43.68 |    37.97 |   59.09 |   43.75 | ...02-205,210-216 
+ ...s/src/dropdown |    75.7 |     58.2 |   66.66 |   85.88 |                   
+  ...down-item.vue |   88.88 |       50 |      50 |     100 | 41-50             
+  ...down-menu.vue |       0 |      100 |     100 |       0 | 6-10              
+  dropdown.vue     |   76.04 |    58.73 |      70 |   86.84 | ...63,201,218-219 
+ ...ents/src/empty |     100 |      100 |     100 |     100 |                   
+  empty.vue        |     100 |      100 |     100 |     100 |                   
+ ...nents/src/flex |     100 |    93.75 |     100 |     100 |                   
+  flex.vue         |     100 |    93.75 |     100 |     100 | 113               
+ ...nents/src/form |   74.52 |    63.84 |      86 |   78.14 |                   
+  form-item.vue    |   77.89 |    74.62 |   90.47 |      80 | ...15-135,165-167 
+  form.vue         |   56.14 |    30.76 |   69.23 |   63.63 | ...12-114,153-154 
+  useFormArray.ts  |   86.11 |    73.33 |   92.85 |   87.09 | 52-55,141         
+  validate.ts      |    87.5 |    61.11 |     100 |   86.95 | 48-49,81          
+ ...nents/src/grid |     100 |    97.05 |     100 |     100 |                   
+  grid-item.vue    |     100 |      100 |     100 |     100 |                   
+  grid.vue         |     100 |       95 |     100 |     100 | 87                
+ ...nents/src/icon |     100 |    92.85 |     100 |     100 |                   
+  icon.vue         |     100 |    92.85 |     100 |     100 | 38                
+ ...ents/src/icons |       0 |      100 |     100 |       0 |                   
+  icon-paths.ts    |       0 |      100 |     100 |       0 | 10-22             
+ ...ents/src/image |   39.02 |    44.44 |   29.16 |    37.5 |                   
+  ...e-preview.vue |    5.26 |        0 |       0 |    5.26 | 8-100             
+  image.vue        |   68.18 |    58.82 |   58.33 |   66.66 | ...99-112,119-120 
+ ...ents/src/input |   81.96 |    72.46 |      68 |   83.01 |                   
+  input.vue        |   81.96 |    72.46 |      68 |   83.01 | ...62,173-174,204 
+ ...c/input-number |   63.73 |    66.12 |   65.21 |   66.66 |                   
+  input-number.vue |   63.73 |    66.12 |   65.21 |   66.66 | ...86-189,202-204 
+ ...nents/src/list |    61.9 |    80.76 |   42.85 |      60 |                   
+  list-item.vue    |      50 |    64.28 |      25 |      50 | 34-44             
+  list.vue         |   66.66 |      100 |      50 |   64.28 | 36-40             
+ ...ts/src/loading |   93.93 |    81.53 |   92.85 |   98.33 |                   
+  loading.ts       |   91.83 |    73.33 |    87.5 |   97.77 | 97                
+  loading.vue      |     100 |      100 |     100 |     100 |                   
+ ...ts/src/mention |   78.38 |    65.76 |   85.93 |   80.48 |                   
+  mention.vue      |   78.38 |    65.76 |   85.93 |   80.48 | ...35,684-685,722 
+ ...nents/src/menu |   64.21 |    38.46 |   65.51 |   70.51 |                   
+  menu-item.vue    |   80.95 |       50 |      80 |   88.23 | 45,48             
+  menu.vue         |      80 |       50 |      75 |   79.31 | 53,65-66,74,80-81 
+  submenu.vue      |   45.45 |    32.35 |      50 |   53.12 | ...3-76,81-83,136 
+ ...ts/src/message |   92.77 |       75 |   95.65 |      96 |                   
+  message.ts       |   89.83 |    67.74 |   93.33 |   94.33 | 70,79-80          
+  message.vue      |     100 |      100 |     100 |     100 |                   
+ ...c/notification |   91.42 |    77.77 |    92.3 |   94.62 |                   
+  notification.ts  |   86.76 |    70.27 |   85.71 |    91.8 | 69,80-84          
+  notification.vue |     100 |    94.11 |     100 |     100 | 111               
+ ...src/pagination |   89.39 |       80 |     100 |   94.23 |                   
+  pagination.vue   |   89.39 |       80 |     100 |   94.23 | 74-76             
+ ...src/popconfirm |   55.42 |    56.92 |   45.45 |   58.33 |                   
+  popconfirm.vue   |   55.42 |    56.92 |   45.45 |   58.33 | ...35,245,277-278 
+ ...ts/src/popover |   79.36 |    67.53 |   78.37 |   82.56 |                   
+  popover.vue      |   79.36 |    67.53 |   78.37 |   82.56 | ...21-325,349-350 
+ ...s/src/progress |   94.87 |     93.1 |     100 |   96.77 |                   
+  progress.vue     |   94.87 |     93.1 |     100 |   96.77 | 110               
+ ...ts/src/qr-code |   68.18 |     58.1 |   78.57 |      71 |                   
+  qr-code.vue      |   68.18 |     58.1 |   78.57 |      71 | ...90,196,239,245 
+ ...ents/src/radio |   58.82 |    42.55 |   57.89 |   59.74 |                   
+  radio-group.vue  |   41.66 |        0 |   44.44 |   45.45 | 49,55,61,84-117   
+  radio.vue        |   81.08 |    71.42 |      70 |   78.78 | 34,76-80,88,96-98 
+ ...nents/src/rate |   83.33 |    76.13 |      80 |   85.71 |                   
+  rate.vue         |   83.33 |    76.13 |      80 |   85.71 | 103-117,184,204   
+ ...nts/src/result |     100 |       90 |     100 |     100 |                   
+  result.vue       |     100 |       90 |     100 |     100 | 47                
+ ...onents/src/row |     100 |      100 |     100 |     100 |                   
+  row.vue          |     100 |      100 |     100 |     100 |                   
+ .../src/scrollbar |     100 |     87.5 |     100 |     100 |                   
+  scrollbar.vue    |     100 |     87.5 |     100 |     100 | 40                
+ .../src/segmented |    89.9 |    78.26 |   84.61 |   95.55 |                   
+  segmented.vue    |    89.9 |    78.26 |   84.61 |   95.55 | 105-106,159,202   
+ ...nts/src/select |    85.3 |    84.18 |   91.54 |   87.61 |                   
+  select.vue       |    85.3 |    84.18 |   91.54 |   87.61 | ...64,671,725,746 
+ ...s/src/skeleton |    93.4 |    80.24 |   94.73 |   95.58 |                   
+  ...eton-item.vue |     100 |      100 |     100 |     100 |                   
+  skeleton.vue     |   85.71 |    67.34 |   88.88 |    90.9 | 74-76             
+ ...nts/src/slider |   28.98 |    44.61 |    38.7 |   29.45 |                   
+  slider.vue       |   28.98 |    44.61 |    38.7 |   29.45 | ...71,317-361,363 
+ ...ents/src/space |   93.93 |    82.75 |    87.5 |   93.75 |                   
+  space.vue        |   93.93 |    82.75 |    87.5 |   93.75 | 81,155            
+ .../src/statistic |   43.33 |       50 |   61.53 |   44.64 |                   
+  statistic.vue    |   43.33 |       50 |   61.53 |   44.64 | ...09,116-117,123 
+ ...ents/src/steps |    79.1 |    66.66 |   76.19 |   84.61 |                   
+  step.vue         |   80.76 |       70 |   78.57 |   84.61 | 50-53,61,94       
+  steps.vue        |   73.33 |        0 |   71.42 |   84.61 | 42-43             
+ ...nts/src/switch |   88.09 |    78.94 |    90.9 |   86.48 |                   
+  switch.vue       |   88.09 |    78.94 |    90.9 |   86.48 | 90,92,124-126     
+ ...ents/src/table |   85.03 |    76.33 |    82.8 |   87.52 |                   
+  table.vue        |   85.03 |    76.33 |    82.8 |   87.52 | ...1221,1286-1322 
+ ...nents/src/tabs |   44.44 |    36.61 |   46.66 |   45.26 |                   
+  tab-pane.vue     |    90.9 |    88.88 |      75 |      90 | 86,93             
+  tabs.vue         |   32.55 |    29.03 |   36.36 |   33.33 | ...21-175,201-212 
+ ...onents/src/tag |     100 |       80 |     100 |     100 |                   
+  tag.vue          |     100 |       80 |     100 |     100 | 58                
+ ...rc/time-picker |   75.75 |       70 |   72.72 |    77.9 |                   
+  time-picker.vue  |   75.75 |       70 |   72.72 |    77.9 | ...95,263,278,293 
+ ...s/src/timeline |   70.58 |       76 |   66.66 |   68.75 |                   
+  ...line-item.vue |   66.66 |       76 |     100 |   63.63 | 43-51             
+  timeline.vue     |      80 |      100 |       0 |      80 | 19                
+ ...ts/src/tooltip |   63.85 |    47.91 |   58.82 |   67.53 |                   
+  tooltip.vue      |   63.85 |    47.91 |   58.82 |   67.53 | ...34-236,253-254 
+ ...nents/src/tour |   91.93 |    84.31 |      92 |   94.79 |                   
+  tour.vue         |   91.93 |    84.31 |      92 |   94.79 | ...71,429,446-450 
+ ...s/src/transfer |   60.52 |    69.76 |   68.29 |      60 |                   
+  transfer.vue     |   60.52 |    69.76 |   68.29 |      60 | ...11,234-332,355 
+ ...nents/src/tree |    62.3 |    54.26 |   70.14 |   63.34 |                   
+  tree-node.vue    |   65.38 |    49.09 |   72.22 |      65 | 19,61,79-104      
+  tree.vue         |    61.5 |    56.88 |   69.38 |   62.98 | ...65-376,403-418 
+ ...rc/tree-select |   53.01 |    55.97 |   55.81 |   52.02 |                   
+  tree-node.vue    |   80.64 |    91.66 |      50 |   80.64 | ...56,121,138-139 
+  tree-select.vue  |   46.66 |    48.18 |   57.57 |   44.44 | ...34,242-260,272 
+ ...src/typography |   97.56 |    91.66 |   95.83 |   98.61 |                   
+  link.vue         |     100 |      100 |     100 |     100 |                   
+  paragraph.vue    |   95.83 |    90.38 |   93.33 |   97.67 | 117               
+  text.vue         |     100 |      100 |     100 |     100 |                   
+  title.vue        |     100 |     87.5 |     100 |     100 | 42-44             
+ ...nts/src/upload |      25 |    25.28 |   31.25 |   25.68 |                   
+  upload.vue       |      25 |    25.28 |   31.25 |   25.68 | ...90,296-297,386 
+ .../src/watermark |   54.32 |    66.66 |      60 |   54.54 |                   
+  watermark.vue    |   54.32 |    66.66 |      60 |   54.54 | ...84-186,193-200 
+ hooks/src         |   79.33 |    63.82 |    86.5 |   83.69 |                   
+  ...ickOutside.ts |   80.95 |    65.21 |     100 |   93.75 | 73                
+  useClipboard.ts  |   74.46 |    63.15 |   66.66 |   80.95 | 70,75-81,95       
+  useDark.ts       |   82.69 |    72.09 |     100 |   89.13 | 148-154           
+  useDebounce.ts   |   92.85 |       75 |     100 |   92.72 | 43,95-96,121      
+  ...apeKeydown.ts |     100 |     90.9 |     100 |     100 | 29                
+  ...ntListener.ts |   87.87 |    74.19 |    87.5 |   88.88 | 41,67,74          
+  useFocusTrap.ts  |      42 |    24.32 |    62.5 |   46.66 | ...,86,96-104,109 
+  useForwardRef.ts |     100 |      100 |     100 |     100 |                   
+  useId.ts         |     100 |      100 |     100 |     100 |                   
+  ...onObserver.ts |    87.5 |       75 |     100 |   95.45 | 73                
+  useLocale.ts     |       0 |        0 |       0 |       0 |                   
+  useMediaQuery.ts |      70 |    57.14 |   64.28 |      80 | 31-37,103-106     
+  ...onalRouter.ts |   66.66 |        0 |      50 |     100 | 16                
+  ...zeObserver.ts |      90 |    68.75 |     100 |   96.29 | 70                
+  useScroll.ts     |   72.88 |    48.88 |      75 |   78.18 | ...90,120,128,131 
+  useSize.ts       |   61.53 |       50 |      80 |      64 | 27,46-53,59-60    
+  useStorage.ts    |   84.37 |    70.58 |      90 |   89.28 | 27,89-90          
+  useTimeoutFn.ts  |   95.34 |     87.5 |     100 |   95.34 | 64,128            
+  ...irtualList.ts |   85.18 |       80 |   86.66 |   83.67 | ...17-120,128-129 
+  useZIndex.ts     |     100 |      100 |     100 |     100 |                   
+ locale/src        |     100 |      100 |     100 |     100 |                   
+  dictionary.ts    |     100 |      100 |     100 |     100 |                   
+  translate.ts     |     100 |      100 |     100 |     100 |                   
+ theme/src         |   94.83 |    87.41 |   96.29 |   97.55 |                   
+  ...-generator.ts |   97.89 |    95.74 |     100 |   97.77 | 111-112           
+  colors.ts        |     100 |      100 |     100 |     100 |                   
+  css-layers.ts    |     100 |      100 |     100 |     100 |                   
+  namespace.ts     |     100 |      100 |     100 |     100 |                   
+  presets.ts       |     100 |      100 |     100 |     100 |                   
+  runtime-theme.ts |   86.53 |    63.63 |   89.65 |   94.44 | 54-55,405,421-426 
+ utils/src         |   93.18 |       75 |     100 |   92.85 |                   
+  dom.ts           |     100 |      100 |     100 |     100 |                   
+  format.ts        |     100 |      100 |     100 |     100 |                   
+  install.ts       |     100 |       75 |     100 |     100 | 26                
+  ssr.ts           |   78.57 |       70 |     100 |   78.57 | 86,97,107         
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 73.42% ( 5307/7228 )
+Branches     : 66.32% ( 3273/4935 )
+Functions    : 75.62% ( 1412/1867 )
+Lines        : 75.38% ( 4824/6399 )
+================================================================================

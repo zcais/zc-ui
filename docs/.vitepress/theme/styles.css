@@ -1,0 +1,95 @@
+/**
+ * ZC UI documentation custom styles.
+ * Extends VitePress default theme with minor adjustments.
+ */
+
+:root {
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #3c6ee0, #5b8def);
+  --vp-home-hero-image-background-image: linear-gradient(-45deg, #3c6ee0 50%, #5b8def 50%);
+  --vp-home-hero-image-filter: blur(44px);
+  --vp-button-brand-bg: #3c6ee0;
+  --vp-button-brand-hover-bg: #5b8def;
+  --vp-c-brand-1: #3c6ee0;
+  --vp-c-brand-2: #5b8def;
+  --vp-c-brand-3: #2b5cc8;
+}
+
+/* DemoBlock styling */
+.demo-block {
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 16px 0;
+}
+
+.demo-block__source {
+  padding: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.demo-block__source > * {
+  margin: 0;
+}
+
+.demo-block__meta {
+  border-top: 1px solid var(--vp-c-divider);
+  background: var(--vp-c-bg-soft);
+}
+
+.demo-block__controls {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 16px;
+  gap: 8px;
+}
+
+.demo-block__control-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  font-size: 13px;
+  border: none;
+  background: transparent;
+  color: var(--vp-c-text-2);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.demo-block__control-btn:hover {
+  background: var(--vp-c-bg-soft-up);
+  color: var(--vp-c-brand-1);
+}
+
+.demo-block__control-btn--stackblitz {
+  font-weight: 500;
+  color: var(--vp-c-brand-1);
+}
+
+.demo-block__control-btn--stackblitz:hover {
+  color: #1389fd;
+}
+
+.demo-block__code {
+  overflow: hidden;
+  transition: height 0.3s ease;
+}
+
+.demo-block__code-inner {
+  border-top: 1px solid var(--vp-c-divider);
+}
+
+/* ApiTable styling */
+.api-table-wrapper {
+  margin: 16px 0;
+}
+
+.api-table-wrapper h4 {
+  margin: 24px 0 8px;
+  font-weight: 600;
+}

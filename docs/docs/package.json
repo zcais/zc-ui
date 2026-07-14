@@ -1,0 +1,12 @@
+{
+  "name": "@zc-ui/docs",
+  "version": "0.0.1",
+  "private": true,
+  "description": "ZC UI documentation site",
+  "type": "module",
+  "scripts": {
+    "dev": "echo \"TODO: setup VitePress\"",
+    "build": "echo \"TODO: build docs\"",
+    "preview": "echo \"TODO: preview docs\""
+  }
+}
