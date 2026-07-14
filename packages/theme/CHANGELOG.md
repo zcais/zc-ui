@@ -1,5 +1,34 @@
 # @zc-ui/theme
 
+## 1.0.1
+
+### Patch Changes
+
+- # 1.0.1 (patch 发布)
+
+  ## 变更摘要
+
+  首个公开稳定版本 1.0.0 之后的补丁更新，包含以下改进与修复：
+
+  - 📦 优化构建产物：统一各包 ESM/CJS/UMD 输出与 `.d.ts` 类型文件
+  - 🐛 修复若干已知问题，提升整体稳定性
+  - 📝 完善组件文档（VitePress 站点：https://zcais.github.io/zc-ui）
+  - 🔧 更新源码仓库地址为 `github.com/zcais/zc-ui`
+  - ⚡️ 改进打包体积与 Tree-shaking 表现
+
+  ## 包列表
+
+  | 包名                | 当前  | 升级后 |
+  | ------------------- | ----- | ------ |
+  | `@zc-ui/components` | 1.0.0 | 1.0.1  |
+  | `@zc-ui/hooks`      | 1.0.0 | 1.0.1  |
+  | `@zc-ui/icons`      | 1.0.0 | 1.0.1  |
+  | `@zc-ui/locale`     | 1.0.0 | 1.0.1  |
+  | `@zc-ui/nuxt`       | 1.0.0 | 1.0.1  |
+  | `@zc-ui/resolver`   | 1.0.0 | 1.0.1  |
+  | `@zc-ui/theme`      | 1.0.0 | 1.0.1  |
+  | `@zc-ui/utils`      | 1.0.0 | 1.0.1  |
+
 ## 3.0.0-rc.1
 
 ### Major Changes
