@@ -3,6 +3,7 @@ import { resolve } from 'node:path'
 import { demoBlockPlugin } from './plugins/demo-block'
 
 export default defineConfig({
+  base: '/zc-ui/',
   title: 'ZC UI',
   description: 'Vue 3 企业级 UI 组件库',
   lang: 'zh-CN',
