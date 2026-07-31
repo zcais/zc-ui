@@ -30,6 +30,7 @@ import DatePicker from './date-picker/date-picker.vue'
 import Tag from './tag/tag.vue'
 import Badge from './badge/badge.vue'
 import Avatar from './avatar/avatar.vue'
+import AvatarGroup from './avatar/avatar-group.vue'
 import Empty from './empty/empty.vue'
 import Skeleton from './skeleton/skeleton.vue'
 import SkeletonItem from './skeleton/skeleton-item.vue'
@@ -98,6 +99,8 @@ import Rate from './rate/rate.vue'
 import Slider from './slider/slider.vue'
 import TimePicker from './time-picker/time-picker.vue'
 import Upload from './upload/upload.vue'
+// ---- Tag Input Component ----
+import InputTag from './input-tag/input-tag.vue'
 // ---- Advanced Form Components ----
 import Cascader from './cascader/cascader.vue'
 import Transfer from './transfer/transfer.vue'
@@ -120,6 +123,14 @@ import TypographyLink from './typography/link.vue'
 import Popover from './popover/popover.vue'
 // ---- Utility Components ----
 import QRCode from './qr-code/qr-code.vue'
+// ---- Feedback Components ----
+import MessageBoxComponent from './message-box/message-box.vue'
+// ---- Image Viewer ----
+import ImageViewer from './image-viewer/image-viewer.vue'
+// ---- Context Menu ----
+import ContextMenu from './context-menu/context-menu.vue'
+// ---- Page Header ----
+import PageHeader from './page-header/page-header.vue'
 
 /**
  * Individual component exports with installer pattern.
@@ -163,6 +174,7 @@ export const ZcDatePicker = withInstall(DatePicker, 'ZcDatePicker')
 export const ZcTag = withInstall(Tag, 'ZcTag')
 export const ZcBadge = withInstall(Badge, 'ZcBadge')
 export const ZcAvatar = withInstall(Avatar, 'ZcAvatar')
+export const ZcAvatarGroup = withInstall(AvatarGroup, 'ZcAvatarGroup')
 export const ZcEmpty = withInstall(Empty, 'ZcEmpty')
 export const ZcSkeleton = withInstall(Skeleton, 'ZcSkeleton')
 export const ZcSkeletonItem = withInstall(SkeletonItem, 'ZcSkeletonItem')
@@ -241,6 +253,9 @@ export const ZcSlider = withInstall(Slider, 'ZcSlider')
 export const ZcTimePicker = withInstall(TimePicker, 'ZcTimePicker')
 export const ZcUpload = withInstall(Upload, 'ZcUpload')
 
+// ---- Tag Input Component ----
+export const ZcInputTag = withInstall(InputTag, 'ZcInputTag')
+
 // ---- Advanced Form Components ----
 export const ZcCascader = withInstall(Cascader, 'ZcCascader')
 export const ZcTransfer = withInstall(Transfer, 'ZcTransfer')
@@ -258,6 +273,18 @@ export const ZcConfigProvider = withInstall(ConfigProvider, 'ZcConfigProvider')
 
 // ---- Utility Components ----
 export const ZcQRCode = withInstall(QRCode, 'ZcQRCode')
+
+// ---- Feedback Components ----
+export const ZcMessageBoxComponent = withInstall(MessageBoxComponent, 'ZcMessageBox')
+
+// ---- Image Viewer ----
+export const ZcImageViewer = withInstall(ImageViewer, 'ZcImageViewer')
+
+// ---- Context Menu ----
+export const ZcContextMenu = withInstall(ContextMenu, 'ZcContextMenu')
+
+// ---- Page Header ----
+export const ZcPageHeader = withInstall(PageHeader, 'ZcPageHeader')
 
 // ---- Layout Enhancement Components ----
 export const ZcFlex = withInstall(Flex, 'ZcFlex')
@@ -302,6 +329,7 @@ export default withInstallAll({
   ZcTag,
   ZcBadge,
   ZcAvatar,
+  ZcAvatarGroup,
   ZcEmpty,
   ZcSkeleton,
   ZcSkeletonItem,
@@ -370,6 +398,8 @@ export default withInstallAll({
   ZcSlider,
   ZcTimePicker,
   ZcUpload,
+  // Tag Input Component
+  ZcInputTag,
   // Advanced Form Components
   ZcCascader,
   ZcTransfer,
@@ -392,6 +422,14 @@ export default withInstallAll({
   ZcLink,
   // Overlay Components
   ZcPopover,
+  // Feedback Components
+  ZcMessageBoxComponent,
+  // Image Viewer
+  ZcImageViewer,
+  // Context Menu
+  ZcContextMenu,
+  // Page Header
+  ZcPageHeader,
 })
 
 // Export TypeScript types
@@ -439,6 +477,7 @@ export type { RadioSize } from './radio/radio.vue'
 export type { TagType, TagEffect } from './tag/tag.vue'
 export type { BadgeType } from './badge/badge.vue'
 export type { AvatarSize, AvatarShape } from './avatar/avatar.vue'
+export type { AvatarGroupSize } from './avatar/avatar-group.vue'
 export type { SkeletonAnimation } from './skeleton/skeleton.vue'
 export type { SkeletonItemVariant, SkeletonItemAnimation } from './skeleton/skeleton-item.vue'
 export type {
@@ -487,6 +526,41 @@ export type { NotificationOptions, NotificationInstance } from './notification/n
 export { ZcLoadingDirective, ZcLoadingService } from './loading/loading'
 export type { LoadingOptions, LoadingInstance } from './loading/loading'
 
+// ---- MessageBox Functional API ----
+export { ZcMessageBox } from './message-box/message-box'
+export type {
+  MessageBoxOptions,
+  MessageBoxResult,
+  MessageBoxType,
+  MessageBoxAction,
+  MessageBoxCallback,
+} from './message-box/types'
+
+// ---- Image Viewer Types ----
+export type {
+  ImageViewerOptions,
+  ImageViewerProps,
+  ImageViewerEmits,
+  ImageViewerInstance,
+} from './image-viewer/types'
+
+// ---- Context Menu Types & Directive ----
+export { ZcContextMenuDirective } from './context-menu/context-menu-directive'
+export type {
+  ContextMenuItem,
+  ContextMenuOptions,
+  ContextMenuProps,
+  ContextMenuEmits,
+} from './context-menu/types'
+
+// ---- Custom Directives ----
+export { ZcCopyDirective } from './directives/copy'
+export { ZcDebounceDirective } from './directives/debounce'
+
+// ---- Infinite Scroll Directive ----
+export { ZcInfiniteScrollDirective } from './infinite-scroll/infinite-scroll'
+export type { InfiniteScrollOptions } from './infinite-scroll/infinite-scroll'
+
 // ---- Navigation Component Types ----
 export type { MenuMode } from './menu/types'
 export type { TabsType, TabsPosition, PaneData, TabsProps, TabsEmits } from './tabs/types'
@@ -531,6 +605,9 @@ export type {
   UploadListType,
   UploadTrigger,
 } from './upload/types'
+
+// ---- Tag Input Component Types ----
+export type { InputTagProps, InputTagEmits, InputTagSize } from './input-tag/types'
 
 // ---- Advanced Form Component Types ----
 export type {

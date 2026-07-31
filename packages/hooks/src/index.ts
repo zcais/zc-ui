@@ -13,7 +13,12 @@ export { useId } from './useId'
 export { useFocusTrap, type FocusTrapOptions } from './useFocusTrap'
 export { useOptionalRouter } from './useOptionalRouter'
 export { useVirtualList } from './useVirtualList'
-export { useTimeoutFn, useIntervalFn, type UseTimeoutFnOptions, type UseIntervalFnOptions } from './useTimeoutFn'
+export {
+  useTimeoutFn,
+  useIntervalFn,
+  type UseTimeoutFnOptions,
+  type UseIntervalFnOptions,
+} from './useTimeoutFn'
 export { useDebounce, useDebounceFn, useThrottle, useThrottleFn } from './useDebounce'
 export { useScroll, type ScrollTarget, type UseScrollOptions } from './useScroll'
 export {
@@ -29,18 +34,29 @@ export {
   type BreakpointsConfig,
 } from './useMediaQuery'
 export { useClipboard, type UseClipboardReturn } from './useClipboard'
-export {
-  useResizeObserver,
-  type ResizeObserverEntry,
-} from './useResizeObserver'
+export { useResizeObserver, type ResizeObserverEntry } from './useResizeObserver'
 export {
   useIntersectionObserver,
   type UseIntersectionObserverOptions,
 } from './useIntersectionObserver'
-export { useDark, useColorMode, type ColorMode, type UseColorModeOptions, type UseDarkOptions } from './useDark'
+export { useMutationObserver, type UseMutationObserverOptions } from './useMutationObserver'
+export { useElementBounding, type ElementBounding } from './useElementBounding'
+export {
+  useDark,
+  useColorMode,
+  type ColorMode,
+  type UseColorModeOptions,
+  type UseDarkOptions,
+} from './useDark'
 export { useEscapeKeydown } from './useEscapeKeydown'
 export { useForwardRef } from './useForwardRef'
-export { useLocale, type LocaleContext, type Language, type LocaleDictionary, type TranslateOptions } from './useLocale'
+export {
+  useLocale,
+  type LocaleContext,
+  type Language,
+  type LocaleDictionary,
+  type TranslateOptions,
+} from './useLocale'
 
 // ---------------------------------------------------------------
 // Simple inline composables
