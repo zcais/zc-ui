@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { computed, inject, ref } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
+import { useGlobalConfig } from '../config-provider/useGlobalConfig'
 import { radioGroupKey, type RadioGroupContext } from './radio-group.vue'
 
 defineOptions({ name: 'ZcRadio' })
+
+export type RadioSize = 'large' | 'medium' | 'small'
 
 const props = withDefaults(
   defineProps<{
@@ -13,10 +16,16 @@ const props = withDefaults(
     name?: string
     /** Accessible label for screen readers (falls back to label if string) */
     ariaLabel?: string
+    /** Show border around the radio */
+    border?: boolean
+    /** Radio size (only effective with border) */
+    size?: RadioSize
   }>(),
   {
     modelValue: '',
     disabled: false,
+    border: false,
+    size: undefined,
   }
 )
 
@@ -51,12 +60,22 @@ const inputName = computed(() => {
 // ---- Focus tracking for is-focused class ----
 const isFocused = ref(false)
 
+const { size: globalSize } = useGlobalConfig()
+const effectiveSize = computed<RadioSize | undefined>(() => {
+  if (radioGroup?.size?.value) {
+    return radioGroup.size.value as RadioSize
+  }
+  return props.size ?? globalSize.value ?? undefined
+})
+
 // ---- BEM classes ----
 const classes = computed(() => [
   ns.b(),
   ns.is('checked', isChecked.value),
   ns.is('disabled', isDisabled.value),
   ns.is('focused', isFocused.value),
+  ns.is('border', props.border),
+  effectiveSize.value ? ns.m(effectiveSize.value) : '',
 ])
 
 // ---- Handlers ----
@@ -287,5 +306,39 @@ function handleInputChange(event: Event) {
   align-items: center;
   line-height: 1.2;
   padding-left: 2px;
+}
+
+/* ---- Border variant ---- */
+.zc-radio.is-border {
+  padding: 8px 12px;
+  border: 1px solid var(--color-zc-border-base, #dcdfe6);
+  border-radius: var(--radius-zc-base, 4px);
+  transition: border-color var(--transition-duration-zc-base, 0.25s) var(--ease-zc-in-out, ease);
+}
+.zc-radio.is-border:hover:not(.is-disabled) {
+  border-color: var(--color-zc-primary-400, #79bbff);
+}
+.zc-radio.is-border.is-checked {
+  border-color: var(--color-zc-primary-500, #409eff);
+}
+.zc-radio.is-border.is-disabled {
+  background: var(--color-zc-fill-light, #f5f7fa);
+  border-color: var(--color-zc-border-light, #e4e7ed);
+}
+
+/* ---- Sizes (with border) ---- */
+.zc-radio--large.is-border {
+  padding: 10px 14px;
+}
+.zc-radio--large.is-border .zc-radio__inner {
+  width: 16px;
+  height: 16px;
+}
+.zc-radio--small.is-border {
+  padding: 6px 10px;
+}
+.zc-radio--small.is-border .zc-radio__inner {
+  width: 12px;
+  height: 12px;
 }
 </style>

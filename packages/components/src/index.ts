@@ -4,6 +4,7 @@
 
 import { withInstall, withInstallAll } from '@zc-ui/utils'
 import Button from './button/button.vue'
+import ButtonGroup from './button/button-group.vue'
 import Row from './row/row.vue'
 import Col from './col/col.vue'
 import Container from './container/container.vue'
@@ -108,6 +109,15 @@ import Segmented from './segmented/segmented.vue'
 import Tour from './tour/tour.vue'
 // ---- Infrastructure Components ----
 import ConfigProvider from './config-provider/config-provider.vue'
+// ---- Layout Enhancement Components ----
+import Flex from './flex/flex.vue'
+// ---- Typography Components ----
+import TypographyTitle from './typography/title.vue'
+import TypographyText from './typography/text.vue'
+import TypographyParagraph from './typography/paragraph.vue'
+import TypographyLink from './typography/link.vue'
+// ---- Overlay Components ----
+import Popover from './popover/popover.vue'
 // ---- Utility Components ----
 import QRCode from './qr-code/qr-code.vue'
 
@@ -123,6 +133,7 @@ import QRCode from './qr-code/qr-code.vue'
  * app.use(ZcUI)
  */
 export const ZcButton = withInstall(Button, 'ZcButton')
+export const ZcButtonGroup = withInstall(ButtonGroup, 'ZcButtonGroup')
 
 // ---- Layout Components ----
 export const ZcRow = withInstall(Row, 'ZcRow')
@@ -248,11 +259,24 @@ export const ZcConfigProvider = withInstall(ConfigProvider, 'ZcConfigProvider')
 // ---- Utility Components ----
 export const ZcQRCode = withInstall(QRCode, 'ZcQRCode')
 
+// ---- Layout Enhancement Components ----
+export const ZcFlex = withInstall(Flex, 'ZcFlex')
+
+// ---- Typography Components ----
+export const ZcTitle = withInstall(TypographyTitle, 'ZcTitle')
+export const ZcText = withInstall(TypographyText, 'ZcText')
+export const ZcParagraph = withInstall(TypographyParagraph, 'ZcParagraph')
+export const ZcLink = withInstall(TypographyLink, 'ZcLink')
+
+// ---- Overlay Components ----
+export const ZcPopover = withInstall(Popover, 'ZcPopover')
+
 /**
  * Registers all ZC UI components globally.
  */
 export default withInstallAll({
   ZcButton,
+  ZcButtonGroup,
   ZcRow,
   ZcCol,
   ZcContainer,
@@ -359,6 +383,15 @@ export default withInstallAll({
   ZcConfigProvider,
   // Utility Components
   ZcQRCode,
+  // Layout Enhancement Components
+  ZcFlex,
+  // Typography Components
+  ZcTitle,
+  ZcText,
+  ZcParagraph,
+  ZcLink,
+  // Overlay Components
+  ZcPopover,
 })
 
 // Export TypeScript types
@@ -383,6 +416,7 @@ export type {
 
 // ---- Form Component Types ----
 export type { ButtonType, ButtonSize, ButtonNativeType } from './button/button.vue'
+export type { ButtonGroupSize, ButtonGroupDirection } from './button/button-group.vue'
 export type { InputType, InputSize } from './input/input.vue'
 export type { SwitchSize } from './switch/switch.vue'
 export type { SelectOption, SelectOptionGroup, SelectValue, SelectSize } from './select/types'
@@ -397,7 +431,9 @@ export type {
 } from './form/types'
 export { createFormArray, useFormArray } from './form/useFormArray'
 export type { checkboxGroupKey, CheckboxGroupContext } from './checkbox/checkbox-group.vue'
+export type { CheckboxSize } from './checkbox/checkbox.vue'
 export { radioGroupKey, type RadioGroupContext } from './radio/radio-group.vue'
+export type { RadioSize } from './radio/radio.vue'
 
 // ---- Data Display Component Types ----
 export type { TagType, TagEffect } from './tag/tag.vue'
@@ -550,6 +586,18 @@ export type {
   QRCodeStatus,
   QRCodeImageSettings,
 } from './qr-code/types'
+
+// ---- Layout Enhancement Component Types ----
+export type { FlexJustify, FlexAlign, FlexWrap, FlexGap } from './flex/flex.vue'
+
+// ---- Typography Component Types ----
+export type { TitleLevel } from './typography/title.vue'
+export type { TextType, TextSize } from './typography/text.vue'
+export type { ParagraphEllipsisConfig } from './typography/paragraph.vue'
+export type { LinkType } from './typography/link.vue'
+
+// ---- Overlay Component Types ----
+export type { PopoverPlacement, PopoverTrigger } from './popover/popover.vue'
 
 // ---- Theme System Re-exports (from @zc-ui/theme) ----
 export {

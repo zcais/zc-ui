@@ -35,6 +35,8 @@ const props = withDefaults(
     lockScroll?: boolean
     /** Custom dialog class */
     dialogClass?: string
+    /** Hook called before closing. If returns false / rejects, close is aborted. */
+    beforeClose?: (done: () => void) => void
   }>(),
   {
     title: '',
@@ -125,7 +127,13 @@ function close() {
 }
 
 function handleClose() {
-  emit('update:modelValue', false)
+  if (typeof props.beforeClose === 'function') {
+    props.beforeClose(() => {
+      emit('update:modelValue', false)
+    })
+  } else {
+    emit('update:modelValue', false)
+  }
 }
 
 function handleOverlayClick() {

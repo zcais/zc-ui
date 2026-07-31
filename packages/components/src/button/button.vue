@@ -16,6 +16,12 @@ const props = withDefaults(
     disabled?: boolean
     loading?: boolean
     round?: boolean
+    /** Circle shape — typically used for icon-only buttons */
+    circle?: boolean
+    /** Transparent text-only button (no background or border) */
+    text?: boolean
+    /** Link-style button (no background or border, inherits text color) */
+    link?: boolean
     plain?: boolean
     icon?: string
     nativeType?: ButtonNativeType
@@ -26,9 +32,12 @@ const props = withDefaults(
     disabled: false,
     loading: false,
     round: false,
+    circle: false,
+    text: false,
+    link: false,
     plain: false,
     nativeType: 'button',
-  },
+  }
 )
 
 const emit = defineEmits<{
@@ -38,24 +47,25 @@ const emit = defineEmits<{
 const ns = useNamespace('button')
 
 // ---- ConfigProvider size integration ----
-  // Priority: explicit prop > ConfigProvider global size > default 'medium'
-  const { size: globalSize } = useGlobalConfig()
-  const effectiveSize = computed<ButtonSize>(
-  () => props.size ?? globalSize.value ?? 'medium',
-  )
-  
-  const classes = computed(() => [
+// Priority: explicit prop > ConfigProvider global size > default 'medium'
+const { size: globalSize } = useGlobalConfig()
+const effectiveSize = computed<ButtonSize>(() => props.size ?? globalSize.value ?? 'medium')
+
+const classes = computed(() => [
   ns.b(),
   ns.is('disabled', props.disabled),
   ns.is('loading', props.loading),
   // Type modifier: zc-button--primary, etc.
-props.type !== 'default' ? ns.m(props.type) : '',
+  props.type !== 'default' ? ns.m(props.type) : '',
   // Size modifier: zc-button--large, etc.
   ns.m(effectiveSize.value),
   // Shape modifier
   ns.is('round', props.round),
+  ns.is('circle', props.circle),
   // Style variant
   ns.is('plain', props.plain),
+  ns.is('text', props.text),
+  ns.is('link', props.link),
 ])
 
 function handleClick(event: MouseEvent) {
@@ -98,8 +108,8 @@ function handleClick(event: MouseEvent) {
   *
   * Or via createTheme({ components: { button: { bgColor: 'red' } } })
   * ============================================================ */
-  
-  .zc-button {
+
+.zc-button {
   /* ---- Component-level CSS variables (global token defaults) ---- */
   --zc-button-bg-color: var(--color-zc-info-50, #f4f4f5);
   --zc-button-text-color: var(--color-zc-text-regular, #606266);
@@ -109,21 +119,21 @@ function handleClick(event: MouseEvent) {
   --zc-button-hover-border-color: var(--color-zc-primary-300, #a0cfff);
   --zc-button-active-bg-color: var(--color-zc-primary-100, #d9ecff);
   --zc-button-active-text-color: var(--color-zc-primary-600, #337ecc);
-    --zc-button-active-border-color: var(--color-zc-primary-400, #79bbff);
-    --zc-button-focus-outline-color: var(--color-zc-primary-400, #79bbff);
-    --zc-button-disabled-bg-color: var(--color-zc-fill-light, #f5f7fa);
---zc-button-disabled-text-color: var(--color-zc-text-placeholder, #a8abb2);
---zc-button-disabled-border-color: var(--color-zc-border-light, #e4e7ed);
---zc-button-border-radius: var(--radius-zc-base, 4px);
+  --zc-button-active-border-color: var(--color-zc-primary-400, #79bbff);
+  --zc-button-focus-outline-color: var(--color-zc-primary-400, #79bbff);
+  --zc-button-disabled-bg-color: var(--color-zc-fill-light, #f5f7fa);
+  --zc-button-disabled-text-color: var(--color-zc-text-placeholder, #a8abb2);
+  --zc-button-disabled-border-color: var(--color-zc-border-light, #e4e7ed);
+  --zc-button-border-radius: var(--radius-zc-base, 4px);
   --zc-button-font-size: var(--text-zc-base, 14px);
   --zc-button-font-weight: 500;
   --zc-button-gap: var(--spacing-zc-sm, 8px);
 
-display: inline-flex;
-align-items: center;
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
   line-height: 1;
-gap: var(--zc-button-gap);
+  gap: var(--zc-button-gap);
   border: 1px solid var(--zc-button-border-color);
   color: var(--zc-button-text-color);
   background: var(--zc-button-bg-color);
@@ -197,46 +207,46 @@ gap: var(--zc-button-gap);
 
 /* ---- Modifiers: type ---- */
 /* Each type modifier overrides the component-level CSS variables */
-  .zc-button--primary {
+.zc-button--primary {
   --zc-button-bg-color: var(--color-zc-primary-500, #409eff);
   --zc-button-text-color: var(--color-zc-white, #fff);
---zc-button-border-color: var(--color-zc-primary-500, #409eff);
---zc-button-hover-bg-color: var(--color-zc-primary-400, #79bbff);
+  --zc-button-border-color: var(--color-zc-primary-500, #409eff);
+  --zc-button-hover-bg-color: var(--color-zc-primary-400, #79bbff);
   --zc-button-hover-text-color: var(--color-zc-white, #fff);
   --zc-button-hover-border-color: var(--color-zc-primary-400, #79bbff);
-  }
+}
 .zc-button--success {
---zc-button-bg-color: var(--color-zc-success-500, #67c23a);
---zc-button-text-color: var(--color-zc-white, #fff);
+  --zc-button-bg-color: var(--color-zc-success-500, #67c23a);
+  --zc-button-text-color: var(--color-zc-white, #fff);
   --zc-button-border-color: var(--color-zc-success-500, #67c23a);
   --zc-button-hover-bg-color: var(--color-zc-success-400, #95d575);
   --zc-button-hover-text-color: var(--color-zc-white, #fff);
---zc-button-hover-border-color: var(--color-zc-success-400, #95d575);
+  --zc-button-hover-border-color: var(--color-zc-success-400, #95d575);
 }
-  .zc-button--warning {
+.zc-button--warning {
   --zc-button-bg-color: var(--color-zc-warning-500, #e6a23c);
   --zc-button-text-color: var(--color-zc-white, #fff);
---zc-button-border-color: var(--color-zc-warning-500, #e6a23c);
---zc-button-hover-bg-color: var(--color-zc-warning-400, #ecbe77);
---zc-button-hover-text-color: var(--color-zc-white, #fff);
+  --zc-button-border-color: var(--color-zc-warning-500, #e6a23c);
+  --zc-button-hover-bg-color: var(--color-zc-warning-400, #ecbe77);
+  --zc-button-hover-text-color: var(--color-zc-white, #fff);
   --zc-button-hover-border-color: var(--color-zc-warning-400, #ecbe77);
-  }
-  .zc-button--danger {
---zc-button-bg-color: var(--color-zc-danger-500, #f56c6c);
---zc-button-text-color: var(--color-zc-white, #fff);
+}
+.zc-button--danger {
+  --zc-button-bg-color: var(--color-zc-danger-500, #f56c6c);
+  --zc-button-text-color: var(--color-zc-white, #fff);
   --zc-button-border-color: var(--color-zc-danger-500, #f56c6c);
   --zc-button-hover-bg-color: var(--color-zc-danger-400, #f78989);
   --zc-button-hover-text-color: var(--color-zc-white, #fff);
---zc-button-hover-border-color: var(--color-zc-danger-400, #f78989);
+  --zc-button-hover-border-color: var(--color-zc-danger-400, #f78989);
 }
 .zc-button--info {
   --zc-button-bg-color: var(--color-zc-info-500, #909399);
   --zc-button-text-color: var(--color-zc-white, #fff);
   --zc-button-border-color: var(--color-zc-info-500, #909399);
---zc-button-hover-bg-color: var(--color-zc-info-400, #a6a9ad);
---zc-button-hover-text-color: var(--color-zc-white, #fff);
+  --zc-button-hover-bg-color: var(--color-zc-info-400, #a6a9ad);
+  --zc-button-hover-text-color: var(--color-zc-white, #fff);
   --zc-button-hover-border-color: var(--color-zc-info-400, #a6a9ad);
-  }
+}
 
 /* ---- Modifiers: size ---- */
 .zc-button--large {
@@ -274,6 +284,57 @@ gap: var(--zc-button-gap);
 /* ---- Plain variant ---- */
 .zc-button.is-plain {
   background: transparent;
+}
+
+/* ---- Circle shape ---- */
+.zc-button.is-circle {
+  border-radius: 50%;
+  padding: 0;
+  width: 2em;
+  height: 2em;
+  min-width: auto;
+}
+
+/* ---- Text variant ---- */
+.zc-button.is-text {
+  border: none;
+  background: transparent;
+  padding: 2px 4px;
+  --zc-button-border-color: transparent;
+  --zc-button-hover-bg-color: transparent;
+  --zc-button-hover-border-color: transparent;
+}
+.zc-button.is-text.zc-button--primary {
+  --zc-button-text-color: var(--color-zc-primary-500, #409eff);
+  --zc-button-hover-text-color: var(--color-zc-primary-400, #79bbff);
+}
+.zc-button.is-text.zc-button--success {
+  --zc-button-text-color: var(--color-zc-success-500, #67c23a);
+  --zc-button-hover-text-color: var(--color-zc-success-400, #95d575);
+}
+.zc-button.is-text.zc-button--warning {
+  --zc-button-text-color: var(--color-zc-warning-500, #e6a23c);
+  --zc-button-hover-text-color: var(--color-zc-warning-400, #ecbe77);
+}
+.zc-button.is-text.zc-button--danger {
+  --zc-button-text-color: var(--color-zc-danger-500, #f56c6c);
+  --zc-button-hover-text-color: var(--color-zc-danger-400, #f78989);
+}
+.zc-button.is-text.zc-button--info {
+  --zc-button-text-color: var(--color-zc-info-500, #909399);
+  --zc-button-hover-text-color: var(--color-zc-info-400, #a6a9ad);
+}
+
+/* ---- Link variant ---- */
+.zc-button.is-link {
+  border: none;
+  background: transparent;
+  padding: 2px 4px;
+  --zc-button-border-color: transparent;
+  --zc-button-hover-bg-color: transparent;
+  --zc-button-hover-border-color: transparent;
+  --zc-button-text-color: var(--color-zc-text-regular, #606266);
+  --zc-button-hover-text-color: var(--color-zc-primary-500, #409eff);
 }
 .zc-button.is-plain.zc-button--primary {
   --zc-button-text-color: var(--color-zc-primary-500, #409eff);

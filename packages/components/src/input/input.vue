@@ -27,6 +27,10 @@ const props = withDefaults(
     id?: string
     /** Accessible label for screen readers */
     ariaLabel?: string
+    /** Icon class for prefix icon (e.g. 'zc-icon-search') */
+    prefixIcon?: string
+    /** Icon class for suffix icon */
+    suffixIcon?: string
   }>(),
   {
     modelValue: '',
@@ -210,9 +214,10 @@ defineExpose({ focus, blur, inputRef })
     </div>
 
     <div :class="ns.e('wrapper')">
-      <!-- Prefix slot -->
-      <span v-if="slots.prefix" :class="ns.e('prefix')">
+      <!-- Prefix slot / icon -->
+      <span v-if="slots.prefix || prefixIcon" :class="ns.e('prefix')">
         <slot name="prefix" />
+        <i v-if="prefixIcon" :class="[prefixIcon, ns.e('prefix-icon')]" aria-hidden="true" />
       </span>
 
       <input
@@ -235,8 +240,9 @@ defineExpose({ focus, blur, inputRef })
       />
 
       <!-- Suffix area -->
-      <span v-if="showPwdToggle || showClear || slots.suffix" :class="ns.e('suffix')">
+      <span v-if="showPwdToggle || showClear || slots.suffix || suffixIcon" :class="ns.e('suffix')">
         <slot name="suffix" />
+        <i v-if="suffixIcon" :class="[suffixIcon, ns.e('suffix-icon')]" aria-hidden="true" />
 
         <!-- Clear button -->
         <span
@@ -520,6 +526,15 @@ defineExpose({ focus, blur, inputRef })
 .zc-input__suffix {
   margin-left: 6px;
   gap: 4px;
+}
+
+/* ---- Prefix / Suffix icons ---- */
+.zc-input__prefix-icon,
+.zc-input__suffix-icon {
+  display: inline-flex;
+  align-items: center;
+  font-style: normal;
+  line-height: 1;
 }
 
 .zc-input__clear,

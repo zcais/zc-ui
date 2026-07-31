@@ -6,7 +6,7 @@ import { useLocale } from '@zc-ui/locale'
 
 defineOptions({ name: 'ZcDatePicker' })
 
-export type DatePickerType = 'date' | 'daterange'
+export type DatePickerType = 'date' | 'daterange' | 'datetime' | 'month' | 'year' | 'week'
 export type DatePickerSize = 'large' | 'medium' | 'small'
 
 /** A shortcut option that sets the date range. */
@@ -70,6 +70,19 @@ const rangeEnd = ref<Date | null>(null)
 const hoveringDate = ref<Date | null>(null)
 
 const isRange = computed(() => props.type === 'daterange')
+
+// ---- Panel mode: 'date' | 'month' | 'year' ----
+// Determines which panel is shown. Auto-set from props.type on open.
+const panelMode = ref<'date' | 'month' | 'year'>('date')
+const isDateTime = computed(() => props.type === 'datetime')
+const isWeek = computed(() => props.type === 'week')
+const isMonth = computed(() => props.type === 'month')
+const isYear = computed(() => props.type === 'year')
+
+// Time state for datetime mode
+const selectedHours = ref(0)
+const selectedMinutes = ref(0)
+const selectedSeconds = ref(0)
 
 // ---- Parse initial value ----
 watch(
@@ -135,7 +148,48 @@ function formatDate(date: Date): string {
   const y = date.getFullYear()
   const m = String(date.getMonth() + 1).padStart(2, '0')
   const d = String(date.getDate()).padStart(2, '0')
-  return props.format.replace('YYYY', String(y)).replace('MM', m).replace('DD', d)
+  let result = props.format.replace('YYYY', String(y)).replace('MM', m).replace('DD', d)
+  if (isDateTime.value) {
+    const h = String(date.getHours()).padStart(2, '0')
+    const min = String(date.getMinutes()).padStart(2, '0')
+    const s = String(date.getSeconds()).padStart(2, '0')
+    result += ` ${h}:${min}:${s}`
+  }
+  return result
+}
+
+/** Get ISO week number */
+function getWeekNumber(date: Date): number {
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()))
+  const dayNum = d.getUTCDay() || 7
+  d.setUTCDate(d.getUTCDate() + 4 - dayNum)
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1))
+  return Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7)
+}
+
+/** Get the Monday of the week containing the date */
+function getWeekStart(date: Date): Date {
+  const d = new Date(date)
+  const day = d.getDay()
+  const diff = d.getDate() - day + (day === 0 ? -6 : 1)
+  d.setDate(diff)
+  d.setHours(0, 0, 0, 0)
+  return d
+}
+
+/** Check if two dates are in the same week */
+function isSameWeek(a: Date, b: Date): boolean {
+  return getWeekStart(a).getTime() === getWeekStart(b).getTime()
+}
+
+/** Check if two dates are in same month */
+function isSameMonth(a: Date, b: Date): boolean {
+  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth()
+}
+
+/** Check if two dates are in same year */
+function isSameYear(a: Date, b: Date): boolean {
+  return a.getFullYear() === b.getFullYear()
 }
 
 function isDateDisabled(date: Date): boolean {
@@ -198,12 +252,28 @@ const calendarCells = computed<CalendarCell[]>(() => {
 
 // ---- Navigation ----
 function prevMonth() {
+  if (panelMode.value === 'year') {
+    prevYearRange()
+    return
+  }
+  if (panelMode.value === 'month') {
+    prevYear()
+    return
+  }
   const d = new Date(viewDate.value)
   d.setMonth(d.getMonth() - 1)
   viewDate.value = d
 }
 
 function nextMonth() {
+  if (panelMode.value === 'year') {
+    nextYearRange()
+    return
+  }
+  if (panelMode.value === 'month') {
+    nextYear()
+    return
+  }
   const d = new Date(viewDate.value)
   d.setMonth(d.getMonth() + 1)
   viewDate.value = d
@@ -218,6 +288,18 @@ function prevYear() {
 function nextYear() {
   const d = new Date(viewDate.value)
   d.setFullYear(d.getFullYear() + 1)
+  viewDate.value = d
+}
+
+function prevYearRange() {
+  const d = new Date(viewDate.value)
+  d.setFullYear(d.getFullYear() - 10)
+  viewDate.value = d
+}
+
+function nextYearRange() {
+  const d = new Date(viewDate.value)
+  d.setFullYear(d.getFullYear() + 10)
   viewDate.value = d
 }
 
@@ -263,6 +345,10 @@ const singleDisplayValue = computed(() => (!isRange.value ? (displayValue.value 
 // ---- Picker control ----
 function openPicker() {
   if (props.disabled) return
+  // Set panel mode based on type
+  if (isYear.value) panelMode.value = 'year'
+  else if (isMonth.value) panelMode.value = 'month'
+  else panelMode.value = 'date'
   visible.value = true
   isFocused.value = true
   emit('focus', new FocusEvent('focus'))
@@ -304,6 +390,20 @@ function selectDate(cell: CalendarCell) {
       emit('change', range)
       closePicker()
     }
+  } else if (isWeek.value) {
+    // Week mode: select the entire week
+    const weekStart = getWeekStart(cell.date)
+    selectedDate.value = weekStart
+    emit('update:modelValue', weekStart)
+    emit('change', weekStart)
+    closePicker()
+  } else if (isDateTime.value) {
+    // DateTime mode: store date, show time panel
+    selectedDate.value = cell.date
+    if (selectedHours.value === 0 && selectedMinutes.value === 0 && selectedSeconds.value === 0) {
+      setNowTime()
+    }
+    // Don't auto-close, user needs to confirm time
   } else {
     // Single date mode
     selectedDate.value = cell.date
@@ -325,6 +425,70 @@ function handleClear() {
   rangeEnd.value = null
   emit('update:modelValue', '')
   emit('change', null)
+}
+
+// ---- Month / Year selection ----
+function selectMonth(monthIndex: number) {
+  const d = new Date(viewDate.value)
+  d.setMonth(monthIndex)
+  viewDate.value = new Date(d)
+  if (isMonth.value) {
+    // Month type: emit immediately
+    selectedDate.value = new Date(d.getFullYear(), monthIndex, 1)
+    emit('update:modelValue', selectedDate.value)
+    emit('change', selectedDate.value)
+    closePicker()
+  } else {
+    // Switch to date panel
+    panelMode.value = 'date'
+  }
+}
+
+function selectYear(year: number) {
+  const d = new Date(viewDate.value)
+  d.setFullYear(year)
+  viewDate.value = new Date(d)
+  if (isYear.value) {
+    // Year type: emit immediately
+    selectedDate.value = new Date(year, 0, 1)
+    emit('update:modelValue', selectedDate.value)
+    emit('change', selectedDate.value)
+    closePicker()
+  } else {
+    // Switch to month panel
+    panelMode.value = 'month'
+  }
+}
+
+// ---- Year grid (12 years per page) ----
+const yearRange = computed(() => {
+  const currentYear = viewDate.value.getFullYear()
+  const startYear = Math.floor(currentYear / 10) * 10
+  return Array.from({ length: 12 }, (_, i) => startYear + i - 1)
+})
+
+const yearRangeLabel = computed(() => {
+  const years = yearRange.value
+  return `${years[1]} - ${years[10]}`
+})
+
+// ---- Time handling for datetime ----
+function setNowTime() {
+  const now = new Date()
+  selectedHours.value = now.getHours()
+  selectedMinutes.value = now.getMinutes()
+  selectedSeconds.value = now.getSeconds()
+}
+
+function confirmDateTime() {
+  if (selectedDate.value) {
+    const d = new Date(selectedDate.value)
+    d.setHours(selectedHours.value, selectedMinutes.value, selectedSeconds.value)
+    selectedDate.value = d
+    emit('update:modelValue', d)
+    emit('change', d)
+  }
+  closePicker()
 }
 
 // ---- Shortcuts ----
@@ -367,9 +531,23 @@ const containerClasses = computed(() => [
 
 const headerLabel = computed(() => {
   const y = viewDate.value.getFullYear()
+  if (panelMode.value === 'year') {
+    return yearRangeLabel.value
+  }
+  if (panelMode.value === 'month') {
+    return `${y} ${t('zc.datePicker.year')}`
+  }
   const m = MONTHS.value[viewDate.value.getMonth()]
   return `${y} ${t('zc.datePicker.year')} ${m}`
 })
+
+// Switch panel to month/year by clicking header label
+function switchToMonthPanel() {
+  if (panelMode.value === 'date') panelMode.value = 'month'
+}
+function switchToYearPanel() {
+  if (panelMode.value === 'month') panelMode.value = 'year'
+}
 </script>
 
 <template>
@@ -456,39 +634,146 @@ const headerLabel = computed(() => {
           <div :class="ns.e('calendar')">
             <!-- Header -->
             <div :class="ns.e('header')">
-              <button :class="ns.e('prev-year')" type="button" @click.stop="prevYear">«</button>
-              <button :class="ns.e('prev-month')" type="button" @click.stop="prevMonth">‹</button>
-              <span :class="ns.e('header-label')">{{ headerLabel }}</span>
-              <button :class="ns.e('next-month')" type="button" @click.stop="nextMonth">›</button>
-              <button :class="ns.e('next-year')" type="button" @click.stop="nextYear">»</button>
-            </div>
-
-            <!-- Weekday headers -->
-            <div :class="ns.e('weekdays')">
-              <span v-for="day in WEEKDAYS" :key="day" :class="ns.e('weekday')">{{ day }}</span>
-            </div>
-
-            <!-- Days grid -->
-            <div :class="ns.e('days')">
-              <div
-                v-for="(cell, i) in calendarCells"
-                :key="i"
-                :class="[
-                  ns.e('day'),
-                  ns.is('other-month', !cell.isCurrentMonth),
-                  ns.is('today', cell.isToday),
-                  ns.is('disabled', cell.isDisabled),
-                  ns.is('selected', isSameDay(selectedDate, cell.date)),
-                  ns.is('range-start', isRangeStart(cell.date)),
-                  ns.is('range-end', isRangeEnd(cell.date)),
-                  ns.is('in-range', isInRange(cell.date)),
-                ]"
-                @click.stop="selectDate(cell)"
-                @mouseenter="handleCellHover(cell)"
+              <button
+                :class="ns.e('prev-year')"
+                type="button"
+                @click.stop="panelMode === 'year' ? prevYearRange() : prevYear()"
               >
-                {{ cell.date.getDate() }}
+                «
+              </button>
+              <button :class="ns.e('prev-month')" type="button" @click.stop="prevMonth">‹</button>
+              <span
+                :class="[ns.e('header-label'), { 'is-clickable': panelMode !== 'year' }]"
+                @click.stop="
+                  panelMode === 'date'
+                    ? switchToMonthPanel()
+                    : panelMode === 'month'
+                      ? switchToYearPanel()
+                      : undefined
+                "
+                >{{ headerLabel }}</span
+              >
+              <button :class="ns.e('next-month')" type="button" @click.stop="nextMonth">›</button>
+              <button
+                :class="ns.e('next-year')"
+                type="button"
+                @click.stop="panelMode === 'year' ? nextYearRange() : nextYear()"
+              >
+                »
+              </button>
+            </div>
+
+            <!-- Year panel -->
+            <div v-if="panelMode === 'year'" :class="ns.e('year-grid')">
+              <div
+                v-for="yr in yearRange"
+                :key="yr"
+                :class="[
+                  ns.e('year-cell'),
+                  ns.is('selected', selectedDate && selectedDate.getFullYear() === yr),
+                  ns.is('current', new Date().getFullYear() === yr),
+                  ns.is('disabled', isDateDisabled(new Date(yr, 0, 1))),
+                ]"
+                @click.stop="!isDateDisabled(new Date(yr, 0, 1)) && selectYear(yr)"
+              >
+                {{ yr }}
               </div>
             </div>
+
+            <!-- Month panel -->
+            <div v-else-if="panelMode === 'month'" :class="ns.e('month-grid')">
+              <div
+                v-for="(m, idx) in MONTHS"
+                :key="idx"
+                :class="[
+                  ns.e('month-cell'),
+                  ns.is(
+                    'selected',
+                    selectedDate &&
+                      isSameMonth(selectedDate, new Date(viewDate.getFullYear(), idx, 1))
+                  ),
+                  ns.is(
+                    'current',
+                    isSameMonth(new Date(), new Date(viewDate.getFullYear(), idx, 1))
+                  ),
+                  ns.is('disabled', isDateDisabled(new Date(viewDate.getFullYear(), idx, 1))),
+                ]"
+                @click.stop="
+                  !isDateDisabled(new Date(viewDate.getFullYear(), idx, 1)) && selectMonth(idx)
+                "
+              >
+                {{ m }}
+              </div>
+            </div>
+
+            <!-- Date panel (default) -->
+            <template v-else>
+              <!-- Weekday headers -->
+              <div :class="ns.e('weekdays')">
+                <span v-for="day in WEEKDAYS" :key="day" :class="ns.e('weekday')">{{ day }}</span>
+              </div>
+
+              <!-- Days grid -->
+              <div :class="ns.e('days')">
+                <div
+                  v-for="(cell, i) in calendarCells"
+                  :key="i"
+                  :class="[
+                    ns.e('day'),
+                    ns.is('other-month', !cell.isCurrentMonth),
+                    ns.is('today', cell.isToday),
+                    ns.is('disabled', cell.isDisabled),
+                    ns.is('selected', !isWeek && isSameDay(selectedDate, cell.date)),
+                    ns.is(
+                      'week-selected',
+                      isWeek && selectedDate && isSameWeek(selectedDate, cell.date)
+                    ),
+                    ns.is('range-start', isRangeStart(cell.date)),
+                    ns.is('range-end', isRangeEnd(cell.date)),
+                    ns.is('in-range', isInRange(cell.date)),
+                  ]"
+                  @click.stop="selectDate(cell)"
+                  @mouseenter="handleCellHover(cell)"
+                >
+                  {{ cell.date.getDate() }}
+                </div>
+              </div>
+            </template>
+          </div>
+
+          <!-- Time panel (for datetime mode) -->
+          <div v-if="isDateTime && selectedDate" :class="ns.e('time-panel')">
+            <div :class="ns.e('time-inputs')">
+              <input
+                v-model.number="selectedHours"
+                type="number"
+                min="0"
+                max="23"
+                :class="ns.e('time-input')"
+                aria-label="Hours"
+              />
+              <span>:</span>
+              <input
+                v-model.number="selectedMinutes"
+                type="number"
+                min="0"
+                max="59"
+                :class="ns.e('time-input')"
+                aria-label="Minutes"
+              />
+              <span>:</span>
+              <input
+                v-model.number="selectedSeconds"
+                type="number"
+                min="0"
+                max="59"
+                :class="ns.e('time-input')"
+                aria-label="Seconds"
+              />
+            </div>
+            <button :class="ns.e('time-confirm')" type="button" @click.stop="confirmDateTime">
+              {{ t('zc.datePicker.confirm') || 'OK' }}
+            </button>
           </div>
         </div>
       </div>
@@ -755,6 +1040,114 @@ const headerLabel = computed(() => {
 
 .zc-date-picker__day.is-range-end {
   border-radius: 0 var(--radius-zc-base, 4px) var(--radius-zc-base, 4px) 0;
+}
+
+/* ---- Year / Month grid panels ---- */
+.zc-date-picker__year-grid,
+.zc-date-picker__month-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  padding: 8px;
+  min-width: 280px;
+}
+
+.zc-date-picker__year-cell,
+.zc-date-picker__month-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  cursor: pointer;
+  border-radius: var(--radius-zc-base, 4px);
+  font-size: var(--text-zc-sm, 13px);
+  color: var(--color-zc-text-regular, #606266);
+  transition: all var(--transition-duration-zc-fast, 0.15s);
+}
+
+.zc-date-picker__year-cell:hover:not(.is-disabled),
+.zc-date-picker__month-cell:hover:not(.is-disabled) {
+  background: var(--color-zc-primary-50, #ecf5ff);
+  color: var(--color-zc-primary-500, #409eff);
+}
+
+.zc-date-picker__year-cell.is-current,
+.zc-date-picker__month-cell.is-current {
+  font-weight: 600;
+  color: var(--color-zc-primary-500, #409eff);
+}
+
+.zc-date-picker__year-cell.is-selected,
+.zc-date-picker__month-cell.is-selected {
+  background: var(--color-zc-primary-500, #409eff);
+  color: var(--color-zc-white, #fff);
+}
+
+.zc-date-picker__year-cell.is-disabled,
+.zc-date-picker__month-cell.is-disabled {
+  color: var(--color-zc-text-placeholder, #a8abb2);
+  cursor: not-allowed;
+}
+
+/* ---- Header label clickable ---- */
+.zc-date-picker__header-label.is-clickable {
+  cursor: pointer;
+}
+
+.zc-date-picker__header-label.is-clickable:hover {
+  color: var(--color-zc-primary-500, #409eff);
+}
+
+/* ---- Week selected ---- */
+.zc-date-picker__day.is-week-selected {
+  background: var(--color-zc-primary-50, #ecf5ff);
+  color: var(--color-zc-primary-500, #409eff);
+}
+
+/* ---- Time panel (datetime mode) ---- */
+.zc-date-picker__time-panel {
+  padding: 8px 12px;
+  border-top: 1px solid var(--color-zc-border-lighter, #ebeef5);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+
+.zc-date-picker__time-inputs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.zc-date-picker__time-input {
+  width: 42px;
+  text-align: center;
+  border: 1px solid var(--color-zc-border-base, #dcdfe6);
+  border-radius: var(--radius-zc-base, 4px);
+  padding: 2px 4px;
+  font-size: var(--text-zc-sm, 13px);
+  color: var(--color-zc-text-primary, #303133);
+  outline: none;
+}
+
+.zc-date-picker__time-input:focus {
+  border-color: var(--color-zc-primary-500, #409eff);
+}
+
+.zc-date-picker__time-confirm {
+  border: none;
+  background: var(--color-zc-primary-500, #409eff);
+  color: var(--color-zc-white, #fff);
+  padding: 4px 12px;
+  border-radius: var(--radius-zc-base, 4px);
+  cursor: pointer;
+  font-size: var(--text-zc-sm, 13px);
+  transition: background var(--transition-duration-zc-fast, 0.15s);
+}
+
+.zc-date-picker__time-confirm:hover {
+  background: var(--color-zc-primary-600, #337ecc);
 }
 
 /* ---- Dropdown transition ---- */

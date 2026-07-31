@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { computed, inject, ref } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
+import { useGlobalConfig } from '../config-provider/useGlobalConfig'
 import { checkboxGroupKey, type CheckboxGroupContext } from './checkbox-group.vue'
 
 defineOptions({ name: 'ZcCheckbox' })
+
+export type CheckboxSize = 'large' | 'medium' | 'small'
 
 const props = withDefaults(
   defineProps<{
@@ -14,11 +17,17 @@ const props = withDefaults(
     name?: string
     /** Accessible label for screen readers (falls back to label) */
     ariaLabel?: string
+    /** Show border around the checkbox */
+    border?: boolean
+    /** Checkbox size (only effective with border) */
+    size?: CheckboxSize
   }>(),
   {
     modelValue: false,
     disabled: false,
     indeterminate: false,
+    border: false,
+    size: undefined,
   }
 )
 
@@ -44,6 +53,15 @@ const isChecked = computed(() => {
 
 const isDisabled = computed(() => {
   return props.disabled || (isGroup.value && checkboxGroup!.disabled.value)
+})
+
+// ---- ConfigProvider size integration ----
+const { size: globalSize } = useGlobalConfig()
+const effectiveSize = computed<CheckboxSize | undefined>(() => {
+  if (isGroup.value && checkboxGroup?.size?.value) {
+    return checkboxGroup.size.value as CheckboxSize
+  }
+  return props.size ?? globalSize.value ?? undefined
 })
 
 // ---- Handlers ----
@@ -100,6 +118,8 @@ const classes = computed(() => [
   ns.is('disabled', isDisabled.value),
   ns.is('indeterminate', !isChecked.value && props.indeterminate),
   ns.is('focused', isFocused.value),
+  ns.is('border', props.border),
+  effectiveSize.value ? ns.m(effectiveSize.value) : '',
 ])
 </script>
 
@@ -298,5 +318,39 @@ const classes = computed(() => [
   padding-left: var(--spacing-zc-xs, 4px);
   line-height: 1.5;
   transition: color var(--transition-duration-zc-base, 0.25s) var(--ease-zc-in-out, ease);
+}
+
+/* ---- Border variant ---- */
+.zc-checkbox.is-border {
+  padding: 8px 12px;
+  border: 1px solid var(--color-zc-border-base, #dcdfe6);
+  border-radius: var(--radius-zc-base, 4px);
+  transition: border-color var(--transition-duration-zc-base, 0.25s) var(--ease-zc-in-out, ease);
+}
+.zc-checkbox.is-border:hover:not(.is-disabled) {
+  border-color: var(--color-zc-primary-400, #79bbff);
+}
+.zc-checkbox.is-border.is-checked {
+  border-color: var(--color-zc-primary-500, #409eff);
+}
+.zc-checkbox.is-border.is-disabled {
+  background: var(--color-zc-fill-light, #f5f7fa);
+  border-color: var(--color-zc-border-light, #e4e7ed);
+}
+
+/* ---- Sizes (with border) ---- */
+.zc-checkbox--large.is-border {
+  padding: 10px 14px;
+}
+.zc-checkbox--large.is-border .zc-checkbox__inner {
+  width: 18px;
+  height: 18px;
+}
+.zc-checkbox--small.is-border {
+  padding: 6px 10px;
+}
+.zc-checkbox--small.is-border .zc-checkbox__inner {
+  width: 12px;
+  height: 12px;
 }
 </style>

@@ -21,6 +21,10 @@ const props = withDefaults(
     pagerCount?: number
     /** Disabled state */
     disabled?: boolean
+    /** Available page sizes for the sizes selector */
+    pageSizes?: number[]
+    /** Show background on pager buttons */
+    background?: boolean
   }>(),
   {
     pageSize: 10,
@@ -28,6 +32,8 @@ const props = withDefaults(
     layout: 'prev, pager, next, jumper, total',
     pagerCount: 7,
     disabled: false,
+    pageSizes: () => [10, 20, 50, 100],
+    background: false,
   }
 )
 
@@ -115,6 +121,18 @@ function handleJumper(e: KeyboardEvent) {
   target.value = ''
 }
 
+/** Change page size from the sizes selector */
+function handleSizeChange(e: Event) {
+  const target = e.target as HTMLSelectElement
+  const newSize = parseInt(target.value, 10)
+  emit('update:pageSize', newSize)
+  // Reset to page 1 when size changes
+  const newTotalPages = Math.max(1, Math.ceil(props.total / newSize))
+  const newPage = Math.min(currentPageSync.value, newTotalPages)
+  emit('update:currentPage', newPage)
+  emit('change', newPage, newSize)
+}
+
 function isActive(page: number | string) {
   return page === currentPageSync.value
 }
@@ -122,7 +140,7 @@ function isActive(page: number | string) {
 
 <template>
   <div
-    :class="[ns.b(), ns.is('disabled', disabled)]"
+    :class="[ns.b(), ns.is('disabled', disabled), ns.is('background', background)]"
     role="navigation"
     :aria-label="t('zc.pagination.label')"
   >
@@ -200,6 +218,19 @@ function isActive(page: number | string) {
           />
         </svg>
       </button>
+
+      <!-- Sizes selector -->
+      <span v-else-if="part === 'sizes'" :class="ns.e('sizes')">
+        <select
+          :class="ns.e('sizes-select')"
+          :value="pageSize"
+          :disabled="disabled"
+          aria-label="Items per page"
+          @change="handleSizeChange"
+        >
+          <option v-for="size in pageSizes" :key="size" :value="size">{{ size }} / page</option>
+        </select>
+      </span>
 
       <!-- Jumper -->
       <span v-else-if="part === 'jumper'" :class="ns.e('jumper')">
@@ -373,5 +404,64 @@ function isActive(page: number | string) {
 .zc-pagination__jumper-input {
   -moz-appearance: textfield;
   appearance: textfield;
+}
+
+/* ---- Sizes selector ---- */
+.zc-pagination__sizes {
+  display: inline-flex;
+  align-items: center;
+  margin-right: var(--spacing-zc-xs, 4px);
+}
+
+.zc-pagination__sizes-select {
+  height: 28px;
+  padding: 0 24px 0 8px;
+  border: 1px solid var(--zc-pagination-button-border-color);
+  border-radius: var(--zc-pagination-button-border-radius);
+  background: var(--zc-pagination-button-bg-color);
+  color: var(--zc-pagination-button-text-color);
+  font-size: var(--zc-pagination-font-size);
+  cursor: pointer;
+  outline: none;
+  transition: border-color var(--transition-duration-zc-base, 0.25s);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23606266' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 6px center;
+}
+
+.zc-pagination__sizes-select:focus {
+  border-color: var(--zc-pagination-active-color);
+}
+
+.zc-pagination__sizes-select:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* ---- Background mode ---- */
+.zc-pagination.is-background .zc-pagination__btn,
+.zc-pagination.is-background .zc-pagination__number {
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-zc-base, 4px);
+}
+
+.zc-pagination.is-background .zc-pagination__btn:hover:not(.is-disabled),
+.zc-pagination.is-background .zc-pagination__number:hover:not(.is-active):not(.is-ellipsis) {
+  background: var(--zc-pagination-button-hover-bg-color);
+  color: var(--zc-pagination-button-hover-text-color);
+}
+
+.zc-pagination.is-background .zc-pagination__btn.is-disabled,
+.zc-pagination.is-background .zc-pagination__number.is-disabled {
+  background: transparent;
+}
+
+.zc-pagination.is-background .zc-pagination__number.is-active {
+  background: var(--zc-pagination-button-active-bg-color);
+  color: var(--zc-pagination-button-active-text-color);
 }
 </style>

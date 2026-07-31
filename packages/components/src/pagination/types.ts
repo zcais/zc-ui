@@ -19,6 +19,10 @@ export interface PaginationProps {
   pagerCount?: number
   /** Disabled state */
   disabled?: boolean
+  /** Available page sizes for the sizes selector */
+  pageSizes?: number[]
+  /** Show background on pager buttons */
+  background?: boolean
 }
 
 /** Pagination emit events */

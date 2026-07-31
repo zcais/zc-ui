@@ -33,6 +33,8 @@ export interface DialogProps {
   lockScroll?: boolean
   /** Custom dialog class */
   dialogClass?: string
+  /** Hook called before closing. If returns false / rejects, close is aborted. */
+  beforeClose?: (done: () => void) => void
 }
 
 /** Dialog emit events */
