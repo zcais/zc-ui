@@ -147,8 +147,6 @@ import Masonry from './masonry/masonry.vue'
 import Comment from './comment/comment.vue'
 // ---- CodeBlock Component ----
 import CodeBlock from './code-block/code-block.vue'
-// ---- CountTo Component ----
-import CountTo from './count-to/count-to.vue'
 // ---- StatisticCard Component ----
 import StatisticCard from './statistic-card/statistic-card.vue'
 // ---- ErrorBoundary Component ----
@@ -333,9 +331,6 @@ export const ZcComment = withInstall(Comment, 'ZcComment')
 
 // ---- CodeBlock Component ----
 export const ZcCodeBlock = withInstall(CodeBlock, 'ZcCodeBlock')
-
-// ---- CountTo Component ----
-export const ZcCountTo = withInstall(CountTo, 'ZcCountTo')
 
 // ---- StatisticCard Component ----
 export const ZcStatisticCard = withInstall(StatisticCard, 'ZcStatisticCard')
