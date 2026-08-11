@@ -76,4 +76,4 @@ const buttonSize: ButtonSize = 'medium'
 ## 下一步
 
 - 查看 [安装](./installation) 了解更多安装方式
-- 浏览 [组件总览](/components/button) 了解所有可用组件
+- 浏览 [组件总览](/components/overview) 了解所有可用组件

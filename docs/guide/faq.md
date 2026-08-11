@@ -32,16 +32,16 @@ import { ZcButton, ZcInput } from '@zc-ui/components'
 
 ### Q: 支持哪些浏览器？
 
-| 浏览器 | 最低版本 |
-| --- | --- |
-| Chrome / Edge | 80+ |
-| Firefox | 80+ |
-| Safari | 14+ |
+| 浏览器        | 最低版本 |
+| ------------- | -------- |
+| Chrome / Edge | 80+      |
+| Firefox       | 80+      |
+| Safari        | 14+      |
 
 ### Q: 如何使用 CDN 引入？
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/@zc-ui/components/dist/index.css" />
+<link rel="stylesheet" href="https://unpkg.com/@zc-ui/components/dist/style.css" />
 <script src="https://unpkg.com/vue@3"></script>
 <script src="https://unpkg.com/@zc-ui/components"></script>
 ```
@@ -90,17 +90,19 @@ applyDarkMode(true) // 开启暗色模式
 
 ```css
 :root {
-  --radius-zc-base: 8px;  /* 默认圆角 */
-  --radius-zc-lg: 12px;   /* 大圆角 */
+  --radius-zc-base: 8px; /* 默认圆角 */
+  --radius-zc-lg: 12px; /* 大圆角 */
 }
 ```
 
 或通过 ConfigProvider 组件级覆盖：
 
 ```vue
-<ZcConfigProvider :theme-overrides="{
-  Button: { '--zc-button-border-radius': '20px' },
-}">
+<ZcConfigProvider
+  :theme-overrides="{
+    Button: { '--zc-button-border-radius': '20px' },
+  }"
+>
   <App />
 </ZcConfigProvider>
 ```
@@ -114,6 +116,7 @@ applyDarkMode(true) // 开启暗色模式
 ### Q: Form 表单校验不触发？
 
 检查以下几点：
+
 1. `ZcFormItem` 必须设置 `prop` 属性，且值与 `model` 对象中的字段名对应
 2. `ZcForm` 需要绑定 `:model` 和 `:rules`
 3. 校验规则中的 `trigger` 需与实际事件匹配（如 `blur`、`change`）
@@ -153,13 +156,7 @@ const columns = [
 ### Q: Select 选择器如何支持远程搜索？
 
 ```vue
-<ZcSelect
-  v-model="value"
-  filterable
-  remote
-  :remote-method="handleSearch"
-  :loading="loading"
->
+<ZcSelect v-model="value" filterable remote :remote-method="handleSearch" :loading="loading">
   <ZcOption v-for="item in options" :key="item.id" :label="item.name" :value="item.id" />
 </ZcSelect>
 ```
@@ -188,6 +185,7 @@ formRef.value?.validate()
 ### Q: 构建后组件不显示，但开发环境正常？
 
 通常是 CSS 没有被正确打包。检查：
+
 1. `vite.config.ts` 或 `webpack.config.js` 中是否有 CSS 提取配置
 2. 确保在生产构建中导入了 `@zc-ui/components/styles`
 
@@ -199,7 +197,7 @@ formRef.value?.validate()
 
 ### Q: SSR / Nuxt 中样式闪烁怎么办？
 
-ZC UI 支持 SSR。详见 [SSR / Nuxt 兼容指南](./auto-import#ssr-模式)。
+ZC UI 支持 SSR。详见 [SSR / Nuxt 兼容指南](./ssr)。
 
 ## 兼容性
 

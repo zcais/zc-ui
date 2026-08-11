@@ -91,11 +91,11 @@ interface ZcUiResolverOptions {
 
 ### importStyle
 
-| 值 | 说明 |
-| --- | --- |
-| `'full'` (默认) | 导入完整样式文件 `@zc-ui/components/styles` |
-| `'component'` | 按组件导入各自 CSS，如 `@zc-ui/components/styles/button.css` |
-| `false` | 不自动导入 CSS（需手动引入） |
+| 值              | 说明                                                         |
+| --------------- | ------------------------------------------------------------ |
+| `'full'` (默认) | 导入完整样式文件 `@zc-ui/components/styles`                  |
+| `'component'`   | 按组件导入各自 CSS，如 `@zc-ui/components/styles/button.css` |
+| `false`         | 不自动导入 CSS（需手动引入）                                 |
 
 ```ts
 // 按组件导入 CSS
@@ -279,11 +279,7 @@ export default defineConfig({
     AutoImport({
       imports: [
         {
-          '@zc-ui/components': [
-            'ZcMessage',
-            'ZcNotification',
-            'ZcLoadingService',
-          ],
+          '@zc-ui/components': ['ZcMessage', 'ZcNotification', 'ZcLoadingService'],
         },
       ],
     }),
@@ -335,11 +331,13 @@ const result = resolveZcComponent('ZcButton')
 
 Resolver 自动支持所有 `@zc-ui/components` 中导出的组件，包括：
 
-| 类别 | 组件 |
-| --- | --- |
-| 基础 | Button, Icon |
-| 布局 | Row, Col, Container, Header, Aside, Main, Footer, Space, Grid, GridItem |
-| 表单 | Input, Select, Switch, Checkbox, Radio, Form, DatePicker, InputNumber, Slider, Rate, Upload, Cascader 等 |
-| 数据展示 | Table, Tag, Badge, Avatar, Tree, Image, Descriptions, Timeline, List, Carousel 等 |
-| 反馈导航 | Tooltip, Dialog, Drawer, Message, Notification, Loading, Alert, Progress, Steps 等 |
-| 导航 | Menu, Tabs, Breadcrumb, Dropdown, Pagination, Anchor, Backtop, Affix 等 |
+| 类别       | 组件                                                                                                                                                                                                                                                              |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 基础       | Button, Icon                                                                                                                                                                                                                                                      |
+| 布局       | Row, Col, Container, Header, Aside, Main, Footer, Space, Grid, GridItem, Carousel                                                                                                                                                                                 |
+| 容器与基础 | Card, Divider, Collapse, CollapseItem, Scrollbar                                                                                                                                                                                                                  |
+| 表单       | Input, InputNumber, AutoComplete, Select, Switch, Checkbox, CheckboxGroup, Radio, RadioGroup, Form, FormItem, DatePicker, TimePicker, ColorPicker, Rate, Slider, Upload, Cascader, Transfer, Mention, TreeSelect                                                  |
+| 数据展示   | Table, Tag, Badge, Avatar, Empty, Skeleton, SkeletonItem, Image, Tree, TreeNode, Descriptions, DescriptionsItem, Statistic, Countdown, Timeline, TimelineItem, List, ListItem, Carousel, CarouselItem, Calendar, Steps, Step, Progress, Result, Watermark, QRCode |
+| 反馈       | Dialog, Drawer, Tooltip, Popover, Popconfirm, Message, Notification, Loading, Alert, Tour                                                                                                                                                                         |
+| 导航       | Menu, MenuItem, Submenu, Tabs, TabPane, Segmented, Breadcrumb, BreadcrumbItem, Dropdown, DropdownMenu, DropdownItem, Pagination, Anchor, AnchorLink, Backtop, Affix, FloatButton, FloatButtonGroup                                                                |
+| 基础设施   | ConfigProvider                                                                                                                                                                                                                                                    |

@@ -2,4 +2,4 @@
 
 Documentation site for ZC UI Component Library.
 
-> TODO: Setup VitePress
+> Built with VitePress 1.6.4

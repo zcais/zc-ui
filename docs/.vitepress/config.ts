@@ -55,6 +55,7 @@ export default defineConfig({
             { text: '设计原则', link: '/guide/design-principles' },
             { text: 'Design Tokens 设计令牌', link: '/guide/design-tokens' },
             { text: '主题定制', link: '/guide/theming' },
+            { text: '组件级主题定制', link: '/guide/component-theme-customization' },
             { text: 'SCSS / CSS 变量混用', link: '/guide/scss-css-variables' },
             { text: '无障碍设计', link: '/guide/accessibility' },
           ],
@@ -204,7 +205,7 @@ export default defineConfig({
 
     footer: {
       message: '基于 MIT 许可发布',
-      copyright: 'Copyright © 2024 ZC UI',
+      copyright: 'Copyright © 2024-2025 ZC UI',
     },
 
     outline: {
