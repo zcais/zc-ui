@@ -44,8 +44,8 @@ const props = withDefaults(
     startLineNumber: 1,
     maxHeight: '',
     fontSize: 13,
-    copyText: 'Copy',
-    copiedText: 'Copied!',
+    copyText: '复制',
+    copiedText: '已复制',
   }
 )
 
@@ -386,6 +386,8 @@ function tokenizeCSS(code: string) {
     { type: 'attr', regex: /^[@#][\w-]+/ },
     { type: 'function', regex: /^[\w-]+(?=\s*\()/ },
     { type: 'tag', regex: /^[\w-]+(?=\s*:)/ },
+    // CSS selectors: .class, #id, :pseudo, ::pseudo-element
+    { type: 'keyword', regex: /^[.#:][\w-]+|::[\w-]+/ },
     { type: 'operator', regex: /^[{};:()]/ },
     { type: 'plain', regex: /^\s+/ },
     { type: 'plain', regex: /^[a-zA-Z_-][\w-]*/ },
@@ -485,10 +487,20 @@ const highlightedContent = computed(() => renderHighlightedCode())
   <div :class="[ns.b(), ns.m(theme)]">
     <!-- Header bar -->
     <div v-if="showHeader" :class="headerClasses">
+      <div :class="ns.e('dots')" aria-hidden="true">
+        <span :class="[ns.e('dot'), ns.e('dot--red')]"></span>
+        <span :class="[ns.e('dot'), ns.e('dot--yellow')]"></span>
+        <span :class="[ns.e('dot'), ns.e('dot--green')]"></span>
+      </div>
       <span v-if="showLanguage" :class="ns.e('language')">{{ languageLabel }}</span>
       <div :class="ns.e('actions')">
         <slot name="actions" />
-        <button v-if="showCopy" :class="ns.e('copy-btn')" type="button" @click="handleCopy">
+        <button
+          v-if="showCopy"
+          :class="[ns.e('copy-btn'), ns.is('copied', copied)]"
+          type="button"
+          @click="handleCopy"
+        >
           <svg
             v-if="!copied"
             viewBox="0 0 24 24"
@@ -549,6 +561,7 @@ const highlightedContent = computed(() => renderHighlightedCode())
   --zc-cb-text: var(--color-zc-text-primary, #24292e);
   --zc-cb-border: var(--color-zc-border-light, #e1e4e8);
   --zc-cb-header-text: var(--color-zc-text-secondary, #586069);
+  width: 100%;
   border: 1px solid var(--zc-cb-border);
   border-radius: 8px;
   overflow: hidden;
@@ -568,10 +581,36 @@ const highlightedContent = computed(() => renderHighlightedCode())
 .zc-code-block__header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 12px;
   padding: 8px 12px;
   background-color: var(--zc-cb-header-bg);
   border-bottom: 1px solid var(--zc-cb-border);
+}
+
+.zc-code-block__dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.zc-code-block__dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.zc-code-block__dot--red {
+  background-color: #ff5f56;
+}
+
+.zc-code-block__dot--yellow {
+  background-color: #ffbd2e;
+}
+
+.zc-code-block__dot--green {
+  background-color: #27c93f;
 }
 
 .zc-code-block__language {
@@ -586,6 +625,7 @@ const highlightedContent = computed(() => renderHighlightedCode())
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-left: auto;
 }
 
 .zc-code-block__copy-btn {
@@ -605,6 +645,14 @@ const highlightedContent = computed(() => renderHighlightedCode())
 .zc-code-block__copy-btn:hover {
   background-color: rgba(128, 128, 128, 0.15);
   color: var(--zc-cb-text);
+}
+
+.zc-code-block__copy-btn.is-copied {
+  color: #27c93f;
+}
+
+.zc-code-block__copy-btn.is-copied:hover {
+  color: #27c93f;
 }
 
 /* ---- Code container ---- */
@@ -717,6 +765,29 @@ const highlightedContent = computed(() => renderHighlightedCode())
 
 .zc-code-block--dark :deep(.tok-attr) {
   color: #9cdcfe;
+}
+
+/* ---- Custom scrollbar ---- */
+.zc-code-block__code::-webkit-scrollbar,
+.zc-code-block__pre::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+.zc-code-block__code::-webkit-scrollbar-track,
+.zc-code-block__pre::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.zc-code-block__code::-webkit-scrollbar-thumb,
+.zc-code-block__pre::-webkit-scrollbar-thumb {
+  background-color: rgba(128, 128, 128, 0.3);
+  border-radius: 3px;
+}
+
+.zc-code-block__code::-webkit-scrollbar-thumb:hover,
+.zc-code-block__pre::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(128, 128, 128, 0.5);
 }
 
 /* ---- Dark mode (global) ---- */

@@ -127,20 +127,20 @@ const code = `<div class="card">
 
 ### CodeBlock Props
 
-| 属性名          | 说明                 | 类型                | 默认值      |
-| --------------- | -------------------- | ------------------- | ----------- |
-| code            | 代码内容             | `string`            | `''`        |
-| language        | 编程语言             | `string`            | `'text'`    |
-| theme           | 主题                 | `'light' \| 'dark'` | `'light'`   |
-| showLineNumbers | 是否显示行号         | `boolean`           | `false`     |
-| showCopy        | 是否显示复制按钮     | `boolean`           | `true`      |
-| showLanguage    | 是否显示语言标签     | `boolean`           | `true`      |
-| showHeader      | 是否显示头部栏       | `boolean`           | `true`      |
-| startLineNumber | 起始行号             | `number`            | `1`         |
-| maxHeight       | 最大高度（超出滚动） | `string`            | -           |
-| fontSize        | 字体大小（px）       | `number`            | `13`        |
-| copyText        | 复制按钮文字         | `string`            | `'Copy'`    |
-| copiedText      | 复制成功提示文字     | `string`            | `'Copied!'` |
+| 属性名          | 说明                 | 类型                | 默认值     |
+| --------------- | -------------------- | ------------------- | ---------- |
+| code            | 代码内容             | `string`            | `''`       |
+| language        | 编程语言             | `string`            | `'text'`   |
+| theme           | 主题                 | `'light' \| 'dark'` | `'light'`  |
+| showLineNumbers | 是否显示行号         | `boolean`           | `false`    |
+| showCopy        | 是否显示复制按钮     | `boolean`           | `true`     |
+| showLanguage    | 是否显示语言标签     | `boolean`           | `true`     |
+| showHeader      | 是否显示头部栏       | `boolean`           | `true`     |
+| startLineNumber | 起始行号             | `number`            | `1`        |
+| maxHeight       | 最大高度（超出滚动） | `string`            | -          |
+| fontSize        | 字体大小（px）       | `number`            | `13`       |
+| copyText        | 复制按钮文字         | `string`            | `'复制'`   |
+| copiedText      | 复制成功提示文字     | `string`            | `'已复制'` |
 
 ### CodeBlock Events
 
