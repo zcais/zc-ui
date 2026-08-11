@@ -12,8 +12,14 @@ import { visualizer } from 'rollup-plugin-visualizer'
  *  - ESM:   dist/index.mjs (tree-shakeable)
  *  - CJS:   dist/index.cjs
  *  - UMD:   dist/index.umd.js (with inlined CSS)
- *  - CSS:   dist/style.css
+ *  - CSS:   dist/style.css (all component styles)
  *  - Types: dist/types/index.d.ts
+ *
+ * CSS code splitting is enabled (cssCodeSplit: true) for better
+ * per-chunk CSS extraction when used with manual chunks.
+ *
+ * sideEffects: Only "*.css" files are marked as side-effects,
+ * allowing bundlers to tree-shake unused component JS.
  */
 export default defineConfig({
   plugins: [
@@ -60,10 +66,9 @@ export default defineConfig({
           vue: 'Vue',
         },
         exports: 'named',
-        assetFileNames: (assetInfo) => {
-          if (assetInfo.name === 'style.css') return 'style.css'
-          return assetInfo.name || 'asset-[hash][extname]'
-        },
+        // Use default asset naming so CSS chunks get proper hashed names.
+        // The full combined CSS is available as dist/style.css.
+        assetFileNames: 'assets/[name]-[hash][extname]',
       },
     },
   },

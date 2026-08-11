@@ -212,6 +212,21 @@ watch(isVisible, (val) => {
 onBeforeUnmount(() => {
   document.removeEventListener('keydown', handleEsc)
 })
+
+// ---- Public API ----
+function show() {
+  if (!isVisible.value) {
+    emit('update:modelValue', true)
+  }
+}
+
+function hide() {
+  if (isVisible.value) {
+    handleClose()
+  }
+}
+
+defineExpose({ show, hide, isVisible })
 </script>
 
 <template>

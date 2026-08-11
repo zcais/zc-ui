@@ -5,7 +5,7 @@
  * Each ZcFormItem registers itself with the parent form so that
  * the form can trigger validation for all items (e.g. on submit).
  */
-import type { InjectionKey, Ref, UnwrapNestedRefs } from 'vue'
+import type { InjectionKey, Ref } from 'vue'
 
 /** A single validation rule for a form field. */
 export interface FormItemRule {
@@ -15,10 +15,21 @@ export interface FormItemRule {
   max?: number
   /** Regex pattern (string or RegExp). */
   pattern?: RegExp | string
+  /** Type validation (checks typeof value). */
+  type?: 'string' | 'number' | 'boolean' | 'array' | 'object' | 'email' | 'url'
+  /** Allowed values (enum validation). */
+  enum?: Array<string | number>
   /**
    * Custom validator function.
-   * Returns `true` (pass) or `false` (fail / error).
+   * Returns `true` (pass) or `false` (fail / error), or a Promise.
+   * Can also return an error message string directly for convenience.
    * When the third `model` parameter is present, enables cross-field validation.
+   * @example
+   * // Async validator with API check
+   * validator: async (rule, value) => {
+   *   const res = await checkUsername(value)
+   *   return res.available
+   * }
    * @example
    * // Cross-field: confirm password must match password
    * validator: (rule, value, model) => value === model.password
@@ -27,11 +38,13 @@ export interface FormItemRule {
     rule: FormItemRule,
     value: unknown,
     model?: Record<string, unknown>
-  ) => boolean | Promise<boolean>
-  /** Custom error message. */
-  message?: string
+  ) => boolean | string | Promise<boolean | string>
+  /** Custom error message (string or function for dynamic messages). */
+  message?: string | ((rule: FormItemRule, value: unknown) => string)
   /** When to trigger validation. */
   trigger?: 'blur' | 'change'
+  /** Transform the value before validation. */
+  transform?: (value: unknown) => unknown
 }
 
 /** Rules map keyed by model property path. */

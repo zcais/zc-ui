@@ -38,7 +38,7 @@
   ],
   "sideEffects": [
     "**/*.css",
-    "**/*.vue"
+    "**/*.scss"
   ],
   "publishConfig": {
     "access": "public",

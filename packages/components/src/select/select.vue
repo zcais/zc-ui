@@ -494,7 +494,22 @@ function virtualScrollToHovered() {
   virtualScrollToIndex(hoveringIndex.value)
 }
 
-defineExpose({ visible, openDropdown, closeDropdown, toggleSelectAll })
+function focus() {
+  if (inputRef.value) {
+    inputRef.value.focus()
+  } else {
+    triggerRef.value?.focus()
+  }
+}
+
+function blur() {
+  if (inputRef.value) {
+    inputRef.value.blur()
+  }
+  if (visible.value) closeDropdown()
+}
+
+defineExpose({ visible, focus, blur, openDropdown, closeDropdown, toggleSelectAll })
 </script>
 
 <template>

@@ -1,5 +1,10 @@
 /**
  * ZC UI Locale - Internationalization framework
+ *
+ * Architecture:
+ * - Module-level singleton for SPA usage (backward compatible)
+ * - `createLocale()` creates a per-app isolated context for SSR safety
+ * - `useLocale()` returns the injected context or falls back to the singleton
  */
 
 import { ref, reactive, readonly, inject, type Ref, type InjectionKey } from 'vue'
@@ -114,6 +119,10 @@ const zhCNMessages: Record<string, string> = {
   'zc.form.max': '长度不能超过 {max}',
   'zc.form.pattern': '格式不正确',
   'zc.form.validateFailed': '校验失败',
+  'zc.form.type': '数据类型不正确',
+  'zc.form.email': '请输入正确的邮箱地址',
+  'zc.form.url': '请输入正确的 URL',
+  'zc.form.enum': '值必须是 {values} 中的一个',
   'zc.image.preview': '图片预览',
   'zc.image.closePreview': '关闭预览',
   'zc.image.zoomIn': '放大',
@@ -207,6 +216,10 @@ const enUSMessages: Record<string, string> = {
   'zc.form.max': 'Length cannot be greater than {max}',
   'zc.form.pattern': 'Invalid format',
   'zc.form.validateFailed': 'Validation failed',
+  'zc.form.type': 'Invalid data type',
+  'zc.form.email': 'Please enter a valid email address',
+  'zc.form.url': 'Please enter a valid URL',
+  'zc.form.enum': 'Value must be one of: {values}',
   'zc.image.preview': 'Image Preview',
   'zc.image.closePreview': 'Close preview',
   'zc.image.zoomIn': 'Zoom In',
@@ -232,17 +245,11 @@ const enUSMessages: Record<string, string> = {
 }
 
 // ---------------------------------------------------------------
-// Module-level reactive singleton state
+// Module-level reactive singleton state (SPA fallback)
 //
-// NOTE: These are module-level singletons, meaning all components in an
-// application share the same locale state. This is the standard pattern
-// used by Element Plus, Naive UI, and other Vue 3 component libraries.
-//
-// **SSR Limitation**: In Server-Side Rendering scenarios, different
-// requests will share the same module state, which can cause locale
-// cross-contamination between requests. For SSR applications, consider
-// scoping locale state per-request (e.g. via app.runWithContext() or a
-// custom createApp-level store). For typical SPA usage this is not an issue.
+// This is the backward-compatible module-level state used when
+// no per-app locale context is provided. For SSR scenarios, use
+// createLocale() to create per-app isolated state.
 // ---------------------------------------------------------------
 
 const _localeRef = ref<Language>('zh-CN')
@@ -254,7 +261,7 @@ const _messages = reactive<Record<Language, Record<string, string>>>({
 })
 
 // ---------------------------------------------------------------
-// Core functions
+// Core singleton functions (backward compatible)
 // ---------------------------------------------------------------
 
 /**
@@ -322,6 +329,76 @@ export function register(lang: Language, dict: LocaleDictionary): void {
 }
 
 // ---------------------------------------------------------------
+// Per-app isolated locale context factory (SSR-safe)
+// ---------------------------------------------------------------
+
+/**
+ * Create an isolated locale context with its own reactive state.
+ *
+ * This is the SSR-safe alternative to the module-level singleton.
+ * Each call creates independent state, so different requests in SSR
+ * won't cross-contaminate each other.
+ *
+ * @example
+ * const ctx = createLocaleContext({ locale: 'en-US' })
+ * ctx.t('common.confirm')  // 'Confirm'
+ * ctx.setLocale('zh-CN')   // only affects this context
+ */
+export function createLocaleContext(options?: {
+  locale?: Language
+  fallbackLocale?: Language
+  messages?: Record<Language, LocaleDictionary>
+}): LocaleContext {
+  const localLocaleRef = ref<Language>(options?.locale ?? 'zh-CN')
+  const localFallbackRef = ref<Language>(options?.fallbackLocale ?? 'zh-CN')
+  const localMessages = reactive<Record<Language, Record<string, string>>>({
+    'zh-CN': { ...zhCNMessages },
+    'en-US': { ...enUSMessages },
+  })
+
+  // Merge custom messages
+  if (options?.messages) {
+    for (const [lang, dict] of Object.entries(options.messages)) {
+      localMessages[lang] = { ...localMessages[lang], ...flatten(dict) }
+    }
+  }
+
+  const localT = (key: string, opts?: TranslateOptions): string => {
+    const currentDict = localMessages[localLocaleRef.value]
+    const fallbackDict = localMessages[localFallbackRef.value]
+    const raw = currentDict?.[key] ?? fallbackDict?.[key] ?? key
+    return interpolate(raw, opts)
+  }
+
+  const localSetLocale = (lang: Language): void => {
+    localLocaleRef.value = lang
+  }
+
+  const localGetLocale = (): Language => localLocaleRef.value
+
+  const localSetFallbackLocale = (lang: Language): void => {
+    localFallbackRef.value = lang
+  }
+
+  const localGetFallbackLocale = (): Language => localFallbackRef.value
+
+  const localRegister = (lang: Language, dict: LocaleDictionary): void => {
+    const flat = flatten(dict)
+    localMessages[lang] = { ...localMessages[lang], ...flat }
+  }
+
+  return {
+    locale: readonly(localLocaleRef),
+    t: localT,
+    setLocale: localSetLocale,
+    getLocale: localGetLocale,
+    setFallbackLocale: localSetFallbackLocale,
+    getFallbackLocale: localGetFallbackLocale,
+    register: localRegister,
+  }
+}
+
+// ---------------------------------------------------------------
 // provide/inject
 // ---------------------------------------------------------------
 
@@ -337,10 +414,9 @@ export const localeInjectionKey: InjectionKey<LocaleContext> = Symbol('zcLocale'
  *
  * **Must be called inside a component `setup()` function.** When called
  * within a provide tree (i.e. after `app.use(createLocale())`), it returns
- * the injected context. As a fallback for non-component usage (e.g. in
- * utility modules), it returns the module-level singleton context — note
- * that this fallback will trigger a Vue dev-mode warning about `inject()`
- * being called outside setup, which can be safely ignored.
+ * the injected context — this is the **SSR-safe** path. As a fallback for
+ * non-component usage (e.g. in utility modules), it returns the module-level
+ * singleton context.
  *
  * @example
  * // In a component setup:
@@ -370,6 +446,12 @@ export function useLocale(): LocaleContext {
 /**
  * Create a locale plugin with optional initial configuration.
  *
+ * **SSR Safety**: When using `createLocale()`, a per-app isolated context
+ * is created and provided via `app.provide()`. This means each app instance
+ * (and each SSR request) gets its own locale state, preventing
+ * cross-contamination. Without `createLocale()`, components fall back to
+ * the shared module-level singleton.
+ *
  * @example
  * import { createLocale } from '@zc-ui/locale'
  * app.use(createLocale({ locale: 'en-US' }))
@@ -381,6 +463,12 @@ export function useLocale(): LocaleContext {
  *   fallbackLocale: 'zh-CN',
  *   messages: { 'ja-JP': { common: { ok: 'OK' } } }
  * }))
+ *
+ * @example
+ * // SSR (Nuxt) - each request gets isolated locale state
+ * export default defineNuxtPlugin((nuxtApp) => {
+ *   nuxtApp.vueApp.use(createLocale({ locale: 'en-US' }))
+ * })
  */
 export function createLocale(options?: {
   locale?: Language
@@ -389,28 +477,8 @@ export function createLocale(options?: {
 }): Plugin {
   return {
     install(app: App) {
-      if (options?.locale) {
-        setLocale(options.locale)
-      }
-      if (options?.fallbackLocale) {
-        setFallbackLocale(options.fallbackLocale)
-      }
-      if (options?.messages) {
-        for (const [lang, dict] of Object.entries(options.messages)) {
-          register(lang, dict)
-        }
-      }
-
-      const ctx: LocaleContext = {
-        locale: readonly(_localeRef),
-        t,
-        setLocale,
-        getLocale,
-        setFallbackLocale,
-        getFallbackLocale,
-        register,
-      }
-
+      // Create an isolated context for this app instance
+      const ctx = createLocaleContext(options)
       app.provide(localeInjectionKey, ctx)
     },
   }
