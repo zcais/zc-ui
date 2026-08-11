@@ -9,6 +9,7 @@ import {
   Comment,
   Fragment,
   type VNode,
+  type VNodeChild,
 } from 'vue'
 import { useNamespace, useResizeObserver } from '@zc-ui/hooks'
 
@@ -97,22 +98,59 @@ interface MasonryEntry {
   key: string | number
 }
 
+/**
+ * Recursively flatten slot VNodes.
+ *
+ * When the user writes `v-for` inside the default slot, Vue wraps the loop
+ * items in a **Fragment** VNode. Without flattening, the entire Fragment is
+ * treated as a single child — which means all loop items end up inside ONE
+ * `.zc-masonry__item` wrapper, breaking both CSS columns (`break-inside: avoid`
+ * keeps the giant wrapper in a single column) and JS balanced mode (all items
+ * land in one column).
+ *
+ * This function walks every child, recurses into Fragments / arrays, filters
+ * out comments and empty text nodes, and returns a flat list of real element
+ * VNodes — one per slot item.
+ */
+function flattenVNodes(children: VNodeChild): VNode[] {
+  const result: VNode[] = []
+
+  if (children == null) return result
+
+  if (Array.isArray(children)) {
+    for (const child of children) {
+      result.push(...flattenVNodes(child))
+    }
+    return result
+  }
+
+  // Fragment → recurse into its children
+  if ((children as VNode).type === Fragment) {
+    return flattenVNodes((children as VNode).children as VNodeChild)
+  }
+
+  // Skip comments
+  if ((children as VNode).type === Comment) return result
+
+  // Skip text nodes that are empty / whitespace-only
+  if (typeof children === 'string') {
+    if (children.trim() === '') return result
+  }
+  if (typeof children === 'number') {
+    // Non-zero number text nodes are valid
+  }
+
+  result.push(children as VNode)
+  return result
+}
+
 function collectEntries(): MasonryEntry[] {
   const children = slots.default?.() ?? []
-  return children
-    .filter(
-      (child) =>
-        child.type !== Comment &&
-        !(
-          child.type === Fragment &&
-          (child.children == null || (Array.isArray(child.children) && child.children.length === 0))
-        )
-    )
-    .map((vnode, index) => ({
-      vnode,
-      index,
-      key: vnode.key != null ? (vnode.key as string | number) : index,
-    }))
+  return flattenVNodes(children).map((vnode, index) => ({
+    vnode,
+    index,
+    key: vnode.key != null ? (vnode.key as string | number) : index,
+  }))
 }
 
 const allEntries = computed(() => collectEntries())
