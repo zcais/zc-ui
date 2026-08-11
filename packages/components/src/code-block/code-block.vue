@@ -798,4 +798,37 @@ const highlightedContent = computed(() => renderHighlightedCode())
   --zc-cb-border: #3c3c3c;
   --zc-cb-header-text: #999;
 }
+
+/* ---- Dark mode (global) token colors ---- */
+.dark .zc-code-block:not(.zc-code-block--dark) :deep(.tok-keyword) {
+  color: #569cd6;
+}
+
+.dark .zc-code-block:not(.zc-code-block--dark) :deep(.tok-string) {
+  color: #ce9178;
+}
+
+.dark .zc-code-block:not(.zc-code-block--dark) :deep(.tok-comment) {
+  color: #6a9955;
+}
+
+.dark .zc-code-block:not(.zc-code-block--dark) :deep(.tok-number) {
+  color: #b5cea8;
+}
+
+.dark .zc-code-block:not(.zc-code-block--dark) :deep(.tok-function) {
+  color: #dcdcaa;
+}
+
+.dark .zc-code-block:not(.zc-code-block--dark) :deep(.tok-operator) {
+  color: #d4d4d4;
+}
+
+.dark .zc-code-block:not(.zc-code-block--dark) :deep(.tok-tag) {
+  color: #569cd6;
+}
+
+.dark .zc-code-block:not(.zc-code-block--dark) :deep(.tok-attr) {
+  color: #9cdcfe;
+}
 </style>

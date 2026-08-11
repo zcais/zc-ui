@@ -63,17 +63,18 @@ const user: User = {
 
 ```vue
 <template>
-  <div style="background: #1e1e1e; padding: 16px; border-radius: 8px">
-    <ZcCodeBlock language="css" theme="dark" :show-header="false" :code="code" />
+  <div style="background: #1e1e1e; padding: 16px; border-radius: 8px; width: 100%">
+    <ZcCodeBlock language="javascript" theme="dark" :code="code" />
   </div>
 </template>
 
 <script setup>
-const code = `.container {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 20px;
+const code = `function debounce(fn, delay) {
+  let timer = null
+  return function (...args) {
+    clearTimeout(timer)
+    timer = setTimeout(() => fn.apply(this, args), delay)
+  }
 }`
 </script>
 ```
