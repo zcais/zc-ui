@@ -14,6 +14,8 @@ const props = withDefaults(
     activeIndex?: string
     /** Whether the menu is collapsed (vertical mode only) */
     collapse?: boolean
+    /** Whether to enable collapse transition animation */
+    collapseTransition?: boolean
     /** Background color */
     backgroundColor?: string
     /** Text color */
@@ -27,6 +29,7 @@ const props = withDefaults(
     mode: 'vertical',
     activeIndex: '',
     collapse: false,
+    collapseTransition: true,
     backgroundColor: '',
     textColor: '',
     activeTextColor: '',
@@ -45,7 +48,12 @@ const ns = useNamespace('menu')
 const activeIndexRef = ref(props.activeIndex)
 const openedMenus = ref<Set<string>>(new Set())
 
-const rootClasses = computed(() => [ns.b(), ns.m(props.mode), ns.is('collapse', props.collapse)])
+const rootClasses = computed(() => [
+  ns.b(),
+  ns.m(props.mode),
+  ns.is('collapse', props.collapse),
+  ns.is('collapse-transition', props.collapseTransition),
+])
 
 const rootStyle = computed(() => {
   const style: Record<string, string> = {}
@@ -100,7 +108,7 @@ provide(MENU_KEY, menuContext as unknown as MenuContext)
   --zc-menu-active-color: var(--color-zc-primary-500, #409eff);
   --zc-menu-active-bg-color: var(--color-zc-primary-50, #ecf5ff);
   --zc-menu-hover-bg-color: var(--color-zc-fill-light, #f5f7fa);
---zc-menu-hover-text-color: var(--color-zc-text-primary, #303133);
+  --zc-menu-hover-text-color: var(--color-zc-text-primary, #303133);
   --zc-menu-item-height: 56px;
   --zc-menu-item-padding: 0 20px;
   --zc-menu-font-size: var(--text-zc-base, 14px);
@@ -139,6 +147,22 @@ provide(MENU_KEY, menuContext as unknown as MenuContext)
 
 .zc-menu--vertical.is-collapse {
   width: var(--zc-menu-collapsed-width);
+}
+
+/* ---- Collapse transition animation ---- */
+.zc-menu--vertical.is-collapse-transition {
+  transition: width var(--transition-duration-zc-base, 0.25s) var(--ease-zc-in-out, ease);
+}
+
+.zc-menu--vertical.is-collapse-transition .zc-menu__item,
+.zc-menu--vertical.is-collapse-transition > .zc-submenu .zc-submenu__title {
+  transition: padding var(--transition-duration-zc-base, 0.25s) var(--ease-zc-in-out, ease);
+}
+
+/* Fade text/icons during collapse */
+.zc-menu--vertical.is-collapse-transition > .zc-menu-item span,
+.zc-menu--vertical.is-collapse-transition > .zc-submenu__title span {
+  transition: opacity var(--transition-duration-zc-fast, 0.15s) var(--ease-zc-in-out, ease);
 }
 
 .zc-menu--vertical.is-collapse > .zc-menu-item span,

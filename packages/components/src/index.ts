@@ -141,6 +141,20 @@ import TextEllipsis from './text-ellipsis/text-ellipsis.vue'
 import Spin from './spin/spin.vue'
 // ---- Editable Component ----
 import Editable from './editable/editable.vue'
+// ---- Masonry Component ----
+import Masonry from './masonry/masonry.vue'
+// ---- Comment Component ----
+import Comment from './comment/comment.vue'
+// ---- CodeBlock Component ----
+import CodeBlock from './code-block/code-block.vue'
+// ---- CountTo Component ----
+import CountTo from './count-to/count-to.vue'
+// ---- StatisticCard Component ----
+import StatisticCard from './statistic-card/statistic-card.vue'
+// ---- ErrorBoundary Component ----
+import ErrorBoundary from './error-boundary/error-boundary.vue'
+// ---- ActionSheet Component ----
+import ActionSheet from './action-sheet/action-sheet.vue'
 
 /**
  * Individual component exports with installer pattern.
@@ -311,6 +325,27 @@ export const ZcSpin = withInstall(Spin, 'ZcSpin')
 // ---- Editable Component ----
 export const ZcEditable = withInstall(Editable, 'ZcEditable')
 
+// ---- Masonry Component ----
+export const ZcMasonry = withInstall(Masonry, 'ZcMasonry')
+
+// ---- Comment Component ----
+export const ZcComment = withInstall(Comment, 'ZcComment')
+
+// ---- CodeBlock Component ----
+export const ZcCodeBlock = withInstall(CodeBlock, 'ZcCodeBlock')
+
+// ---- CountTo Component ----
+export const ZcCountTo = withInstall(CountTo, 'ZcCountTo')
+
+// ---- StatisticCard Component ----
+export const ZcStatisticCard = withInstall(StatisticCard, 'ZcStatisticCard')
+
+// ---- ErrorBoundary Component ----
+export const ZcErrorBoundary = withInstall(ErrorBoundary, 'ZcErrorBoundary')
+
+// ---- ActionSheet Component ----
+export const ZcActionSheet = withInstall(ActionSheet, 'ZcActionSheet')
+
 // ---- Layout Enhancement Components ----
 export const ZcFlex = withInstall(Flex, 'ZcFlex')
 
@@ -465,6 +500,20 @@ export default withInstallAll({
   ZcSpin,
   // Editable
   ZcEditable,
+  // Masonry
+  ZcMasonry,
+  // Comment
+  ZcComment,
+  // CodeBlock
+  ZcCodeBlock,
+  // CountTo
+  ZcCountTo,
+  // StatisticCard
+  ZcStatisticCard,
+  // ErrorBoundary
+  ZcErrorBoundary,
+  // ActionSheet
+  ZcActionSheet,
 })
 
 // Export TypeScript types
@@ -591,6 +640,11 @@ export type {
 // ---- Custom Directives ----
 export { ZcCopyDirective } from './directives/copy'
 export { ZcDebounceDirective } from './directives/debounce'
+export { ZcTooltipDirective } from './tooltip/tooltip-directive'
+export type {
+  TooltipDirectivePlacement,
+  TooltipDirectiveOptions,
+} from './tooltip/tooltip-directive'
 
 // ---- Infinite Scroll Directive ----
 export { ZcInfiniteScrollDirective } from './infinite-scroll/infinite-scroll'
@@ -716,6 +770,24 @@ export type { SpinSize } from './spin/spin.vue'
 
 // ---- Editable Component Types ----
 export type { EditableMode } from './editable/editable.vue'
+
+// ---- Masonry Component Types ----
+// (no exported types needed — props are inline)
+
+// ---- Comment Component Types ----
+// (no exported types needed — props are inline)
+
+// ---- CodeBlock Component Types ----
+export type { CodeBlockTheme } from './code-block/code-block.vue'
+
+// ---- CountTo Component Types ----
+export type { CountToEasing } from './count-to/count-to.vue'
+
+// ---- StatisticCard Component Types ----
+export type { StatisticCardTrend } from './statistic-card/statistic-card.vue'
+
+// ---- ActionSheet Component Types ----
+export type { ActionSheetItem } from './action-sheet/action-sheet.vue'
 
 // ---- Typography Component Types ----
 export type { TitleLevel } from './typography/title.vue'

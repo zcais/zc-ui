@@ -6,7 +6,14 @@ import { useLocale } from '@zc-ui/locale'
 
 defineOptions({ name: 'ZcDatePicker' })
 
-export type DatePickerType = 'date' | 'daterange' | 'datetime' | 'month' | 'year' | 'week'
+export type DatePickerType =
+  | 'date'
+  | 'daterange'
+  | 'datetime'
+  | 'datetimerange'
+  | 'month'
+  | 'year'
+  | 'week'
 export type DatePickerSize = 'large' | 'medium' | 'small'
 
 /** A shortcut option that sets the date range. */
@@ -69,12 +76,12 @@ const rangeStart = ref<Date | null>(null)
 const rangeEnd = ref<Date | null>(null)
 const hoveringDate = ref<Date | null>(null)
 
-const isRange = computed(() => props.type === 'daterange')
+const isRange = computed(() => props.type === 'daterange' || props.type === 'datetimerange')
 
 // ---- Panel mode: 'date' | 'month' | 'year' ----
 // Determines which panel is shown. Auto-set from props.type on open.
 const panelMode = ref<'date' | 'month' | 'year'>('date')
-const isDateTime = computed(() => props.type === 'datetime')
+const isDateTime = computed(() => props.type === 'datetime' || props.type === 'datetimerange')
 const isWeek = computed(() => props.type === 'week')
 const isMonth = computed(() => props.type === 'month')
 const isYear = computed(() => props.type === 'year')
@@ -83,6 +90,14 @@ const isYear = computed(() => props.type === 'year')
 const selectedHours = ref(0)
 const selectedMinutes = ref(0)
 const selectedSeconds = ref(0)
+
+// Time state for datetimerange mode
+const rangeStartHours = ref(0)
+const rangeStartMinutes = ref(0)
+const rangeStartSeconds = ref(0)
+const rangeEndHours = ref(0)
+const rangeEndMinutes = ref(0)
+const rangeEndSeconds = ref(0)
 
 // ---- Parse initial value ----
 watch(
@@ -150,12 +165,27 @@ function formatDate(date: Date): string {
   const d = String(date.getDate()).padStart(2, '0')
   let result = props.format.replace('YYYY', String(y)).replace('MM', m).replace('DD', d)
   if (isDateTime.value) {
+    // For datetimerange, use the specific time values based on whether it's start or end
+    if (props.type === 'datetimerange') {
+      return result
+    }
     const h = String(date.getHours()).padStart(2, '0')
     const min = String(date.getMinutes()).padStart(2, '0')
     const s = String(date.getSeconds()).padStart(2, '0')
     result += ` ${h}:${min}:${s}`
   }
   return result
+}
+
+/** Format date with time for datetimerange display */
+function formatDateTimeRange(date: Date, isStart: boolean): string {
+  const y = date.getFullYear()
+  const m = String(date.getMonth() + 1).padStart(2, '0')
+  const d = String(date.getDate()).padStart(2, '0')
+  const h = String(isStart ? rangeStartHours.value : rangeEndHours.value).padStart(2, '0')
+  const min = String(isStart ? rangeStartMinutes.value : rangeEndMinutes.value).padStart(2, '0')
+  const s = String(isStart ? rangeStartSeconds.value : rangeEndSeconds.value).padStart(2, '0')
+  return `${y}-${m}-${d} ${h}:${min}:${s}`
 }
 
 /** Get the Monday of the week containing the date */
@@ -312,6 +342,11 @@ function isRangeEnd(date: Date): boolean {
 // ---- Display values ----
 const displayValue = computed(() => {
   if (isRange.value) {
+    if (props.type === 'datetimerange') {
+      const start = rangeStart.value ? formatDateTimeRange(rangeStart.value, true) : ''
+      const end = rangeEnd.value ? formatDateTimeRange(rangeEnd.value, false) : ''
+      return { start, end }
+    }
     const start = rangeStart.value ? formatDate(rangeStart.value) : ''
     const end = rangeEnd.value ? formatDate(rangeEnd.value) : ''
     return { start, end }
@@ -362,6 +397,15 @@ function selectDate(cell: CalendarCell) {
       // Start new range
       rangeStart.value = cell.date
       rangeEnd.value = null
+      // Initialize times if datetimerange
+      if (props.type === 'datetimerange') {
+        if (rangeStartHours.value === 0 && rangeStartMinutes.value === 0) {
+          setNowTime()
+          rangeStartHours.value = selectedHours.value
+          rangeStartMinutes.value = selectedMinutes.value
+          rangeStartSeconds.value = selectedSeconds.value
+        }
+      }
     } else {
       // Set end date
       if (cell.date.getTime() < rangeStart.value.getTime()) {
@@ -370,11 +414,20 @@ function selectDate(cell: CalendarCell) {
       } else {
         rangeEnd.value = cell.date
       }
-      // Emit
-      const range: [Date, Date] = [rangeStart.value!, rangeEnd.value]
-      emit('update:modelValue', range)
-      emit('change', range)
-      closePicker()
+      // For datetimerange, don't auto-close — user needs to confirm time
+      if (props.type !== 'datetimerange') {
+        const range: [Date, Date] = [rangeStart.value!, rangeEnd.value]
+        emit('update:modelValue', range)
+        emit('change', range)
+        closePicker()
+      } else {
+        // Initialize end time if not set
+        if (rangeEndHours.value === 0 && rangeEndMinutes.value === 0) {
+          rangeEndHours.value = 23
+          rangeEndMinutes.value = 59
+          rangeEndSeconds.value = 59
+        }
+      }
     }
   } else if (isWeek.value) {
     // Week mode: select the entire week
@@ -477,6 +530,22 @@ function confirmDateTime() {
   closePicker()
 }
 
+/** Confirm date time range selection */
+function confirmDateTimeRange() {
+  if (rangeStart.value && rangeEnd.value) {
+    const start = new Date(rangeStart.value)
+    start.setHours(rangeStartHours.value, rangeStartMinutes.value, rangeStartSeconds.value)
+    const end = new Date(rangeEnd.value)
+    end.setHours(rangeEndHours.value, rangeEndMinutes.value, rangeEndSeconds.value)
+    rangeStart.value = start
+    rangeEnd.value = end
+    const range: [Date, Date] = [start, end]
+    emit('update:modelValue', range)
+    emit('change', range)
+    closePicker()
+  }
+}
+
 // ---- Shortcuts ----
 function applyShortcut(shortcut: DatePickerShortcut) {
   const value = typeof shortcut.value === 'function' ? shortcut.value() : shortcut.value
@@ -542,6 +611,8 @@ defineExpose({
   closePicker,
   /** Toggle the date picker panel */
   togglePicker,
+  /** Confirm date time range selection */
+  confirmDateTimeRange,
   /** Current visible state */
   visible,
 })
@@ -771,6 +842,75 @@ defineExpose({
               />
             </div>
             <button :class="ns.e('time-confirm')" type="button" @click.stop="confirmDateTime">
+              {{ t('zc.datePicker.confirm') || 'OK' }}
+            </button>
+          </div>
+
+          <!-- Time panel for datetimerange mode -->
+          <div
+            v-if="type === 'datetimerange' && rangeStart && rangeEnd"
+            :class="ns.e('time-panel')"
+          >
+            <div :class="ns.e('time-range')">
+              <div :class="ns.e('time-inputs')">
+                <input
+                  v-model.number="rangeStartHours"
+                  type="number"
+                  min="0"
+                  max="23"
+                  :class="ns.e('time-input')"
+                  aria-label="Start Hours"
+                />
+                <span>:</span>
+                <input
+                  v-model.number="rangeStartMinutes"
+                  type="number"
+                  min="0"
+                  max="59"
+                  :class="ns.e('time-input')"
+                  aria-label="Start Minutes"
+                />
+                <span>:</span>
+                <input
+                  v-model.number="rangeStartSeconds"
+                  type="number"
+                  min="0"
+                  max="59"
+                  :class="ns.e('time-input')"
+                  aria-label="Start Seconds"
+                />
+              </div>
+              <span :class="ns.e('separator')">—</span>
+              <div :class="ns.e('time-inputs')">
+                <input
+                  v-model.number="rangeEndHours"
+                  type="number"
+                  min="0"
+                  max="23"
+                  :class="ns.e('time-input')"
+                  aria-label="End Hours"
+                />
+                <span>:</span>
+                <input
+                  v-model.number="rangeEndMinutes"
+                  type="number"
+                  min="0"
+                  max="59"
+                  :class="ns.e('time-input')"
+                  aria-label="End Minutes"
+                />
+                <span>:</span>
+                <input
+                  v-model.number="rangeEndSeconds"
+                  type="number"
+                  min="0"
+                  max="59"
+                  :class="ns.e('time-input')"
+                  aria-label="End Seconds"
+                />
+              </div>
+            </div>
+            <button :class="ns.e('time-confirm')" type="button" @click.stop="confirmDateTimeRange">
               {{ t('zc.datePicker.confirm') || 'OK' }}
             </button>
           </div>
@@ -1147,6 +1287,13 @@ defineExpose({
 
 .zc-date-picker__time-confirm:hover {
   background: var(--color-zc-primary-600, #337ecc);
+}
+
+/* ---- Time range panel (datetimerange mode) ---- */
+.zc-date-picker__time-range {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 /* ---- Dropdown transition ---- */
