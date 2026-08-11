@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onErrorCaptured } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
+import { useLocale } from '@zc-ui/locale'
 
 defineOptions({ name: 'ZcErrorBoundary' })
 
@@ -17,7 +18,7 @@ const props = withDefaults(
   }>(),
   {
     catchErrors: true,
-    showDetails: process.env.NODE_ENV !== 'production',
+    showDetails: import.meta.env?.DEV ?? true,
     errorTitle: 'Something went wrong',
     errorDescription: '',
   }
@@ -29,6 +30,7 @@ const emit = defineEmits<{
 }>()
 
 const ns = useNamespace('error-boundary')
+const { t } = useLocale()
 
 const hasError = ref(false)
 const errorObj = ref<Error | null>(null)
@@ -37,7 +39,8 @@ const showStack = ref(false)
 
 onErrorCaptured((err, _instance, info) => {
   if (!props.catchErrors) {
-    return false // let the error propagate
+    // Do not capture — let the error propagate to parent error handlers
+    return true
   }
 
   hasError.value = true
@@ -70,7 +73,7 @@ defineExpose({ reset })
     <slot />
   </template>
 
-  <div v-else :class="ns.b()" role="alert">
+  <div v-else :class="ns.b()" role="alert" aria-live="polite">
     <!-- Custom error slot -->
     <slot name="error" :error="errorObj!" :reset="reset">
       <div :class="ns.e('content')">
@@ -93,18 +96,22 @@ defineExpose({ reset })
 
         <!-- Action -->
         <div :class="ns.e('action')">
-          <button type="button" :class="ns.e('retry-btn')" @click="reset">Try Again</button>
+          <button type="button" :class="ns.e('retry-btn')" @click="reset">
+            {{ t('zc.errorBoundary.retry') }}
+          </button>
         </div>
 
         <!-- Details (collapsible) -->
         <div v-if="showDetails && errorObj" :class="ns.e('details')">
           <button type="button" :class="ns.e('details-toggle')" @click="toggleStack">
-            {{ showStack ? '▾' : '▸' }} Error details
+            {{ showStack ? '▾' : '▸' }} {{ t('zc.errorBoundary.details') }}
           </button>
           <pre
             v-if="showStack"
             :class="ns.e('stack')"
-          ><code>{{ errorObj.stack || errorObj.message }}</code></pre>
+          ><code>{{ errorObj.stack || errorObj.message }}<template v-if="errorInfo">
+
+[Info: {{ errorInfo }}]</template></code></pre>
         </div>
       </div>
     </slot>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, type ComputedRef } from 'vue'
+import { computed, inject, nextTick, useId, type ComputedRef } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
 
 defineOptions({ name: 'ZcCollapseItem' })
@@ -37,24 +37,34 @@ interface CollapseContext {
   activeNames: ComputedRef<Array<string | number>>
   toggleItem: (name: string | number | undefined) => void
   size: ComputedRef<'large' | 'default' | 'small'>
+  instanceId: string
 }
+
+// Fallback unique ID for standalone usage (outside of ZcCollapse)
+const ownUid = useId()
 
 const collapseCtx = inject<CollapseContext>('zcCollapse', {
   activeNames: computed(() => []),
   toggleItem: () => {},
   size: computed(() => 'default' as const),
+  instanceId: ownUid,
 } as CollapseContext)
+
+// Unique prefix for DOM ids — combines parent instance ID with item name
+const idPrefix = computed(() => `zc-collapse-${collapseCtx.instanceId}-${props.name ?? 'default'}`)
 
 const isActive = computed(() => {
   if (props.name === undefined) return false
   return collapseCtx.activeNames.value.includes(props.name)
 })
 
-function handleClick() {
+async function handleClick() {
   if (props.disabled) return
   emit('item-click', props.name)
   collapseCtx.toggleItem(props.name)
-  emit('toggle', { name: props.name, isActive: !isActive.value })
+  // Wait for reactive state to settle before reporting isActive
+  await nextTick()
+  emit('toggle', { name: props.name, isActive: isActive.value })
 }
 
 const classes = computed(() => [
@@ -93,9 +103,9 @@ function onExpandLeave(el: Element) {
     <div
       :class="[ns.e('header'), ns.is('arrow-left', arrowPlacement === 'left')]"
       role="tab"
-      :id="`zc-collapse-header-${name ?? 'default'}`"
+      :id="`zc-collapse-header-${idPrefix}`"
       :aria-expanded="isActive ? 'true' : 'false'"
-      :aria-controls="`zc-collapse-content-${name ?? 'default'}`"
+      :aria-controls="`zc-collapse-content-${idPrefix}`"
       :aria-disabled="disabled ? 'true' : undefined"
       :tabindex="disabled ? -1 : 0"
       @click="handleClick"
@@ -164,8 +174,8 @@ function onExpandLeave(el: Element) {
         <div
           :class="ns.e('content')"
           role="tabpanel"
-          :id="`zc-collapse-content-${name ?? 'default'}`"
-          :aria-labelledby="`zc-collapse-header-${name ?? 'default'}`"
+          :id="`zc-collapse-content-${idPrefix}`"
+          :aria-labelledby="`zc-collapse-header-${idPrefix}`"
         >
           <slot />
         </div>

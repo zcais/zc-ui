@@ -710,6 +710,11 @@ export type {
   MentionMentionItem,
 } from './mention/types'
 export type { TreeSelectOption, TreeSelectSize, TreeSelectProps } from './tree-select/types'
+export type {
+  ErrorBoundaryProps,
+  ErrorBoundaryEmits,
+  ErrorBoundaryExposed,
+} from './error-boundary/types'
 
 // ---- Navigation Enhancement Component Types ----
 export type { SegmentedOption, SegmentedSize } from './segmented/segmented.vue'

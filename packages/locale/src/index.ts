@@ -145,6 +145,8 @@ const zhCNMessages: Record<string, string> = {
   'zc.floatButton.backToTop': '回到顶部',
   'zc.floatButton.expand': '展开悬浮按钮',
   'zc.floatButton.collapse': '折叠悬浮按钮',
+  'zc.errorBoundary.retry': '重试',
+  'zc.errorBoundary.details': '错误详情',
 }
 
 const enUSMessages: Record<string, string> = {
@@ -242,6 +244,8 @@ const enUSMessages: Record<string, string> = {
   'zc.floatButton.backToTop': 'Back to top',
   'zc.floatButton.expand': 'Expand float button',
   'zc.floatButton.collapse': 'Collapse float button',
+  'zc.errorBoundary.retry': 'Try Again',
+  'zc.errorBoundary.details': 'Error details',
 }
 
 // ---------------------------------------------------------------

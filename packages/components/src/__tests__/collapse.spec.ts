@@ -216,12 +216,19 @@ describe('ZcCollapseItem', () => {
 
   // ---- toggle event ----
   it('emits toggle event with name and isActive', async () => {
-    const wrapper = mount(CollapseItem, {
-      props: { name: '1', title: 'Toggle Event' },
+    const wrapper = mount(Collapse, {
+      props: { modelValue: [] },
+      slots: {
+        default: () => h(CollapseItem, { name: '1', title: 'Toggle Event' }),
+      },
     })
-    await wrapper.find('.zc-collapse-item__header').trigger('click')
-    expect(wrapper.emitted('toggle')).toBeTruthy()
-    expect(wrapper.emitted('toggle')![0]).toEqual([{ name: '1', isActive: true }])
+    await nextTick()
+    const header = wrapper.find('.zc-collapse-item__header')
+    await header.trigger('click')
+    const itemComp = wrapper.findComponent(CollapseItem)
+    expect(itemComp.emitted('toggle')).toBeTruthy()
+    // After nextTick, isActive reflects the actual post-toggle state
+    expect(itemComp.emitted('toggle')![0]).toEqual([{ name: '1', isActive: true }])
   })
 
   it('does not emit toggle when disabled', async () => {

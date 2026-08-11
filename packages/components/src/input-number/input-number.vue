@@ -284,6 +284,20 @@ defineExpose({ focus, blur, increase, decrease })
  * ============================================================ */
 
 .zc-input-number {
+  /* Component-level CSS variables with global token defaults */
+  --zc-input-number-bg-color: var(--color-zc-white, #fff);
+  --zc-input-number-text-color: var(--color-zc-text-primary, #303133);
+  --zc-input-number-placeholder-color: var(--color-zc-text-placeholder, #a8abb2);
+  --zc-input-number-border-color: var(--color-zc-border-base, #dcdfe6);
+  --zc-input-number-hover-border-color: var(--color-zc-primary-300, #a0cfff);
+  --zc-input-number-focus-border-color: var(--color-zc-primary-500, #409eff);
+  --zc-input-number-focus-shadow-color: var(--color-zc-primary-50, #ecf5ff);
+  --zc-input-number-disabled-text-color: var(--color-zc-text-placeholder, #a8abb2);
+  --zc-input-number-button-hover-bg-color: var(--color-zc-primary-50, #ecf5ff);
+  --zc-input-number-border-radius: var(--radius-zc-base, 4px);
+  --zc-input-number-fill-color: var(--color-zc-fill-light, #f5f7fa);
+  --zc-input-number-transition-duration: var(--transition-duration-zc-base, 0.25s);
+
   display: inline-flex;
   align-items: stretch;
   position: relative;
@@ -366,7 +380,7 @@ defineExpose({ focus, blur, increase, decrease })
 }
 
 .zc-input-number__inner::placeholder {
-  color: var(--zc-input-number-disabled-text-color);
+  color: var(--zc-input-number-placeholder-color);
 }
 
 .zc-input-number__inner:disabled {

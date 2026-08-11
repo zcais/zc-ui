@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, provide, ref, watch, type ComputedRef } from 'vue'
+import { computed, provide, ref, useId, watch, type ComputedRef } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
 
 defineOptions({ name: 'ZcCollapse' })
@@ -35,6 +35,9 @@ const emit = defineEmits<{
 }>()
 
 const ns = useNamespace('collapse')
+
+// Unique instance ID to prevent DOM id collisions across multiple Collapse instances
+const instanceId = useId()
 
 const activeNames = ref<Array<string | number>>(
   Array.isArray(props.modelValue)
@@ -90,6 +93,7 @@ provide('zcCollapse', {
   activeNames: activeNamesComputed,
   toggleItem,
   size: computed(() => props.size),
+  instanceId,
 })
 
 const classes = computed(() => [

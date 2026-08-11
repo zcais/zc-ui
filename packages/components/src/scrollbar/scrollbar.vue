@@ -111,12 +111,14 @@ const classes = computed(() => [
 }
 
 /* ---- Hover-only mode (default: hide thumb until hover) ---- */
+/* Use background: transparent instead of opacity: 0 — opacity does not
+  * reliably apply to ::-webkit-scrollbar-thumb in many WebKit browsers. */
 .zc-scrollbar:not(.is-always) .zc-scrollbar__wrap::-webkit-scrollbar-thumb {
-  opacity: 0;
+  background: transparent;
 }
 
 .zc-scrollbar:not(.is-always) .zc-scrollbar__wrap:hover::-webkit-scrollbar-thumb {
-  opacity: 1;
+  background: var(--zc-scrollbar-thumb-bg-color);
 }
 
 .zc-scrollbar:not(.is-always) .zc-scrollbar__wrap {
@@ -129,7 +131,7 @@ const classes = computed(() => [
 
 /* ---- Always-visible mode ---- */
 .zc-scrollbar.is-always .zc-scrollbar__wrap::-webkit-scrollbar-thumb {
-  opacity: 1;
+  background: var(--zc-scrollbar-thumb-bg-color);
 }
 
 /* ---- Native mode: reset to browser default ---- */
@@ -144,7 +146,6 @@ const classes = computed(() => [
 }
 
 .zc-scrollbar.is-native .zc-scrollbar__wrap::-webkit-scrollbar-thumb {
-  opacity: 1;
   min-height: auto;
   min-width: auto;
   background: revert;
