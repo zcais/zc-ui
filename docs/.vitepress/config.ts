@@ -101,6 +101,7 @@ export default defineConfig({
             { text: 'Space 间距', link: '/components/space' },
             { text: 'Grid 网格', link: '/components/grid' },
             { text: 'Carousel 走马灯', link: '/components/carousel' },
+            { text: 'Splitter 分栏面板', link: '/components/splitter' },
           ],
         },
         {
@@ -133,6 +134,7 @@ export default defineConfig({
             { text: 'TreeSelect 树选择', link: '/components/tree-select' },
             { text: 'Upload 上传', link: '/components/upload' },
             { text: 'Mention 提及', link: '/components/mention' },
+            { text: 'InputOTP 验证码输入', link: '/components/input-otp' },
             { text: 'Form 表单', link: '/components/form' },
           ],
         },
@@ -161,6 +163,9 @@ export default defineConfig({
             { text: 'Calendar 日历', link: '/components/calendar' },
             { text: 'Result 结果', link: '/components/result' },
             { text: 'QRCode 二维码', link: '/components/qr-code' },
+            { text: 'TextEllipsis 文本省略', link: '/components/text-ellipsis' },
+            { text: 'Spin 加载', link: '/components/spin' },
+            { text: 'Editable 行内编辑', link: '/components/editable' },
           ],
         },
         {

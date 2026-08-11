@@ -131,6 +131,16 @@ import ImageViewer from './image-viewer/image-viewer.vue'
 import ContextMenu from './context-menu/context-menu.vue'
 // ---- Page Header ----
 import PageHeader from './page-header/page-header.vue'
+// ---- Splitter Component ----
+import Splitter from './splitter/splitter.vue'
+// ---- Input OTP Component ----
+import InputOTP from './input-otp/input-otp.vue'
+// ---- Text Ellipsis Component ----
+import TextEllipsis from './text-ellipsis/text-ellipsis.vue'
+// ---- Spin Component ----
+import Spin from './spin/spin.vue'
+// ---- Editable Component ----
+import Editable from './editable/editable.vue'
 
 /**
  * Individual component exports with installer pattern.
@@ -286,6 +296,21 @@ export const ZcContextMenu = withInstall(ContextMenu, 'ZcContextMenu')
 // ---- Page Header ----
 export const ZcPageHeader = withInstall(PageHeader, 'ZcPageHeader')
 
+// ---- Splitter Component ----
+export const ZcSplitter = withInstall(Splitter, 'ZcSplitter')
+
+// ---- Input OTP Component ----
+export const ZcInputOTP = withInstall(InputOTP, 'ZcInputOTP')
+
+// ---- Text Ellipsis Component ----
+export const ZcTextEllipsis = withInstall(TextEllipsis, 'ZcTextEllipsis')
+
+// ---- Spin Component ----
+export const ZcSpin = withInstall(Spin, 'ZcSpin')
+
+// ---- Editable Component ----
+export const ZcEditable = withInstall(Editable, 'ZcEditable')
+
 // ---- Layout Enhancement Components ----
 export const ZcFlex = withInstall(Flex, 'ZcFlex')
 
@@ -430,6 +455,16 @@ export default withInstallAll({
   ZcContextMenu,
   // Page Header
   ZcPageHeader,
+  // Splitter
+  ZcSplitter,
+  // Input OTP
+  ZcInputOTP,
+  // Text Ellipsis
+  ZcTextEllipsis,
+  // Spin
+  ZcSpin,
+  // Editable
+  ZcEditable,
 })
 
 // Export TypeScript types
@@ -666,6 +701,21 @@ export type {
 
 // ---- Layout Enhancement Component Types ----
 export type { FlexJustify, FlexAlign, FlexWrap, FlexGap } from './flex/flex.vue'
+
+// ---- Splitter Component Types ----
+export type { SplitterDirection } from './splitter/splitter.vue'
+
+// ---- Input OTP Component Types ----
+export type { InputOTPSize } from './input-otp/input-otp.vue'
+
+// ---- Text Ellipsis Component Types ----
+export type { TextEllipsisPlacement } from './text-ellipsis/text-ellipsis.vue'
+
+// ---- Spin Component Types ----
+export type { SpinSize } from './spin/spin.vue'
+
+// ---- Editable Component Types ----
+export type { EditableMode } from './editable/editable.vue'
 
 // ---- Typography Component Types ----
 export type { TitleLevel } from './typography/title.vue'
