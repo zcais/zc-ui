@@ -2,23 +2,48 @@
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
 
+/** Easing function type for count-up animation */
+export type StatisticEasing = 'linear' | 'easeOut' | 'easeIn' | 'easeInOut'
+
 defineOptions({ name: 'ZcStatistic' })
 
 const props = withDefaults(
   defineProps<{
+    /** Numeric value to display */
     value?: number
+    /** Title text shown above the value */
     title?: string
+    /** Prefix string before the value */
     prefix?: string
+    /** Suffix string after the value */
     suffix?: string
+    /** Number of decimal places */
     precision?: number
+    /** Decimal separator character */
     decimalSeparator?: string
+    /** Thousands group separator */
     groupSeparator?: string
+    /** Custom value formatter function */
     formatter?: (value: number) => string
+    /** Inline style for the value element */
     valueStyle?: Record<string, string>
+    /** Whether to animate the value with count-up */
     countUp?: boolean
+    /** Start value for count-up animation */
     countFrom?: number
+    /** Animation duration in ms */
     duration?: number
+    /** Whether to use an easing function (only when countUp is true) */
+    useEasing?: boolean
+    /** Easing function type */
+    easing?: StatisticEasing
+    /** Whether to auto-play the animation on mount */
+    autoplay?: boolean
+    /** Whether to auto restart animation when value changes */
+    autoRestart?: boolean
+    /** Whether to show a countdown timer */
     countdown?: boolean
+    /** Target timestamp or duration in ms for countdown */
     startValue?: number
   }>(),
   {
@@ -34,59 +59,153 @@ const props = withDefaults(
     countUp: false,
     countFrom: 0,
     duration: 2000,
+    useEasing: true,
+    easing: 'easeOut',
+    autoplay: true,
+    autoRestart: false,
     countdown: false,
     startValue: 0,
   }
 )
 
+const emit = defineEmits<{
+  (e: 'start'): void
+  (e: 'end'): void
+}>()
+
 const ns = useNamespace('statistic')
 
-const displayValue = ref<number>(props.value)
-const countdownDisplay = ref('')
-let timer: ReturnType<typeof setInterval> | null = null
+/* ------------------------------------------------------------------ *
+ * Easing functions
+ * ------------------------------------------------------------------ */
+const easingFunctions: Record<StatisticEasing, (t: number) => number> = {
+  linear: (t) => t,
+  easeOut: (t) => 1 - Math.pow(1 - t, 3),
+  easeIn: (t) => Math.pow(t, 3),
+  easeInOut: (t) => (t < 0.5 ? 4 * Math.pow(t, 3) : 1 - Math.pow(-2 * t + 2, 3) / 2),
+}
 
+/* ------------------------------------------------------------------ *
+ * State
+ * ------------------------------------------------------------------ */
+const displayValue = ref<number>(props.countUp ? props.countFrom : props.value)
+const countdownDisplay = ref('')
+let rafId: number | null = null
+let startTime: number | null = null
+let paused = false
+let startedFrom = props.countFrom
+let countdownTimer: ReturnType<typeof setInterval> | null = null
+
+/* ------------------------------------------------------------------ *
+ * Number formatting
+ * ------------------------------------------------------------------ */
 function formatNumber(val: number): string {
   if (props.formatter) return props.formatter(val)
   const fixed = val.toFixed(props.precision)
   const [intPart, decPart] = fixed.split('.')
-  const formatted = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, props.groupSeparator)
-  return decPart !== undefined ? `${formatted}${props.decimalSeparator}${decPart}` : formatted
+  const formatted = props.groupSeparator
+    ? intPart.replace(/\B(?=(\d{3})+(?!\d))/g, props.groupSeparator)
+    : intPart
+  return props.precision > 0 && decPart !== undefined
+    ? `${formatted}${props.decimalSeparator}${decPart}`
+    : formatted
 }
 
-/* ---- Count-up animation ---- */
-function animateCountUp() {
-  const startTime = performance.now()
-  const startVal = props.countFrom
-  const endVal = props.value
-  const duration = props.duration
+const formattedValue = computed(() => {
+  if (props.countdown) return countdownDisplay.value
+  return formatNumber(displayValue.value)
+})
 
-  function step(currentTime: number) {
-    const elapsed = currentTime - startTime
-    const progress = Math.min(elapsed / duration, 1)
-    const eased = 1 - Math.pow(1 - progress, 3) // easeOutCubic
-    displayValue.value = startVal + (endVal - startVal) * eased
-    if (progress < 1) {
-      requestAnimationFrame(step)
-    } else {
-      displayValue.value = endVal
-    }
+/* ------------------------------------------------------------------ *
+ * Count-up animation engine
+ * ------------------------------------------------------------------ */
+function animateStep(timestamp: number) {
+  if (paused) return
+
+  if (startTime === null) startTime = timestamp
+
+  const elapsed = timestamp - startTime
+  const progress = Math.min(elapsed / props.duration, 1)
+
+  if (props.useEasing) {
+    const easeFn = easingFunctions[props.easing] ?? easingFunctions.easeOut
+    displayValue.value = startedFrom + (props.value - startedFrom) * easeFn(progress)
+  } else {
+    displayValue.value = startedFrom + (props.value - startedFrom) * progress
   }
 
-  requestAnimationFrame(step)
+  if (progress < 1) {
+    rafId = requestAnimationFrame(animateStep)
+  } else {
+    displayValue.value = props.value
+    rafId = null
+    startTime = null
+    emit('end')
+  }
 }
 
-/* ---- Countdown ---- */
+/** Start (or restart) the count-up animation */
+function start(): void {
+  cancelAnimation()
+  paused = false
+  startTime = null
+  startedFrom = props.countFrom
+  displayValue.value = props.countFrom
+  emit('start')
+  rafId = requestAnimationFrame(animateStep)
+}
+
+/** Pause the running animation */
+function pause(): void {
+  if (rafId !== null) {
+    paused = true
+    cancelAnimationFrame(rafId)
+    rafId = null
+  }
+}
+
+/** Resume a paused animation */
+function resume(): void {
+  if (paused) {
+    paused = false
+    startTime = null
+    rafId = requestAnimationFrame(animateStep)
+  }
+}
+
+/** Reset display value to countFrom without animating */
+function reset(): void {
+  cancelAnimation()
+  paused = false
+  startTime = null
+  startedFrom = props.countFrom
+  displayValue.value = props.countFrom
+}
+
+function cancelAnimation(): void {
+  if (rafId !== null) {
+    cancelAnimationFrame(rafId)
+    rafId = null
+  }
+  startTime = null
+}
+
+/* ------------------------------------------------------------------ *
+ * Countdown
+ * ------------------------------------------------------------------ */
 function updateCountdown() {
   const now = Date.now()
   let diff = props.startValue - now
 
+  // If startValue is small, treat as duration in ms
   if (props.startValue < 1e10) {
     diff = props.startValue
   }
 
   if (diff <= 0) {
     countdownDisplay.value = '00:00:00'
-    if (timer) clearInterval(timer)
+    if (countdownTimer) clearInterval(countdownTimer)
+    emit('end')
     return
   }
 
@@ -98,35 +217,47 @@ function updateCountdown() {
   countdownDisplay.value = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
 }
 
-onMounted(() => {
-  if (props.countUp) {
-    animateCountUp()
-  } else {
-    displayValue.value = props.value
-  }
-  if (props.countdown) {
-    updateCountdown()
-    timer = setInterval(updateCountdown, 1000)
-  }
-})
-
+/* ------------------------------------------------------------------ *
+ * Watchers
+ * ------------------------------------------------------------------ */
 watch(
   () => props.value,
   (val) => {
-    if (!props.countUp && !props.countdown) {
+    if (props.countUp && props.autoRestart) {
+      start()
+    } else if (!props.countUp) {
       displayValue.value = val
     }
   }
 )
 
-onUnmounted(() => {
-  if (timer) clearInterval(timer)
+/* ------------------------------------------------------------------ *
+ * Lifecycle
+ * ------------------------------------------------------------------ */
+onMounted(() => {
+  if (props.countdown) {
+    updateCountdown()
+    countdownTimer = setInterval(updateCountdown, 1000)
+  } else if (props.countUp) {
+    if (props.autoplay) {
+      start()
+    } else {
+      displayValue.value = props.countFrom
+    }
+  } else {
+    displayValue.value = props.value
+  }
 })
 
-const formattedValue = computed(() => {
-  if (props.countdown) return countdownDisplay.value
-  return formatNumber(displayValue.value)
+onUnmounted(() => {
+  cancelAnimation()
+  if (countdownTimer) clearInterval(countdownTimer)
 })
+
+/* ------------------------------------------------------------------ *
+ * Expose
+ * ------------------------------------------------------------------ */
+defineExpose({ start, pause, resume, reset })
 </script>
 
 <template>

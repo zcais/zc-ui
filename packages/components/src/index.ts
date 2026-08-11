@@ -506,8 +506,6 @@ export default withInstallAll({
   ZcComment,
   // CodeBlock
   ZcCodeBlock,
-  // CountTo
-  ZcCountTo,
   // StatisticCard
   ZcStatisticCard,
   // ErrorBoundary
@@ -780,8 +778,8 @@ export type { EditableMode } from './editable/editable.vue'
 // ---- CodeBlock Component Types ----
 export type { CodeBlockTheme } from './code-block/code-block.vue'
 
-// ---- CountTo Component Types ----
-export type { CountToEasing } from './count-to/count-to.vue'
+// ---- Statistic Component Types ----
+export type { StatisticEasing } from './statistic/statistic.vue'
 
 // ---- StatisticCard Component Types ----
 export type { StatisticCardTrend } from './statistic-card/statistic-card.vue'

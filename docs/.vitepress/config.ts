@@ -170,7 +170,6 @@ export default defineConfig({
             { text: 'Editable 行内编辑', link: '/components/editable' },
             { text: 'Comment 评论', link: '/components/comment' },
             { text: 'CodeBlock 代码高亮', link: '/components/code-block' },
-            { text: 'CountTo 数字动画', link: '/components/count-to' },
             { text: 'StatisticCard 统计卡片', link: '/components/statistic-card' },
           ],
         },

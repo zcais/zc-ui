@@ -100,7 +100,6 @@ ZC UI 是一个基于 Vue 3 + TypeScript 的企业级 UI 组件库，提供 **90
 | QRCode        | 二维码   |
 | Comment       | 评论     |
 | CodeBlock     | 代码高亮 |
-| CountTo       | 数字动画 |
 | StatisticCard | 统计卡片 |
 
 ### 反馈组件
