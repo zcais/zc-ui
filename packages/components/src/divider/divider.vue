@@ -18,12 +18,18 @@ const props = withDefaults(
     borderStyle?: DividerBorderStyle
     /** Shortcut for dashed border */
     dashed?: boolean
+    /** Plain mode: text without padding emphasis */
+    plain?: boolean
+    /** Custom border color */
+    color?: string
   }>(),
   {
     direction: 'horizontal',
     contentPosition: 'center',
     borderStyle: 'solid',
     dashed: false,
+    plain: false,
+    color: undefined,
   }
 )
 
@@ -38,29 +44,38 @@ const classes = computed(() => [
   ns.b(),
   ns.m(props.direction),
   ns.is('with-content', hasContent.value && props.direction === 'horizontal'),
+  ns.is('plain', props.plain),
+  // Use BEM modifier for content position instead of fragile :has() selector
+  ...(props.direction === 'horizontal' && hasContent.value
+    ? [ns.m(`text-${props.contentPosition}`)]
+    : []),
 ])
+
+const lineStyle = computed(() => ({
+  borderTopStyle: actualBorderStyle.value,
+  ...(props.color ? { borderTopColor: props.color } : {}),
+}))
+
+const vLineStyle = computed(() => ({
+  borderLeftStyle: actualBorderStyle.value,
+  ...(props.color ? { borderLeftColor: props.color } : {}),
+}))
 </script>
 
 <template>
   <div :class="classes" role="separator">
     <template v-if="direction === 'horizontal' && hasContent">
-      <div
-        :class="[ns.e('line'), ns.em('line', 'left')]"
-        :style="{ borderTopStyle: actualBorderStyle }"
-      />
-      <div :class="ns.e('text')" :style="{ textAlign: contentPosition }">
+      <div :class="[ns.e('line'), ns.em('line', 'left')]" :style="lineStyle" />
+      <div :class="ns.e('text')">
         <slot />
       </div>
-      <div
-        :class="[ns.e('line'), ns.em('line', 'right')]"
-        :style="{ borderTopStyle: actualBorderStyle }"
-      />
+      <div :class="[ns.e('line'), ns.em('line', 'right')]" :style="lineStyle" />
     </template>
     <template v-else-if="direction === 'vertical'">
-      <div :class="ns.e('vertical-line')" :style="{ borderLeftStyle: actualBorderStyle }" />
+      <div :class="ns.e('vertical-line')" :style="vLineStyle" />
     </template>
     <template v-else>
-      <div :class="ns.e('line')" :style="{ borderTopStyle: actualBorderStyle }" />
+      <div :class="ns.e('line')" :style="lineStyle" />
     </template>
   </div>
 </template>
@@ -73,85 +88,96 @@ const classes = computed(() => [
 
 .zc-divider {
   --zc-divider-color: var(--color-zc-border-base, #dcdfe6);
---zc-divider-text-color: var(--color-zc-text-primary, #303133);
---zc-divider-font-size: var(--text-zc-md, 16px);
---zc-divider-margin: 24px 0;
---zc-divider-text-padding: 20px;
-  }
-  
-  /* ---- Horizontal ---- */
+  --zc-divider-text-color: var(--color-zc-text-primary, #303133);
+  --zc-divider-font-size: var(--text-zc-md, 14px);
+  --zc-divider-margin: 24px 0;
+  --zc-divider-text-padding: 20px;
+}
+
+/* ---- Horizontal ---- */
 .zc-divider--horizontal {
-display: block;
-width: 100%;
-margin: var(--zc-divider-margin);
-  }
-  
-/* Without content: single line */
-.zc-divider--horizontal:not(.is-with-content) {
-border-top: 1px solid var(--zc-divider-color);
-height: 0;
-  }
-  
-  /* With content: flexbox layout */
-  .zc-divider--horizontal.is-with-content {
-display: flex;
-align-items: center;
-border-top: none;
+  display: block;
+  width: 100%;
   margin: var(--zc-divider-margin);
 }
 
+/* Without content: single line */
+.zc-divider--horizontal:not(.is-with-content) {
+  border-top: 1px solid var(--zc-divider-color);
+  height: 0;
+}
+
+/* With content: flexbox layout */
+.zc-divider--horizontal.is-with-content {
+  display: flex;
+  align-items: center;
+  border-top: none;
+}
+
 .zc-divider--horizontal.is-with-content .zc-divider__line {
-border-top: 1px solid var(--zc-divider-color);
-  }
+  border-top: 1px solid var(--zc-divider-color);
+}
 
 /* Content position: left */
-.zc-divider--horizontal.is-with-content .zc-divider__line--left {
+.zc-divider--text-left .zc-divider__line--left {
   flex: 0 1 5%;
 }
 
-.zc-divider--horizontal.is-with-content .zc-divider__line--right {
-flex: 1;
-  }
-  
-/* Content position: right (swap via text align) */
-.zc-divider--horizontal.is-with-content:has(.zc-divider__text[style*='right'])
-.zc-divider__line--left {
+.zc-divider--text-left .zc-divider__line--right {
   flex: 1;
-  }
+}
 
-.zc-divider--horizontal.is-with-content:has(.zc-divider__text[style*='right'])
-.zc-divider__line--right {
-flex: 0 1 5%;
-  }
-
-  /* Content position: center (equal flex) */
-  .zc-divider--horizontal.is-with-content:has(.zc-divider__text[style*='center'])
-.zc-divider__line--left,
-.zc-divider--horizontal.is-with-content:has(.zc-divider__text[style*='center'])
-.zc-divider__line--right {
+/* Content position: right */
+.zc-divider--text-right .zc-divider__line--left {
   flex: 1;
-  }
-  
-  .zc-divider__text {
+}
+
+.zc-divider--text-right .zc-divider__line--right {
+  flex: 0 1 5%;
+}
+
+/* Content position: center */
+.zc-divider--text-center .zc-divider__line--left,
+.zc-divider--text-center .zc-divider__line--right {
+  flex: 1;
+}
+
+/* Text styling */
+.zc-divider__text {
   padding: 0 var(--zc-divider-text-padding);
-font-size: var(--zc-divider-font-size);
-color: var(--zc-divider-text-color);
-white-space: nowrap;
-flex-shrink: 0;
-  }
-  
-  /* ---- Vertical ---- */
-  .zc-divider--vertical {
-  display: inline-block;
-vertical-align: middle;
-position: relative;
-margin: 0 var(--spacing-zc-sm, 8px);
+  font-size: var(--zc-divider-font-size);
+  font-weight: 500;
+  color: var(--zc-divider-text-color);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Plain mode: reduced padding, lighter text */
+.zc-divider.is-plain .zc-divider__text {
+  font-weight: 400;
+  color: var(--color-zc-text-secondary, #909399);
+  padding: 0 12px;
+}
+
+/* ---- Vertical ---- */
+.zc-divider--vertical {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  margin: 0 var(--spacing-zc-sm, 8px);
   height: 1em;
-  }
-  
+  vertical-align: middle;
+}
+
 .zc-divider__vertical-line {
-width: 0;
+  width: 0;
   height: 100%;
   border-left: 1px solid var(--zc-divider-color);
+}
+
+/* ---- Dark mode ---- */
+.dark .zc-divider {
+  --zc-divider-color: var(--color-zc-border-base, #414243);
+  --zc-divider-text-color: var(--color-zc-text-primary, #e5eaf3);
 }
 </style>

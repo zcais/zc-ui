@@ -11,9 +11,9 @@
 ```vue
 <template>
   <div>
-    <p>第一段内容</p>
+    <p>青春是一个短暂的美梦，当你醒来时，它早已消失无踪。</p>
     <ZcDivider />
-    <p>第二段内容</p>
+    <p>少量的邪恶足以抵消全部高贵的品质。</p>
   </div>
 </template>
 ```
@@ -22,7 +22,7 @@
 
 ## 带文字的分割线
 
-使用默认插槽添加文字，通过 `contentPosition` 控制对齐方式。
+使用默认插槽添加文字，通过 `content-position` 控制对齐位置。
 
 <DemoBlock>
 
@@ -46,7 +46,7 @@
 
 ```vue
 <template>
-  <div style="display: flex; align-items: center;">
+  <div style="display: flex; align-items: center; gap: 4px;">
     <span>文本一</span>
     <ZcDivider direction="vertical" />
     <a href="#">链接</a>
@@ -58,18 +58,58 @@
 
 </DemoBlock>
 
-## 虚线样式
+## 线条样式
 
-通过 `dashed` 属性或 `borderStyle` 属性设置线条样式。
+通过 `dashed` 属性快捷设置虚线，或通过 `border-style` 属性使用更多样式（`solid` / `dashed` / `dotted` / `double`）。
 
 <DemoBlock>
 
 ```vue
 <template>
   <div>
-    <ZcDivider />
-    <ZcDivider dashed>虚线带文字</ZcDivider>
-    <ZcDivider border-style="dotted">点线样式</ZcDivider>
+    <ZcDivider border-style="solid">实线</ZcDivider>
+    <ZcDivider border-style="dashed">虚线</ZcDivider>
+    <ZcDivider border-style="dotted">点线</ZcDivider>
+    <ZcDivider border-style="double">双线</ZcDivider>
+  </div>
+</template>
+```
+
+</DemoBlock>
+
+## 简洁模式
+
+通过 `plain` 属性使用更轻量的文字样式，适合次要分隔场景。
+
+<DemoBlock>
+
+```vue
+<template>
+  <div>
+    <ZcDivider>普通文字</ZcDivider>
+    <ZcDivider plain>简洁文字</ZcDivider>
+  </div>
+</template>
+```
+
+</DemoBlock>
+
+## 自定义颜色
+
+通过 `color` 属性自定义分割线颜色。
+
+<DemoBlock>
+
+```vue
+<template>
+  <div>
+    <ZcDivider color="#409eff">蓝色分割线</ZcDivider>
+    <ZcDivider color="#67c23a">绿色分割线</ZcDivider>
+    <div style="display: flex; align-items: center;">
+      <span>彩色</span>
+      <ZcDivider direction="vertical" color="#e6a23c" />
+      <span>垂直线</span>
+    </div>
   </div>
 </template>
 ```
@@ -85,6 +125,8 @@
   { name: 'contentPosition', description: '文字对齐（水平方向有效）', type: '\'left\' | \'center\' | \'right\'', default: '\'center\'' },
   { name: 'borderStyle', description: '线条样式', type: '\'solid\' | \'dashed\' | \'dotted\' | \'double\'', default: '\'solid\'' },
   { name: 'dashed', description: '是否为虚线（快捷设置）', type: 'boolean', default: 'false' },
+  { name: 'plain', description: '简洁模式，文字使用更轻的样式', type: 'boolean', default: 'false' },
+  { name: 'color', description: '自定义分割线颜色', type: 'string', default: '—' },
 ]" />
 
 ### Slots
