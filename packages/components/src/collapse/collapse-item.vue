@@ -12,16 +12,23 @@ const props = withDefaults(
     title?: string
     /** Disable toggle */
     disabled?: boolean
+    /** Show the expand/collapse arrow icon */
+    showArrow?: boolean
+    /** Arrow placement: left or right of header */
+    arrowPlacement?: 'left' | 'right'
   }>(),
   {
     name: undefined,
     title: undefined,
     disabled: false,
+    showArrow: true,
+    arrowPlacement: 'right',
   }
 )
 
 const emit = defineEmits<{
   (e: 'item-click', name: string | number | undefined): void
+  (e: 'toggle', payload: { name: string | number | undefined; isActive: boolean }): void
 }>()
 
 const ns = useNamespace('collapse-item')
@@ -29,11 +36,13 @@ const ns = useNamespace('collapse-item')
 interface CollapseContext {
   activeNames: ComputedRef<Array<string | number>>
   toggleItem: (name: string | number | undefined) => void
+  size: ComputedRef<'large' | 'default' | 'small'>
 }
 
 const collapseCtx = inject<CollapseContext>('zcCollapse', {
   activeNames: computed(() => []),
   toggleItem: () => {},
+  size: computed(() => 'default' as const),
 } as CollapseContext)
 
 const isActive = computed(() => {
@@ -45,12 +54,14 @@ function handleClick() {
   if (props.disabled) return
   emit('item-click', props.name)
   collapseCtx.toggleItem(props.name)
+  emit('toggle', { name: props.name, isActive: !isActive.value })
 }
 
 const classes = computed(() => [
   ns.b(),
   ns.is('active', isActive.value),
   ns.is('disabled', props.disabled),
+  ns.m(collapseCtx.size.value),
 ])
 
 /* ---- Expand/collapse height animation ---- */
@@ -80,7 +91,7 @@ function onExpandLeave(el: Element) {
 <template>
   <div :class="classes">
     <div
-      :class="ns.e('header')"
+      :class="[ns.e('header'), ns.is('arrow-left', arrowPlacement === 'left')]"
       role="tab"
       :id="`zc-collapse-header-${name ?? 'default'}`"
       :aria-expanded="isActive ? 'true' : 'false'"
@@ -91,10 +102,45 @@ function onExpandLeave(el: Element) {
       @keydown.enter.prevent="handleClick"
       @keydown.space.prevent="handleClick"
     >
+      <!-- Arrow on left -->
+      <span
+        v-if="showArrow && arrowPlacement === 'left'"
+        :class="ns.e('arrow')"
+        :style="{ transform: isActive ? 'rotate(90deg)' : 'none' }"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          style="width: 16px; height: 16px"
+        >
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+      </span>
+
+      <!-- Icon slot -->
+      <span v-if="$slots.icon" :class="ns.e('icon')">
+        <slot name="icon" :active="isActive" />
+      </span>
+
       <span :class="ns.e('header-title')">
         <slot name="title">{{ title }}</slot>
       </span>
-      <span :class="ns.e('arrow')" :style="{ transform: isActive ? 'rotate(90deg)' : 'none' }">
+
+      <!-- Extra slot -->
+      <span v-if="$slots.extra" :class="ns.e('extra')">
+        <slot name="extra" :active="isActive" />
+      </span>
+
+      <!-- Arrow on right -->
+      <span
+        v-if="showArrow && arrowPlacement === 'right'"
+        :class="ns.e('arrow')"
+        :style="{ transform: isActive ? 'rotate(90deg)' : 'none' }"
+      >
         <svg
           viewBox="0 0 24 24"
           fill="none"
@@ -138,6 +184,11 @@ function onExpandLeave(el: Element) {
   border-bottom: 1px solid var(--color-zc-border-light, #e4e7ed);
 }
 
+/* Ghost mode: no per-item border */
+.zc-collapse.is-ghost .zc-collapse-item {
+  border-bottom: 1px solid var(--color-zc-border-lighter, #ebeef5);
+}
+
 .zc-collapse-item:last-child {
   border-bottom: none;
 }
@@ -147,12 +198,13 @@ function onExpandLeave(el: Element) {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 48px;
+  height: var(--zc-collapse-header-height, 48px);
   padding: 0 var(--spacing-zc-md, 16px);
-  font-size: var(--text-zc-md, 16px);
-  color: var(--color-zc-text-primary, #303133);
+  font-size: var(--zc-collapse-header-font-size, var(--text-zc-md, 16px));
+  color: var(--zc-collapse-header-text-color, var(--color-zc-text-primary, #303133));
   cursor: pointer;
   user-select: none;
+  gap: var(--spacing-zc-xs, 8px);
   transition: background-color var(--transition-duration-zc-fast, 0.15s) var(--ease-zc-in-out, ease);
 }
 
@@ -160,8 +212,38 @@ function onExpandLeave(el: Element) {
   background-color: var(--color-zc-fill-light, #f5f7fa);
 }
 
+/* Active header gets primary color */
+.zc-collapse-item.is-active .zc-collapse-item__header {
+  color: var(--zc-collapse-active-header-color, var(--color-zc-primary-500, #409eff));
+  border-bottom-color: transparent;
+}
+
+/* Arrow on left side: title gets flex:1 */
+.zc-collapse-item__header.is-arrow-left {
+  flex-direction: row;
+}
+
 .zc-collapse-item__header-title {
   flex: 1;
+}
+
+/* ---- Icon slot ---- */
+.zc-collapse-item__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--color-zc-text-secondary, #909399);
+}
+
+/* ---- Extra slot ---- */
+.zc-collapse-item__extra {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-left: auto;
+  color: var(--color-zc-text-secondary, #909399);
+  font-size: var(--text-zc-sm, 14px);
 }
 
 /* ---- Disabled ---- */
@@ -176,8 +258,13 @@ function onExpandLeave(el: Element) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   color: var(--color-zc-text-secondary, #909399);
   transition: transform var(--transition-duration-zc-base, 0.25s) var(--ease-zc-in-out, ease);
+}
+
+.zc-collapse-item.is-active .zc-collapse-item__arrow {
+  color: var(--zc-collapse-active-header-color, var(--color-zc-primary-500, #409eff));
 }
 
 /* ---- Content ---- */
@@ -189,8 +276,20 @@ function onExpandLeave(el: Element) {
 .zc-collapse-item__content {
   padding: 0 var(--spacing-zc-md, 16px) var(--spacing-zc-md, 16px);
   font-size: var(--text-zc-base, 14px);
-  color: var(--color-zc-text-regular, #606266);
-  line-height: 1.5;
+  color: var(--zc-collapse-content-text-color, var(--color-zc-text-regular, #606266));
+  line-height: 1.6;
+}
+
+/* ---- Size: small ---- */
+.zc-collapse-item--small .zc-collapse-item__content {
+  padding: 0 var(--spacing-zc-md, 16px) var(--spacing-zc-sm, 12px);
+  font-size: var(--text-zc-sm, 14px);
+}
+
+/* ---- Size: large ---- */
+.zc-collapse-item--large .zc-collapse-item__content {
+  padding: 0 var(--spacing-zc-md, 16px) var(--spacing-zc-lg, 20px);
+  font-size: var(--text-zc-base, 15px);
 }
 
 /* ---- Expand transition ---- */

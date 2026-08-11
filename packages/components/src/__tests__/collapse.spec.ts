@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { ref, nextTick } from 'vue'
+import { ref, nextTick, h } from 'vue'
 import Collapse from '../collapse/collapse.vue'
 import CollapseItem from '../collapse/collapse-item.vue'
 
@@ -68,6 +68,57 @@ describe('ZcCollapse', () => {
   it('does not add is-accordion class by default', () => {
     const wrapper = mount(Collapse)
     expect(wrapper.classes()).not.toContain('is-accordion')
+  })
+
+  // ---- border prop ----
+  it('adds is-bordered class by default', () => {
+    const wrapper = mount(Collapse)
+    expect(wrapper.classes()).toContain('is-bordered')
+  })
+
+  it('removes is-bordered when border is false', () => {
+    const wrapper = mount(Collapse, { props: { border: false } })
+    expect(wrapper.classes()).not.toContain('is-bordered')
+  })
+
+  // ---- ghost prop ----
+  it('adds is-ghost class when ghost is true', () => {
+    const wrapper = mount(Collapse, { props: { ghost: true } })
+    expect(wrapper.classes()).toContain('is-ghost')
+  })
+
+  it('does not add is-ghost by default', () => {
+    const wrapper = mount(Collapse)
+    expect(wrapper.classes()).not.toContain('is-ghost')
+  })
+
+  // ---- size prop ----
+  it('adds size modifier class for large', () => {
+    const wrapper = mount(Collapse, { props: { size: 'large' } })
+    expect(wrapper.classes()).toContain('zc-collapse--large')
+  })
+
+  it('adds size modifier class for small', () => {
+    const wrapper = mount(Collapse, { props: { size: 'small' } })
+    expect(wrapper.classes()).toContain('zc-collapse--small')
+  })
+
+  it('adds default size modifier class', () => {
+    const wrapper = mount(Collapse)
+    expect(wrapper.classes()).toContain('zc-collapse--default')
+  })
+
+  // ---- size propagation to items ----
+  it('passes size to collapse items', async () => {
+    const wrapper = mount(Collapse, {
+      props: { size: 'small' },
+      slots: {
+        default: () => h(CollapseItem, { name: '1', title: 'Small Item' }),
+      },
+    })
+    await nextTick()
+    const item = wrapper.find('.zc-collapse-item')
+    expect(item.classes()).toContain('zc-collapse-item--small')
   })
 })
 
@@ -163,6 +214,24 @@ describe('ZcCollapseItem', () => {
     expect(wrapper.emitted('item-click')![0]).toEqual(['1'])
   })
 
+  // ---- toggle event ----
+  it('emits toggle event with name and isActive', async () => {
+    const wrapper = mount(CollapseItem, {
+      props: { name: '1', title: 'Toggle Event' },
+    })
+    await wrapper.find('.zc-collapse-item__header').trigger('click')
+    expect(wrapper.emitted('toggle')).toBeTruthy()
+    expect(wrapper.emitted('toggle')![0]).toEqual([{ name: '1', isActive: true }])
+  })
+
+  it('does not emit toggle when disabled', async () => {
+    const wrapper = mount(CollapseItem, {
+      props: { name: '1', title: 'Disabled', disabled: true },
+    })
+    await wrapper.find('.zc-collapse-item__header').trigger('click')
+    expect(wrapper.emitted('toggle')).toBeFalsy()
+  })
+
   // ---- aria-expanded ----
   it('has proper aria attributes', () => {
     const wrapper = mountItem({ name: '1' })
@@ -224,7 +293,82 @@ describe('ZcCollapseItem', () => {
     expect(emitted.length).toBeGreaterThan(0)
     expect(emitted[emitted.length - 1]).toBe('2')
   })
-})
 
-// Helper
-import { h } from 'vue'
+  // ---- show-arrow ----
+  it('shows arrow by default', () => {
+    const wrapper = mountItem({ name: '1' })
+    expect(wrapper.find('.zc-collapse-item__arrow').exists()).toBe(true)
+  })
+
+  it('hides arrow when showArrow is false', () => {
+    const wrapper = mountItem({ name: '1', showArrow: false })
+    expect(wrapper.find('.zc-collapse-item__arrow').exists()).toBe(false)
+  })
+
+  // ---- arrow-placement ----
+  it('places arrow on the right by default', () => {
+    const wrapper = mountItem({ name: '1' })
+    const header = wrapper.find('.zc-collapse-item__header')
+    expect(header.classes()).not.toContain('is-arrow-left')
+    // Arrow should be the last child (after title)
+    const arrow = wrapper.find('.zc-collapse-item__arrow')
+    expect(arrow.exists()).toBe(true)
+  })
+
+  it('places arrow on the left when arrowPlacement is left', () => {
+    const wrapper = mountItem({ name: '1', arrowPlacement: 'left' })
+    const header = wrapper.find('.zc-collapse-item__header')
+    expect(header.classes()).toContain('is-arrow-left')
+    // Arrow should be the first child (before title)
+    const headerEl = header.element
+    const firstChild = headerEl.firstElementChild
+    expect(firstChild?.classList.contains('zc-collapse-item__arrow')).toBe(true)
+  })
+
+  // ---- icon slot ----
+  it('renders icon slot when provided', () => {
+    const wrapper = mountItem(
+      { name: '1', title: 'With Icon' },
+      { icon: '<span class="my-icon">📋</span>' }
+    )
+    expect(wrapper.find('.zc-collapse-item__icon').exists()).toBe(true)
+    expect(wrapper.find('.my-icon').exists()).toBe(true)
+  })
+
+  it('does not render icon element when icon slot is not provided', () => {
+    const wrapper = mountItem({ name: '1', title: 'No Icon' })
+    expect(wrapper.find('.zc-collapse-item__icon').exists()).toBe(false)
+  })
+
+  // ---- extra slot ----
+  it('renders extra slot when provided', () => {
+    const wrapper = mountItem(
+      { name: '1', title: 'With Extra' },
+      { extra: '<span class="my-extra">Extra Info</span>' }
+    )
+    expect(wrapper.find('.zc-collapse-item__extra').exists()).toBe(true)
+    expect(wrapper.find('.my-extra').text()).toBe('Extra Info')
+  })
+
+  it('does not render extra element when extra slot is not provided', () => {
+    const wrapper = mountItem({ name: '1', title: 'No Extra' })
+    expect(wrapper.find('.zc-collapse-item__extra').exists()).toBe(false)
+  })
+
+  // ---- active header color ----
+  it('applies active header style when active', async () => {
+    const wrapper = mount(Collapse, {
+      props: { modelValue: ['1'] },
+      slots: {
+        default: () => h(CollapseItem, { name: '1', title: 'Active' }),
+      },
+    })
+    await nextTick()
+    const item = wrapper.find('.zc-collapse-item')
+    const header = item.find('.zc-collapse-item__header')
+    // Active item should have active class
+    expect(item.classes()).toContain('is-active')
+    // The header should be inside the active item
+    expect(header.exists()).toBe(true)
+  })
+})

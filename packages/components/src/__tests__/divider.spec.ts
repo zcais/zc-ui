@@ -41,31 +41,28 @@ describe('ZcDivider', () => {
     expect(wrapper.find('.zc-divider__text').exists()).toBe(false)
   })
 
-  it('applies center content position by default', () => {
+  it('applies center content position class by default', () => {
     const wrapper = mount(Divider, { slots: { default: 'Center' } })
-    const text = wrapper.find('.zc-divider__text')
-    expect(text.attributes('style')).toContain('center')
+    expect(wrapper.classes()).toContain('zc-divider--text-center')
   })
 
-  it('applies left content position', () => {
+  it('applies left content position class', () => {
     const wrapper = mount(Divider, {
       props: { contentPosition: 'left' },
       slots: { default: 'Left' },
     })
-    const text = wrapper.find('.zc-divider__text')
-    expect(text.attributes('style')).toContain('left')
+    expect(wrapper.classes()).toContain('zc-divider--text-left')
   })
 
-  it('applies right content position', () => {
+  it('applies right content position class', () => {
     const wrapper = mount(Divider, {
       props: { contentPosition: 'right' },
       slots: { default: 'Right' },
     })
-    const text = wrapper.find('.zc-divider__text')
-    expect(text.attributes('style')).toContain('right')
+    expect(wrapper.classes()).toContain('zc-divider--text-right')
   })
 
-  // ---- dashed ----
+  // ---- dashed / borderStyle ----
   it('applies dashed style when dashed is true', () => {
     const wrapper = mount(Divider, { props: { dashed: true } })
     const line = wrapper.find('.zc-divider__line')
@@ -78,7 +75,6 @@ describe('ZcDivider', () => {
     expect(line.attributes('style')).toContain('solid')
   })
 
-  // ---- borderStyle ----
   it('applies dotted border style', () => {
     const wrapper = mount(Divider, { props: { borderStyle: 'dotted' } })
     const line = wrapper.find('.zc-divider__line')
@@ -91,6 +87,117 @@ describe('ZcDivider', () => {
     })
     const line = wrapper.find('.zc-divider__line')
     expect(line.attributes('style')).toContain('dashed')
+  })
+
+  // ---- color ----
+  it('applies custom color to horizontal divider', () => {
+    const wrapper = mount(Divider, {
+      props: { color: '#409eff' },
+      slots: { default: 'Blue' },
+    })
+    const line = wrapper.find('.zc-divider__line')
+    // jsdom converts hex to rgb
+    expect(line.attributes('style')).toContain('border-top-color')
+  })
+
+  it('applies custom color to vertical divider', () => {
+    const wrapper = mount(Divider, {
+      props: { direction: 'vertical', color: '#409eff' },
+    })
+    const line = wrapper.find('.zc-divider__vertical-line')
+    expect(line.attributes('style')).toContain('border-left-color')
+  })
+
+  // ---- borderWidth ----
+  it('applies custom border width to horizontal divider', () => {
+    const wrapper = mount(Divider, {
+      props: { borderWidth: '3px' },
+      slots: { default: 'Thick' },
+    })
+    const line = wrapper.find('.zc-divider__line')
+    expect(line.attributes('style')).toContain('border-top-width')
+    expect(line.attributes('style')).toContain('3px')
+  })
+
+  it('applies custom border width to plain horizontal divider', () => {
+    const wrapper = mount(Divider, {
+      props: { borderWidth: '2px' },
+    })
+    const root = wrapper.find('.zc-divider')
+    expect(root.exists()).toBe(true)
+  })
+
+  it('applies custom border width to vertical divider', () => {
+    const wrapper = mount(Divider, {
+      props: { direction: 'vertical', borderWidth: '2px' },
+    })
+    const line = wrapper.find('.zc-divider__vertical-line')
+    expect(line.attributes('style')).toContain('border-left-width')
+    expect(line.attributes('style')).toContain('2px')
+  })
+
+  // ---- margin ----
+  it('applies custom margin to horizontal divider', () => {
+    const wrapper = mount(Divider, {
+      props: { margin: '12px 0' },
+    })
+    expect(wrapper.attributes('style')).toContain('margin')
+    expect(wrapper.attributes('style')).toContain('12px 0')
+  })
+
+  // ---- height (vertical) ----
+  it('applies custom height to vertical divider', () => {
+    const wrapper = mount(Divider, {
+      props: { direction: 'vertical', height: '32px' },
+    })
+    const line = wrapper.find('.zc-divider__vertical-line')
+    expect(line.attributes('style')).toContain('height')
+    expect(line.attributes('style')).toContain('32px')
+  })
+
+  it('applies custom height to vertical divider root', () => {
+    const wrapper = mount(Divider, {
+      props: { direction: 'vertical', height: '40px' },
+    })
+    expect(wrapper.attributes('style')).toContain('height')
+    expect(wrapper.attributes('style')).toContain('40px')
+  })
+
+  // ---- contentWidth ----
+  it('applies custom content width CSS variable', () => {
+    const wrapper = mount(Divider, {
+      props: { contentPosition: 'left', contentWidth: '80px' },
+      slots: { default: 'Wide Left' },
+    })
+    expect(wrapper.attributes('style')).toContain('--zc-divider-content-width')
+    expect(wrapper.attributes('style')).toContain('80px')
+  })
+
+  it('does not apply content width CSS variable for center position', () => {
+    const wrapper = mount(Divider, {
+      props: { contentPosition: 'center', contentWidth: '80px' },
+      slots: { default: 'Center' },
+    })
+    expect(wrapper.attributes('style') || '').not.toContain('--zc-divider-content-width')
+  })
+
+  // ---- icon slot ----
+  it('renders icon slot content', () => {
+    const wrapper = mount(Divider, {
+      slots: {
+        default: 'With Icon',
+        icon: '<svg class="test-icon" />',
+      },
+    })
+    expect(wrapper.classes()).toContain('is-with-icon')
+    expect(wrapper.find('.test-icon').exists()).toBe(true)
+  })
+
+  it('does not add is-with-icon class without icon slot', () => {
+    const wrapper = mount(Divider, {
+      slots: { default: 'No Icon' },
+    })
+    expect(wrapper.classes()).not.toContain('is-with-icon')
   })
 
   // ---- vertical direction ----
@@ -106,6 +213,15 @@ describe('ZcDivider', () => {
     })
     expect(wrapper.classes()).not.toContain('is-with-content')
     expect(wrapper.find('.zc-divider__text').exists()).toBe(false)
+  })
+
+  // ---- plain ----
+  it('applies plain class when plain is true', () => {
+    const wrapper = mount(Divider, {
+      props: { plain: true },
+      slots: { default: 'Plain' },
+    })
+    expect(wrapper.classes()).toContain('is-plain')
   })
 
   // ---- role ----

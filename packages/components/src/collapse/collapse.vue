@@ -13,10 +13,19 @@ const props = withDefaults(
     modelValue?: CollapseModelValue
     /** Accordion mode: only one panel open at a time */
     accordion?: boolean
+    /** Show outer border */
+    border?: boolean
+    /** Ghost mode: no border, no background — for embedded use */
+    ghost?: boolean
+    /** Size variant: large / default / small */
+    size?: 'large' | 'default' | 'small'
   }>(),
   {
     modelValue: () => [],
     accordion: false,
+    border: true,
+    ghost: false,
+    size: 'default',
   }
 )
 
@@ -80,9 +89,16 @@ const activeNamesComputed = computed(() => activeNames.value) as ComputedRef<Arr
 provide('zcCollapse', {
   activeNames: activeNamesComputed,
   toggleItem,
+  size: computed(() => props.size),
 })
 
-const classes = computed(() => [ns.b(), ns.is('accordion', props.accordion)])
+const classes = computed(() => [
+  ns.b(),
+  ns.is('accordion', props.accordion),
+  ns.is('bordered', props.border),
+  ns.is('ghost', props.ghost),
+  ns.m(props.size),
+])
 </script>
 
 <template>
@@ -100,15 +116,35 @@ const classes = computed(() => [ns.b(), ns.is('accordion', props.accordion)])
 .zc-collapse {
   --zc-collapse-border-color: var(--color-zc-border-light, #e4e7ed);
   --zc-collapse-header-bg-color: var(--color-zc-bg-base, #fff);
---zc-collapse-header-text-color: var(--color-zc-text-primary, #303133);
---zc-collapse-header-font-size: var(--text-zc-md, 16px);
+  --zc-collapse-header-text-color: var(--color-zc-text-primary, #303133);
+  --zc-collapse-header-font-size: var(--text-zc-md, 16px);
   --zc-collapse-header-height: 48px;
   --zc-collapse-content-bg-color: var(--color-zc-bg-base, #fff);
   --zc-collapse-content-text-color: var(--color-zc-text-regular, #606266);
   --zc-collapse-content-padding: 16px 0;
   --zc-collapse-active-header-color: var(--color-zc-primary-500, #409eff);
+}
 
+/* ---- Border mode (default true) ---- */
+.zc-collapse.is-bordered {
   border-top: 1px solid var(--zc-collapse-border-color);
   border-bottom: 1px solid var(--zc-collapse-border-color);
+}
+
+/* ---- Ghost mode ---- */
+.zc-collapse.is-ghost {
+  border-top: none;
+  border-bottom: none;
+}
+
+/* ---- Size variants ---- */
+.zc-collapse--large {
+  --zc-collapse-header-height: 56px;
+  --zc-collapse-header-font-size: var(--text-zc-lg, 18px);
+}
+
+.zc-collapse--small {
+  --zc-collapse-header-height: 40px;
+  --zc-collapse-header-font-size: var(--text-zc-sm, 14px);
 }
 </style>

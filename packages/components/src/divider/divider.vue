@@ -22,6 +22,14 @@ const props = withDefaults(
     plain?: boolean
     /** Custom border color */
     color?: string
+    /** Custom border thickness (e.g., '2px'). Applied to all border sides */
+    borderWidth?: string
+    /** Custom top/bottom margin for horizontal dividers (e.g., '16px' or '16px 0') */
+    margin?: string
+    /** Custom height for vertical dividers (e.g., '24px', '2em') */
+    height?: string
+    /** Custom content-side ratio for left/right positioning (e.g., '80px' or '20%') */
+    contentWidth?: string
   }>(),
   {
     direction: 'horizontal',
@@ -30,6 +38,10 @@ const props = withDefaults(
     dashed: false,
     plain: false,
     color: undefined,
+    borderWidth: undefined,
+    margin: undefined,
+    height: undefined,
+    contentWidth: undefined,
   }
 )
 
@@ -37,6 +49,7 @@ const ns = useNamespace('divider')
 const slots = useSlots()
 
 const hasContent = computed(() => !!slots.default && slots.default().length > 0)
+const hasIcon = computed(() => !!slots.icon && slots.icon().length > 0)
 
 const actualBorderStyle = computed(() => (props.dashed ? 'dashed' : props.borderStyle))
 
@@ -44,6 +57,7 @@ const classes = computed(() => [
   ns.b(),
   ns.m(props.direction),
   ns.is('with-content', hasContent.value && props.direction === 'horizontal'),
+  ns.is('with-icon', hasIcon.value),
   ns.is('plain', props.plain),
   // Use BEM modifier for content position instead of fragile :has() selector
   ...(props.direction === 'horizontal' && hasContent.value
@@ -51,22 +65,48 @@ const classes = computed(() => [
     : []),
 ])
 
-const lineStyle = computed(() => ({
-  borderTopStyle: actualBorderStyle.value,
-  ...(props.color ? { borderTopColor: props.color } : {}),
-}))
+const borderStyleObj = computed(() => {
+  const style: Record<string, string> = {
+    [props.direction === 'vertical' ? 'borderLeftStyle' : 'borderTopStyle']:
+      actualBorderStyle.value,
+  }
+  if (props.color) {
+    style[props.direction === 'vertical' ? 'borderLeftColor' : 'borderTopColor'] = props.color
+  }
+  if (props.borderWidth) {
+    style[props.direction === 'vertical' ? 'borderLeftWidth' : 'borderTopWidth'] = props.borderWidth
+  }
+  return style
+})
+
+const lineStyle = computed(() => borderStyleObj.value)
 
 const vLineStyle = computed(() => ({
-  borderLeftStyle: actualBorderStyle.value,
-  ...(props.color ? { borderLeftColor: props.color } : {}),
+  ...borderStyleObj.value,
+  ...(props.height ? { height: props.height } : {}),
 }))
+
+const rootStyle = computed(() => {
+  const style: Record<string, string> = {}
+  if (props.direction === 'horizontal' && props.margin) {
+    style.margin = props.margin
+  }
+  if (props.direction === 'vertical' && props.height) {
+    style.height = props.height
+  }
+  if (props.contentWidth && props.contentPosition !== 'center') {
+    style['--zc-divider-content-width'] = props.contentWidth
+  }
+  return style
+})
 </script>
 
 <template>
-  <div :class="classes" role="separator">
+  <div :class="classes" :style="rootStyle" role="separator">
     <template v-if="direction === 'horizontal' && hasContent">
       <div :class="[ns.e('line'), ns.em('line', 'left')]" :style="lineStyle" />
       <div :class="ns.e('text')">
+        <slot v-if="hasIcon" name="icon" />
         <slot />
       </div>
       <div :class="[ns.e('line'), ns.em('line', 'right')]" :style="lineStyle" />
@@ -92,6 +132,8 @@ const vLineStyle = computed(() => ({
   --zc-divider-font-size: var(--text-zc-md, 14px);
   --zc-divider-margin: 24px 0;
   --zc-divider-text-padding: 20px;
+  --zc-divider-border-width: 1px;
+  --zc-divider-content-width: 5%;
 }
 
 /* ---- Horizontal ---- */
@@ -103,7 +145,7 @@ const vLineStyle = computed(() => ({
 
 /* Without content: single line */
 .zc-divider--horizontal:not(.is-with-content) {
-  border-top: 1px solid var(--zc-divider-color);
+  border-top: var(--zc-divider-border-width) solid var(--zc-divider-color);
   height: 0;
 }
 
@@ -115,12 +157,12 @@ const vLineStyle = computed(() => ({
 }
 
 .zc-divider--horizontal.is-with-content .zc-divider__line {
-  border-top: 1px solid var(--zc-divider-color);
+  border-top: var(--zc-divider-border-width) solid var(--zc-divider-color);
 }
 
 /* Content position: left */
 .zc-divider--text-left .zc-divider__line--left {
-  flex: 0 1 5%;
+  flex: 0 0 var(--zc-divider-content-width);
 }
 
 .zc-divider--text-left .zc-divider__line--right {
@@ -133,7 +175,7 @@ const vLineStyle = computed(() => ({
 }
 
 .zc-divider--text-right .zc-divider__line--right {
-  flex: 0 1 5%;
+  flex: 0 0 var(--zc-divider-content-width);
 }
 
 /* Content position: center */
@@ -144,12 +186,24 @@ const vLineStyle = computed(() => ({
 
 /* Text styling */
 .zc-divider__text {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   padding: 0 var(--zc-divider-text-padding);
   font-size: var(--zc-divider-font-size);
   font-weight: 500;
   color: var(--zc-divider-text-color);
   white-space: nowrap;
   flex-shrink: 0;
+}
+
+/* Icon in text */
+.zc-divider.is-with-icon .zc-divider__text :slotted(svg),
+.zc-divider.is-with-icon .zc-divider__text :slotted([class*='icon']) {
+  font-size: 1.1em;
+  width: 1.1em;
+  height: 1.1em;
+  opacity: 0.85;
 }
 
 /* Plain mode: reduced padding, lighter text */
@@ -172,7 +226,7 @@ const vLineStyle = computed(() => ({
 .zc-divider__vertical-line {
   width: 0;
   height: 100%;
-  border-left: 1px solid var(--zc-divider-color);
+  border-left: var(--zc-divider-border-width) solid var(--zc-divider-color);
 }
 
 /* ---- Dark mode ---- */
