@@ -123,18 +123,6 @@ describe('ZcImage', () => {
   })
 
   it('opens preview on click when preview is enabled', async () => {
-    const wrapper = mount(Image, {
-      props: { src: 'https://example.com/test.jpg', preview: true },
-    })
-    // First load the image
-    await wrapper.find('img').trigger('load')
-    // Click to open preview
-    await wrapper.find('img').trigger('click')
-    // Preview component should be rendered
-    expect(wrapper.find('.zc-image-preview').exists()).toBe(true)
-  })
-
-  it('opens preview on click when preview is enabled', async () => {
     document.body.innerHTML = ''
     const wrapper = mount(Image, {
       props: { src: 'https://example.com/test.jpg', preview: true },

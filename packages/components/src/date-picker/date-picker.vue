@@ -534,6 +534,17 @@ function switchToMonthPanel() {
 function switchToYearPanel() {
   if (panelMode.value === 'month') panelMode.value = 'year'
 }
+
+defineExpose({
+  /** Open the date picker panel */
+  openPicker,
+  /** Close the date picker panel */
+  closePicker,
+  /** Toggle the date picker panel */
+  togglePicker,
+  /** Current visible state */
+  visible,
+})
 </script>
 
 <template>

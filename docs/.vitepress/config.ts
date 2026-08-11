@@ -197,6 +197,7 @@ export default defineConfig({
             { text: 'Backtop 返回顶部', link: '/components/backtop' },
             { text: 'Affix 固钉', link: '/components/affix' },
             { text: 'FloatButton 悬浮按钮', link: '/components/float-button' },
+            { text: 'PageHeader 页面头部', link: '/components/page-header' },
           ],
         },
       ],

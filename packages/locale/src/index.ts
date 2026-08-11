@@ -351,10 +351,14 @@ export function createLocaleContext(options?: {
 }): LocaleContext {
   const localLocaleRef = ref<Language>(options?.locale ?? 'zh-CN')
   const localFallbackRef = ref<Language>(options?.fallbackLocale ?? 'zh-CN')
-  const localMessages = reactive<Record<Language, Record<string, string>>>({
-    'zh-CN': { ...zhCNMessages },
-    'en-US': { ...enUSMessages },
-  })
+  const localMessages = reactive<Record<Language, Record<string, string>>>(
+    Object.fromEntries(
+      // Snapshot the current module-level messages so that language packs
+      // registered via the module-level register() before createLocale()
+      // are available in the isolated context too.
+      Object.entries(_messages).map(([lang, dict]) => [lang, { ...dict }])
+    )
+  )
 
   // Merge custom messages
   if (options?.messages) {

@@ -55,7 +55,10 @@ const transform = ref({ scale: 1, deg: 0, offsetX: 0, offsetY: 0, enableTransiti
 const isDragging = ref(false)
 const dragStart = ref({ x: 0, y: 0, offsetX: 0, offsetY: 0 })
 
-const effectiveZIndex = computed(() => props.zIndex ?? nextZIndex())
+// Compute z-index once — calling nextZIndex() inside a computed would
+// cause an infinite re-render loop because it mutates a shared ref.
+const effectiveZIndex = computed(() => props.zIndex ?? computedZIndex.value)
+const computedZIndex = ref(nextZIndex())
 const currentUrl = computed(() => props.urlList[currentIndex.value] ?? '')
 const isFirst = computed(() => currentIndex.value === 0)
 const isLast = computed(() => currentIndex.value === props.urlList.length - 1)

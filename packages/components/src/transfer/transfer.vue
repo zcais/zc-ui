@@ -167,6 +167,17 @@ function moveToLeft() {
   emit('update:modelValue', newValue)
   emit('change', newValue)
 }
+
+defineExpose({
+  /** Move checked items from left to right */
+  moveToRight,
+  /** Move checked items from right to left */
+  moveToLeft,
+  /** Left panel search query */
+  leftSearch,
+  /** Right panel search query */
+  rightSearch,
+})
 </script>
 
 <template>

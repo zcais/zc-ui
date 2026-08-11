@@ -338,6 +338,17 @@ watch(
     syncFromModel()
   }
 )
+
+defineExpose({
+  /** Toggle picker visibility */
+  togglePicker,
+  /** Close the picker */
+  closePicker,
+  /** Confirm current color selection */
+  confirmColor,
+  /** Current visible state */
+  visible,
+})
 </script>
 
 <template>

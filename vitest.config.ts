@@ -4,8 +4,8 @@ import { resolve } from 'node:path'
 
 export default defineConfig({
   plugins: [vue()],
-  server:{
-    port:3000,
+  server: {
+    port: 3000,
   },
   resolve: {
     alias: {
@@ -17,6 +17,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
+    setupFiles: ['./vitest.setup.ts'],
     include: ['packages/**/src/**/__tests__/**/*.spec.ts'],
 
     // Coverage configuration

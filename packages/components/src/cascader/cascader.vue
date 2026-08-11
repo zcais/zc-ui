@@ -327,6 +327,17 @@ function handleKeyDown(event: KeyboardEvent) {
     closeDropdown()
   }
 }
+
+defineExpose({
+  /** Toggle dropdown visibility */
+  toggleDropdown,
+  /** Close the dropdown */
+  closeDropdown,
+  /** Clear selected value */
+  handleClear,
+  /** Current visible state */
+  visible,
+})
 </script>
 
 <template>

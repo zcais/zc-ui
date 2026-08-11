@@ -204,6 +204,17 @@ function scrollToSelected(type: 'hour' | 'minute' | 'second') {
     el.scrollTop = selected.offsetTop - el.clientHeight / 2 + selected.clientHeight / 2
   }
 }
+
+defineExpose({
+  /** Toggle time picker panel */
+  togglePanel,
+  /** Close the panel */
+  closePanel,
+  /** Confirm the selected time */
+  handleConfirm,
+  /** Current visible state */
+  visible,
+})
 </script>
 
 <template>
