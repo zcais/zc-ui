@@ -42,12 +42,11 @@ const asideStyle = computed(() => ({
   --zc-aside-width: 200px;
   --zc-aside-bg-color: var(--color-zc-info-50, #f4f4f5);
   --zc-aside-text-color: var(--color-zc-text-primary, #303133);
-  
+
   box-sizing: border-box;
   flex-shrink: 0;
   flex-basis: auto;
-width: var(--zc-aside-width);
-  height: 100%;
+  width: var(--zc-aside-width);
   overflow: auto;
   background-color: var(--zc-aside-bg-color);
   color: var(--zc-aside-text-color);
