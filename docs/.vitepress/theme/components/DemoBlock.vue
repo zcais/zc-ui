@@ -58,7 +58,9 @@ app.use(ZcUI)
 app.mount('#app')`
 
   // Build index.html content (split to avoid parser confusion with <\/script>)
-  const indexHtml = '<!DOCTYPE html>\n<html lang="en">\n<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>ZC UI Playground</title></head>\n<body><div id="app"></div><script type="module" src="/src/main.ts"><\/script></body>\n</html>'
+  // eslint-disable-next-line no-useless-escape -- escape required so the SFC parser doesn't terminate this <script> block early
+  const indexHtml =
+    '<!DOCTYPE html>\n<html lang="en">\n<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>ZC UI Playground</title></head>\n<body><div id="app"></div><script type="module" src="/src/main.ts"><\/script></body>\n</html>'
 
   // Use StackBlitz SDK URL to create a project dynamically
   const project = {
@@ -115,9 +117,7 @@ app.mount('#app')`
             fill="currentColor"
             style="flex-shrink: 0"
           >
-            <path
-              d="M10.797 14.182H3.404L13.488 0l-2.797 7.818h7.393L8 22l2.797-7.818Z"
-            />
+            <path d="M10.797 14.182H3.404L13.488 0l-2.797 7.818h7.393L8 22l2.797-7.818Z" />
           </svg>
           StackBlitz
         </button>

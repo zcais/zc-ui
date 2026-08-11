@@ -1,13 +1,5 @@
 <script setup lang="ts">
-import {
-  computed,
-  ref,
-  shallowRef,
-  nextTick,
-  watch,
-  onMounted,
-  onBeforeUnmount,
-} from 'vue'
+import { computed, ref, shallowRef, nextTick, watch, onMounted, onBeforeUnmount } from 'vue'
 import { useNamespace, useClickOutside, useId } from '@zc-ui/hooks'
 import { useLocale } from '@zc-ui/locale'
 import type {
@@ -66,7 +58,7 @@ const props = withDefaults(
     split: false,
     maxHeight: 240,
     teleport: false,
-  },
+  }
 )
 
 const emit = defineEmits<{
@@ -120,9 +112,7 @@ const filteredOptions = computed<MentionOption[]>(() => {
       return label.includes(kw)
     })
 
-  return props.options.filter((opt) =>
-    filterFn(opt, keyword, activeTriggerChar.value),
-  )
+  return props.options.filter((opt) => filterFn(opt, keyword, activeTriggerChar.value))
 })
 
 /** Whether any option groups are configured */
@@ -141,17 +131,17 @@ const groupedDisplayOptions = computed(() => {
 
 /** Whether to show dropdown */
 const dropdownVisible = computed(
-  () => visible.value && (props.loading || filteredOptions.value.length > 0),
+  () => visible.value && (props.loading || filteredOptions.value.length > 0)
 )
 
 /** Whether to show empty state */
 const emptyVisible = computed(
-  () => visible.value && !props.loading && filteredOptions.value.length === 0,
+  () => visible.value && !props.loading && filteredOptions.value.length === 0
 )
 
 // ---- Computed: Dropdown style ----
 const dropdownMaxHeight = computed(() =>
-  typeof props.maxHeight === 'number' ? `${props.maxHeight}px` : (props.maxHeight as string),
+  typeof props.maxHeight === 'number' ? `${props.maxHeight}px` : (props.maxHeight as string)
 )
 
 /** Teleport target */
@@ -205,7 +195,7 @@ const dropdownId = computed(() => `zc-mention-listbox-${uid}`)
 const getOptionId = (index: number) => `zc-mention-option-${uid}-${index}`
 
 const ariaActiveDescendant = computed(() =>
-  activeIndex.value >= 0 ? getOptionId(activeIndex.value) : undefined,
+  activeIndex.value >= 0 ? getOptionId(activeIndex.value) : undefined
 )
 
 // ---- Computed: Classes ----
@@ -216,9 +206,7 @@ const classes = computed(() => [
   ns.is('split', props.split),
 ])
 
-const inputClasses = computed(() =>
-  props.type === 'input' ? ns.e('input') : ns.e('textarea'),
-)
+const inputClasses = computed(() => (props.type === 'input' ? ns.e('input') : ns.e('textarea')))
 
 // ============================================================
 // Actions
@@ -351,8 +339,7 @@ function selectOptionInTextMode(option: MentionOption, displayLabel: string) {
 
   const beforeTrigger = value.substring(0, triggerPosition.value - 1)
   const afterCursor = value.substring(cursorPos)
-  const newValue =
-    beforeTrigger + activeTriggerChar.value + displayLabel + ' ' + afterCursor
+  const newValue = beforeTrigger + activeTriggerChar.value + displayLabel + ' ' + afterCursor
 
   emit('update:modelValue', newValue)
   emit('change', newValue)
@@ -410,10 +397,7 @@ function textToMentionHtml(text: string): string {
     .join('|')
   const regex = new RegExp(`(${escaped})([^\\s]+)`, 'g')
 
-  html = html.replace(
-    regex,
-    `<span class="${mentionTagClass}" contenteditable="false">$1$2</span>`,
-  )
+  html = html.replace(regex, `<span class="${mentionTagClass}" contenteditable="false">$1$2</span>`)
 
   return html
 }
@@ -506,15 +490,19 @@ function closeSuggestions() {
 }
 
 // ---- Click outside ----
-useClickOutside(containerRef, () => {
-  if (visible.value) {
-    if (props.blurBehavior !== 'keep-open') {
-      closeSuggestions()
+useClickOutside(
+  containerRef,
+  () => {
+    if (visible.value) {
+      if (props.blurBehavior !== 'keep-open') {
+        closeSuggestions()
+      }
     }
+  },
+  {
+    ignore: [dropdownRef],
   }
-}, {
-  ignore: [dropdownRef],
-})
+)
 
 // ---- Dropdown positioning (for Teleport) ----
 function handleScrollResize() {
@@ -535,7 +523,7 @@ watch(
         editableRef.value.innerHTML = textToMentionHtml(val || '')
       }
     }
-  },
+  }
 )
 
 // Reset active index when filtered options change
@@ -664,14 +652,10 @@ defineExpose({
           <template v-else>
             <!-- Grouped rendering -->
             <template v-if="hasGroups">
-              <div
-                v-for="group in groupedDisplayOptions"
-                :key="group.value"
-                :class="ns.e('group')"
-              >
+              <div v-for="group in groupedDisplayOptions" :key="group.value" :class="ns.e('group')">
                 <div :class="ns.e('group-title')">{{ group.label }}</div>
                 <div
-                  v-for="(option, idx) in group.options"
+                  v-for="option in group.options"
                   :id="getOptionId(filteredOptions.indexOf(option))"
                   :key="option.value"
                   :class="[

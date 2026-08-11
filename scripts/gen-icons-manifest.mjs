@@ -1,4 +1,3 @@
-/* global console, process */
 /**
  * gen-icons-manifest.mjs
  *

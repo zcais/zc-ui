@@ -19,7 +19,7 @@ export interface ImageViewerOptions {
   maxScale?: number
 }
 
-export interface ImageViewerProps extends ImageViewerOptions {}
+export type ImageViewerProps = ImageViewerOptions
 
 export interface ImageViewerEmits {
   (e: 'switch', index: number): void

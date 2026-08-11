@@ -68,11 +68,13 @@ function handleTouchEnd(e: TouchEvent) {
 
   if (isVertical.value) {
     if (Math.abs(dy) > SWIPE_THRESHOLD) {
-      dy > 0 ? next() : prev()
+      if (dy > 0) next()
+      else prev()
     }
   } else {
     if (Math.abs(dx) > SWIPE_THRESHOLD && Math.abs(dx) > Math.abs(dy)) {
-      dx > 0 ? next() : prev()
+      if (dx > 0) next()
+      else prev()
     }
   }
 }
@@ -211,7 +213,8 @@ onMounted(() => {
 watch(
   () => props.autoplay,
   (val) => {
-    val ? startAutoplay() : stopAutoplay()
+    if (val) startAutoplay()
+    else stopAutoplay()
   }
 )
 

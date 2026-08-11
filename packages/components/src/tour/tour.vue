@@ -46,7 +46,6 @@ const props = withDefaults(
     /** Indicator type */
     indicator?: TourIndicatorType
     /** scrollIntoView options */
-    // eslint-disable-next-line no-undef
     scrollIntoViewOptions?: ScrollIntoViewOptions
     /** Show Previous button */
     showPrevButton?: boolean

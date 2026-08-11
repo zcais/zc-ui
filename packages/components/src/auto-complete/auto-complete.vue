@@ -78,7 +78,7 @@ function getDisplayValue(item: AutoCompleteOption): string {
   return String(item[props.valueKey as keyof AutoCompleteOption] ?? item.label ?? item.value)
 }
 
-async function fetchSuggestions(query: string) {
+async function loadSuggestions(query: string) {
   if (!props.fetchSuggestions || !query) {
     suggestions.value = []
     return
@@ -105,7 +105,7 @@ function handleInput(event: Event) {
 
   if (debounceTimer) clearTimeout(debounceTimer)
   debounceTimer = setTimeout(() => {
-    fetchSuggestions(value)
+    loadSuggestions(value)
   }, props.debounce)
 }
 
