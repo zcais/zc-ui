@@ -2,6 +2,7 @@
 import { computed, inject, ref } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
 import { useGlobalConfig } from '../config-provider/useGlobalConfig'
+import type { ComponentSize } from '../config-provider/types'
 import { radioGroupKey, type RadioGroupContext } from './radio-group.vue'
 
 defineOptions({ name: 'ZcRadio' })
@@ -61,10 +62,7 @@ const inputName = computed(() => {
 const isFocused = ref(false)
 
 const { size: globalSize } = useGlobalConfig()
-const effectiveSize = computed<RadioSize | undefined>(() => {
-  if (radioGroup?.size?.value) {
-    return radioGroup.size.value as RadioSize
-  }
+const effectiveSize = computed<ComponentSize | undefined>(() => {
   return props.size ?? globalSize.value ?? undefined
 })
 

@@ -220,7 +220,7 @@ describe('ZcUpload', () => {
     await input.trigger('change')
 
     expect(wrapper.emitted('change')).toBeTruthy()
-    const changeEvent = wrapper.emitted('change')![0]
+    const changeEvent = wrapper.emitted('change')![0] as any[]
     expect(changeEvent[0].name).toBe('test.txt')
     expect(changeEvent[0].status).toBe('ready')
     expect(changeEvent[1].length).toBe(1)
@@ -451,7 +451,7 @@ describe('ZcUpload', () => {
 
     expect(wrapper.emitted('error')).toBeTruthy()
     expect(wrapper.emitted('error')![0][0]).toBeInstanceOf(Error)
-    expect(wrapper.emitted('error')![0][0].message).toBe('Upload failed')
+    expect((wrapper.emitted('error')![0][0] as Error).message).toBe('Upload failed')
   })
 
   it('emits progress event via httpRequest onProgress callback', async () => {
@@ -474,7 +474,7 @@ describe('ZcUpload', () => {
     await wrapper.vm.$nextTick()
 
     expect(wrapper.emitted('progress')).toBeTruthy()
-    expect(wrapper.emitted('progress')![0][0].percent).toBe(50)
+    expect((wrapper.emitted('progress')![0][0] as { percent: number }).percent).toBe(50)
   })
 
   it('respects onRemove prop and prevents removal when returns false', async () => {
@@ -551,7 +551,7 @@ describe('ZcUpload', () => {
     await input.trigger('change')
 
     expect(wrapper.emitted('change')).toBeTruthy()
-    const changeEvent = wrapper.emitted('change')![0]
+    const changeEvent = wrapper.emitted('change')![0] as any[]
     expect(changeEvent[0].url).toBeTruthy()
     expect(changeEvent[0].url).toMatch(/^blob:/)
   })

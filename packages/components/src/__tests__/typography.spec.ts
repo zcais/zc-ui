@@ -130,7 +130,7 @@ describe('ZcTitle', () => {
 
   // ---- Level ----
   it.each([1, 2, 3, 4, 5])('renders as h%s with correct level class', (level) => {
-    const wrapper = mount(Title, { props: { level } })
+    const wrapper = mount(Title, { props: { level: level as 1 | 2 | 3 | 4 | 5 } })
     expect(wrapper.element.tagName).toBe(`H${level}`)
     expect(wrapper.classes()).toContain(`zc-title--level-${level}`)
   })

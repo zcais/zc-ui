@@ -330,7 +330,7 @@ function selectOption(option: MentionOption) {
   searchText.value = ''
 }
 
-function selectOptionInTextMode(option: MentionOption, displayLabel: string) {
+function selectOptionInTextMode(_option: MentionOption, displayLabel: string) {
   const el = inputRef.value as HTMLInputElement | HTMLTextAreaElement | undefined
   if (!el) return
 
@@ -354,7 +354,7 @@ function selectOptionInTextMode(option: MentionOption, displayLabel: string) {
   })
 }
 
-function selectOptionInSplitMode(option: MentionOption, displayLabel: string) {
+function selectOptionInSplitMode(_option: MentionOption, displayLabel: string) {
   const el = editableRef.value
   if (!el) return
 

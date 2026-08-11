@@ -373,7 +373,7 @@ describe('ZcTabs', () => {
     })
     await flushPromises()
     const nav = wrapper.find('.zc-tabs__nav')
-    const tabEls = wrapper.findAll('[role="tab"]')
+    const tabEls = wrapper.findAll<HTMLElement>('[role="tab"]')
     // Focus the first tab
     tabEls[0].element.focus()
     await nav.trigger('keydown', { key: 'ArrowRight' })
@@ -397,7 +397,7 @@ describe('ZcTabs', () => {
     await flushPromises()
     const nav = wrapper.find('.zc-tabs__nav')
     // Focus the last tab
-    const tabEls = wrapper.findAll('[role="tab"]')
+    const tabEls = wrapper.findAll<HTMLElement>('[role="tab"]')
     tabEls[2].element.focus()
     // Press Home — should focus first tab
     await nav.trigger('keydown', { key: 'Home' })
@@ -420,7 +420,7 @@ describe('ZcTabs', () => {
     })
     await flushPromises()
     const nav = wrapper.find('.zc-tabs__nav')
-    const tabEls = wrapper.findAll('[role="tab"]')
+    const tabEls = wrapper.findAll<HTMLElement>('[role="tab"]')
 
     // Override document.activeElement to simulate focus on first tab
     const originalDescriptor = Object.getOwnPropertyDescriptor(Document.prototype, 'activeElement')
@@ -451,7 +451,7 @@ describe('ZcTabs', () => {
     })
     await flushPromises()
     const nav = wrapper.find('.zc-tabs__nav')
-    const tabEls = wrapper.findAll('[role="tab"]')
+    const tabEls = wrapper.findAll<HTMLElement>('[role="tab"]')
     tabEls[0].element.focus()
     await nav.trigger('keydown', { key: 'Delete' })
     expect(wrapper.emitted('tab-remove')).toBeUndefined()

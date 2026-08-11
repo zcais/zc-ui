@@ -312,6 +312,11 @@ function confirmColor() {
   closePicker()
 }
 
+function handleInputChange(e: Event) {
+  const v = (e.target as HTMLInputElement).value
+  color.value = parseAnyToHsv(v)
+}
+
 function closePicker() {
   visible.value = false
 }
@@ -377,17 +382,7 @@ watch(
 
         <!-- Input + buttons -->
         <div :class="ns.e('footer')">
-          <input
-            :class="ns.e('input')"
-            :value="displayColor"
-            @input="
-              (e) => {
-                const v = (e.target as HTMLInputElement).value
-                const hsv = parseAnyToHsv(v)
-                color.value = hsv
-              }
-            "
-          />
+          <input :class="ns.e('input')" :value="displayColor" @input="handleInputChange" />
           <button :class="ns.e('btn')" @click="confirmColor">{{ t('common.confirm') }}</button>
         </div>
 

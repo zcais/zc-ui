@@ -81,9 +81,7 @@ describe('ZcTour', () => {
     await nextTick()
     wrapper.vm.close()
     await nextTick()
-    expect(
-      wrapper.emitted('update:modelValue')?.some((v) => v[0] === false),
-    ).toBe(true)
+    expect(wrapper.emitted('update:modelValue')?.some((v) => v[0] === false)).toBe(true)
     expect(wrapper.emitted('close')).toBeTruthy()
     wrapper.unmount()
   })
@@ -95,9 +93,7 @@ describe('ZcTour', () => {
     await nextTick()
     wrapper.vm.close()
     await nextTick()
-    expect(
-      wrapper.emitted('update:open')?.some((v) => v[0] === false),
-    ).toBe(true)
+    expect(wrapper.emitted('update:open')?.some((v) => v[0] === false)).toBe(true)
     wrapper.unmount()
   })
 
@@ -189,9 +185,7 @@ describe('ZcTour', () => {
     wrapper.vm.next()
     await nextTick()
     expect(wrapper.emitted('finish')).toBeTruthy()
-    expect(
-      wrapper.emitted('update:modelValue')?.some((v) => v[0] === false),
-    ).toBe(true)
+    expect(wrapper.emitted('update:modelValue')?.some((v) => v[0] === false)).toBe(true)
     wrapper.unmount()
   })
 
@@ -252,9 +246,7 @@ describe('ZcTour', () => {
     expect(closeBtn).not.toBeNull()
     closeBtn.click()
     await nextTick()
-    expect(
-      wrapper.emitted('update:modelValue')?.some((v) => v[0] === false),
-    ).toBe(true)
+    expect(wrapper.emitted('update:modelValue')?.some((v) => v[0] === false)).toBe(true)
     wrapper.unmount()
   })
 
@@ -361,7 +353,7 @@ describe('ZcTour', () => {
 
   // ── Placement ─────────────────────────────────────────────
   it('applies placement class to panel', async () => {
-    const target = createTarget('target-placement')
+    createTarget('target-placement')
     const wrapper = mount(Tour, {
       props: {
         modelValue: true,
@@ -377,7 +369,7 @@ describe('ZcTour', () => {
   })
 
   it('uses step-level placement override', async () => {
-    const target = createTarget('target-step-placement')
+    createTarget('target-step-placement')
     const wrapper = mount(Tour, {
       props: {
         modelValue: true,
@@ -428,7 +420,7 @@ describe('ZcTour', () => {
   })
 
   it('applies arrow placement class', async () => {
-    const target = createTarget('target-arrow')
+    createTarget('target-arrow')
     const wrapper = mount(Tour, {
       props: {
         modelValue: true,
@@ -473,7 +465,7 @@ describe('ZcTour', () => {
   })
 
   it('generates cutout path when target has rect', async () => {
-    const target = createTarget('target-cutout')
+    createTarget('target-cutout')
     const wrapper = mount(Tour, {
       props: {
         modelValue: true,
@@ -504,9 +496,7 @@ describe('ZcTour', () => {
     const event = new KeyboardEvent('keydown', { key: 'Escape' })
     document.dispatchEvent(event)
     await nextTick()
-    expect(
-      wrapper.emitted('update:modelValue')?.some((v) => v[0] === false),
-    ).toBe(true)
+    expect(wrapper.emitted('update:modelValue')?.some((v) => v[0] === false)).toBe(true)
     wrapper.unmount()
   })
 
@@ -606,9 +596,7 @@ describe('ZcTour', () => {
     // close
     vm.close()
     await nextTick()
-    expect(
-      wrapper.emitted('update:modelValue')?.some((v) => v[0] === false),
-    ).toBe(true)
+    expect(wrapper.emitted('update:modelValue')?.some((v) => v[0] === false)).toBe(true)
     wrapper.unmount()
   })
 
@@ -626,9 +614,7 @@ describe('ZcTour', () => {
     await nextTick()
     await nextTick()
     expect(document.querySelector('.custom-title')).not.toBeNull()
-    expect(document.querySelector('.custom-title')?.textContent).toContain(
-      'Custom Title',
-    )
+    expect(document.querySelector('.custom-title')?.textContent).toContain('Custom Title')
     wrapper.unmount()
   })
 
@@ -705,9 +691,7 @@ describe('ZcTour', () => {
     const wrapper = mount(Tour, {
       props: {
         modelValue: true,
-        steps: [
-          { title: 'T', description: 'D', target: () => target },
-        ],
+        steps: [{ title: 'T', description: 'D', target: () => target }],
       },
     })
     await nextTick()
@@ -719,7 +703,7 @@ describe('ZcTour', () => {
 
   // ── Close on overlay click ──────────────────────────────
   it('does not close when closeOnOverlayClick is false', async () => {
-    const target = createTarget('target-no-close')
+    createTarget('target-no-close')
     const wrapper = mount(Tour, {
       props: {
         modelValue: true,
@@ -738,9 +722,7 @@ describe('ZcTour', () => {
 
     // Should still be open
     expect(document.querySelector('.zc-tour__overlay')).not.toBeNull()
-    expect(
-      wrapper.emitted('update:modelValue')?.some((v) => v[0] === false),
-    ).toBeFalsy()
+    expect(wrapper.emitted('update:modelValue')?.some((v) => v[0] === false)).toBeFalsy()
     wrapper.unmount()
   })
 
@@ -773,7 +755,7 @@ describe('ZcTour', () => {
 
   // ── Gap / Offset ─────────────────────────────────────────
   it('applies gap to mask cutout path', async () => {
-    const target = createTarget('target-gap')
+    createTarget('target-gap')
     const wrapper = mount(Tour, {
       props: {
         modelValue: true,
@@ -794,7 +776,7 @@ describe('ZcTour', () => {
   })
 
   it('uses step-level gap override', async () => {
-    const target = createTarget('target-step-gap')
+    createTarget('target-step-gap')
     const wrapper = mount(Tour, {
       props: {
         modelValue: true,
@@ -822,7 +804,7 @@ describe('ZcTour', () => {
   })
 
   it('applies offset to popover panel position', async () => {
-    const target = createTarget('target-offset')
+    createTarget('target-offset')
     const wrapper = mount(Tour, {
       props: {
         modelValue: true,

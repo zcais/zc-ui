@@ -158,15 +158,6 @@ function formatDate(date: Date): string {
   return result
 }
 
-/** Get ISO week number */
-function getWeekNumber(date: Date): number {
-  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()))
-  const dayNum = d.getUTCDay() || 7
-  d.setUTCDate(d.getUTCDate() + 4 - dayNum)
-  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1))
-  return Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7)
-}
-
 /** Get the Monday of the week containing the date */
 function getWeekStart(date: Date): Date {
   const d = new Date(date)
@@ -185,11 +176,6 @@ function isSameWeek(a: Date, b: Date): boolean {
 /** Check if two dates are in same month */
 function isSameMonth(a: Date, b: Date): boolean {
   return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth()
-}
-
-/** Check if two dates are in same year */
-function isSameYear(a: Date, b: Date): boolean {
-  return a.getFullYear() === b.getFullYear()
 }
 
 function isDateDisabled(date: Date): boolean {
@@ -670,7 +656,7 @@ function switchToYearPanel() {
                 :key="yr"
                 :class="[
                   ns.e('year-cell'),
-                  ns.is('selected', selectedDate && selectedDate.getFullYear() === yr),
+                  ns.is('selected', !!(selectedDate && selectedDate.getFullYear() === yr)),
                   ns.is('current', new Date().getFullYear() === yr),
                   ns.is('disabled', isDateDisabled(new Date(yr, 0, 1))),
                 ]"
@@ -689,8 +675,10 @@ function switchToYearPanel() {
                   ns.e('month-cell'),
                   ns.is(
                     'selected',
-                    selectedDate &&
+                    !!(
+                      selectedDate &&
                       isSameMonth(selectedDate, new Date(viewDate.getFullYear(), idx, 1))
+                    )
                   ),
                   ns.is(
                     'current',
@@ -726,7 +714,7 @@ function switchToYearPanel() {
                     ns.is('selected', !isWeek && isSameDay(selectedDate, cell.date)),
                     ns.is(
                       'week-selected',
-                      isWeek && selectedDate && isSameWeek(selectedDate, cell.date)
+                      !!(isWeek && selectedDate && isSameWeek(selectedDate, cell.date))
                     ),
                     ns.is('range-start', isRangeStart(cell.date)),
                     ns.is('range-end', isRangeEnd(cell.date)),

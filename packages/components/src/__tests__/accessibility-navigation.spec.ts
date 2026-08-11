@@ -3,22 +3,12 @@ import { mount } from '@vue/test-utils'
 import ZcSteps from '../steps/steps.vue'
 import ZcStep from '../steps/step.vue'
 import ZcPagination from '../pagination/pagination.vue'
-import ZcCollapse from '../collapse/collapse.vue'
 import ZcCollapseItem from '../collapse/collapse-item.vue'
 import ZcBreadcrumb from '../breadcrumb/breadcrumb.vue'
 import ZcBreadcrumbItem from '../breadcrumb/breadcrumb-item.vue'
 import ZcTooltip from '../tooltip/tooltip.vue'
 
 describe('Accessibility: Steps', () => {
-  const mountSteps = (props = {}) => {
-    return mount(ZcSteps, {
-      props: { current: 1, ...props },
-      slots: {
-        default: () => [{ __v_isVNode: true, type: 'div', children: 'Step 1' }],
-      },
-    })
-  }
-
   it('should have role="list" on container', () => {
     const wrapper = mount(ZcSteps)
     expect(wrapper.attributes('role')).toBe('list')

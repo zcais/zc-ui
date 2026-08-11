@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef } from 'vue'
-import { useNamespace, useVirtualList } from '@zc-ui/hooks'
+import { useNamespace } from '@zc-ui/hooks'
 import { useClickOutside } from '@zc-ui/hooks'
 import { useLocale } from '@zc-ui/locale'
 import type { TreeSelectOption } from './types'
@@ -19,7 +19,7 @@ const props = withDefaults(
     filterable?: boolean
     checkStrictly?: boolean
     size?: 'large' | 'medium' | 'small'
-  virtual?: boolean
+    virtual?: boolean
   }>(),
   {
     modelValue: undefined,
@@ -31,7 +31,7 @@ const props = withDefaults(
     filterable: false,
     checkStrictly: false,
     size: 'medium',
-  virtual: false,
+    virtual: false,
   }
 )
 
@@ -190,42 +190,6 @@ function closeDropdown() {
   isFocused.value = false
   searchText.value = ''
 }
-
-/* ---- Virtual scroll integration ---- */
-const virtualItemHeight = 32
-
-// Flatten tree nodes for virtual scroll (with expand/collapse support)
-function flattenVisibleNodes(
-  nodes: TreeSelectOption[],
-  level: number
-): Array<{ node: TreeSelectOption; level: number }> {
-  const result: Array<{ node: TreeSelectOption; level: number }> = []
-  function walk(opts: TreeSelectOption[], lvl: number) {
-    for (const opt of opts) {
-      result.push({ node: opt, level: lvl })
-      if (opt.children && expandedKeys.value.has(opt.value)) {
-        walk(opt.children, lvl + 1)
-      }
-    }
-  }
-  walk(nodes, level)
-  return result
-}
-
-const flatVisibleNodes = computed(() =>
-  flattenVisibleNodes(filteredData.value, 0)
-)
-
-const {
-  containerRef: virtualContainerRef,
-  visibleData: virtualVisibleData,
-  totalHeight: virtualTotalHeight,
-  offsetY: virtualOffsetY,
-} = useVirtualList<{ node: TreeSelectOption; level: number }>({
-  data: flatVisibleNodes,
-  itemHeight: virtualItemHeight,
-  overscan: 5,
-})
 
 function handleClear(event: Event) {
   event.stopPropagation()
@@ -509,8 +473,8 @@ function handleKeyDown(event: KeyboardEvent) {
 }
 
 /* Virtual tree container */
-  .zc-tree-select__virtual-tree {
-border: 1px solid var(--color-zc-border-light, #e4e7ed);
+.zc-tree-select__virtual-tree {
+  border: 1px solid var(--color-zc-border-light, #e4e7ed);
   border-radius: 4px;
 }
 

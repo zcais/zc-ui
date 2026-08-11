@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, computed, onMounted, onUnmounted } from 'vue'
+import { inject, computed, onMounted, onUnmounted, type CSSProperties } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
 import { CAROUSEL_KEY } from './types'
 import type { CarouselItemData } from './types'
@@ -36,7 +36,7 @@ onUnmounted(() => {
 // Card mode: compute transform/opacity relative to activeIndex
 // All items use: position:absolute; width:50%; left:0; top:0
 // translateX % is relative to item's own width (50% of container)
-const cardStyle = computed(() => {
+const cardStyle = computed<CSSProperties>(() => {
   if (!ctx || !ctx.isCard.value) return {}
 
   const items = ctx.items.value

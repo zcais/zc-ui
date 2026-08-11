@@ -133,3 +133,12 @@ export interface ColumnResizeEvent {
   oldWidth: number
   newWidth: number
 }
+
+/** Flattened row used internally by the table renderer (virtual & tree modes). */
+export interface RenderRow {
+  row: Record<string, any>
+  depth: number
+  hasChildren: boolean
+  isTreeExpanded: boolean
+  index: number
+}

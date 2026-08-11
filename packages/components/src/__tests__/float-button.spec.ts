@@ -606,7 +606,7 @@ describe('ZcFloatButtonGroup', () => {
           { shape: 'square', type: 'primary' },
           {
             default: ({ shape, type }: { shape: string; type: string }) =>
-              h(FloatButton, { icon: '+', shape, type }),
+              h(FloatButton, { icon: '+', shape, type } as any),
           }
         )
       },

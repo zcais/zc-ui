@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { h, type Component } from 'vue'
+import { h } from 'vue'
 import ZcTable from '../table/table.vue'
 import ZcButton from '../button/button.vue'
 import ZcTag from '../tag/tag.vue'
@@ -70,46 +70,57 @@ describe('Performance Benchmarks', () => {
       expect(time).toBeLessThan(PERFORMANCE_THRESHOLD)
     })
 
-    it('should render 1000 rows within threshold', () => {
-      const data = generateTableData(1000)
-      const columns = [
-        { prop: 'id', label: 'ID' },
-        { prop: 'name', label: 'Name' },
-        { prop: 'email', label: 'Email' },
-        { prop: 'department', label: 'Department' },
-        { prop: 'status', label: 'Status' },
-      ]
+    it(
+      'should render 1000 rows within threshold',
+      () => {
+        const data = generateTableData(1000)
+        const columns = [
+          { prop: 'id', label: 'ID' },
+          { prop: 'name', label: 'Name' },
+          { prop: 'email', label: 'Email' },
+          { prop: 'department', label: 'Department' },
+          { prop: 'status', label: 'Status' },
+        ]
 
-      const time = measureTime(() => {
-        mount(ZcTable, {
-          props: { data, columns },
-        })
-      })
-
-      console.log(`  Table(1000 rows): ${time.toFixed(2)}ms`)
-      expect(time).toBeLessThan(PERFORMANCE_THRESHOLD)
-    }, PERF_TEST_TIMEOUT)
-
-    it('should mount and unmount 100 rows without memory leaks', () => {
-      const data = generateTableData(100)
-      const columns = [{ prop: 'id', label: 'ID' }, { prop: 'name', label: 'Name' }]
-
-      // Mount and unmount 10 times to check for leaks/errors
-      let totalTime = 0
-      for (let i = 0; i < 10; i++) {
-        const iterationTime = measureTime(() => {
-          const wrapper = mount(ZcTable, {
+        const time = measureTime(() => {
+          mount(ZcTable, {
             props: { data, columns },
           })
-          wrapper.unmount()
         })
-        totalTime += iterationTime
-      }
 
-      const avgTime = totalTime / 10
-      console.log(`  Table(100 rows) mount/unmount x10 avg: ${avgTime.toFixed(2)}ms`)
-      expect(avgTime).toBeLessThan(PERFORMANCE_THRESHOLD / 2)
-    }, PERF_TEST_TIMEOUT)
+        console.log(`  Table(1000 rows): ${time.toFixed(2)}ms`)
+        expect(time).toBeLessThan(PERFORMANCE_THRESHOLD)
+      },
+      PERF_TEST_TIMEOUT
+    )
+
+    it(
+      'should mount and unmount 100 rows without memory leaks',
+      () => {
+        const data = generateTableData(100)
+        const columns = [
+          { prop: 'id', label: 'ID' },
+          { prop: 'name', label: 'Name' },
+        ]
+
+        // Mount and unmount 10 times to check for leaks/errors
+        let totalTime = 0
+        for (let i = 0; i < 10; i++) {
+          const iterationTime = measureTime(() => {
+            const wrapper = mount(ZcTable, {
+              props: { data, columns },
+            })
+            wrapper.unmount()
+          })
+          totalTime += iterationTime
+        }
+
+        const avgTime = totalTime / 10
+        console.log(`  Table(100 rows) mount/unmount x10 avg: ${avgTime.toFixed(2)}ms`)
+        expect(avgTime).toBeLessThan(PERFORMANCE_THRESHOLD / 2)
+      },
+      PERF_TEST_TIMEOUT
+    )
   })
 
   describe('Button Rendering', () => {
@@ -141,7 +152,11 @@ describe('Performance Benchmarks', () => {
             return h(
               'div',
               Array.from({ length: 1000 }, (_, i) =>
-                h(ZcTag, { key: i, type: (['', 'success', 'warning', 'danger'] as const)[i % 4] }, () => `Tag ${i}`)
+                h(
+                  ZcTag,
+                  { key: i, type: (['primary', 'success', 'warning', 'danger'] as const)[i % 4] },
+                  () => `Tag ${i}`
+                )
               )
             )
           },

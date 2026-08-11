@@ -16,8 +16,7 @@
  * Node SSR, jsdom, happy-dom). This is the **most reliable** check and serves as
  * the single source of truth — `isClient` in `dom.ts` re-exports this value.
  */
-export const isClient: boolean =
-  typeof window !== 'undefined' && typeof document !== 'undefined'
+export const isClient: boolean = typeof window !== 'undefined' && typeof document !== 'undefined'
 
 /**
  * Runtime check: `true` when running on the server (Node.js).
@@ -38,11 +37,8 @@ export const isServer: boolean = !isClient
  *   // browser-only code — dead-code eliminated on server builds
  * }
  */
-// @ts-expect-error — import.meta.client is provided by Vite/Nuxt at build time
 export const importMetaClient: boolean =
-  typeof import.meta !== 'undefined' && import.meta.client === true
-    ? true
-    : isClient
+  typeof import.meta !== 'undefined' && import.meta.client === true ? true : isClient
 
 /**
  * Safely access `window` in SSR-aware code.
@@ -94,7 +90,7 @@ export function safeRAF(cb: () => void): number {
   if (isClient && typeof requestAnimationFrame === 'function') {
     return requestAnimationFrame(cb)
   }
-  return setTimeout(cb, 16)
+  return setTimeout(cb, 16) as unknown as number
 }
 
 /**

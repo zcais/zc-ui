@@ -41,7 +41,8 @@ const isVertical = computed(() => {
   return children.some((child: VNode) => {
     // `name` comes from defineOptions({ name: 'ZcHeader' })
     // `__name` is the SFC filename (e.g. 'header'), so check `name` first
-    const componentName = child.type?.name || child.type?.__name
+    const type = child.type as { name?: string; __name?: string }
+    const componentName = type.name || type.__name
     return componentName === 'ZcHeader' || componentName === 'ZcFooter'
   })
 })
@@ -70,10 +71,10 @@ const classes = computed(() => [ns.b(), ns.is('vertical', isVertical.value)])
   --zc-container-bg-color: transparent;
   --zc-container-min-height: auto;
   --zc-container-border-color: var(--color-zc-border-base, #dcdfe6);
-  
+
   display: flex;
   flex-direction: row;
-flex: 1;
+  flex: 1;
   flex-basis: auto;
   box-sizing: border-box;
   min-width: 0;

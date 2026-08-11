@@ -15,7 +15,10 @@ import {
   safeCancelRAF,
 } from '@zc-ui/utils'
 import { message as ZcMessage, closeAllMessages as ZcMessageCloseAll } from '../message/message'
-import { notify as ZcNotification, closeAllNotifications as ZcNotificationCloseAll } from '../notification/notification'
+import {
+  notify as ZcNotification,
+  closeAllNotifications as ZcNotificationCloseAll,
+} from '../notification/notification'
 import { ZcLoadingService, ZcLoadingDirective } from '../loading/loading'
 
 describe('SSR Utilities', () => {
@@ -134,8 +137,8 @@ describe('SSR Loading Safety', () => {
   })
 
   it('v-loading directive should have SSR-safe hooks', () => {
-    expect(typeof ZcLoadingDirective.mounted).toBe('function')
-    expect(typeof ZcLoadingDirective.updated).toBe('function')
-    expect(typeof ZcLoadingDirective.unmounted).toBe('function')
+    expect(typeof (ZcLoadingDirective as any).mounted).toBe('function')
+    expect(typeof (ZcLoadingDirective as any).updated).toBe('function')
+    expect(typeof (ZcLoadingDirective as any).unmounted).toBe('function')
   })
 })

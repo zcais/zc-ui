@@ -17,6 +17,7 @@ import type {
   ColumnSettingItem,
   DragSortEvent,
   ColumnResizeEvent,
+  RenderRow,
 } from './types'
 
 defineOptions({ name: 'ZcTable' })
@@ -476,14 +477,6 @@ function toggleTreeExpand(row: Record<string, any>) {
   }
   expandedTreeKeys.value = new Set(expandedTreeKeys.value)
   emit('tree-toggle', row, willExpand)
-}
-
-interface RenderRow {
-  row: Record<string, any>
-  depth: number
-  hasChildren: boolean
-  isTreeExpanded: boolean
-  index: number
 }
 
 const renderRows = computed<RenderRow[]>(() => {
@@ -977,6 +970,21 @@ defineExpose({
   handleResizeEnd,
   // Virtual scrolling API
   virtualScrollTo: scrollToIndex,
+  // Virtual scrolling / state (exposed for testing & advanced use)
+  isVirtualActive,
+  virtualData,
+  displayData,
+  displayColumns,
+  processedData,
+  renderRows,
+  sortState,
+  wrapperRef,
+  // Selection & interaction
+  isAllSelected,
+  isRowSelected,
+  handleRowSelect,
+  handleSortClick,
+  handleFilterToggle,
 })
 </script>
 

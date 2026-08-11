@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import ZcTree from '../tree/tree.vue'
 import ZcTreeNode from '../tree/tree-node.vue'

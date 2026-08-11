@@ -481,6 +481,7 @@ defineExpose({
   next,
   prev,
   goTo,
+  panelRef,
 })
 </script>
 

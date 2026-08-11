@@ -36,7 +36,7 @@ const props = withDefaults(
     copyText: undefined,
     editable: false,
     copyTooltip: undefined,
-  },
+  }
 )
 
 const emit = defineEmits<{
@@ -64,7 +64,7 @@ const ellipsisConfig = computed<ParagraphEllipsisConfig>(() => {
 const isEllipsis = computed(() => !!props.ellipsis)
 const isExpanded = ref(false)
 const shouldClamp = computed(
-  () => isEllipsis.value && !isExpanded.value && ellipsisConfig.value.rows > 0,
+  () => isEllipsis.value && !isExpanded.value && (ellipsisConfig.value.rows ?? 0) > 0
 )
 
 function handleExpand() {
@@ -115,7 +115,7 @@ watch(
   () => props.ellipsis,
   () => {
     isExpanded.value = false
-  },
+  }
 )
 
 const classes = computed(() => [
@@ -162,23 +162,43 @@ const contentStyle = computed(() => {
         :title="copyTooltip ?? (copied ? '已复制' : '复制')"
         @click="handleCopy"
       >
-        <svg v-if="!copied" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <svg
+          v-if="!copied"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
           <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
           <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
         </svg>
-        <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <svg
+          v-else
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
           <polyline points="20 6 9 17 4 12" />
         </svg>
       </button>
       <!-- Edit trigger -->
-      <button
-        v-if="editable"
-        :class="ns.e('edit')"
-        type="button"
-        title="编辑"
-        @click="startEdit"
-      >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <button v-if="editable" :class="ns.e('edit')" type="button" title="编辑" @click="startEdit">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
           <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
           <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
         </svg>

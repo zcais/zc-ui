@@ -1,15 +1,15 @@
 <script lang="ts">
+import type { AvatarSize } from '../avatar/avatar.vue'
+
 export const avatarGroupKey = 'zc-avatar-group'
+export type AvatarGroupSize = AvatarSize
 </script>
 
 <script setup lang="ts">
 import { computed, provide, reactive, useSlots, type VNode } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
-import type { AvatarSize } from '../avatar/avatar.vue'
 
 defineOptions({ name: 'ZcAvatarGroup' })
-
-export type AvatarGroupSize = AvatarSize
 
 const props = withDefaults(
   defineProps<{

@@ -2,6 +2,7 @@
 import { computed, inject, ref } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
 import { useGlobalConfig } from '../config-provider/useGlobalConfig'
+import type { ComponentSize } from '../config-provider/types'
 import { checkboxGroupKey, type CheckboxGroupContext } from './checkbox-group.vue'
 
 defineOptions({ name: 'ZcCheckbox' })
@@ -57,10 +58,7 @@ const isDisabled = computed(() => {
 
 // ---- ConfigProvider size integration ----
 const { size: globalSize } = useGlobalConfig()
-const effectiveSize = computed<CheckboxSize | undefined>(() => {
-  if (isGroup.value && checkboxGroup?.size?.value) {
-    return checkboxGroup.size.value as CheckboxSize
-  }
+const effectiveSize = computed<ComponentSize | undefined>(() => {
   return props.size ?? globalSize.value ?? undefined
 })
 
@@ -129,7 +127,7 @@ const classes = computed(() => [
     role="checkbox"
     :aria-checked="indeterminate ? 'mixed' : isChecked"
     :aria-disabled="isDisabled"
-    :aria-label="ariaLabel || label || undefined"
+    :aria-label="ariaLabel || (typeof label === 'string' ? label : undefined)"
   >
     <span :class="ns.e('input')">
       <span :class="ns.e('inner')">

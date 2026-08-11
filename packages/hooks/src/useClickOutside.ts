@@ -7,7 +7,7 @@ export type { EventTargetLike, UseEventListenerOptions } from './useEventListene
  */
 export interface ClickOutsideOptions {
   /** Additional elements that should NOT trigger the outside-click. */
-  ignore?: Array<EventTargetLike | null | undefined>
+  ignore?: Array<EventTargetLike | { value: EventTargetLike | null | undefined } | null | undefined>
   /** Event type to listen for. Default: 'click' */
   event?: string
 }
@@ -45,7 +45,12 @@ export function useClickOutside(
     // Check if click was inside any ignored element
     for (const ignoredEl of ignore) {
       if (!ignoredEl) continue
-      if (contains(ignoredEl, clickedTarget)) return
+      const resolved = (isRefTarget(ignoredEl) ? ignoredEl.value : ignoredEl) as
+        | EventTargetLike
+        | null
+        | undefined
+      if (!resolved) continue
+      if (contains(resolved, clickedTarget)) return
     }
 
     handler(e as MouseEvent)

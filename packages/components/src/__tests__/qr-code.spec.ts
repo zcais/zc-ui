@@ -7,9 +7,7 @@ vi.mock('qrcode', () => ({
   default: {
     toCanvas: vi.fn(),
     toDataURL: vi.fn().mockResolvedValue('data:image/png;base64,mockQRCodeData'),
-    toString: vi
-      .fn()
-      .mockResolvedValue('<svg xmlns="http://www.w3.org/2000/svg"></svg>'),
+    toString: vi.fn().mockResolvedValue('<svg xmlns="http://www.w3.org/2000/svg"></svg>'),
     create: vi.fn(),
   },
 }))
@@ -82,7 +80,7 @@ describe('ZcQRCode', () => {
       expect.objectContaining({
         width: 160,
         errorCorrectionLevel: 'M',
-      }),
+      })
     )
   })
 
@@ -100,7 +98,7 @@ describe('ZcQRCode', () => {
       'colored',
       expect.objectContaining({
         color: { dark: '#ff0000', light: '#00ff00' },
-      }),
+      })
     )
   })
 
@@ -112,7 +110,7 @@ describe('ZcQRCode', () => {
     expect(QRCodeLib.toCanvas).toHaveBeenCalledWith(
       expect.anything(),
       'test',
-      expect.objectContaining({ errorCorrectionLevel: 'H' }),
+      expect.objectContaining({ errorCorrectionLevel: 'H' })
     )
   })
 
@@ -124,7 +122,7 @@ describe('ZcQRCode', () => {
     expect(QRCodeLib.toCanvas).toHaveBeenCalledWith(
       expect.anything(),
       'test',
-      expect.objectContaining({ margin: 2 }),
+      expect.objectContaining({ margin: 2 })
     )
   })
 
@@ -136,7 +134,7 @@ describe('ZcQRCode', () => {
     expect(QRCodeLib.toCanvas).toHaveBeenCalledWith(
       expect.anything(),
       'test',
-      expect.objectContaining({ width: 300 }),
+      expect.objectContaining({ width: 300 })
     )
   })
 
@@ -147,7 +145,7 @@ describe('ZcQRCode', () => {
     await flushPromises()
     expect(QRCodeLib.toString).toHaveBeenCalledWith(
       'svg-test',
-      expect.objectContaining({ type: 'svg' }),
+      expect.objectContaining({ type: 'svg' })
     )
   })
 
@@ -156,10 +154,7 @@ describe('ZcQRCode', () => {
       props: { value: 'img-test', type: 'image' },
     })
     await flushPromises()
-    expect(QRCodeLib.toDataURL).toHaveBeenCalledWith(
-      'img-test',
-      expect.objectContaining({}),
-    )
+    expect(QRCodeLib.toDataURL).toHaveBeenCalledWith('img-test', expect.objectContaining({}))
   })
 
   /* ---------------------------- Events ----------------------------- */
@@ -173,9 +168,7 @@ describe('ZcQRCode', () => {
   })
 
   it('emits error event when generation fails', async () => {
-    vi.mocked(QRCodeLib.toCanvas).mockRejectedValueOnce(
-      new Error('Too much data'),
-    )
+    vi.mocked(QRCodeLib.toCanvas).mockRejectedValueOnce(new Error('Too much data'))
     const wrapper = mount(QRCode, {
       props: { value: 'a'.repeat(10000) },
     })
@@ -299,11 +292,7 @@ describe('ZcQRCode', () => {
     await wrapper.setProps({ value: 'updated' })
     await flushPromises()
 
-    expect(QRCodeLib.toCanvas).toHaveBeenCalledWith(
-      expect.anything(),
-      'updated',
-      expect.anything(),
-    )
+    expect(QRCodeLib.toCanvas).toHaveBeenCalledWith(expect.anything(), 'updated', expect.anything())
   })
 
   it('re-renders when size changes', async () => {
@@ -319,7 +308,7 @@ describe('ZcQRCode', () => {
     expect(QRCodeLib.toCanvas).toHaveBeenCalledWith(
       expect.anything(),
       'test',
-      expect.objectContaining({ width: 200 }),
+      expect.objectContaining({ width: 200 })
     )
   })
 
@@ -336,7 +325,7 @@ describe('ZcQRCode', () => {
     expect(QRCodeLib.toCanvas).toHaveBeenCalledWith(
       expect.anything(),
       'test',
-      expect.objectContaining({ errorCorrectionLevel: 'Q' }),
+      expect.objectContaining({ errorCorrectionLevel: 'Q' })
     )
   })
 
@@ -353,7 +342,7 @@ describe('ZcQRCode', () => {
     expect(QRCodeLib.toCanvas).toHaveBeenCalledWith(
       expect.anything(),
       'test',
-      expect.objectContaining({ color: { dark: '#ff0000', light: '#ffffff' } }),
+      expect.objectContaining({ color: { dark: '#ff0000', light: '#ffffff' } })
     )
   })
 
@@ -361,7 +350,7 @@ describe('ZcQRCode', () => {
 
   it('sets up auto-refresh interval when refreshInterval is set', async () => {
     vi.useFakeTimers()
-    const wrapper = mount(QRCode, {
+    mount(QRCode, {
       props: { value: 'test', refreshInterval: 2000 },
     })
     await flushPromises()

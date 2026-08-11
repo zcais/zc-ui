@@ -1,12 +1,11 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { defineComponent, ref, reactive, nextTick, h } from 'vue'
+import { defineComponent, ref, reactive, nextTick } from 'vue'
 import Form from '../form/form.vue'
 import FormItem from '../form/form-item.vue'
 import Input from '../input/input.vue'
-import { createFormArray, useFormArray } from '../form/useFormArray'
-import { validateField, normaliseRules } from '../form/validate'
-import { formContextKey } from '../form/types'
+import { createFormArray } from '../form/useFormArray'
+import { validateField } from '../form/validate'
 
 // ============================================================
 // useFormArray Tests
@@ -254,7 +253,6 @@ describe('Form Enhancements', () => {
     await nextTick()
 
     // With validateOnValueChange=false, no auto-validation should happen
-    const formRef = wrapper.findComponent(Form).vm as any
     // Manually validate to confirm no auto-validation state
     expect(wrapper.find('.zc-form-item__error').exists()).toBe(false)
   })

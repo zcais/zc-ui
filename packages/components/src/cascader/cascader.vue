@@ -426,7 +426,7 @@ function handleKeyDown(event: KeyboardEvent) {
         <div v-else :class="ns.e('panels')">
           <!-- Virtual scroll mode -->
           <template v-if="virtualScroll">
-            <div v-for="(panel, panelIdx) in panels" :key="panelIdx" :class="ns.e('menu')">
+            <div v-for="(_panel, panelIdx) in panels" :key="panelIdx" :class="ns.e('menu')">
               <div
                 v-if="virtualPanels[panelIdx]"
                 :ref="(virtualPanels[panelIdx] as any).containerRef"

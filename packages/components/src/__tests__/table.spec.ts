@@ -1070,7 +1070,7 @@ describe('ZcTable', () => {
           data: bigData,
           virtual: true,
           height: 300,
-          treeProps: { parentId: 'parentId' },
+          treeProps: { children: 'children' },
         },
       })
       // 应该打印警告

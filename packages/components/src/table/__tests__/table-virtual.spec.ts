@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
-import { mount, VueWrapper } from '@vue/test-utils'
-import { defineComponent, nextTick, ref } from 'vue'
+import { mount } from '@vue/test-utils'
+import { nextTick } from 'vue'
 import ZcTable from '../table.vue'
 import type { TableColumn } from '../types'
 

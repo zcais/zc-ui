@@ -49,10 +49,10 @@ const props = withDefaults(
     draggable?: boolean
     /** Custom node class */
     nodeClass?: string | ((data: TreeNodeData) => string)
-  /** Enable virtual scrolling for large datasets */
-  virtual?: boolean
-    }>(),
-    {
+    /** Enable virtual scrolling for large datasets */
+    virtual?: boolean
+  }>(),
+  {
     data: () => [],
     checkedKeys: () => [],
     expandedKeys: () => [],
@@ -71,8 +71,8 @@ const props = withDefaults(
     indent: 16,
     props: () => ({}),
     emptyText: 'No data',
-  draggable: false,
-nodeClass: '',
+    draggable: false,
+    nodeClass: '',
     virtual: false,
   }
 )
@@ -487,6 +487,8 @@ const {
   itemHeight: virtualItemHeight,
   overscan: 5,
 })
+
+defineExpose({ virtualContainerRef })
 </script>
 
 <template>
@@ -498,15 +500,15 @@ const {
       <slot name="empty">{{ emptyText }}</slot>
     </div>
     <!-- Virtual scroll mode -->
-      <template v-else-if="virtual">
-        <div
+    <template v-else-if="virtual">
+      <div
         ref="virtualContainerRef"
         :class="ns.e('virtual-list')"
-        style="height: 300px; overflow-y: auto;"
+        style="height: 300px; overflow-y: auto"
       >
-    <div :style="{ height: `${virtualTotalHeight}px`, position: 'relative' }">
-  <div
-:style="{ transform: `translateY(${virtualOffsetY}px)` }"
+        <div :style="{ height: `${virtualTotalHeight}px`, position: 'relative' }">
+          <div
+            :style="{ transform: `translateY(${virtualOffsetY}px)` }"
             class="zc-tree-virtual-wrapper"
           >
             <tree-node
@@ -556,12 +558,12 @@ const {
   overflow: auto;
   border: 1px solid var(--color-zc-border-light, #e4e7ed);
   border-radius: 4px;
-  }
-  
-  .zc-tree-virtual-wrapper {
+}
+
+.zc-tree-virtual-wrapper {
   position: absolute;
   top: 0;
-left: 0;
+  left: 0;
   right: 0;
 }
 

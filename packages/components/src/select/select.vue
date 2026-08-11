@@ -509,7 +509,15 @@ function blur() {
   if (visible.value) closeDropdown()
 }
 
-defineExpose({ visible, focus, blur, openDropdown, closeDropdown, toggleSelectAll })
+defineExpose({
+  visible,
+  focus,
+  blur,
+  openDropdown,
+  closeDropdown,
+  toggleSelectAll,
+  virtualContainerRef,
+})
 </script>
 
 <template>

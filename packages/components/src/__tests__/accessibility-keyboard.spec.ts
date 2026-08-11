@@ -4,7 +4,6 @@ import { nextTick } from 'vue'
 import ZcTabs from '../tabs/tabs.vue'
 import ZcTabPane from '../tabs/tab-pane.vue'
 import ZcSwitch from '../switch/switch.vue'
-import ZcRadioGroup from '../radio/radio-group.vue'
 import ZcRadio from '../radio/radio.vue'
 import ZcCheckbox from '../checkbox/checkbox.vue'
 import ZcCollapseItem from '../collapse/collapse-item.vue'
@@ -228,7 +227,7 @@ describe('Keyboard: Tabs (roving tabindex)', () => {
     return mount(ZcTabs, {
       props: { modelValue: 'tab1' },
       slots: {
-        default: [{ __v_isVNode: true, type: 'div', children: 'Content 1' }],
+        default: [{ __v_isVNode: true, type: 'div', children: 'Content 1' }] as any,
       },
       global: {
         components: { ZcTabPane },

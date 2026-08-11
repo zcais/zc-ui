@@ -26,6 +26,8 @@ export interface NotificationConfig {
   max?: number
   /** Default auto-close duration in ms */
   duration?: number
+  /** Whether to show the close button by default */
+  showClose?: boolean
   /** Default position */
   position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left'
 }
