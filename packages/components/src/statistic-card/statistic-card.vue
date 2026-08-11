@@ -188,6 +188,7 @@ function handleClick() {
   --zc-sc-prefix-color: var(--color-zc-text-regular, #606266);
   --zc-sc-box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.06);
   --zc-sc-hover-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.1);
+  min-width: 200px;
   background-color: var(--zc-sc-bg-color);
   border-radius: var(--zc-sc-border-radius);
   box-shadow: var(--zc-sc-box-shadow);
@@ -279,17 +280,17 @@ function handleClick() {
 }
 
 /* ---- Trend: up ---- */
-.zc-statistic-card__trend--up {
+.zc-statistic-card__trend.zc-statistic-card--up {
   color: var(--zc-sc-trend-up-color);
 }
 
 /* ---- Trend: down ---- */
-.zc-statistic-card__trend--down {
+.zc-statistic-card__trend.zc-statistic-card--down {
   color: var(--zc-sc-trend-down-color);
 }
 
 /* ---- Trend: none ---- */
-.zc-statistic-card__trend--none {
+.zc-statistic-card__trend.zc-statistic-card--none {
   color: var(--zc-sc-trend-label-color);
 }
 
