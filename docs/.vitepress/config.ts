@@ -102,6 +102,7 @@ export default defineConfig({
             { text: 'Grid 网格', link: '/components/grid' },
             { text: 'Carousel 走马灯', link: '/components/carousel' },
             { text: 'Splitter 分栏面板', link: '/components/splitter' },
+            { text: 'Masonry 瀑布流', link: '/components/masonry' },
           ],
         },
         {
@@ -112,6 +113,7 @@ export default defineConfig({
             { text: 'Divider 分割线', link: '/components/divider' },
             { text: 'Collapse 折叠面板', link: '/components/collapse' },
             { text: 'Scrollbar 滚动条', link: '/components/scrollbar' },
+            { text: 'ErrorBoundary 错误边界', link: '/components/error-boundary' },
           ],
         },
         {
@@ -166,6 +168,10 @@ export default defineConfig({
             { text: 'TextEllipsis 文本省略', link: '/components/text-ellipsis' },
             { text: 'Spin 加载', link: '/components/spin' },
             { text: 'Editable 行内编辑', link: '/components/editable' },
+            { text: 'Comment 评论', link: '/components/comment' },
+            { text: 'CodeBlock 代码高亮', link: '/components/code-block' },
+            { text: 'CountTo 数字动画', link: '/components/count-to' },
+            { text: 'StatisticCard 统计卡片', link: '/components/statistic-card' },
           ],
         },
         {
@@ -182,6 +188,7 @@ export default defineConfig({
             { text: 'Message 消息提示', link: '/components/message' },
             { text: 'Notification 通知', link: '/components/notification' },
             { text: 'Loading 加载', link: '/components/loading' },
+            { text: 'ActionSheet 底部操作面板', link: '/components/action-sheet' },
           ],
         },
         {
