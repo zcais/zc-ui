@@ -1,6 +1,6 @@
 {
   "name": "@zc-ui/nuxt",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Nuxt 3 module for ZC UI — auto-imports components, composables, and the default theme.",
   "license": "MIT",
   "author": "ZC UI Team",

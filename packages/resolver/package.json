@@ -1,6 +1,6 @@
 {
   "name": "@zc-ui/resolver",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "ZC UI resolver for unplugin-vue-components and unplugin-auto-import",
   "license": "MIT",
   "author": "ZC UI Team",
