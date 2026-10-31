@@ -3,6 +3,8 @@ import { computed, ref, shallowRef, watch } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
 import { useClickOutside } from '@zc-ui/hooks'
 import { useLocale } from '@zc-ui/locale'
+import { usePopper } from '../popper/usePopper'
+import { useFormDisabled, useFormSize, useFormItem } from '../form/use-form'
 import type { ColorFormat } from './types'
 
 defineOptions({ name: 'ZcColorPicker' })
@@ -19,7 +21,7 @@ const props = withDefaults(
   {
     modelValue: '#409eff',
     disabled: false,
-    size: 'medium',
+    size: undefined,
     format: 'hex',
     showAlpha: false,
     predefine: () => [],
@@ -34,12 +36,36 @@ const emit = defineEmits<{
 
 const ns = useNamespace('color-picker')
 const { t } = useLocale()
+
+// ---- Form context integration ----
+// Priority: explicit prop > ZcFormItem > ZcForm > ConfigProvider global > 'medium'
+// Size union has no 'mini', so 'mini' degrades to 'small'
+const formSize = useFormSize(() => props.size)
+const formDisabled = useFormDisabled(() => props.disabled)
+const formItem = useFormItem()
+const isDisabled = formDisabled
+const effectiveSize = computed<'large' | 'medium' | 'small'>(() => {
+  const resolved = formSize.value ?? 'medium'
+  return resolved === 'mini' ? 'small' : (resolved as 'large' | 'medium' | 'small')
+})
+
 const containerRef = shallowRef<HTMLElement>()
 const svRef = shallowRef<HTMLElement>()
+const dropdownRef = shallowRef<HTMLElement>()
 
 const visible = ref(false)
 const color = ref({ h: 220, s: 100, v: 100, a: 1 })
 const history = ref<string[]>([])
+
+// ---- Dropdown positioning (usePopper absolute strategy) ----
+const { styles: dropdownStyles } = usePopper({
+  reference: containerRef,
+  popper: dropdownRef,
+  placement: 'bottom-start',
+  offset: 4,
+  strategy: 'absolute',
+  visible,
+})
 
 useClickOutside(containerRef, () => {
   if (visible.value) closePicker()
@@ -249,14 +275,14 @@ const svBackground = computed(() => {
 
 const classes = computed(() => [
   ns.b(),
-  ns.m(props.size),
-  ns.is('disabled', props.disabled),
+  ns.m(effectiveSize.value),
+  ns.is('disabled', isDisabled.value),
   ns.is('open', visible.value),
 ])
 
 // ---- SV panel interaction ----
 function handleSVMouseDown(event: MouseEvent) {
-  if (props.disabled) return
+  if (isDisabled.value) return
   handleSVMove(event)
   document.addEventListener('mousemove', handleSVMove)
   document.addEventListener('mouseup', handleSVMouseUp)
@@ -305,6 +331,8 @@ function confirmColor() {
   const str = getCurrentColorStr()
   emit('update:modelValue', str)
   emit('change', str)
+  // Bridge to form-item validation rules with trigger: 'change'
+  formItem?.validate('change')
 
   if (!history.value.includes(str)) {
     history.value = [str, ...history.value].slice(0, 8)
@@ -322,7 +350,7 @@ function closePicker() {
 }
 
 function togglePicker() {
-  if (props.disabled) return
+  if (isDisabled.value) return
   visible.value = !visible.value
 }
 
@@ -360,7 +388,7 @@ defineExpose({
 
     <!-- Dropdown panel -->
     <transition name="zc-color-picker-dropdown">
-      <div v-show="visible" :class="ns.e('panel')">
+      <div v-show="visible" ref="dropdownRef" :style="dropdownStyles" :class="ns.e('panel')">
         <!-- Saturation-Value panel -->
         <div
           ref="svRef"
@@ -488,8 +516,6 @@ defineExpose({
 /* Panel */
 .zc-color-picker__panel {
   position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
   z-index: var(--z-zc-dropdown, 1000);
   width: 240px;
   padding: 12px;

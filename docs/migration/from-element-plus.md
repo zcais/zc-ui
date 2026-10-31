@@ -30,7 +30,7 @@ npm install @zc-ui/components
 // main.ts
 import { createApp } from 'vue'
 import ZcUI from '@zc-ui/components'
-import '@zc-ui/theme'
+import '@zc-ui/theme/styles'
 import '@zc-ui/components/styles' // 全量 CSS
 
 const app = createApp(App)
@@ -43,10 +43,10 @@ app.use(ZcUI)
 // 无需手动引入——配合 @zc-ui/resolver + unplugin-vue-components
 // vite.config.ts
 import Components from 'unplugin-vue-components/vite'
-import { ZcUIResolver } from '@zc-ui/resolver'
+import { ZcUiResolver } from '@zc-ui/resolver'
 
 export default defineConfig({
-  plugins: [Components({ resolvers: [ZcUIResolver()] })],
+  plugins: [Components({ resolvers: [ZcUiResolver()] })],
 })
 ```
 
@@ -110,7 +110,7 @@ app.use(ElementPlus)
 
 ```ts
 import ZcUI from '@zc-ui/components'
-import '@zc-ui/theme'
+import '@zc-ui/theme/styles'
 import '@zc-ui/components/styles'
 
 app.use(ZcUI)

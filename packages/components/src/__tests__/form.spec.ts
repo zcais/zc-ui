@@ -108,8 +108,12 @@ describe('ZcForm + ZcFormItem Validation', () => {
     const wrapper = mount(TestComp)
     await wrapper.vm.$nextTick()
     const formRef = wrapper.findComponent(Form).vm
-    const valid = await formRef.validate()
-    expect(valid).toBe(false)
+    // validate() rejects with the invalid-fields object on failure (EP semantics)
+    const failure = await formRef.validate().then(
+      () => null,
+      (e) => e
+    )
+    expect(failure).not.toBeNull()
     expect(wrapper.find('.zc-form-item__error').text()).toContain('Name is required')
   })
 
@@ -156,8 +160,12 @@ describe('ZcForm + ZcFormItem Validation', () => {
     const wrapper = mount(TestComp)
     await wrapper.vm.$nextTick()
     const formRef = wrapper.findComponent(Form).vm
-    const valid = await formRef.validate()
-    expect(valid).toBe(false)
+    // validate() rejects with the invalid-fields object on failure (EP semantics)
+    const failure = await formRef.validate().then(
+      () => null,
+      (e) => e
+    )
+    expect(failure).not.toBeNull()
     expect(wrapper.find('.zc-form-item__error').text()).toContain('3-10 chars')
   })
 
@@ -182,8 +190,12 @@ describe('ZcForm + ZcFormItem Validation', () => {
     const wrapper = mount(TestComp)
     await wrapper.vm.$nextTick()
     const formRef = wrapper.findComponent(Form).vm
-    const valid = await formRef.validate()
-    expect(valid).toBe(false)
+    // validate() rejects with the invalid-fields object on failure (EP semantics)
+    const failure = await formRef.validate().then(
+      () => null,
+      (e) => e
+    )
+    expect(failure).not.toBeNull()
     expect(wrapper.find('.zc-form-item__error').text()).toContain('Invalid email')
   })
 
@@ -211,8 +223,12 @@ describe('ZcForm + ZcFormItem Validation', () => {
     const wrapper = mount(TestComp)
     await wrapper.vm.$nextTick()
     const formRef = wrapper.findComponent(Form).vm
-    const valid = await formRef.validate()
-    expect(valid).toBe(false)
+    // validate() rejects with the invalid-fields object on failure (EP semantics)
+    const failure = await formRef.validate().then(
+      () => null,
+      (e) => e
+    )
+    expect(failure).not.toBeNull()
     expect(wrapper.find('.zc-form-item__error').text()).toContain('Must be 18+')
   })
 
@@ -240,8 +256,11 @@ describe('ZcForm + ZcFormItem Validation', () => {
     const wrapper = mount(TestComp)
     await wrapper.vm.$nextTick()
     const formRef = wrapper.findComponent(Form).vm
-    const valid = await formRef.validateField('name')
-    expect(valid).toBe(false)
+    const failure = await formRef.validateField('name').then(
+      () => null,
+      (e) => e
+    )
+    expect(failure).not.toBeNull()
   })
 
   it('hides error messages when showMessage=false', async () => {
@@ -292,7 +311,7 @@ describe('ZcForm + ZcFormItem Validation', () => {
 
     // Validate (should show error)
     const form = wrapper.findComponent(Form)
-    await form.vm.validate()
+    await form.vm.validate().catch(() => undefined)
     await wrapper.vm.$nextTick()
     expect(wrapper.find('.zc-form-item__error').exists()).toBe(true)
 
@@ -304,7 +323,7 @@ describe('ZcForm + ZcFormItem Validation', () => {
     expect(wrapper.find('.zc-form-item__error').exists()).toBe(false)
 
     // Validation should still work after reset
-    await form.vm.validate()
+    await form.vm.validate().catch(() => undefined)
     await wrapper.vm.$nextTick()
     expect(wrapper.find('.zc-form-item__error').exists()).toBe(true)
   })
@@ -338,7 +357,7 @@ describe('ZcForm + ZcFormItem Validation', () => {
 
     const form = wrapper.findComponent(Form)
     // Validate should check both fields
-    await form.vm.validate()
+    await form.vm.validate().catch(() => undefined)
     await wrapper.vm.$nextTick()
     expect(wrapper.findAll('.zc-form-item__error').length).toBe(2)
 
@@ -347,7 +366,7 @@ describe('ZcForm + ZcFormItem Validation', () => {
     await wrapper.vm.$nextTick()
 
     // Validate again — should only check name field
-    await form.vm.validate()
+    await form.vm.validate().catch(() => undefined)
     await wrapper.vm.$nextTick()
     expect(wrapper.findAll('.zc-form-item__error').length).toBe(1)
   })

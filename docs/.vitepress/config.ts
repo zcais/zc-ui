@@ -103,6 +103,8 @@ export default defineConfig({
             { text: 'Carousel 走马灯', link: '/components/carousel' },
             { text: 'Splitter 分栏面板', link: '/components/splitter' },
             { text: 'Masonry 瀑布流', link: '/components/masonry' },
+            { text: 'Flex 弹性布局', link: '/components/flex' },
+            { text: 'InfiniteScroll 无限滚动', link: '/components/infinite-scroll' },
           ],
         },
         {
@@ -137,6 +139,7 @@ export default defineConfig({
             { text: 'Upload 上传', link: '/components/upload' },
             { text: 'Mention 提及', link: '/components/mention' },
             { text: 'InputOTP 验证码输入', link: '/components/input-otp' },
+            { text: 'InputTag 标签输入', link: '/components/input-tag' },
             { text: 'Form 表单', link: '/components/form' },
           ],
         },
@@ -171,6 +174,8 @@ export default defineConfig({
             { text: 'Comment 评论', link: '/components/comment' },
             { text: 'CodeBlock 代码高亮', link: '/components/code-block' },
             { text: 'StatisticCard 统计卡片', link: '/components/statistic-card' },
+            { text: 'ImageViewer 图片预览', link: '/components/image-viewer' },
+            { text: 'Typography 排版', link: '/components/typography' },
           ],
         },
         {
@@ -188,6 +193,8 @@ export default defineConfig({
             { text: 'Notification 通知', link: '/components/notification' },
             { text: 'Loading 加载', link: '/components/loading' },
             { text: 'ActionSheet 底部操作面板', link: '/components/action-sheet' },
+            { text: 'MessageBox 消息弹框', link: '/components/message-box' },
+            { text: 'ContextMenu 右键菜单', link: '/components/context-menu' },
           ],
         },
         {

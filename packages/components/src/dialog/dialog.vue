@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, computed, watch, onBeforeUnmount, shallowRef, nextTick } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
-import { useZIndex, useFocusTrap } from '@zc-ui/hooks'
+import { useZIndex, useFocusTrap, lockBodyScroll, unlockBodyScroll } from '@zc-ui/hooks'
+import { useLocale } from '@zc-ui/locale'
 
 defineOptions({ name: 'ZcDialog' })
 
@@ -62,6 +63,7 @@ const emit = defineEmits<{
 }>()
 
 const ns = useNamespace('dialog')
+const { t } = useLocale()
 const { nextZIndex } = useZIndex()
 const focusTrap = useFocusTrap()
 
@@ -100,13 +102,25 @@ const dialogStyle = computed(() => ({
       : 'none',
 }))
 
+// Reference-counted scroll lock: other overlays may be open at the same
+// time, so the body lock is only released when the last one closes.
+let scrollLocked = false
+function acquireScrollLock() {
+  if (!props.lockScroll || scrollLocked) return
+  lockBodyScroll()
+  scrollLocked = true
+}
+function releaseScrollLock() {
+  if (!scrollLocked) return
+  unlockBodyScroll()
+  scrollLocked = false
+}
+
 function open() {
   isVisible.value = true
   zIndex.value = nextZIndex()
   emit('open')
-  if (props.lockScroll && typeof document !== 'undefined') {
-    document.body.style.overflow = 'hidden'
-  }
+  acquireScrollLock()
   // Activate focus trap after transition
   nextTick(() => {
     setTimeout(() => {
@@ -121,9 +135,7 @@ function close() {
   focusTrap.release()
   isVisible.value = false
   emit('close')
-  if (props.lockScroll && typeof document !== 'undefined') {
-    document.body.style.overflow = ''
-  }
+  releaseScrollLock()
 }
 
 function handleClose() {
@@ -193,9 +205,7 @@ watch(
 
 onBeforeUnmount(() => {
   focusTrap.release()
-  if (props.lockScroll && typeof document !== 'undefined') {
-    document.body.style.overflow = ''
-  }
+  releaseScrollLock()
   document.removeEventListener('mousemove', handleDragMove)
   document.removeEventListener('mouseup', handleDragEnd)
 })
@@ -268,7 +278,9 @@ defineExpose({ show, hide, isVisible })
                   v-if="fullscreen"
                   :class="ns.e('fullscreen-btn')"
                   type="button"
-                  :aria-label="isFullScreen ? '退出全屏' : '全屏'"
+                  :aria-label="
+                    isFullScreen ? t('zc.dialog.exitFullscreen') : t('zc.dialog.fullscreen')
+                  "
                   @click="toggleFullScreen"
                 >
                   <svg v-if="!isFullScreen" viewBox="0 0 24 24" fill="none" class="zc-dialog__icon">
@@ -294,7 +306,7 @@ defineExpose({ show, hide, isVisible })
                   v-if="showClose"
                   :class="ns.e('close-btn')"
                   type="button"
-                  aria-label="关闭对话框"
+                  :aria-label="t('zc.dialog.close')"
                   @click="handleClose"
                 >
                   <svg viewBox="0 0 24 24" fill="none" class="zc-dialog__icon">

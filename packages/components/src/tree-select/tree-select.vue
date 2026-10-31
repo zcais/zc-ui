@@ -3,6 +3,8 @@ import { computed, ref, shallowRef } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
 import { useClickOutside } from '@zc-ui/hooks'
 import { useLocale } from '@zc-ui/locale'
+import { usePopper } from '../popper/usePopper'
+import { useFormDisabled, useFormSize, useFormItem } from '../form/use-form'
 import type { TreeSelectOption } from './types'
 import ZcTreeSelectNode from './tree-node.vue'
 
@@ -30,7 +32,7 @@ const props = withDefaults(
     multiple: false,
     filterable: false,
     checkStrictly: false,
-    size: 'medium',
+    size: undefined,
     virtual: false,
   }
 )
@@ -45,13 +47,36 @@ const emit = defineEmits<{
 const ns = useNamespace('tree-select')
 const { t } = useLocale()
 
+// ---- Form context integration ----
+// Priority: explicit prop > ZcFormItem > ZcForm > ConfigProvider global > 'medium'
+// Size union has no 'mini', so 'mini' degrades to 'small'
+const formSize = useFormSize(() => props.size)
+const formDisabled = useFormDisabled(() => props.disabled)
+const formItem = useFormItem()
+const isDisabled = formDisabled
+const effectiveSize = computed<'large' | 'medium' | 'small'>(() => {
+  const resolved = formSize.value ?? 'medium'
+  return resolved === 'mini' ? 'small' : (resolved as 'large' | 'medium' | 'small')
+})
+
 const placeholderText = computed(() => props.placeholder || t('zc.treeSelect.placeholder'))
 const searchPlaceholderText = computed(() => t('zc.treeSelect.searchPlaceholder'))
 const noDataText = computed(() => t('zc.treeSelect.noData'))
 
 const containerRef = shallowRef<HTMLElement>()
+const dropdownRef = shallowRef<HTMLElement>()
 
 const visible = ref(false)
+
+// ---- Dropdown positioning (usePopper absolute strategy) ----
+const { styles: dropdownStyles } = usePopper({
+  reference: containerRef,
+  popper: dropdownRef,
+  placement: 'bottom-start',
+  offset: 4,
+  strategy: 'absolute',
+  visible,
+})
 const isFocused = ref(false)
 const expandedKeys = ref<Set<string | number>>(new Set())
 const searchText = ref('')
@@ -128,8 +153,8 @@ const filteredData = computed<TreeSelectOption[]>(() => {
 
 const classes = computed(() => [
   ns.b(),
-  ns.m(props.size),
-  ns.is('disabled', props.disabled),
+  ns.m(effectiveSize.value),
+  ns.is('disabled', isDisabled.value),
   ns.is('focused', isFocused.value),
   ns.is('open', visible.value),
 ])
@@ -159,10 +184,14 @@ function selectNode(option: TreeSelectOption) {
     else current.push(option.value)
     emit('update:modelValue', current)
     emit('change', current)
+    // Bridge to form-item validation rules with trigger: 'change'
+    formItem?.validate('change')
   } else {
     if (props.checkStrictly || isLeaf(option)) {
       emit('update:modelValue', option.value)
       emit('change', option.value)
+      // Bridge to form-item validation rules with trigger: 'change'
+      formItem?.validate('change')
       closeDropdown()
     } else {
       toggleExpand(option.value)
@@ -171,7 +200,7 @@ function selectNode(option: TreeSelectOption) {
 }
 
 function toggleDropdown() {
-  if (props.disabled) return
+  if (isDisabled.value) return
   if (visible.value) {
     closeDropdown()
   } else {
@@ -200,6 +229,8 @@ function handleClear(event: Event) {
     emit('update:modelValue', undefined)
     emit('change', undefined)
   }
+  // Bridge to form-item validation rules with trigger: 'change'
+  formItem?.validate('change')
 }
 
 function handleSearchInput(event: Event) {
@@ -208,13 +239,15 @@ function handleSearchInput(event: Event) {
 }
 
 function removeMultipleItem(value: string | number) {
-  if (props.disabled) return
+  if (isDisabled.value) return
   const current = Array.isArray(props.modelValue) ? [...props.modelValue] : []
   const index = current.indexOf(value)
   if (index >= 0) {
     current.splice(index, 1)
     emit('update:modelValue', current)
     emit('change', current)
+    // Bridge to form-item validation rules with trigger: 'change'
+    formItem?.validate('change')
   }
 }
 
@@ -255,7 +288,7 @@ defineExpose({
 
       <!-- Clear -->
       <span
-        v-if="clearable && displayText && !disabled"
+        v-if="clearable && displayText && !isDisabled"
         :class="ns.e('clear')"
         @click="handleClear"
       >
@@ -289,7 +322,7 @@ defineExpose({
 
     <!-- Dropdown -->
     <transition name="zc-tree-select-dropdown">
-      <div v-show="visible" :class="ns.e('dropdown')">
+      <div v-show="visible" ref="dropdownRef" :style="dropdownStyles" :class="ns.e('dropdown')">
         <div v-if="filterable" :class="ns.e('search')">
           <input
             :class="ns.e('search-input')"
@@ -442,9 +475,7 @@ defineExpose({
 /* Dropdown */
 .zc-tree-select__dropdown {
   position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
-  right: 0;
+  width: 100%;
   z-index: var(--z-zc-dropdown, 1000);
   background: var(--color-zc-white, #fff);
   border: 1px solid var(--color-zc-border-light, #e4e7ed);

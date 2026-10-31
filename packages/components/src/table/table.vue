@@ -585,6 +585,117 @@ function emitSelectionChange() {
 }
 
 // ============================================================
+// Imperative API (Element Plus compatible)
+// ============================================================
+
+/** Rows currently selected, in data order. */
+function getSelectionRows(): Record<string, any>[] {
+  const sourceData = props.draggable ? localData.value : props.data
+  return sourceData.filter((row) => selectedRows.value.has(getRowKeyValue(row)))
+}
+
+/** Clear all selected rows. */
+function clearSelection() {
+  if (selectedRows.value.size === 0) return
+  selectedRows.value = new Set()
+  emitSelectionChange()
+}
+
+/** Select or deselect (or toggle when `selected` is omitted) a single row. */
+function toggleRowSelection(row: Record<string, any>, selected?: boolean) {
+  handleRowSelect(row, selected)
+}
+
+/** Toggle select-all across the currently displayed rows. */
+function toggleAllSelection() {
+  isAllSelected.value = !isAllSelected.value
+}
+
+/** Expand, collapse, or toggle a tree row. */
+function toggleRowExpansion(row: Record<string, any>, expanded?: boolean) {
+  const key = getRowKeyValue(row)
+  const willExpand = expanded ?? !expandedTreeKeys.value.has(key)
+  if (willExpand === expandedTreeKeys.value.has(key)) return
+  if (willExpand) {
+    expandedTreeKeys.value.add(key)
+  } else {
+    expandedTreeKeys.value.delete(key)
+  }
+  expandedTreeKeys.value = new Set(expandedTreeKeys.value)
+  emit('tree-toggle', row, willExpand)
+}
+
+/** Expand, collapse, or toggle an expandable row. */
+function toggleRowExpand(row: Record<string, any>, expanded?: boolean) {
+  const key = getRowKeyValue(row)
+  const willExpand = expanded ?? !expandedRowKeys.value.has(key)
+  if (willExpand === expandedRowKeys.value.has(key)) return
+  if (willExpand) {
+    expandedRowKeys.value.add(key)
+  } else {
+    expandedRowKeys.value.delete(key)
+  }
+  expandedRowKeys.value = new Set(expandedRowKeys.value)
+  emit('expand-change', row, willExpand)
+}
+
+/** Set the sort state programmatically (does not loop through `custom` sorters). */
+function sort(prop: string, order: SortOrder) {
+  sortState.value = { prop, order }
+  emit('sort-change', { prop, order })
+}
+
+/** Clear the current sort. */
+function clearSort() {
+  if (!sortState.value.prop) return
+  sortState.value = { prop: '', order: null }
+  emit('sort-change', { prop: '', order: null })
+}
+
+/** Clear filters for one column, or all columns when `prop` is omitted. */
+function clearFilter(prop?: string) {
+  if (prop) {
+    if (!(prop in filterState.value)) return
+    const next = { ...filterState.value }
+    delete next[prop]
+    filterState.value = next
+  } else {
+    if (Object.keys(filterState.value).length === 0) return
+    filterState.value = {}
+  }
+  emit('filter-change', { ...filterState.value })
+}
+
+/** Set the scroll container's vertical scroll position. */
+function setScrollTop(top: number) {
+  if (wrapperRef.value) {
+    wrapperRef.value.scrollTop = top
+  }
+}
+
+/**
+ * Scroll a row into view. Accepts a zero-based data index or a rowKey value.
+ * Uses the virtual scroller when virtual scrolling is active.
+ */
+function scrollToRow(indexOrKey: number | string) {
+  let index = -1
+  if (typeof indexOrKey === 'number') {
+    index = indexOrKey
+  } else {
+    index = renderRows.value.findIndex((r) => getRowKeyValue(r.row) === indexOrKey)
+  }
+  if (index < 0) return
+
+  if (isVirtualActive.value) {
+    scrollToIndex(index)
+    return
+  }
+  const body = wrapperRef.value?.querySelector('tbody')
+  const rowEl = body?.children[index] as HTMLElement | undefined
+  rowEl?.scrollIntoView({ block: 'nearest' })
+}
+
+// ============================================================
 // Current Highlighted Row
 // ============================================================
 const currentRowIndex = ref<number>(-1)
@@ -703,7 +814,7 @@ const summaryValues = computed<(string | VNode)[]>(() => {
 
   // Default: sum numeric columns
   return displayColumns.value.map((col, index) => {
-    if (index === 0) return props.summaryText || '合计'
+    if (index === 0) return props.summaryText || t('zc.table.summaryText')
     const prop = col.prop || ''
     const sum = processedData.value.reduce((acc, row) => {
       const val = Number(row[prop])
@@ -985,6 +1096,18 @@ defineExpose({
   handleRowSelect,
   handleSortClick,
   handleFilterToggle,
+  // Imperative API (Element Plus compatible)
+  getSelectionRows,
+  clearSelection,
+  toggleRowSelection,
+  toggleAllSelection,
+  toggleRowExpansion,
+  toggleRowExpand,
+  sort,
+  clearSort,
+  clearFilter,
+  setScrollTop,
+  scrollToRow,
 })
 </script>
 

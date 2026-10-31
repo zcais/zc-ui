@@ -106,3 +106,11 @@
   { name: 'prefix', description: '输入框头部图标' },
   { name: 'suffix', description: '输入框尾部图标或内容' }
 ]" />
+
+### Exposes
+
+<ApiTable type="methods" :data="[
+  { name: 'focus', description: '聚焦输入框', type: '() => void', default: '—' },
+  { name: 'blur', description: '使输入框失焦', type: '() => void', default: '—' },
+  { name: 'inputRef', description: '原生输入元素引用', type: 'ShallowRef<HTMLInputElement | HTMLTextAreaElement>', default: '—' }
+]" />

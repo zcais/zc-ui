@@ -14,9 +14,14 @@ describe('ZcRadio', () => {
     expect(wrapper.element.tagName).toBe('LABEL')
   })
 
-  it('has role="radio" for accessibility', () => {
+  it('exposes a native radio input as the interactive element (a11y)', () => {
     const wrapper = mount(Radio)
-    expect(wrapper.attributes('role')).toBe('radio')
+    // The native input carries the radio semantics (implicit role="radio");
+    // the wrapping label must not nest a second interactive element.
+    const input = wrapper.find('input[type="radio"]')
+    expect(input.exists()).toBe(true)
+    expect(wrapper.attributes('role')).toBeUndefined()
+    expect(wrapper.attributes('tabindex')).toBeUndefined()
   })
 
   // ---- Checked state ----
@@ -34,16 +39,16 @@ describe('ZcRadio', () => {
     expect(wrapper.classes()).not.toContain('is-checked')
   })
 
-  it('sets aria-checked attribute correctly', () => {
+  it('reflects checked state on the native input', () => {
     const checked = mount(Radio, {
       props: { modelValue: 'a', label: 'a' },
     })
-    expect(checked.attributes('aria-checked')).toBe('true')
+    expect((checked.find('input[type="radio"]').element as HTMLInputElement).checked).toBe(true)
 
     const unchecked = mount(Radio, {
       props: { modelValue: 'b', label: 'a' },
     })
-    expect(unchecked.attributes('aria-checked')).toBe('false')
+    expect((unchecked.find('input[type="radio"]').element as HTMLInputElement).checked).toBe(false)
   })
 
   // ---- Disabled state ----
@@ -54,11 +59,11 @@ describe('ZcRadio', () => {
     expect(wrapper.classes()).toContain('is-disabled')
   })
 
-  it('sets aria-disabled attribute when disabled', () => {
+  it('disables the native input when disabled', () => {
     const wrapper = mount(Radio, {
       props: { disabled: true },
     })
-    expect(wrapper.attributes('aria-disabled')).toBe('true')
+    expect((wrapper.find('input[type="radio"]').element as HTMLInputElement).disabled).toBe(true)
   })
 
   it('disables the hidden input when disabled', () => {

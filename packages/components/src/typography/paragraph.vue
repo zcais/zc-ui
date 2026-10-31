@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue'
 import { useNamespace, useClipboard } from '@zc-ui/hooks'
+import { useLocale } from '@zc-ui/locale'
 
 defineOptions({ name: 'ZcParagraph' })
 
@@ -47,6 +48,7 @@ const emit = defineEmits<{
 
 const ns = useNamespace('paragraph')
 const { copy, copied } = useClipboard()
+const { t } = useLocale()
 
 // ---- Ellipsis logic ----
 const ellipsisConfig = computed<ParagraphEllipsisConfig>(() => {
@@ -55,8 +57,8 @@ const ellipsisConfig = computed<ParagraphEllipsisConfig>(() => {
   return {
     rows: props.ellipsis.rows ?? 3,
     expandable: props.ellipsis.expandable ?? false,
-    expandText: props.ellipsis.expandText ?? '展开',
-    collapseText: props.ellipsis.collapseText ?? '收起',
+    expandText: props.ellipsis.expandText ?? t('zc.textEllipsis.expand'),
+    collapseText: props.ellipsis.collapseText ?? t('zc.textEllipsis.collapse'),
     suffix: props.ellipsis.suffix ?? '...',
   }
 })
@@ -159,7 +161,7 @@ const contentStyle = computed(() => {
         v-if="copyable"
         :class="[ns.e('copy'), ns.is('copied', copied)]"
         type="button"
-        :title="copyTooltip ?? (copied ? '已复制' : '复制')"
+        :title="copyTooltip ?? (copied ? t('zc.typography.copied') : t('zc.typography.copy'))"
         @click="handleCopy"
       >
         <svg
@@ -189,7 +191,13 @@ const contentStyle = computed(() => {
         </svg>
       </button>
       <!-- Edit trigger -->
-      <button v-if="editable" :class="ns.e('edit')" type="button" title="编辑" @click="startEdit">
+      <button
+        v-if="editable"
+        :class="ns.e('edit')"
+        type="button"
+        :title="t('zc.typography.edit')"
+        @click="startEdit"
+      >
         <svg
           viewBox="0 0 24 24"
           fill="none"
@@ -216,8 +224,12 @@ const contentStyle = computed(() => {
         @keydown.esc.prevent="cancelEdit"
       />
       <div :class="ns.e('edit-actions')">
-        <button :class="[ns.e('edit-confirm')]" type="button" @click="confirmEdit">确定</button>
-        <button :class="ns.e('edit-cancel')" type="button" @click="cancelEdit">取消</button>
+        <button :class="[ns.e('edit-confirm')]" type="button" @click="confirmEdit">
+          {{ t('common.ok') }}
+        </button>
+        <button :class="ns.e('edit-cancel')" type="button" @click="cancelEdit">
+          {{ t('common.cancel') }}
+        </button>
       </div>
     </template>
   </div>
@@ -401,24 +413,24 @@ const contentStyle = computed(() => {
 }
 
 /* ---- Dark mode ---- */
-html[data-theme='dark'] .zc-paragraph {
+.dark .zc-paragraph {
   --zc-paragraph-color: var(--color-zc-text-primary, #e5eaf3);
 }
 
-html[data-theme='dark'] .zc-paragraph__editor {
+.dark .zc-paragraph__editor {
   background: var(--color-zc-bg-overlay, #1d1e1f);
   border-color: var(--color-zc-border-base, #4c4d4f);
   color: var(--color-zc-text-primary, #e5eaf3);
 }
 
-html[data-theme='dark'] .zc-paragraph__edit-confirm,
-html[data-theme='dark'] .zc-paragraph__edit-cancel {
+.dark .zc-paragraph__edit-confirm,
+.dark .zc-paragraph__edit-cancel {
   background: var(--color-zc-bg-overlay, #1d1e1f);
   border-color: var(--color-zc-border-base, #4c4d4f);
   color: var(--color-zc-text-primary, #e5eaf3);
 }
 
-html[data-theme='dark'] .zc-paragraph__edit-confirm {
+.dark .zc-paragraph__edit-confirm {
   background: var(--color-zc-primary-500, #409eff);
   border-color: var(--color-zc-primary-500, #409eff);
   color: #fff;

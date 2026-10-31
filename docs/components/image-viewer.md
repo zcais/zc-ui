@@ -53,31 +53,31 @@ const initialIndex = ref(1)
 
 ## 属性
 
-| 属性       | 说明                        | 类型       | 默认值  |
-| ---------- | --------------------------- | ---------- | ------- |
-| urlList    | 图片 URL 列表               | `string[]` | `[]`    |
-| modelValue | 当前图片索引（v-model）     | `number`   | `0`     |
-| visible    | 是否可见（v-model:visible） | `boolean`  | `false` |
-| showClose  | 是否显示关闭按钮            | `boolean`  | `true`  |
-| infinite   | 是否无限循环                | `boolean`  | `true`  |
-| zoomRate   | 缩放速率                    | `number`   | `0.2`   |
-| minScale   | 最小缩放比例                | `number`   | `0.2`   |
-| maxScale   | 最大缩放比例                | `number`   | `7`     |
-| zIndex     | 层级                        | `number`   | —       |
+<ApiTable type="props" :data="[
+{ name: 'urlList', description: '图片 URL 列表', type: 'string[]', default: '[]' },
+{ name: 'modelValue', description: '当前图片索引（v-model）', type: 'number', default: '0' },
+{ name: 'visible', description: '是否可见（v-model:visible）', type: 'boolean', default: 'false' },
+{ name: 'showClose', description: '是否显示关闭按钮', type: 'boolean', default: 'true' },
+{ name: 'infinite', description: '是否无限循环', type: 'boolean', default: 'true' },
+{ name: 'zoomRate', description: '缩放速率', type: 'number', default: '0.2' },
+{ name: 'minScale', description: '最小缩放比例', type: 'number', default: '0.2' },
+{ name: 'maxScale', description: '最大缩放比例', type: 'number', default: '7' },
+{ name: 'zIndex', description: '层级', type: 'number', default: '—' }
+]" />
 
 ## 事件
 
-| 事件名            | 说明           | 回调参数          |
-| ----------------- | -------------- | ----------------- |
-| update:modelValue | 索引变化       | `(index: number)` |
-| update:visible    | 可见状态变化   | `(val: boolean)`  |
-| switch            | 切换图片时触发 | `(index: number)` |
-| close             | 关闭时触发     | —                 |
+<ApiTable type="events" :data="[
+{ name: '(index: number)', description: '索引变化' },
+{ name: '(val: boolean)', description: '可见状态变化' },
+{ name: '(index: number)', description: '切换图片时触发' },
+{ name: '—', description: '关闭时触发' }
+]" />
 
 ## 暴露方法
 
-| 方法名               | 说明             |
-| -------------------- | ---------------- |
-| next()               | 切换到下一张     |
-| prev()               | 切换到上一张     |
-| setActiveItem(index) | 设置当前图片索引 |
+<ApiTable type="methods" :data="[
+{ name: 'next()', description: '切换到下一张' },
+{ name: 'prev()', description: '切换到上一张' },
+{ name: 'setActiveItem(index)', description: '设置当前图片索引' }
+]" />

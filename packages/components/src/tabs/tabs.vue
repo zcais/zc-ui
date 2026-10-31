@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, provide, watch, shallowRef } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
+import { useLocale } from '@zc-ui/locale'
 
 defineOptions({ name: 'ZcTabs' })
 
@@ -45,6 +46,7 @@ const emit = defineEmits<{
 }>()
 
 const ns = useNamespace('tabs')
+const { t } = useLocale()
 
 const currentName = ref<string | number>(props.modelValue)
 
@@ -211,7 +213,7 @@ function handleKeydown(event: KeyboardEvent) {
             v-if="pane.closable || closable"
             :class="ns.e('tab-close')"
             role="button"
-            aria-label="关闭标签页"
+            :aria-label="t('zc.tabs.close')"
             @click="handleRemove(pane.name, $event)"
           >
             <svg

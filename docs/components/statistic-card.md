@@ -113,35 +113,35 @@
 
 ### StatisticCard Props
 
-| 属性名     | 说明                                | 类型                       | 默认值             |
-| ---------- | ----------------------------------- | -------------------------- | ------------------ |
-| title      | 卡片标题                            | `string`                   | `''`               |
-| value      | 数值                                | `number \| string`         | `''`               |
-| prefix     | 前缀（如货币符号）                  | `string`                   | `''`               |
-| suffix     | 后缀（如单位）                      | `string`                   | `''`               |
-| trend      | 趋势方向                            | `'up' \| 'down' \| 'none'` | `'none'`           |
-| trendValue | 趋势百分比（如 `12.5` 表示 +12.5%） | `number`                   | -                  |
-| trendLabel | 趋势标签文字                        | `string`                   | `'vs last period'` |
-| decimals   | 小数位数                            | `number`                   | `0`                |
-| separator  | 是否显示千分位分隔符                | `boolean`                  | `true`             |
-| loading    | 是否加载中                          | `boolean`                  | `false`            |
-| bordered   | 是否显示边框                        | `boolean`                  | `true`             |
-| padding    | 卡片内边距（px）                    | `number`                   | `20`               |
+<ApiTable type="props" :data="[
+{ name: 'title', description: '卡片标题', type: 'string', default: '''' },
+{ name: 'value', description: '数值', type: '`number \', default: 'string`' },
+{ name: 'prefix', description: '前缀（如货币符号）', type: 'string', default: '''' },
+{ name: 'suffix', description: '后缀（如单位）', type: 'string', default: '''' },
+{ name: 'trend', description: '趋势方向', type: '`'up' \', default: ''down' \' },
+{ name: 'trendValue', description: '趋势百分比（如 12.5 表示 +12.5%）', type: 'number', default: '—' },
+{ name: 'trendLabel', description: '趋势标签文字', type: 'string', default: ''vs last period'' },
+{ name: 'decimals', description: '小数位数', type: 'number', default: '0' },
+{ name: 'separator', description: '是否显示千分位分隔符', type: 'boolean', default: 'true' },
+{ name: 'loading', description: '是否加载中', type: 'boolean', default: 'false' },
+{ name: 'bordered', description: '是否显示边框', type: 'boolean', default: 'true' },
+{ name: 'padding', description: '卡片内边距（px）', type: 'number', default: '20' }
+]" />
 
 ### StatisticCard Events
 
-| 事件名 | 说明           | 回调参数 |
-| ------ | -------------- | -------- |
-| click  | 点击卡片时触发 | -        |
+<ApiTable type="events" :data="[
+{ name: '—', description: '点击卡片时触发' }
+]" />
 
 ### Slots
 
-| 插槽名  | 说明                                         |
-| ------- | -------------------------------------------- |
-| default | 自定义数值内容                               |
-| title   | 自定义标题                                   |
-| prefix  | 自定义前缀                                   |
-| suffix  | 自定义后缀                                   |
-| trend   | 自定义趋势区域，提供 `trend` 和 `trendValue` |
-| avatar  | 标题右侧自定义图标/头像                      |
-| footer  | 卡片底部内容                                 |
+<ApiTable type="slots" :data="[
+{ name: 'default', description: '自定义数值内容' },
+{ name: 'title', description: '自定义标题' },
+{ name: 'prefix', description: '自定义前缀' },
+{ name: 'suffix', description: '自定义后缀' },
+{ name: 'trend', description: '自定义趋势区域，提供 trend 和 trendValue' },
+{ name: 'avatar', description: '标题右侧自定义图标/头像' },
+{ name: 'footer', description: '卡片底部内容' }
+]" />

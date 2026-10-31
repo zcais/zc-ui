@@ -21,6 +21,7 @@ export const floatButtonGroupKey: InjectionKey<FloatButtonGroupContext> =
 <script setup lang="ts">
 import { computed, provide, ref } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
+import { useLocale } from '@zc-ui/locale'
 
 defineOptions({ name: 'ZcFloatButtonGroup' })
 
@@ -59,6 +60,7 @@ const props = withDefaults(
 )
 
 const ns = useNamespace('float-button-group')
+const { t } = useLocale()
 const expanded = ref(!props.collapsible)
 const groupHover = ref(false)
 const groupFocus = ref(false)
@@ -138,7 +140,7 @@ function handleFocusout() {
       type="button"
       :class="ns.e('trigger')"
       :aria-expanded="open"
-      :aria-label="open ? '折叠悬浮按钮' : '展开悬浮按钮'"
+      :aria-label="open ? t('zc.floatButton.collapse') : t('zc.floatButton.expand')"
       @click="handleTriggerClick"
     >
       <svg
@@ -268,9 +270,7 @@ function handleFocusout() {
 }
 
 /* ---- Dark mode ---- */
-html.zc-dark .zc-float-button-group__trigger,
-.zc-dark .zc-float-button-group__trigger,
-[data-theme='dark'] .zc-float-button-group__trigger {
+.dark .zc-float-button-group__trigger {
   background: var(--color-zc-primary-600, #337ecc);
 }
 </style>

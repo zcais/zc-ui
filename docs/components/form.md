@@ -299,14 +299,15 @@ interface UseFormArrayReturn<T> {
 ### Form Props
 
 <ApiTable type="props" :data="[
-  { name: 'model', description: '表单数据对象', type: 'Record<string, unknown>', default: '—' },
-  { name: 'rules', description: '表单校验规则', type: 'FormRules', default: '{}' },
-  { name: 'labelWidth', description: '标签宽度', type: 'string | number', default: '' },
-  { name: 'labelPosition', description: '标签对齐方式', type: 'left | right | top', default: 'right' },
-  { name: 'showMessage', description: '是否显示校验错误信息', type: 'boolean', default: 'true' },
-  { name: 'inline', description: '是否行内排列', type: 'boolean', default: 'false' },
-  { name: 'validateOnValueChange', description: '是否在值变化时自动校验（Watch 模式）', type: 'boolean', default: 'true' },
-  { name: 'disabled', description: '表单级禁用状态', type: 'boolean', default: 'false' }
+{ name: 'model', description: '表单数据对象', type: 'Record<string, unknown>', default: '—' },
+{ name: 'rules', description: '表单校验规则', type: 'FormRules', default: '{}' },
+{ name: 'labelWidth', description: '标签宽度', type: 'string | number', default: '' },
+{ name: 'labelPosition', description: '标签对齐方式', type: 'left | right | top', default: 'right' },
+{ name: 'showMessage', description: '是否显示校验错误信息', type: 'boolean', default: 'true' },
+{ name: 'inline', description: '是否行内排列', type: 'boolean', default: 'false' },
+{ name: 'validateOnValueChange', description: '是否在值变化时自动校验（Watch 模式）', type: 'boolean', default: 'true' },
+{ name: 'disabled', description: '表单级禁用状态（内部所有控件渲染各自的禁用态）', type: 'boolean', default: 'false' },
+{ name: 'size', description: '表单级尺寸（内部所有控件的默认尺寸）', type: "'large' | 'medium' | 'small' | 'mini'", default: '—' }
 ]" />
 
 ### Form Events
@@ -317,23 +318,25 @@ interface UseFormArrayReturn<T> {
 
 ### Form 方法
 
-<ApiTable type="props" :data="[
-  { name: 'validate', description: '校验所有表单项，返回是否通过', type: '() => Promise<boolean>', default: '—' },
-  { name: 'validateField', description: '校验指定表单项', type: '(name: string) => Promise<boolean>', default: '—' },
-  { name: 'resetFields', description: '重置所有表单项校验状态', type: '() => void', default: '—' },
-  { name: 'clearValidate', description: '清除所有校验信息', type: '() => void', default: '—' }
+<ApiTable type="methods" :data="[
+  { name: 'validate', description: '校验所有表单项。全部通过时 resolve true；有失败时 reject 无效字段对象 { [field]: Array<{ message, field }> }（与 Element Plus 一致）', type: '() => Promise<boolean>', default: '—' },
+  { name: 'validateField', description: '校验指定表单项，reject 语义同 validate', type: '(name: string) => Promise<boolean>', default: '—' },
+  { name: 'resetFields', description: '将所有字段恢复为注册时的初始值并清除校验状态（保留 Date/Map/Set 类型）', type: '() => void', default: '—' },
+  { name: 'clearValidate', description: '清除所有校验信息', type: '() => void', default: '—' },
+  { name: 'scrollToField', description: '平滑滚动到指定字段的表单项', type: '(prop: string) => void', default: '—' }
 ]" />
 
 ### FormItem Props
 
 <ApiTable type="props" :data="[
-  { name: 'prop', description: '字段路径（如 user.name）', type: 'string', default: '—' },
-  { name: 'label', description: '标签文本', type: 'string', default: '—' },
-  { name: 'labelWidth', description: '标签宽度覆盖', type: 'string | number', default: '—' },
-  { name: 'rules', description: '自定义校验规则', type: 'FormItemRule | FormItemRule[]', default: '—' },
-  { name: 'required', description: '是否必填（显示 * 号）', type: 'boolean', default: 'false' },
-  { name: 'showMessage', description: '是否显示错误信息', type: 'boolean', default: 'true' },
-  { name: 'disabled', description: '是否禁用', type: 'boolean', default: 'false' }
+{ name: 'prop', description: '字段路径（如 user.name）', type: 'string', default: '—' },
+{ name: 'label', description: '标签文本', type: 'string', default: '—' },
+{ name: 'labelWidth', description: '标签宽度覆盖', type: 'string | number', default: '—' },
+{ name: 'rules', description: '自定义校验规则', type: 'FormItemRule | FormItemRule[]', default: '—' },
+{ name: 'required', description: '是否必填（显示 \* 号）', type: 'boolean', default: 'false' },
+{ name: 'showMessage', description: '是否显示错误信息', type: 'boolean', default: 'true' },
+{ name: 'disabled', description: '是否禁用（内部控件渲染各自的禁用态）', type: 'boolean', default: 'false' },
+{ name: 'size', description: '尺寸覆盖（优先级高于 Form 的 size）', type: "'large' | 'medium' | 'small' | 'mini'", default: '—' }
 ]" />
 
 ### FormItem Slots
@@ -346,6 +349,7 @@ interface UseFormArrayReturn<T> {
 
 ### FormItem 暴露的方法
 
-<ApiTable type="props" :data="[
-  { name: 'validating', description: '是否正在异步校验中', type: 'Ref<boolean>', default: 'false' }
+<ApiTable type="methods" :data="[
+{ name: 'validate', description: '触发该项校验，可传 trigger 过滤规则', type: "(trigger?: 'blur' | 'change') => Promise<FormItemValidationResult>", default: '—' },
+{ name: 'clearValidate', description: '清除该项校验状态', type: '() => void', default: '—' }
 ]" />

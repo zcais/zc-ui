@@ -240,9 +240,36 @@ const columns = [
   { prop: 'salary', label: '薪资', width: 100, fixed: 'right' },
 ]
 const tableData = [
-  { name: '张三', age: 28, city: '北京', email: 'zhangsan@example.com', address: '朝阳区xx路', phone: '13800001111', company: '科技公司A', salary: 15000 },
-  { name: '李四', age: 32, city: '上海', email: 'lisi@example.com', address: '浦东新区xx路', phone: '13800002222', company: '互联网公司B', salary: 25000 },
-  { name: '王五', age: 25, city: '广州', email: 'wangwu@example.com', address: '天河区xx路', phone: '13800003333', company: '金融公司C', salary: 18000 },
+  {
+    name: '张三',
+    age: 28,
+    city: '北京',
+    email: 'zhangsan@example.com',
+    address: '朝阳区xx路',
+    phone: '13800001111',
+    company: '科技公司A',
+    salary: 15000,
+  },
+  {
+    name: '李四',
+    age: 32,
+    city: '上海',
+    email: 'lisi@example.com',
+    address: '浦东新区xx路',
+    phone: '13800002222',
+    company: '互联网公司B',
+    salary: 25000,
+  },
+  {
+    name: '王五',
+    age: 25,
+    city: '广州',
+    email: 'wangwu@example.com',
+    address: '天河区xx路',
+    phone: '13800003333',
+    company: '金融公司C',
+    salary: 18000,
+  },
 ]
 </script>
 ```
@@ -295,7 +322,13 @@ function spanMethod({ rowIndex, columnIndex }) {
 
 ```vue
 <template>
-  <ZcTable :data="tableData" :columns="columns" border expandable @expand-change="handleExpandChange">
+  <ZcTable
+    :data="tableData"
+    :columns="columns"
+    border
+    expandable
+    @expand-change="handleExpandChange"
+  >
     <template #expand="{ row }">
       <div style="padding: 16px; background: #f9f9f9;">
         <h4>{{ row.name }} 的详细信息</h4>
@@ -498,13 +531,7 @@ function handleCellEdit({ row, column, value, oldValue }) {
 
 ```vue
 <template>
-  <ZcTable
-    :data="tableData"
-    :columns="columns"
-    border
-    show-summary
-    summary-text="总计"
-  />
+  <ZcTable :data="tableData" :columns="columns" border show-summary summary-text="总计" />
 </template>
 
 <script setup>
@@ -656,9 +683,7 @@ value: Math.floor(Math.random() * 10000),
     border
     @sort-change="handleSortChange"
   />
-  <div style="margin-top: 10px;">
-    当前排序: {{ currentSort }}
-  </div>
+  <div style="margin-top: 10px;">当前排序: {{ currentSort }}</div>
 </template>
 
 <script setup>
@@ -681,7 +706,8 @@ const tableData = Array.from({ length: 500 }, (_, i) => ({
 }))
 
 function handleSortChange(sort) {
-  currentSort.value = sort.order === null ? '无' : `${sort.prop} ${sort.order === 'ascending' ? '升序' : '降序'}`
+  currentSort.value =
+    sort.order === null ? '无' : `${sort.prop} ${sort.order === 'ascending' ? '升序' : '降序'}`
 }
 </script>
 ```
@@ -704,9 +730,7 @@ function handleSortChange(sort) {
     border
     @filter-change="handleFilterChange"
   />
-  <div style="margin-top: 10px;">
-    当前筛选: {{ currentFilter }}
-  </div>
+  <div style="margin-top: 10px;">当前筛选: {{ currentFilter }}</div>
 </template>
 
 <script setup>
@@ -763,9 +787,7 @@ function handleFilterChange(filters) {
     selectable
     @selection-change="handleSelectionChange"
   />
-  <div style="margin-top: 10px;">
-    已选择: {{ selectedCount }} 条数据
-  </div>
+  <div style="margin-top: 10px;">已选择: {{ selectedCount }} 条数据</div>
 </template>
 
 <script setup>
@@ -806,14 +828,7 @@ function handleSelectionChange(selection) {
 ```vue
 <template>
   <div>
-    <ZcTable
-      ref="tableRef"
-      :data="tableData"
-      :columns="columns"
-      virtual
-      :height="300"
-      border
-    />
+    <ZcTable ref="tableRef" :data="tableData" :columns="columns" virtual :height="300" border />
     <div style="margin-top: 10px; display: flex; gap: 10px; align-items: center;">
       <span>跳转到行:</span>
       <input
@@ -875,20 +890,22 @@ function scrollToBottom() {
 
 虚拟滚动适用于处理大数据量场景，以下是性能对比：
 
-| 数据量 | 普通渲染 DOM 节点数 | 虚拟滚动 DOM 节点数 | 渲染时间（普通） | 渲染时间（虚拟） |
-|--------|---------------------|---------------------|------------------|------------------|
-| 100 行  | ~100                | ~20                 | ~50ms           | ~30ms           |
-| 1,000 行 | ~1,000              | ~20                 | ~300ms          | ~50ms           |
-| 10,000 行 | ~10,000            | ~20                 | ~3000ms         | ~80ms           |
-| 100,000 行 | OOM               | ~20                 | 浏览器崩溃      | ~150ms          |
+| 数据量     | 普通渲染 DOM 节点数 | 虚拟滚动 DOM 节点数 | 渲染时间（普通） | 渲染时间（虚拟） |
+| ---------- | ------------------- | ------------------- | ---------------- | ---------------- |
+| 100 行     | ~100                | ~20                 | ~50ms            | ~30ms            |
+| 1,000 行   | ~1,000              | ~20                 | ~300ms           | ~50ms            |
+| 10,000 行  | ~10,000             | ~20                 | ~3000ms          | ~80ms            |
+| 100,000 行 | OOM                 | ~20                 | 浏览器崩溃       | ~150ms           |
 
 **虚拟滚动优势：**
+
 - ✅ 大幅减少 DOM 节点数量，提高渲染性能
 - ✅ 滚动流畅，不随数据量增加而卡顿
 - ✅ 内存占用稳定，不会因数据量增加而增长
 - ✅ 支持所有常规功能（排序、筛选、选择等）
 
 **注意事项：**
+
 - ⚠️ 需要设置固定的表格高度
 - ⚠️ 当前仅支持固定行高模式（`estimatedRowHeight`）
 - ⚠️ 不兼容分页、树形表格、合并单元格功能
@@ -998,9 +1015,9 @@ interface SpanValue {
 
 ```ts
 interface TableTreePropsConfig {
-  children?: string    // 子节点字段名，默认 'children'
+  children?: string // 子节点字段名，默认 'children'
   hasChildren?: string // 是否有子节点的字段名（用于懒加载）
-  indent?: number      // 每层缩进宽度（px），默认 16
+  indent?: number // 每层缩进宽度（px），默认 16
 }
 ```
 
@@ -1046,26 +1063,37 @@ interface ColumnResizeEvent {
 
 ### 兼容性说明
 
-| 功能组合 | 兼容性 | 说明 |
-|---------|--------|------|
-| virtual + treeProps | ❌ 不兼容 | 虚拟模式忽略树形结构 |
-| virtual + spanMethod | ❌ 不兼容 | 虚拟模式下合并结果可能错位 |
-| virtual + pagination | ❌ 不兼容 | 虚拟模式仅在非分页时生效 |
-| virtual + sortable | ✅ 兼容 | 排序功能正常工作 |
-| virtual + filterable | ✅ 兼容 | 筛选功能正常工作 |
-| virtual + selectable | ✅ 兼容 | 选择功能正常工作 |
-| virtual + fixed | ✅ 兼容 | 固定列功能正常工作 |
-| spanMethod + fixed | ⚠️ 注意 | 合并单元格可能影响固定列偏移计算 |
-| draggable + treeProps | ⚠️ 注意 | 拖拽基于扁平行索引，非树形层级 |
-| showSummary + pagination | ✅ 兼容 | 合计基于全量数据，非当前页 |
-| editable + treeProps | ✅ 兼容 | 正常工作 |
-| resizable + showColumnSettings | ✅ 兼容 | 正常工作 |
+| 功能组合                       | 兼容性    | 说明                             |
+| ------------------------------ | --------- | -------------------------------- |
+| virtual + treeProps            | ❌ 不兼容 | 虚拟模式忽略树形结构             |
+| virtual + spanMethod           | ❌ 不兼容 | 虚拟模式下合并结果可能错位       |
+| virtual + pagination           | ❌ 不兼容 | 虚拟模式仅在非分页时生效         |
+| virtual + sortable             | ✅ 兼容   | 排序功能正常工作                 |
+| virtual + filterable           | ✅ 兼容   | 筛选功能正常工作                 |
+| virtual + selectable           | ✅ 兼容   | 选择功能正常工作                 |
+| virtual + fixed                | ✅ 兼容   | 固定列功能正常工作               |
+| spanMethod + fixed             | ⚠️ 注意   | 合并单元格可能影响固定列偏移计算 |
+| draggable + treeProps          | ⚠️ 注意   | 拖拽基于扁平行索引，非树形层级   |
+| showSummary + pagination       | ✅ 兼容   | 合计基于全量数据，非当前页       |
+| editable + treeProps           | ✅ 兼容   | 正常工作                         |
+| resizable + showColumnSettings | ✅ 兼容   | 正常工作                         |
 
 ### 暴露的方法 (Exposed Methods)
 
-| 方法名 | 参数 | 说明 |
-|--------|------|------|
-| virtualScrollTo | (index: number, behavior?: ScrollBehavior) | 滚动到指定行索引（从 0 开始），behavior 可选 'auto' 或 'smooth' |
-| startEdit | (row, column) | 开始编辑单元格 |
-| confirmEdit | (row, column) | 确认编辑 |
-| cancelEdit | () | 取消编辑 |
+| 方法名             | 参数                                               | 说明                                                            |
+| ------------------ | -------------------------------------------------- | --------------------------------------------------------------- |
+| clearSelection     | ()                                                 | 清空所有选中行                                                  |
+| getSelectionRows   | ()                                                 | 获取当前选中行（按数据顺序）                                    |
+| toggleRowSelection | (row, selected?: boolean)                          | 选中/取消/切换某一行                                            |
+| toggleAllSelection | ()                                                 | 切换全选（作用于当前展示行）                                    |
+| toggleRowExpansion | (row, expanded?: boolean)                          | 展开/收起/切换树形子行                                          |
+| toggleRowExpand    | (row, expanded?: boolean)                          | 展开/收起/切换可展开行                                          |
+| sort               | (prop: string, order: 'ascending' \| 'descending') | 编程式排序                                                      |
+| clearSort          | ()                                                 | 清除排序                                                        |
+| clearFilter        | (prop?: string)                                    | 清除筛选（不传清除全部）                                        |
+| setScrollTop       | (top: number)                                      | 设置纵向滚动位置                                                |
+| scrollToRow        | (indexOrKey: number \| string)                     | 滚动到指定行（支持索引或 rowKey 值；虚拟滚动下走虚拟滚动定位）  |
+| virtualScrollTo    | (index: number, behavior?: ScrollBehavior)         | 滚动到指定行索引（从 0 开始），behavior 可选 'auto' 或 'smooth' |
+| startEdit          | (row, column)                                      | 开始编辑单元格                                                  |
+| confirmEdit        | (row, column)                                      | 确认编辑                                                        |
+| cancelEdit         | ()                                                 | 取消编辑                                                        |

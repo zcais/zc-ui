@@ -147,7 +147,7 @@
 
 <ApiTable type="props" :data="[
   { name: 'header', description: '卡片标题文本', type: 'string', default: '—' },
-  { name: 'shadow', description: '阴影显示模式', type: '\'always\' | \'hover\' | \'never\'', default: '\'always\'' },
+  { name: 'shadow', description: '阴影显示模式', type: ''always | hover | never'', default: 'always' },
   { name: 'bordered', description: '是否显示边框', type: 'boolean', default: 'true' },
   { name: 'bodyStyle', description: '内容区自定义样式', type: 'string | Record<string, string>', default: '—' },
   { name: 'bodyClass', description: '内容区自定义类名', type: 'string', default: '—' },

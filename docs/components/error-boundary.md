@@ -118,19 +118,19 @@ const RiskyComponent = defineComponent({
 
 ### ErrorBoundary Props
 
-| 属性名           | 说明                           | 类型      | 默认值                              |
-| ---------------- | ------------------------------ | --------- | ----------------------------------- |
-| catchErrors      | 是否捕获错误（`false` 时透传） | `boolean` | `true`                              |
-| showDetails      | 是否显示错误详情折叠           | `boolean` | 开发环境为 `true`，生产环境 `false` |
-| errorTitle       | 错误标题                       | `string`  | `'Something went wrong'`            |
-| errorDescription | 错误描述                       | `string`  | `''`                                |
+<ApiTable type="props" :data="[
+{ name: 'catchErrors', description: '是否捕获错误（false 时透传）', type: 'boolean', default: 'true' },
+{ name: 'showDetails', description: '是否显示错误详情折叠', type: 'boolean', default: '开发环境为 true，生产环境 false' },
+{ name: 'errorTitle', description: '错误标题', type: 'string', default: ''Something went wrong'' },
+{ name: 'errorDescription', description: '错误描述', type: 'string', default: '''' }
+]" />
 
 ### ErrorBoundary Events
 
-| 事件名 | 说明               | 回调参数                       |
-| ------ | ------------------ | ------------------------------ |
-| error  | 捕获到错误时触发   | `(error: Error, info: string)` |
-| reset  | 用户点击重试时触发 | -                              |
+<ApiTable type="events" :data="[
+{ name: '(error: Error, info: string)', description: '捕获到错误时触发' },
+{ name: '—', description: '用户点击重试时触发' }
+]" />
 
 ### ErrorBoundary Methods
 
@@ -142,7 +142,7 @@ const RiskyComponent = defineComponent({
 
 ### Slots
 
-| 插槽名  | 说明                                                   |
-| ------- | ------------------------------------------------------ |
-| default | 正常渲染的子内容                                       |
-| error   | 错误降级 UI，提供 `error`（Error 对象）和 `reset` 方法 |
+<ApiTable type="slots" :data="[
+{ name: 'default', description: '正常渲染的子内容' },
+{ name: 'error', description: '错误降级 UI，提供 error（Error 对象）和 reset 方法' }
+]" />

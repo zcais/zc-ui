@@ -319,26 +319,29 @@ interface SelectOptionGroup {
 ### Props
 
 <ApiTable type="props" :data="[
-  { name: 'modelValue', description: '绑定值', type: 'string | number | (string | number)[]', default: '—' },
-  { name: 'options', description: '选项数据源（扁平）', type: 'SelectOption[]', default: '[]' },
-  { name: 'optionGroups', description: '分组选项数据源', type: 'SelectOptionGroup[]', default: '[]' },
-  { name: 'multiple', description: '是否多选', type: 'boolean', default: 'false' },
-  { name: 'filterable', description: '是否可搜索过滤', type: 'boolean', default: 'false' },
-  { name: 'allowCreate', description: '是否允许创建新选项（需配合 filterable）', type: 'boolean', default: 'false' },
-  { name: 'clearable', description: '是否可清空', type: 'boolean', default: 'false' },
-  { name: 'disabled', description: '是否禁用', type: 'boolean', default: 'false' },
-  { name: 'loading', description: '是否显示加载中', type: 'boolean', default: 'false' },
-  { name: 'loadingText', description: '加载中显示的文案', type: 'string', default: '加载中...' },
-  { name: 'remote', description: '是否远程搜索', type: 'boolean', default: 'false' },
-  { name: 'remoteMethod', description: '远程搜索方法', type: '(query: string) => Promise<SelectOption[]>', default: '—' },
-  { name: 'collapseTags', description: '多选时是否折叠标签', type: 'boolean', default: 'false' },
-  { name: 'collapseTagsLimit', description: '折叠前最多显示的标签数', type: 'number', default: '1' },
-  { name: 'virtualScroll', description: '是否启用虚拟滚动（推荐 1000+ 选项时开启）', type: 'boolean', default: 'false' },
-  { name: 'estimatedOptionHeight', description: '虚拟滚动选项的预估行高（px）', type: 'number', default: '36' },
-  { name: 'placeholder', description: '占位文本', type: 'string', default: '请选择' },
-  { name: 'size', description: '选择器尺寸', type: 'large | medium | small', default: 'medium' },
-  { name: 'noDataText', description: '无数据时显示的文本', type: 'string', default: '暂无数据' },
-  { name: 'noMatchText', description: '无匹配时显示的文本', type: 'string', default: '无匹配数据' }
+{ name: 'modelValue', description: '绑定值', type: 'string | number | (string | number)[]', default: '—' },
+{ name: 'options', description: '选项数据源（扁平）', type: 'SelectOption[]', default: '[]' },
+{ name: 'optionGroups', description: '分组选项数据源', type: 'SelectOptionGroup[]', default: '[]' },
+{ name: 'multiple', description: '是否多选', type: 'boolean', default: 'false' },
+{ name: 'filterable', description: '是否可搜索过滤', type: 'boolean', default: 'false' },
+{ name: 'allowCreate', description: '是否允许创建新选项（需配合 filterable）', type: 'boolean', default: 'false' },
+{ name: 'clearable', description: '是否可清空', type: 'boolean', default: 'false' },
+{ name: 'disabled', description: '是否禁用（也可由 Form / FormItem 注入）', type: 'boolean', default: 'false' },
+{ name: 'loading', description: '是否显示加载中', type: 'boolean', default: 'false' },
+{ name: 'loadingText', description: '加载中显示的文案', type: 'string', default: '加载中...' },
+{ name: 'remote', description: '是否远程搜索', type: 'boolean', default: 'false' },
+{ name: 'remoteMethod', description: '远程搜索方法', type: '(query: string) => Promise<SelectOption[]>', default: '—' },
+{ name: 'filterMethod', description: '自定义过滤函数，接收搜索词并返回匹配的选项（需配合 filterable）', type: '(query: string) => SelectOption[]', default: '—' },
+{ name: 'multipleLimit', description: '多选时最多可选的条目数（0 为不限制）', type: 'number', default: '0' },
+{ name: 'remoteMethod', description: '远程搜索方法', type: '(query: string) => Promise<SelectOption[]>', default: '—' },
+{ name: 'collapseTags', description: '多选时是否折叠标签', type: 'boolean', default: 'false' },
+{ name: 'collapseTagsLimit', description: '折叠前最多显示的标签数', type: 'number', default: '1' },
+{ name: 'virtualScroll', description: '是否启用虚拟滚动（推荐 1000+ 选项时开启）', type: 'boolean', default: 'false' },
+{ name: 'estimatedOptionHeight', description: '虚拟滚动选项的预估行高（px）', type: 'number', default: '36' },
+{ name: 'placeholder', description: '占位文本', type: 'string', default: '请选择' },
+{ name: 'size', description: '尺寸（默认继承 Form / ConfigProvider 的 size）', type: "'large' | 'medium' | 'small'", default: 'medium' },
+{ name: 'noDataText', description: '无数据时显示的文本', type: 'string', default: '暂无数据' },
+{ name: 'noMatchText', description: '无匹配时显示的文本', type: 'string', default: '无匹配数据' }
 ]" />
 
 ### Events
@@ -359,5 +362,55 @@ interface SelectOptionGroup {
 
 <ApiTable type="slots" :data="[
   { name: 'prefix', description: '选择器前置内容（如前缀图标）' },
+  { name: 'option', description: '自定义选项渲染', params: '{ option: SelectOption, selected: boolean, disabled: boolean }' },
   { name: 'empty', description: '无选项时的自定义内容' }
 ]" />
+
+### Exposes
+
+<ApiTable type="methods" :data="[
+  { name: 'focus', description: '聚焦选择器', type: '() => void', default: '—' },
+  { name: 'blur', description: '失焦并收起下拉', type: '() => void', default: '—' },
+  { name: 'openDropdown', description: '打开下拉面板', type: '() => void', default: '—' },
+  { name: 'closeDropdown', description: '关闭下拉面板', type: '() => void', default: '—' },
+  { name: 'toggleSelectAll', description: '切换全选（多选模式）', type: '() => void', default: '—' },
+  { name: 'visible', description: '下拉面板可见状态', type: 'Ref<boolean>', default: '—' }
+]" />
+
+## 自定义过滤 / 多选上限 / 自定义选项渲染
+
+<DemoBlock>
+
+```vue
+<template>
+  <ZcSelect
+    v-model="value"
+    multiple
+    filterable
+    :options="options"
+    :filter-method="filterByPrefix"
+    :multiple-limit="2"
+  >
+    <template #option="{ option, selected }">
+      <span :style="{ fontWeight: selected ? 600 : 400 }"> {{ option.label }}（自定义渲染） </span>
+    </template>
+  </ZcSelect>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+const value = ref([])
+const options = [
+  { label: '北京', value: 'bj' },
+  { label: '上海', value: 'sh' },
+  { label: '广州', value: 'gz' },
+  { label: '深圳', value: 'sz' },
+]
+// 只按 value 前缀匹配的自定义过滤
+function filterByPrefix(query) {
+  return options.filter((o) => o.value.startsWith(query.toLowerCase()))
+}
+</script>
+```
+
+</DemoBlock>

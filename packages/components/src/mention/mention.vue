@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import { computed, ref, shallowRef, nextTick, watch, onMounted, onBeforeUnmount } from 'vue'
+import { computed, ref, shallowRef, nextTick, watch, onMounted } from 'vue'
 import { useNamespace, useClickOutside, useId } from '@zc-ui/hooks'
 import { useLocale } from '@zc-ui/locale'
+import { usePopper } from '../popper/usePopper'
+import { useFormDisabled, useFormItem } from '../form/use-form'
+import type { PopperPlacement } from '../popper/types'
 import type {
   MentionOption,
   MentionPlacement,
@@ -73,6 +76,12 @@ const emit = defineEmits<{
 const ns = useNamespace('mention')
 const { t } = useLocale()
 const uid = useId('zc-mention').id
+
+// ---- Form context integration ----
+// Component has no size prop, so only disabled resolution and validation bridging
+const formDisabled = useFormDisabled(() => props.disabled)
+const formItem = useFormItem()
+const isDisabled = formDisabled
 
 const placeholderText = computed(() => props.placeholder || t('zc.mention.placeholder'))
 const loadingDisplayText = computed(() => props.loadingText || t('zc.mention.loading'))
@@ -151,44 +160,35 @@ const teleportTarget = computed(() => {
   return undefined
 })
 
-/** Dynamic dropdown position for Teleport mode */
-const dropdownPos = ref({ top: 0, left: 0, width: 0 })
-const dropdownPlacement = ref<MentionPlacement>('bottom')
+// ---- Positioning via ZcPopper engine (fixed strategy, teleported to body) ----
+const popperActive = computed(() => !!props.teleport && visible.value)
+const referenceEl = computed(() => (props.split ? editableRef.value : inputRef.value) ?? null)
+const popperEl = computed(() => (props.teleport ? dropdownRef.value : null))
+const { styles: popperStyles, update: updatePopper } = usePopper({
+  reference: referenceEl,
+  popper: popperEl,
+  placement: computed(() => props.placement as PopperPlacement),
+  offset: 4,
+  strategy: 'fixed',
+  flip: false,
+  visible: popperActive,
+})
+
+/** Dropdown width matches the input width in teleport mode */
+const dropdownWidth = computed(() => {
+  const el = referenceEl.value
+  return el ? `${el.getBoundingClientRect().width}px` : undefined
+})
+
+const teleportedStyle = computed(() => ({
+  ...popperStyles.value,
+  width: dropdownWidth.value,
+  maxHeight: dropdownMaxHeight.value,
+}))
 
 function updateDropdownPosition() {
-  const el = props.split ? editableRef.value : inputRef.value
-  if (!el) return
-  const rect = el.getBoundingClientRect()
-  dropdownPos.value = {
-    top: rect.bottom,
-    left: rect.left,
-    width: rect.width,
-  }
-  dropdownPlacement.value = props.placement
+  updatePopper()
 }
-
-const teleportedStyle = computed(() => {
-  const p = dropdownPlacement.value
-  const pos = dropdownPos.value
-  if (p === 'top') {
-    const el = props.split ? editableRef.value : inputRef.value
-    const top = el ? el.getBoundingClientRect().top - 4 : 0
-    return {
-      position: 'fixed' as const,
-      left: `${pos.left}px`,
-      width: `${pos.width}px`,
-      bottom: `${window.innerHeight - top}px`,
-      maxHeight: dropdownMaxHeight.value,
-    }
-  }
-  return {
-    position: 'fixed' as const,
-    left: `${pos.left}px`,
-    width: `${pos.width}px`,
-    top: `${pos.top + 4}px`,
-    maxHeight: dropdownMaxHeight.value,
-  }
-})
 
 // ---- Computed: ARIA ----
 const dropdownId = computed(() => `zc-mention-listbox-${uid}`)
@@ -201,7 +201,7 @@ const ariaActiveDescendant = computed(() =>
 // ---- Computed: Classes ----
 const classes = computed(() => [
   ns.b(),
-  ns.is('disabled', props.disabled),
+  ns.is('disabled', isDisabled.value),
   ns.is('focused', isFocused.value),
   ns.is('split', props.split),
 ])
@@ -343,6 +343,8 @@ function selectOptionInTextMode(_option: MentionOption, displayLabel: string) {
 
   emit('update:modelValue', newValue)
   emit('change', newValue)
+  // Bridge to form-item validation rules with trigger: 'change'
+  formItem?.validate('change')
 
   nextTick(() => {
     if (el) {
@@ -367,6 +369,8 @@ function selectOptionInSplitMode(_option: MentionOption, displayLabel: string) {
 
   emit('update:modelValue', newValue)
   emit('change', newValue)
+  // Bridge to form-item validation rules with trigger: 'change'
+  formItem?.validate('change')
 
   nextTick(() => {
     if (el) {
@@ -481,6 +485,9 @@ function handleBlur(event: FocusEvent) {
         break
     }
   }
+
+  // Bridge to form-item validation rules with trigger: 'blur'
+  formItem?.validate('blur')
 }
 
 function closeSuggestions() {
@@ -505,11 +512,6 @@ useClickOutside(
 )
 
 // ---- Dropdown positioning (for Teleport) ----
-function handleScrollResize() {
-  if (visible.value && props.teleport) {
-    updateDropdownPosition()
-  }
-}
 
 // ---- Watchers ----
 
@@ -536,15 +538,6 @@ onMounted(() => {
   if (props.split && editableRef.value) {
     editableRef.value.innerHTML = textToMentionHtml(props.modelValue || '')
   }
-  if (props.teleport) {
-    window.addEventListener('scroll', handleScrollResize, true)
-    window.addEventListener('resize', handleScrollResize)
-  }
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('scroll', handleScrollResize, true)
-  window.removeEventListener('resize', handleScrollResize)
 })
 
 // ---- Expose for testing / parent access ----
@@ -574,8 +567,8 @@ defineExpose({
       :aria-activedescendant="ariaActiveDescendant"
       :aria-controls="dropdownId"
       aria-autocomplete="list"
-      :aria-disabled="disabled"
-      :tabindex="disabled ? -1 : 0"
+      :aria-disabled="isDisabled"
+      :tabindex="isDisabled ? -1 : 0"
       @input="handleSplitInput"
       @keydown="handleKeyDown"
       @focus="handleFocus"
@@ -591,7 +584,7 @@ defineExpose({
       :class="inputClasses"
       :value="modelValue"
       :placeholder="placeholderText"
-      :disabled="disabled"
+      :disabled="isDisabled"
       role="combobox"
       aria-haspopup="listbox"
       :aria-expanded="dropdownVisible || emptyVisible"
@@ -613,7 +606,7 @@ defineExpose({
       :class="inputClasses"
       :value="modelValue"
       :placeholder="placeholderText"
-      :disabled="disabled"
+      :disabled="isDisabled"
       role="combobox"
       aria-haspopup="listbox"
       :aria-expanded="dropdownVisible || emptyVisible"
@@ -732,6 +725,7 @@ defineExpose({
       <transition name="zc-mention-dropdown">
         <div
           v-show="emptyVisible"
+          ref="dropdownRef"
           :class="[ns.e('suggestions'), ns.e('empty'), ns.is('top', placement === 'top')]"
           :style="teleport ? teleportedStyle : { maxHeight: dropdownMaxHeight }"
         >

@@ -833,3 +833,141 @@ describe('ZcSelect', () => {
     })
   })
 })
+
+// =====================================================
+// filterMethod / multipleLimit / #option scoped slot
+// =====================================================
+describe('ZcSelect advanced: filterMethod, multipleLimit, #option slot', () => {
+  const prefixOptions = [
+    { label: 'js-array', value: 'js-array' },
+    { label: 'js-object', value: 'js-object' },
+    { label: 'css-flex', value: 'css-flex' },
+  ]
+
+  // ---- filterMethod ----
+  describe('filterMethod', () => {
+    it('filters options using the custom filterMethod (value prefix match)', async () => {
+      const wrapper = mount(Select, {
+        props: {
+          options: prefixOptions,
+          filterable: true,
+          filterMethod: (query: string) => prefixOptions.filter((o) => o.value.startsWith(query)),
+        },
+      })
+      await wrapper.trigger('click')
+      const input = wrapper.find('.zc-select__input')
+      await input.setValue('js-')
+      await nextTick()
+      const options = wrapper.findAll('.zc-select__option')
+      expect(options).toHaveLength(2)
+      expect(options[0].text()).toContain('js-array')
+      expect(options[1].text()).toContain('js-object')
+      expect(options[1].text()).not.toContain('css-flex')
+    })
+
+    it('shows the empty state when filterMethod matches nothing', async () => {
+      const wrapper = mount(Select, {
+        props: {
+          options: prefixOptions,
+          filterable: true,
+          filterMethod: (query: string) => prefixOptions.filter((o) => o.value.startsWith(query)),
+        },
+      })
+      await wrapper.trigger('click')
+      const input = wrapper.find('.zc-select__input')
+      await input.setValue('python')
+      await nextTick()
+      expect(wrapper.findAll('.zc-select__option')).toHaveLength(0)
+      expect(wrapper.find('.zc-select__empty').exists()).toBe(true)
+    })
+
+    it('passes the current query to filterMethod', async () => {
+      const filterMethod = vi.fn((query: string) =>
+        prefixOptions.filter((o) => o.value.startsWith(query))
+      )
+      const wrapper = mount(Select, {
+        props: { options: prefixOptions, filterable: true, filterMethod },
+      })
+      await wrapper.trigger('click')
+      const input = wrapper.find('.zc-select__input')
+      await input.setValue('js-')
+      await nextTick()
+      expect(filterMethod).toHaveBeenCalledWith('js-')
+    })
+  })
+
+  // ---- multipleLimit ----
+  describe('multipleLimit', () => {
+    it('stops selecting beyond multipleLimit in multiple mode', async () => {
+      const wrapper = mount(Select, {
+        props: {
+          multiple: true,
+          multipleLimit: 2,
+          options: testOptions,
+          modelValue: [] as string[],
+        },
+      })
+      await wrapper.trigger('click')
+      let opts = wrapper.findAll('.zc-select__option')
+      await opts[0].trigger('click')
+      expect(wrapper.emitted('update:modelValue')![0]).toEqual([['1']])
+      await wrapper.setProps({ modelValue: ['1'] })
+      opts = wrapper.findAll('.zc-select__option')
+      await opts[1].trigger('click')
+      expect(wrapper.emitted('update:modelValue')![1]).toEqual([['1', '2']])
+      await wrapper.setProps({ modelValue: ['1', '2'] })
+      opts = wrapper.findAll('.zc-select__option')
+      await opts[2].trigger('click')
+      // Limit of 2 reached: selecting the 3rd option has no effect
+      expect(wrapper.emitted('update:modelValue')).toHaveLength(2)
+    })
+
+    it('select-all respects multipleLimit', async () => {
+      const wrapper = mount(Select, {
+        props: {
+          multiple: true,
+          multipleLimit: 2,
+          options: testOptions,
+          modelValue: [] as string[],
+        },
+      })
+      await wrapper.trigger('click')
+      await wrapper.find('.zc-select__select-all').trigger('click')
+      expect(wrapper.emitted('update:modelValue')![0]).toEqual([['1', '2']])
+    })
+  })
+
+  // ---- #option scoped slot ----
+  describe('#option scoped slot', () => {
+    it('renders custom option content from the scoped slot', async () => {
+      const wrapper = mount(Select, {
+        props: { options: testOptions },
+        slots: {
+          option: `<template #option="{ option }"><span class="custom-option">{{ option.label }} (custom)</span></template>`,
+        },
+      })
+      await wrapper.trigger('click')
+      const custom = wrapper.findAll('.custom-option')
+      expect(custom).toHaveLength(3)
+      expect(custom[0].text()).toContain('Option 1 (custom)')
+      expect(custom[2].text()).toContain('Option 3 (custom)')
+    })
+
+    it('receives the option, selected state and disabled state via slot props', async () => {
+      const options = [
+        { label: 'A', value: 'a' },
+        { label: 'B', value: 'b', disabled: true },
+      ]
+      const wrapper = mount(Select, {
+        props: { options, modelValue: 'a' },
+        slots: {
+          option: `<template #option="{ option, selected, disabled }"><span class="custom-option">{{ option.label }}{{ selected ? ' [selected]' : '' }}{{ disabled ? ' [disabled]' : '' }}</span></template>`,
+        },
+      })
+      await wrapper.trigger('click')
+      const custom = wrapper.findAll('.custom-option')
+      expect(custom[0].text()).toBe('A [selected]')
+      expect(custom[1].text()).toBe('B [disabled]')
+    })
+  })
+})

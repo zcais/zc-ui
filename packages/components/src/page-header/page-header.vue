@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
+import { useLocale } from '@zc-ui/locale'
 
 defineOptions({ name: 'ZcPageHeader' })
 
@@ -31,6 +32,7 @@ const emit = defineEmits<{
 }>()
 
 const ns = useNamespace('page-header')
+const { t } = useLocale()
 
 const classes = computed(() => [
   ns.b(),
@@ -55,7 +57,7 @@ function handleBack() {
         v-if="showBack"
         :class="ns.e('back')"
         type="button"
-        aria-label="返回"
+        :aria-label="t('zc.pageHeader.back')"
         @click="handleBack"
       >
         <svg viewBox="0 0 24 24" fill="none">

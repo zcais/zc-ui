@@ -29,7 +29,7 @@ const props = withDefaults(
     strong: false,
     italic: false,
     code: false,
-  },
+  }
 )
 
 const ns = useNamespace('text')
@@ -134,27 +134,27 @@ code.zc-text {
 }
 
 /* ---- Dark mode ---- */
-html[data-theme='dark'] .zc-text {
+.dark .zc-text {
   --zc-text-color: var(--color-zc-text-primary, #e5eaf3);
 }
 
-html[data-theme='dark'] .zc-text--primary {
+.dark .zc-text--primary {
   --zc-text-color: var(--color-zc-primary-400, #79bbff);
 }
-html[data-theme='dark'] .zc-text--success {
+.dark .zc-text--success {
   --zc-text-color: var(--color-zc-success-400, #95d475);
 }
-html[data-theme='dark'] .zc-text--warning {
+.dark .zc-text--warning {
   --zc-text-color: var(--color-zc-warning-400, #eebe77);
 }
-html[data-theme='dark'] .zc-text--danger {
+.dark .zc-text--danger {
   --zc-text-color: var(--color-zc-danger-400, #f89898);
 }
-html[data-theme='dark'] .zc-text--info {
+.dark .zc-text--info {
   --zc-text-color: var(--color-zc-info-400, #b1b3b8);
 }
 
-html[data-theme='dark'] code.zc-text {
+.dark code.zc-text {
   background: var(--color-zc-fill, #252526);
   color: var(--color-zc-text-primary, #e5eaf3);
 }

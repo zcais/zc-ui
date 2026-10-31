@@ -128,30 +128,30 @@ const code = `<div class="card">
 
 ### CodeBlock Props
 
-| 属性名          | 说明                 | 类型                | 默认值     |
-| --------------- | -------------------- | ------------------- | ---------- |
-| code            | 代码内容             | `string`            | `''`       |
-| language        | 编程语言             | `string`            | `'text'`   |
-| theme           | 主题                 | `'light' \| 'dark'` | `'light'`  |
-| showLineNumbers | 是否显示行号         | `boolean`           | `false`    |
-| showCopy        | 是否显示复制按钮     | `boolean`           | `true`     |
-| showLanguage    | 是否显示语言标签     | `boolean`           | `true`     |
-| showHeader      | 是否显示头部栏       | `boolean`           | `true`     |
-| startLineNumber | 起始行号             | `number`            | `1`        |
-| maxHeight       | 最大高度（超出滚动） | `string`            | -          |
-| fontSize        | 字体大小（px）       | `number`            | `13`       |
-| copyText        | 复制按钮文字         | `string`            | `'复制'`   |
-| copiedText      | 复制成功提示文字     | `string`            | `'已复制'` |
+<ApiTable type="props" :data="[
+{ name: 'code', description: '代码内容', type: 'string', default: '''' },
+{ name: 'language', description: '编程语言', type: 'string', default: ''text'' },
+{ name: 'theme', description: '主题', type: '`'light' \', default: ''dark'`' },
+{ name: 'showLineNumbers', description: '是否显示行号', type: 'boolean', default: 'false' },
+{ name: 'showCopy', description: '是否显示复制按钮', type: 'boolean', default: 'true' },
+{ name: 'showLanguage', description: '是否显示语言标签', type: 'boolean', default: 'true' },
+{ name: 'showHeader', description: '是否显示头部栏', type: 'boolean', default: 'true' },
+{ name: 'startLineNumber', description: '起始行号', type: 'number', default: '1' },
+{ name: 'maxHeight', description: '最大高度（超出滚动）', type: 'string', default: '—' },
+{ name: 'fontSize', description: '字体大小（px）', type: 'number', default: '13' },
+{ name: 'copyText', description: '复制按钮文字', type: 'string', default: ''复制'' },
+{ name: 'copiedText', description: '复制成功提示文字', type: 'string', default: ''已复制'' }
+]" />
 
 ### CodeBlock Events
 
-| 事件名 | 说明           | 回调参数         |
-| ------ | -------------- | ---------------- |
-| copy   | 复制代码时触发 | `(code: string)` |
+<ApiTable type="events" :data="[
+{ name: '(code: string)', description: '复制代码时触发' }
+]" />
 
 ### Slots
 
-| 插槽名  | 说明                             |
-| ------- | -------------------------------- |
-| default | 代码内容（与 `code` 属性二选一） |
-| actions | 头部栏右侧额外操作区域           |
+<ApiTable type="slots" :data="[
+{ name: 'default', description: '代码内容（与 code 属性二选一）' },
+{ name: 'actions', description: '头部栏右侧额外操作区域' }
+]" />

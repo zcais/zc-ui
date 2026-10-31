@@ -3,6 +3,7 @@ import { computed, ref, shallowRef, watch, onBeforeUnmount } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
 import { useClickOutside } from '@zc-ui/hooks'
 import { useLocale } from '@zc-ui/locale'
+import { useFormDisabled, useFormSize, useFormItem } from '../form/use-form'
 
 defineOptions({ name: 'ZcTimePicker' })
 
@@ -26,7 +27,7 @@ const props = withDefaults(
     readonly: false,
     clearable: false,
     format: 'HH:mm:ss',
-    size: 'medium',
+    size: undefined,
     disabledHours: undefined,
     disabledMinutes: undefined,
     disabledSeconds: undefined,
@@ -42,6 +43,18 @@ const emit = defineEmits<{
 
 const ns = useNamespace('time-picker')
 const { t } = useLocale()
+
+// ---- Form context integration ----
+// Priority: explicit prop > ZcFormItem > ZcForm > default 'medium'
+// TimePicker size is 'large'|'medium'|'small' (no 'mini'), so 'mini' degrades to 'small'
+const formSize = useFormSize(() => props.size)
+const formDisabled = useFormDisabled(() => props.disabled)
+const formItem = useFormItem()
+const isDisabled = formDisabled
+const effectiveSize = computed<'large' | 'medium' | 'small'>(() => {
+  const resolved = formSize.value ?? 'medium'
+  return resolved === 'mini' ? 'small' : (resolved as 'large' | 'medium' | 'small')
+})
 
 const placeholderText = computed(() => props.placeholder || t('zc.timePicker.placeholder'))
 const containerRef = shallowRef<HTMLElement>()
@@ -96,8 +109,8 @@ const displayValue = computed(() => {
 
 const classes = computed(() => [
   ns.b(),
-  ns.m(props.size),
-  ns.is('disabled', props.disabled),
+  ns.m(effectiveSize.value),
+  ns.is('disabled', isDisabled.value),
   ns.is('focused', isFocused.value),
   ns.is('open', visible.value),
 ])
@@ -150,6 +163,8 @@ function emitChange() {
   const val = formatTime(currentHour.value, currentMinute.value, currentSecond.value)
   emit('update:modelValue', val)
   emit('change', val)
+  // Bridge to form-item validation rules with trigger: 'change'
+  formItem?.validate('change')
 }
 
 function handleConfirm() {
@@ -160,10 +175,12 @@ function handleConfirm() {
 function closePanel() {
   visible.value = false
   isFocused.value = false
+  // Bridge to form-item validation rules with trigger: 'blur'
+  formItem?.validate('blur')
 }
 
 function togglePanel() {
-  if (props.disabled || props.readonly) return
+  if (isDisabled.value || props.readonly) return
   visible.value = !visible.value
   isFocused.value = visible.value
 }
@@ -172,6 +189,8 @@ function handleClear(event: Event) {
   event.stopPropagation()
   emit('update:modelValue', '')
   emit('change', '')
+  // Bridge to form-item validation rules with trigger: 'change'
+  formItem?.validate('change')
 }
 
 // Scroll to selected when opened
@@ -224,7 +243,7 @@ defineExpose({
         {{ displayValue || placeholderText }}
       </span>
       <span
-        v-if="clearable && displayValue && !disabled"
+        v-if="clearable && displayValue && !isDisabled"
         :class="ns.e('clear')"
         @click="handleClear"
       >

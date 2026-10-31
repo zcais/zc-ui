@@ -135,4 +135,100 @@ describe('ZcDatePicker', () => {
       expect(wrapper.find('.zc-date-picker__panel').exists()).toBe(false)
     }
   })
+
+  // ---- value-format (Element Plus compatible) ----
+  describe('valueFormat', () => {
+    it('emits a formatted string instead of a Date when valueFormat is set', async () => {
+      const wrapper = mount(DatePicker, {
+        props: { modelValue: '', valueFormat: 'YYYY-MM-DD' },
+      })
+      await wrapper.find('input').trigger('click') // open the panel
+      const day = wrapper
+        .findAll('.zc-date-picker__day')
+        .find(
+          (d) => !d.classes().includes('is-other-month') && !d.classes().includes('is-disabled')
+        )
+      await day!.trigger('click')
+      const emitted = wrapper.emitted('update:modelValue')!
+      const value = emitted[emitted.length - 1][0] as string
+      expect(typeof value).toBe('string')
+      expect(value).toMatch(/^\d{4}-\d{2}-\d{2}$/)
+    })
+
+    it('parses a value-format string modelValue into the panel', async () => {
+      const wrapper = mount(DatePicker, {
+        props: { modelValue: '2026-03-15', valueFormat: 'YYYY-MM-DD' },
+      })
+      await wrapper.find('input').trigger('click') // open the panel
+      const selected = wrapper.find('.zc-date-picker__day.is-selected')
+      expect(selected.exists()).toBe(true)
+      expect(selected.text()).toBe('15')
+    })
+
+    it('emits an empty string on clear with valueFormat', async () => {
+      const wrapper = mount(DatePicker, {
+        props: { modelValue: '2026-03-15', valueFormat: 'YYYY-MM-DD', clearable: true },
+      })
+      await wrapper.find('input').trigger('click') // open the panel (clear shows when open)
+      await wrapper.find('.zc-date-picker__clear').trigger('click')
+      const emitted = wrapper.emitted('update:modelValue')!
+      expect(emitted[emitted.length - 1][0]).toBe('')
+    })
+  })
+
+  // ---- editable manual input ----
+  describe('editable', () => {
+    it('input is writable by default and readonly when editable=false', () => {
+      const writable = mount(DatePicker)
+      expect(writable.find('input').attributes('readonly')).toBeUndefined()
+
+      const readonly = mount(DatePicker, { props: { editable: false } })
+      expect(readonly.find('input').attributes('readonly')).toBeDefined()
+    })
+
+    it('commits a typed date on Enter and emits the parsed value', async () => {
+      const wrapper = mount(DatePicker, {
+        props: { modelValue: '' },
+      })
+      const input = wrapper.find('input')
+      ;(input.element as HTMLInputElement).value = '2026-03-15'
+      await input.trigger('input')
+      await input.trigger('keydown', { key: 'Enter' })
+
+      const emitted = wrapper.emitted('update:modelValue')!
+      expect(emitted).toBeTruthy()
+      const value = emitted[emitted.length - 1][0] as Date
+      expect(value).toBeInstanceOf(Date)
+      expect((value as Date).getFullYear()).toBe(2026)
+      expect((value as Date).getMonth()).toBe(2)
+      expect((value as Date).getDate()).toBe(15)
+    })
+
+    it('restores the display value when the typed text is invalid', async () => {
+      const wrapper = mount(DatePicker, {
+        props: { modelValue: new Date(2026, 2, 15) },
+      })
+      const input = wrapper.find('input')
+      ;(input.element as HTMLInputElement).value = 'not-a-date'
+      await input.trigger('input')
+      await input.trigger('blur')
+
+      expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+      // display value is restored
+      expect((input.element as HTMLInputElement).value).not.toBe('not-a-date')
+    })
+
+    it('clears the value when the input is emptied and committed', async () => {
+      const wrapper = mount(DatePicker, {
+        props: { modelValue: new Date(2026, 2, 15), clearable: true },
+      })
+      const input = wrapper.find('input')
+      ;(input.element as HTMLInputElement).value = ''
+      await input.trigger('input')
+      await input.trigger('keydown', { key: 'Enter' })
+
+      const emitted = wrapper.emitted('update:modelValue')!
+      expect(emitted[emitted.length - 1][0]).toBe('')
+    })
+  })
 })

@@ -197,3 +197,12 @@ const visible = ref(false)
   { name: 'toggle()', description: '切换显示/隐藏' },
   { name: 'updatePosition()', description: '手动更新弹出框位置' },
 ]" />
+
+### Exposes
+
+<ApiTable type="methods" :data="[
+  { name: 'show', description: '显示气泡', type: '() => void', default: '—' },
+  { name: 'hide', description: '隐藏气泡', type: '() => void', default: '—' },
+  { name: 'toggle', description: '切换气泡显隐', type: '() => void', default: '—' },
+  { name: 'updatePosition', description: '手动重新定位气泡', type: '() => void', default: '—' }
+]" />

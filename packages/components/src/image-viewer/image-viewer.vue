@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, computed, watch, onBeforeUnmount } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
-import { useZIndex } from '@zc-ui/hooks'
+import { useZIndex, lockBodyScroll, unlockBodyScroll } from '@zc-ui/hooks'
+import { useLocale } from '@zc-ui/locale'
 import { isClient } from '@zc-ui/utils'
 
 defineOptions({ name: 'ZcImageViewer' })
@@ -48,6 +49,7 @@ const emit = defineEmits<{
 }>()
 
 const ns = useNamespace('image-viewer')
+const { t } = useLocale()
 const { nextZIndex } = useZIndex()
 
 const currentIndex = ref(props.modelValue)
@@ -185,22 +187,33 @@ watch(
   }
 )
 
+let scrollLocked = false
+
 watch(
   () => props.visible,
   (val) => {
     if (val && isClient) {
       document.addEventListener('keydown', handleKeydown)
-      document.body.style.overflow = 'hidden'
+      if (!scrollLocked) {
+        lockBodyScroll()
+        scrollLocked = true
+      }
     } else {
       document.removeEventListener('keydown', handleKeydown)
-      document.body.style.overflow = ''
+      if (scrollLocked) {
+        unlockBodyScroll()
+        scrollLocked = false
+      }
     }
   }
 )
 
 onBeforeUnmount(() => {
   document.removeEventListener('keydown', handleKeydown)
-  document.body.style.overflow = ''
+  if (scrollLocked) {
+    unlockBodyScroll()
+    scrollLocked = false
+  }
 })
 
 defineExpose({ next, prev, setActiveItem })
@@ -232,7 +245,12 @@ defineExpose({ next, prev, setActiveItem })
 
         <!-- Header / Actions bar -->
         <div :class="ns.e('actions')" @click.stop>
-          <button :class="ns.e('action-btn')" type="button" title="缩小" @click="zoomOut">
+          <button
+            :class="ns.e('action-btn')"
+            type="button"
+            :title="t('zc.image.zoomOut')"
+            @click="zoomOut"
+          >
             <svg viewBox="0 0 24 24" fill="none">
               <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" />
               <path
@@ -246,7 +264,12 @@ defineExpose({ next, prev, setActiveItem })
 
           <span :class="ns.e('zoom-label')"> {{ Math.round(transform.scale * 100) }}% </span>
 
-          <button :class="ns.e('action-btn')" type="button" title="放大" @click="zoomIn">
+          <button
+            :class="ns.e('action-btn')"
+            type="button"
+            :title="t('zc.image.zoomIn')"
+            @click="zoomIn"
+          >
             <svg viewBox="0 0 24 24" fill="none">
               <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" />
               <path
@@ -260,7 +283,12 @@ defineExpose({ next, prev, setActiveItem })
 
           <span :class="ns.e('divider')" />
 
-          <button :class="ns.e('action-btn')" type="button" title="旋转" @click="rotate">
+          <button
+            :class="ns.e('action-btn')"
+            type="button"
+            :title="t('zc.image.rotate')"
+            @click="rotate"
+          >
             <svg viewBox="0 0 24 24" fill="none">
               <path
                 d="M21 12a9 9 0 11-3-6.7L21 8M21 3v5h-5"
@@ -272,7 +300,12 @@ defineExpose({ next, prev, setActiveItem })
             </svg>
           </button>
 
-          <button :class="ns.e('action-btn')" type="button" title="重置" @click="resetTransform">
+          <button
+            :class="ns.e('action-btn')"
+            type="button"
+            :title="t('zc.image.reset')"
+            @click="resetTransform"
+          >
             <svg viewBox="0 0 24 24" fill="none">
               <path
                 d="M3 12a9 9 0 1015.5-6.4L21 8M21 3v5h-5"
@@ -331,7 +364,7 @@ defineExpose({ next, prev, setActiveItem })
           v-if="showClose"
           :class="ns.e('close')"
           type="button"
-          aria-label="关闭"
+          :aria-label="t('common.close')"
           @click="close"
         >
           <svg viewBox="0 0 24 24" fill="none">

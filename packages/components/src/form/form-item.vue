@@ -4,6 +4,7 @@ import { useNamespace } from '@zc-ui/hooks'
 import {
   formContextKey,
   formItemContextKey,
+  type ComponentSize,
   type FormItemRule,
   type FormItemValidateState,
   type FormItemValidationResult,
@@ -26,13 +27,16 @@ const props = withDefaults(
     showMessage?: boolean
     /** Required indicator (auto-detected from rules if not set). */
     required?: boolean
-    /** Whether to disable this form item. */
+    /** Whether to disable this form item (controls render their disabled state). */
     disabled?: boolean
+    /** Size override for controls inside this item. */
+    size?: ComponentSize
   }>(),
   {
     showMessage: true,
     required: false,
     disabled: false,
+    size: undefined,
   }
 )
 
@@ -176,6 +180,8 @@ provide(formItemContextKey, {
   validateState,
   validateMessage,
   validating,
+  size: computed(() => props.size),
+  disabled: isDisabled,
   validate,
   clearValidate,
 })
@@ -209,7 +215,7 @@ defineExpose({ validate, clearValidate })
 </script>
 
 <template>
-  <div :class="classes">
+  <div :class="classes" :data-zc-form-field="prop || undefined">
     <!-- Label -->
     <label v-if="label || slots.label" :class="ns.e('label')" :style="labelStyle">
       <slot name="label">{{ label }}</slot>
@@ -298,9 +304,21 @@ defineExpose({ validate, clearValidate })
   align-items: center;
 }
 
-/* ---- Error state ---- */
+/* ---- Error state ----
+ * Red border on every supported control's outer wrapper. */
 .zc-form-item.is-error :deep(.zc-input__wrapper),
-.zc-form-item.is-error :deep(.zc-input__inner) {
+.zc-form-item.is-error :deep(.zc-input__inner),
+.zc-form-item.is-error :deep(.zc-select__wrapper),
+.zc-form-item.is-error :deep(.zc-date-picker__wrapper),
+.zc-form-item.is-error :deep(.zc-time-picker__wrapper),
+.zc-form-item.is-error :deep(.zc-input-number__wrapper),
+.zc-form-item.is-error :deep(.zc-tree-select__wrapper),
+.zc-form-item.is-error :deep(.zc-cascader__wrapper),
+.zc-form-item.is-error :deep(.zc-color-picker__trigger),
+.zc-form-item.is-error :deep(.zc-input-otp__box),
+.zc-form-item.is-error :deep(.zc-input-tag__wrapper),
+.zc-form-item.is-error :deep(.zc-mention__wrapper),
+.zc-form-item.is-error :deep(.zc-textarea__wrapper) {
   border-color: var(--zc-form-item-error-color);
 }
 
@@ -360,10 +378,10 @@ defineExpose({ validate, clearValidate })
   }
 }
 
-/* ---- Disabled state ---- */
+/* ---- Disabled state ----
+ * Controls consume the injected disabled state and render their own
+ * disabled appearance; the item only adds a cursor hint. */
 .zc-form-item.is-disabled {
-  opacity: 0.6;
   cursor: not-allowed;
-  pointer-events: none;
 }
 </style>

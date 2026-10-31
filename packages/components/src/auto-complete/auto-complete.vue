@@ -3,6 +3,8 @@ import { computed, ref, shallowRef, onBeforeUnmount } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
 import { useClickOutside } from '@zc-ui/hooks'
 import { useLocale } from '@zc-ui/locale'
+import { usePopper } from '../popper/usePopper'
+import { useFormDisabled, useFormSize, useFormItem } from '../form/use-form'
 import type { AutoCompleteOption, AutoCompleteFetcher } from './types'
 
 defineOptions({ name: 'ZcAutoComplete' })
@@ -27,7 +29,7 @@ const props = withDefaults(
     placeholder: '',
     disabled: false,
     clearable: false,
-    size: 'medium',
+    size: undefined,
     debounce: 300,
     highlightFirstItem: true,
     noDataText: '',
@@ -45,18 +47,41 @@ const emit = defineEmits<{
 const ns = useNamespace('auto-complete')
 const { t } = useLocale()
 
+// ---- Form context integration ----
+// Priority: explicit prop > ZcFormItem > ZcForm > ConfigProvider global > 'medium'
+// Size union has no 'mini', so 'mini' degrades to 'small'
+const formSize = useFormSize(() => props.size)
+const formDisabled = useFormDisabled(() => props.disabled)
+const formItem = useFormItem()
+const isDisabled = formDisabled
+const effectiveSize = computed<'large' | 'medium' | 'small'>(() => {
+  const resolved = formSize.value ?? 'medium'
+  return resolved === 'mini' ? 'small' : (resolved as 'large' | 'medium' | 'small')
+})
+
 const placeholderText = computed(() => props.placeholder || t('zc.autoComplete.placeholder'))
 const noDataTextComputed = computed(() => props.noDataText || t('zc.autoComplete.noData'))
 const searchingText = computed(() => t('zc.autoComplete.searching'))
 
 const containerRef = shallowRef<HTMLElement>()
 const inputRef = shallowRef<HTMLInputElement>()
+const dropdownRef = shallowRef<HTMLElement>()
 
 const visible = ref(false)
 const isFocused = ref(false)
 const loading = ref(false)
 const suggestions = ref<AutoCompleteOption[]>([])
 const activeIndex = ref(-1)
+
+// ---- Dropdown positioning (usePopper absolute strategy) ----
+const { styles: dropdownStyles } = usePopper({
+  reference: containerRef,
+  popper: dropdownRef,
+  placement: 'bottom-start',
+  offset: 4,
+  strategy: 'absolute',
+  visible,
+})
 
 let debounceTimer: ReturnType<typeof setTimeout> | null = null
 
@@ -68,8 +93,8 @@ useClickOutside(containerRef, () => {
 
 const classes = computed(() => [
   ns.b(),
-  ns.m(props.size),
-  ns.is('disabled', props.disabled),
+  ns.m(effectiveSize.value),
+  ns.is('disabled', isDisabled.value),
   ns.is('focused', isFocused.value),
   ns.is('open', visible.value),
 ])
@@ -114,6 +139,8 @@ function selectItem(item: AutoCompleteOption) {
   const display = getDisplayValue(item)
   emit('update:modelValue', display)
   emit('select', item)
+  // Bridge to form-item validation rules with trigger: 'change'
+  formItem?.validate('change')
   visible.value = false
   suggestions.value = []
 }
@@ -151,15 +178,19 @@ function handleFocus(event: FocusEvent) {
 function handleBlur(event: FocusEvent) {
   isFocused.value = false
   emit('blur', event)
+  // Bridge to form-item validation rules with trigger: 'blur'
+  formItem?.validate('blur')
 }
 
 const showClear = computed(
-  () => props.clearable && !!props.modelValue && !props.disabled && isFocused.value
+  () => props.clearable && !!props.modelValue && !isDisabled.value && isFocused.value
 )
 
 function handleClear() {
   emit('update:modelValue', '')
   emit('change', '')
+  // Bridge to form-item validation rules with trigger: 'change'
+  formItem?.validate('change')
   inputRef.value?.focus()
 }
 
@@ -184,7 +215,7 @@ onBeforeUnmount(() => {
         type="text"
         :value="modelValue"
         :placeholder="placeholderText"
-        :disabled="disabled"
+        :disabled="isDisabled"
         @input="handleInput"
         @keydown="handleKeyDown"
         @focus="handleFocus"
@@ -206,7 +237,7 @@ onBeforeUnmount(() => {
       </span>
     </div>
     <transition name="zc-auto-complete-dropdown">
-      <div v-show="visible" :class="ns.e('suggestions')">
+      <div v-show="visible" ref="dropdownRef" :style="dropdownStyles" :class="ns.e('suggestions')">
         <ul v-if="suggestions.length > 0" :class="ns.e('list')">
           <li
             v-for="(item, index) in suggestions"
@@ -348,13 +379,10 @@ onBeforeUnmount(() => {
 /* Suggestions dropdown */
 .zc-auto-complete__suggestions {
   position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
-  right: 0;
+  width: 100%;
   z-index: var(--z-zc-dropdown, 1000);
   background: var(--zc-auto-complete-dropdown-bg-color);
-  border: 1px solid var(--zc-auto-complete-dropdown-border-color);
-  border-radius: var(--zc-auto-complete-border-radius);
+
   box-shadow: var(--shadow-zc-md, 0 4px 12px 0 rgba(0, 0, 0, 0.1));
   max-height: 280px;
   overflow-y: auto;

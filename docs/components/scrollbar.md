@@ -83,7 +83,7 @@
   { name: 'maxHeight', description: '最大高度（数字自动转 px）', type: 'string | number', default: '—' },
   { name: 'native', description: '使用浏览器原生滚动条', type: 'boolean', default: 'false' },
   { name: 'always', description: '始终显示滚动条', type: 'boolean', default: 'false' },
-  { name: 'tag', description: '容器元素标签', type: 'string', default: '\'div\'' },
+  { name: 'tag', description: '容器元素标签', type: 'string', default: 'div' },
 ]" />
 
 ### Slots

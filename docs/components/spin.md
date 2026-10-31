@@ -118,18 +118,18 @@ const showFull = () => {
 
 ### Spin Props
 
-| 属性名     | 说明                         | 类型                             | 默认值     |
-| ---------- | ---------------------------- | -------------------------------- | ---------- |
-| spinning   | 是否正在加载                 | `boolean`                        | `true`     |
-| size       | 尺寸                         | `'large' \| 'medium' \| 'small'` | `'medium'` |
-| tip        | 加载提示文字                 | `string`                         | `''`       |
-| color      | 自定义旋转器颜色             | `string`                         | -          |
-| fullscreen | 是否全屏覆盖                 | `boolean`                        | `false`    |
-| delay      | 加载延迟（ms）               | `number`                         | `0`        |
-| overlay    | 是否显示遮罩背景（包裹模式） | `boolean`                        | `false`    |
+<ApiTable type="props" :data="[
+{ name: 'spinning', description: '是否正在加载', type: 'boolean', default: 'true' },
+{ name: 'size', description: '尺寸', type: '`'large' \', default: ''medium' \' },
+{ name: 'tip', description: '加载提示文字', type: 'string', default: '''' },
+{ name: 'color', description: '自定义旋转器颜色', type: 'string', default: '—' },
+{ name: 'fullscreen', description: '是否全屏覆盖', type: 'boolean', default: 'false' },
+{ name: 'delay', description: '加载延迟（ms）', type: 'number', default: '0' },
+{ name: 'overlay', description: '是否显示遮罩背景（包裹模式）', type: 'boolean', default: 'false' }
+]" />
 
 ### Slots
 
-| 插槽名  | 说明                           |
-| ------- | ------------------------------ |
-| default | 被包裹的内容（包裹模式下使用） |
+<ApiTable type="slots" :data="[
+{ name: 'default', description: '被包裹的内容（包裹模式下使用）' }
+]" />

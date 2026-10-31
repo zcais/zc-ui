@@ -9,6 +9,7 @@ export {
 export { useClickOutside, type ClickOutsideOptions } from './useClickOutside'
 export { useSize, type ElementSize, type UseSizeReturn } from './useSize'
 export { useZIndex, getBaseZIndex, setBaseZIndex } from './useZIndex'
+export { lockBodyScroll, unlockBodyScroll, getBodyScrollLockCount } from './useLockScreen'
 export { useId } from './useId'
 export { useFocusTrap, type FocusTrapOptions } from './useFocusTrap'
 export { useOptionalRouter } from './useOptionalRouter'

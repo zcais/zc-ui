@@ -213,10 +213,15 @@ describe('Cross-field Validation', () => {
     await nextTick()
 
     const formRef = wrapper.findComponent(Form).vm as any
-    const valid = await formRef.validate()
+    // validate() rejects with the invalid-fields object (EP semantics)
+    const failure = await formRef.validate().then(
+      () => null,
+      (e: unknown) => e
+    )
     await nextTick()
 
-    expect(valid).toBe(false)
+    expect(failure).not.toBeNull()
+    expect(failure.confirm[0].message).toContain('Confirm password must match password')
     const errors = wrapper.findAll('.zc-form-item__error')
     expect(errors.length).toBe(1)
     expect(errors[0].text()).toContain('Confirm password must match password')

@@ -7,6 +7,7 @@ interface DebounceElement extends HTMLElement {
     handler: (e: Event) => void
     timer: ReturnType<typeof setTimeout> | null
     delay: number
+    event: string
   }
 }
 
@@ -33,26 +34,27 @@ export const ZcDebounceDirective: Directive = {
     const event = Object.keys(binding.modifiers)[0] || 'click'
     const delay = Number(binding.arg) || 300
 
-    let timer: ReturnType<typeof setTimeout> | null = null
-
     const handler = (e: Event) => {
-      if (timer) {
-        clearTimeout(timer)
+      const state = el.__zcDebounce
+      if (!state) return
+      if (state.timer) {
+        clearTimeout(state.timer)
       }
-      timer = setTimeout(() => {
+      state.timer = setTimeout(() => {
         fn(e)
-        timer = null
+        state.timer = null
       }, delay)
     }
 
     el.addEventListener(event, handler)
-    el.__zcDebounce = { fn, handler, timer, delay }
+    // The timer lives in the element store so `unmounted` can cancel a
+    // pending invocation (a local closure variable would be unreachable).
+    el.__zcDebounce = { fn, handler, timer: null, delay, event }
   },
 
   unmounted(el: DebounceElement) {
     if (el.__zcDebounce) {
-      // We don't know which event was used here, try click (most common)
-      el.removeEventListener('click', el.__zcDebounce.handler)
+      el.removeEventListener(el.__zcDebounce.event, el.__zcDebounce.handler)
       if (el.__zcDebounce.timer) {
         clearTimeout(el.__zcDebounce.timer)
       }

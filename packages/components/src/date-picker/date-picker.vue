@@ -3,6 +3,9 @@ import { computed, ref, shallowRef, watch } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
 import { useClickOutside } from '@zc-ui/hooks'
 import { useLocale } from '@zc-ui/locale'
+import { usePopper } from '../popper/usePopper'
+import { useFormDisabled, useFormSize, useFormItem } from '../form/use-form'
+import { formatDateWithTokens, parseDateWithTokens } from './date-format'
 
 defineOptions({ name: 'ZcDatePicker' })
 
@@ -24,7 +27,7 @@ export interface DatePickerShortcut {
 
 const props = withDefaults(
   defineProps<{
-    modelValue?: Date | [Date, Date] | string
+    modelValue?: Date | [Date, Date] | string | [string, string]
     type?: DatePickerType
     placeholder?: string
     startPlaceholder?: string
@@ -32,7 +35,15 @@ const props = withDefaults(
     size?: DatePickerSize
     disabled?: boolean
     clearable?: boolean
+    /** Display format (tokens: YYYY MM DD HH mm ss). */
     format?: string
+    /**
+     * Output/input value format. When set, `v-model` exchanges formatted
+     * strings instead of Date objects (Element Plus compatible).
+     */
+    valueFormat?: string
+    /** Allow typing a date into the input (single-value types only). */
+    editable?: boolean
     shortcuts?: DatePickerShortcut[]
     disabledDate?: (date: Date) => boolean
   }>(),
@@ -42,22 +53,36 @@ const props = withDefaults(
     placeholder: '',
     startPlaceholder: '',
     endPlaceholder: '',
-    size: 'medium',
+    size: undefined,
     disabled: false,
     clearable: false,
     format: 'YYYY-MM-DD',
+    valueFormat: undefined,
+    editable: true,
   }
 )
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: Date | [Date, Date] | ''): void
-  (e: 'change', value: Date | [Date, Date] | null): void
+  (e: 'update:modelValue', value: Date | [Date, Date] | [string, string] | string | ''): void
+  (e: 'change', value: Date | [Date, Date] | [string, string] | string | null): void
   (e: 'focus', event: FocusEvent): void
   (e: 'blur', event: FocusEvent): void
 }>()
 
 const ns = useNamespace('date-picker')
 const { t } = useLocale()
+
+// ---- Form context integration ----
+// Priority: explicit prop > ZcFormItem > ZcForm > default 'medium'
+// DatePickerSize is 'large'|'medium'|'small' (no 'mini'), so 'mini' degrades to 'small'
+const formSize = useFormSize(() => props.size)
+const formDisabled = useFormDisabled(() => props.disabled)
+const formItem = useFormItem()
+const isDisabled = formDisabled
+const effectiveSize = computed<DatePickerSize>(() => {
+  const resolved = formSize.value ?? 'medium'
+  return resolved === 'mini' ? 'small' : (resolved as DatePickerSize)
+})
 
 const placeholderText = computed(() => props.placeholder || t('zc.datePicker.placeholder'))
 const startPlaceholderText = computed(
@@ -66,8 +91,19 @@ const startPlaceholderText = computed(
 const endPlaceholderText = computed(() => props.endPlaceholder || t('zc.datePicker.endPlaceholder'))
 
 const triggerRef = shallowRef<HTMLElement>()
+const dropdownRef = shallowRef<HTMLElement>()
 const visible = ref(false)
 const isFocused = ref(false)
+
+// ---- Dropdown positioning (usePopper absolute strategy) ----
+const { styles: dropdownStyles } = usePopper({
+  reference: triggerRef,
+  popper: dropdownRef,
+  placement: 'bottom-start',
+  offset: 4,
+  strategy: 'absolute',
+  visible,
+})
 
 // ---- Calendar state ----
 const viewDate = ref(new Date())
@@ -105,16 +141,59 @@ watch(
   (val) => {
     if (!val) return
     if (isRange.value) {
-      const [start, end] = val as [Date, Date]
-      rangeStart.value = start || null
-      rangeEnd.value = end || null
+      const [start, end] = val as [Date | string, Date | string]
+      rangeStart.value = toInternalDate(start)
+      rangeEnd.value = toInternalDate(end)
     } else if (val instanceof Date) {
       selectedDate.value = val
       viewDate.value = new Date(val)
+    } else if (typeof val === 'string' && props.valueFormat) {
+      const parsed = parseDateWithTokens(val, props.valueFormat)
+      if (parsed) {
+        selectedDate.value = parsed
+        viewDate.value = new Date(parsed)
+      }
     }
   },
   { immediate: true }
 )
+
+/** Convert an incoming model value (Date or value-format string) to a Date. */
+function toInternalDate(v: Date | string | undefined | null): Date | null {
+  if (!v) return null
+  if (v instanceof Date) return v
+  if (props.valueFormat) {
+    const parsed = parseDateWithTokens(v, props.valueFormat)
+    return parsed
+  }
+  return null
+}
+
+/**
+ * Map an internal Date (or range) to the emitted value: unchanged when no
+ * `value-format` is configured, formatted strings when it is.
+ */
+function toOutput(
+  value: Date | [Date, Date] | '' | null
+): Date | [Date, Date] | [string, string] | string | '' {
+  if (value === '' || value === null) return ''
+  if (!props.valueFormat) return value
+  if (Array.isArray(value)) {
+    return [
+      formatDateWithTokens(value[0], props.valueFormat),
+      formatDateWithTokens(value[1], props.valueFormat),
+    ]
+  }
+  return formatDateWithTokens(value, props.valueFormat)
+}
+
+/** Emit update:modelValue + change with consistent output mapping. */
+function emitValue(value: Date | [Date, Date] | '' | null) {
+  const out = toOutput(value)
+  emit('update:modelValue', out)
+  emit('change', value === '' || value === null ? null : out)
+  formItem?.validate('change')
+}
 
 // ---- Click outside ----
 useClickOutside(triggerRef, () => {
@@ -159,20 +238,37 @@ function isToday(date: Date): boolean {
   return isSameDay(date, new Date())
 }
 
+/**
+ * Effective display format: datetime types append time tokens when the
+ * user-provided format doesn't include them.
+ */
+const effectiveDisplayFormat = computed(() => {
+  if (isDateTime.value && props.type !== 'datetimerange' && !/HH/.test(props.format)) {
+    return `${props.format} HH:mm:ss`
+  }
+  if (props.type === 'month' && !/MM/.test(props.format)) {
+    return 'YYYY-MM'
+  }
+  if (props.type === 'year' && !/YYYY/.test(props.format)) {
+    return 'YYYY'
+  }
+  return props.format
+})
+
 function formatDate(date: Date): string {
-  const y = date.getFullYear()
-  const m = String(date.getMonth() + 1).padStart(2, '0')
-  const d = String(date.getDate()).padStart(2, '0')
-  let result = props.format.replace('YYYY', String(y)).replace('MM', m).replace('DD', d)
-  if (isDateTime.value) {
-    // For datetimerange, use the specific time values based on whether it's start or end
-    if (props.type === 'datetimerange') {
-      return result
-    }
-    const h = String(date.getHours()).padStart(2, '0')
-    const min = String(date.getMinutes()).padStart(2, '0')
-    const s = String(date.getSeconds()).padStart(2, '0')
-    result += ` ${h}:${min}:${s}`
+  if (props.type === 'month') {
+    return formatDateWithTokens(date, effectiveDisplayFormat.value)
+  }
+  if (props.type === 'year') {
+    return formatDateWithTokens(date, effectiveDisplayFormat.value)
+  }
+  let result = formatDateWithTokens(date, effectiveDisplayFormat.value)
+  if (isDateTime.value && props.type === 'datetimerange') {
+    // datetimerange display is handled by formatDateTimeRange
+    const y = date.getFullYear()
+    const m = String(date.getMonth() + 1).padStart(2, '0')
+    const d = String(date.getDate()).padStart(2, '0')
+    result = `${y}-${m}-${d}`
   }
   return result
 }
@@ -267,6 +363,9 @@ const calendarCells = computed<CalendarCell[]>(() => {
 })
 
 // ---- Navigation ----
+// Note: build dates from year/month components (day fixed to 1) instead of
+// setMonth/setFullYear on the current date — otherwise e.g. Oct 31 setMonth(-1)
+// overflows (Sep 31 -> Oct 1) and the header appears not to change.
 function prevMonth() {
   if (panelMode.value === 'year') {
     prevYearRange()
@@ -276,9 +375,7 @@ function prevMonth() {
     prevYear()
     return
   }
-  const d = new Date(viewDate.value)
-  d.setMonth(d.getMonth() - 1)
-  viewDate.value = d
+  viewDate.value = new Date(viewDate.value.getFullYear(), viewDate.value.getMonth() - 1, 1)
 }
 
 function nextMonth() {
@@ -290,33 +387,23 @@ function nextMonth() {
     nextYear()
     return
   }
-  const d = new Date(viewDate.value)
-  d.setMonth(d.getMonth() + 1)
-  viewDate.value = d
+  viewDate.value = new Date(viewDate.value.getFullYear(), viewDate.value.getMonth() + 1, 1)
 }
 
 function prevYear() {
-  const d = new Date(viewDate.value)
-  d.setFullYear(d.getFullYear() - 1)
-  viewDate.value = d
+  viewDate.value = new Date(viewDate.value.getFullYear() - 1, viewDate.value.getMonth(), 1)
 }
 
 function nextYear() {
-  const d = new Date(viewDate.value)
-  d.setFullYear(d.getFullYear() + 1)
-  viewDate.value = d
+  viewDate.value = new Date(viewDate.value.getFullYear() + 1, viewDate.value.getMonth(), 1)
 }
 
 function prevYearRange() {
-  const d = new Date(viewDate.value)
-  d.setFullYear(d.getFullYear() - 10)
-  viewDate.value = d
+  viewDate.value = new Date(viewDate.value.getFullYear() - 10, viewDate.value.getMonth(), 1)
 }
 
 function nextYearRange() {
-  const d = new Date(viewDate.value)
-  d.setFullYear(d.getFullYear() + 10)
-  viewDate.value = d
+  viewDate.value = new Date(viewDate.value.getFullYear() + 10, viewDate.value.getMonth(), 1)
 }
 
 // ---- Range helpers ----
@@ -365,7 +452,7 @@ const singleDisplayValue = computed(() => (!isRange.value ? (displayValue.value 
 
 // ---- Picker control ----
 function openPicker() {
-  if (props.disabled) return
+  if (isDisabled.value) return
   // Set panel mode based on type
   if (isYear.value) panelMode.value = 'year'
   else if (isMonth.value) panelMode.value = 'month'
@@ -379,12 +466,78 @@ function closePicker() {
   visible.value = false
   isFocused.value = false
   emit('blur', new FocusEvent('blur'))
+  // Bridge to form-item validation rules with trigger: 'blur'
+  formItem?.validate('blur')
 }
 
 function togglePicker() {
-  if (props.disabled) return
+  if (isDisabled.value) return
   if (visible.value) closePicker()
   else openPicker()
+}
+
+function focus() {
+  const input = triggerRef.value?.querySelector('input')
+  if (input) {
+    input.focus()
+  } else {
+    triggerRef.value?.focus()
+  }
+}
+
+function blur() {
+  const input = triggerRef.value?.querySelector('input')
+  input?.blur()
+  if (visible.value) closePicker()
+}
+
+// ---- Manual input (editable) ----
+const editingText = ref<string | null>(null)
+
+function handleManualInput(event: Event) {
+  editingText.value = (event.target as HTMLInputElement).value
+}
+
+/** Commit the typed text: parse with the display format and select. */
+function commitManualInput(closePanel = false) {
+  if (editingText.value == null) return
+  const text = editingText.value.trim()
+  editingText.value = null
+  if (isRange.value) return // range typing is not supported yet
+
+  if (!text) {
+    handleClear()
+    return
+  }
+
+  const parsed = parseDateWithTokens(text, effectiveDisplayFormat.value)
+  if (!parsed || props.disabledDate?.(parsed)) return // invalid: restore display
+
+  if (isDateTime.value) {
+    selectedDate.value = parsed
+    selectedHours.value = parsed.getHours()
+    selectedMinutes.value = parsed.getMinutes()
+    selectedSeconds.value = parsed.getSeconds()
+  } else {
+    selectedDate.value = parsed
+  }
+  viewDate.value = new Date(parsed)
+  emitValue(parsed)
+  if (closePanel && visible.value) {
+    visible.value = false
+  }
+}
+
+function handleInputFocus(event: FocusEvent) {
+  isFocused.value = true
+  emit('focus', event)
+}
+
+function handleInputBlur(event: FocusEvent) {
+  isFocused.value = false
+  emit('blur', event)
+  commitManualInput(false)
+  formItem?.validate('blur')
 }
 
 // ---- Date selection ----
@@ -417,8 +570,7 @@ function selectDate(cell: CalendarCell) {
       // For datetimerange, don't auto-close — user needs to confirm time
       if (props.type !== 'datetimerange') {
         const range: [Date, Date] = [rangeStart.value!, rangeEnd.value]
-        emit('update:modelValue', range)
-        emit('change', range)
+        emitValue(range)
         closePicker()
       } else {
         // Initialize end time if not set
@@ -433,8 +585,7 @@ function selectDate(cell: CalendarCell) {
     // Week mode: select the entire week
     const weekStart = getWeekStart(cell.date)
     selectedDate.value = weekStart
-    emit('update:modelValue', weekStart)
-    emit('change', weekStart)
+    emitValue(weekStart)
     closePicker()
   } else if (isDateTime.value) {
     // DateTime mode: store date, show time panel
@@ -446,8 +597,7 @@ function selectDate(cell: CalendarCell) {
   } else {
     // Single date mode
     selectedDate.value = cell.date
-    emit('update:modelValue', cell.date)
-    emit('change', cell.date)
+    emitValue(cell.date)
     closePicker()
   }
 }
@@ -462,8 +612,7 @@ function handleClear() {
   selectedDate.value = null
   rangeStart.value = null
   rangeEnd.value = null
-  emit('update:modelValue', '')
-  emit('change', null)
+  emitValue('')
 }
 
 // ---- Month / Year selection ----
@@ -474,8 +623,7 @@ function selectMonth(monthIndex: number) {
   if (isMonth.value) {
     // Month type: emit immediately
     selectedDate.value = new Date(d.getFullYear(), monthIndex, 1)
-    emit('update:modelValue', selectedDate.value)
-    emit('change', selectedDate.value)
+    emitValue(selectedDate.value)
     closePicker()
   } else {
     // Switch to date panel
@@ -490,8 +638,7 @@ function selectYear(year: number) {
   if (isYear.value) {
     // Year type: emit immediately
     selectedDate.value = new Date(year, 0, 1)
-    emit('update:modelValue', selectedDate.value)
-    emit('change', selectedDate.value)
+    emitValue(selectedDate.value)
     closePicker()
   } else {
     // Switch to month panel
@@ -524,8 +671,7 @@ function confirmDateTime() {
     const d = new Date(selectedDate.value)
     d.setHours(selectedHours.value, selectedMinutes.value, selectedSeconds.value)
     selectedDate.value = d
-    emit('update:modelValue', d)
-    emit('change', d)
+    emitValue(d)
   }
   closePicker()
 }
@@ -540,8 +686,7 @@ function confirmDateTimeRange() {
     rangeStart.value = start
     rangeEnd.value = end
     const range: [Date, Date] = [start, end]
-    emit('update:modelValue', range)
-    emit('change', range)
+    emitValue(range)
     closePicker()
   }
 }
@@ -555,14 +700,12 @@ function applyShortcut(shortcut: DatePickerShortcut) {
     rangeEnd.value = value[1]
     viewDate.value = new Date(value[0])
     const range: [Date, Date] = [value[0], value[1]]
-    emit('update:modelValue', range)
-    emit('change', range)
+    emitValue(range)
     closePicker()
   } else {
     selectedDate.value = value
     viewDate.value = new Date(value)
-    emit('update:modelValue', value)
-    emit('change', value)
+    emitValue(value)
     closePicker()
   }
 }
@@ -570,7 +713,7 @@ function applyShortcut(shortcut: DatePickerShortcut) {
 const showClear = computed(
   () =>
     props.clearable &&
-    !props.disabled &&
+    !isDisabled.value &&
     visible.value &&
     (selectedDate.value || (rangeStart.value && rangeEnd.value))
 )
@@ -578,8 +721,8 @@ const showClear = computed(
 // ---- Classes ----
 const containerClasses = computed(() => [
   ns.b(),
-  ns.m(props.size),
-  ns.is('disabled', props.disabled),
+  ns.m(effectiveSize.value),
+  ns.is('disabled', isDisabled.value),
   ns.is('focused', isFocused.value),
   ns.is('range', isRange.value),
 ])
@@ -613,6 +756,10 @@ defineExpose({
   togglePicker,
   /** Confirm date time range selection */
   confirmDateTimeRange,
+  /** Focus the trigger input */
+  focus,
+  /** Blur the trigger input */
+  blur,
   /** Current visible state */
   visible,
 })
@@ -642,7 +789,7 @@ defineExpose({
           :class="ns.e('input')"
           :value="rangeDisplayStart"
           :placeholder="startPlaceholderText"
-          :disabled="disabled"
+          :disabled="isDisabled"
           readonly
         />
         <span :class="ns.e('separator')">—</span>
@@ -650,7 +797,7 @@ defineExpose({
           :class="ns.e('input')"
           :value="rangeDisplayEnd"
           :placeholder="endPlaceholderText"
-          :disabled="disabled"
+          :disabled="isDisabled"
           readonly
         />
       </template>
@@ -659,10 +806,15 @@ defineExpose({
       <template v-else>
         <input
           :class="ns.e('input')"
-          :value="singleDisplayValue"
+          :value="editingText ?? singleDisplayValue"
           :placeholder="placeholderText"
-          :disabled="disabled"
-          readonly
+          :disabled="isDisabled"
+          :readonly="!editable"
+          :aria-label="placeholderText"
+          @input="handleManualInput"
+          @keydown.enter.prevent="commitManualInput(true)"
+          @focus="handleInputFocus"
+          @blur="handleInputBlur"
         />
       </template>
 
@@ -684,7 +836,7 @@ defineExpose({
 
     <!-- Dropdown panel -->
     <transition name="zc-date-picker-dropdown">
-      <div v-if="visible" :class="ns.e('panel')">
+      <div v-if="visible" ref="dropdownRef" :style="dropdownStyles" :class="ns.e('panel')">
         <div :class="ns.e('body')">
           <!-- Shortcuts sidebar -->
           <div v-if="shortcuts && shortcuts.length" :class="ns.e('shortcuts')">
@@ -1018,8 +1170,6 @@ defineExpose({
 /* ---- Dropdown panel ---- */
 .zc-date-picker__panel {
   position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
   z-index: var(--z-zc-dropdown, 1000);
   background: var(--color-zc-white, #fff);
   border: 1px solid var(--color-zc-border-light, #e4e7ed);

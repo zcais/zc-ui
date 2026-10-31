@@ -238,61 +238,79 @@ function handleCheck(node: TreeNodeData) {
   const newChecked = new Set(checkedKeysSet.value)
   const newHalf = new Set(halfCheckedKeysSet.value)
 
-  if (newChecked.has(key)) {
-    newChecked.delete(key)
-    newHalf.delete(key)
-    if (!props.checkStrictly) {
-      getDescendantKeys(node).forEach((k) => {
-        newChecked.delete(k)
-        newHalf.delete(k)
-      })
-      getAncestorKeys(node, props.data).forEach((ancestorKey) => {
-        const ancestorNode = findNodeByKey(ancestorKey, props.data)
-        if (ancestorNode) {
-          const allDescKeys = [ancestorKey, ...getDescendantKeys(ancestorNode)]
-          const checkedCount = allDescKeys.filter((k) => newChecked.has(k)).length
-          if (checkedCount === 0) {
-            newChecked.delete(ancestorKey)
-            newHalf.delete(ancestorKey)
-          } else if (checkedCount < allDescKeys.length) {
-            newChecked.delete(ancestorKey)
-            newHalf.add(ancestorKey)
-          } else {
-            newChecked.add(ancestorKey)
-            newHalf.delete(ancestorKey)
-          }
-        }
-      })
-    }
-  } else {
-    newChecked.add(key)
-    newHalf.delete(key)
-    if (!props.checkStrictly) {
-      getDescendantKeys(node).forEach((k) => {
-        newChecked.add(k)
-        newHalf.delete(k)
-      })
-      getAncestorKeys(node, props.data).forEach((ancestorKey) => {
-        const ancestorNode = findNodeByKey(ancestorKey, props.data)
-        if (ancestorNode) {
-          const allDescKeys = [ancestorKey, ...getDescendantKeys(ancestorNode)]
-          const checkedCount = allDescKeys.filter((k) => newChecked.has(k)).length
-          if (checkedCount === allDescKeys.length) {
-            newChecked.add(ancestorKey)
-            newHalf.delete(ancestorKey)
-          } else {
-            newChecked.delete(ancestorKey)
-            newHalf.add(ancestorKey)
-          }
-        }
-      })
-    }
-  }
+  applyCheckCascade(newChecked, newHalf, key, !newChecked.has(key))
 
   checkedKeysSet.value = newChecked
   halfCheckedKeysSet.value = newHalf
   emit('update:checkedKeys', [...newChecked])
-  emit('check-change', node, newChecked.has(key))
+  const targetNode = findNodeByKey(key, props.data)
+  if (targetNode) emit('check-change', targetNode, newChecked.has(key))
+}
+
+/**
+ * Apply a check/uncheck of `key` onto the given sets, cascading to
+ * descendants and ancestors when parent-child linkage is enabled.
+ * Shared by checkbox clicks and the imperative setChecked/setCheckedKeys.
+ */
+function applyCheckCascade(
+  newChecked: Set<string | number>,
+  newHalf: Set<string | number>,
+  key: string | number,
+  willCheck: boolean
+) {
+  if (willCheck) {
+    newChecked.add(key)
+    newHalf.delete(key)
+    if (!props.checkStrictly) {
+      getDescendantKeysByKey(key).forEach((k) => {
+        newChecked.add(k)
+        newHalf.delete(k)
+      })
+      getAncestorKeysOfKey(key).forEach((ancestorKey) => {
+        const allDescKeys = [ancestorKey, ...getDescendantKeysByKey(ancestorKey)]
+        const checkedCount = allDescKeys.filter((k) => newChecked.has(k)).length
+        if (checkedCount === allDescKeys.length) {
+          newChecked.add(ancestorKey)
+          newHalf.delete(ancestorKey)
+        } else {
+          newChecked.delete(ancestorKey)
+          newHalf.add(ancestorKey)
+        }
+      })
+    }
+  } else {
+    newChecked.delete(key)
+    newHalf.delete(key)
+    if (!props.checkStrictly) {
+      getDescendantKeysByKey(key).forEach((k) => {
+        newChecked.delete(k)
+        newHalf.delete(k)
+      })
+      getAncestorKeysOfKey(key).forEach((ancestorKey) => {
+        const allDescKeys = [ancestorKey, ...getDescendantKeysByKey(ancestorKey)]
+        const checkedCount = allDescKeys.filter((k) => newChecked.has(k)).length
+        if (checkedCount === 0) {
+          newChecked.delete(ancestorKey)
+          newHalf.delete(ancestorKey)
+        } else {
+          newChecked.delete(ancestorKey)
+          newHalf.add(ancestorKey)
+        }
+      })
+    }
+  }
+}
+
+/** Descendant keys of the node identified by `key`. */
+function getDescendantKeysByKey(key: string | number): (string | number)[] {
+  const node = findNodeByKey(key, props.data)
+  return node ? getDescendantKeys(node) : []
+}
+
+/** Ancestor keys of the node identified by `key` (nearest first). */
+function getAncestorKeysOfKey(key: string | number): (string | number)[] {
+  const node = findNodeByKey(key, props.data)
+  return node ? getAncestorKeys(node, props.data) : []
 }
 
 function isChecked(node: TreeNodeData): boolean {
@@ -488,7 +506,220 @@ const {
   overscan: 5,
 })
 
-defineExpose({ virtualContainerRef })
+/* ============================================================
+ * Imperative API (Element Plus compatible)
+ * ============================================================ */
+
+/** All fully-checked keys. With `leafOnly`, only leaf nodes are returned. */
+function getCheckedKeys(leafOnly = false): (string | number)[] {
+  const keys = [...checkedKeysSet.value]
+  if (!leafOnly) return keys
+  return keys.filter((key) => {
+    const node = findNodeByKey(key, props.data)
+    return !node || !getNodeChildren(node)?.length
+  })
+}
+
+/** All fully-checked nodes. With `leafOnly`, only leaf nodes are returned. */
+function getCheckedNodes(leafOnly = false): TreeNodeData[] {
+  const nodes: TreeNodeData[] = []
+  function collect(list: TreeNodeData[]) {
+    list.forEach((node) => {
+      if (checkedKeysSet.value.has(getNodeKey(node))) {
+        if (!leafOnly || !getNodeChildren(node)?.length) nodes.push(node)
+      }
+      const children = getNodeChildren(node)
+      if (children?.length) collect(children)
+    })
+  }
+  collect(props.data)
+  return nodes
+}
+
+/** Keys of nodes in the half-checked (indeterminate) state. */
+function getHalfCheckedKeys(): (string | number)[] {
+  return [...halfCheckedKeysSet.value]
+}
+
+/** Nodes in the half-checked (indeterminate) state. */
+function getHalfCheckedNodes(): TreeNodeData[] {
+  const nodes: TreeNodeData[] = []
+  function collect(list: TreeNodeData[]) {
+    list.forEach((node) => {
+      if (halfCheckedKeysSet.value.has(getNodeKey(node))) nodes.push(node)
+      const children = getNodeChildren(node)
+      if (children?.length) collect(children)
+    })
+  }
+  collect(props.data)
+  return nodes
+}
+
+/**
+ * Replace the checked set with `keys`.
+ * With parent-child linkage enabled, the state cascates to descendants and
+ * ancestors just like clicking each node would.
+ */
+function setCheckedKeys(keys: (string | number)[]) {
+  const newChecked = new Set(keys)
+  const newHalf = new Set<string | number>()
+
+  if (!props.checkStrictly) {
+    // Downward pass: a checked parent checks all of its descendants.
+    function cascadeDown(list: TreeNodeData[], parentChecked: boolean) {
+      list.forEach((node) => {
+        const key = getNodeKey(node)
+        const willCheck = parentChecked || newChecked.has(key)
+        if (willCheck) newChecked.add(key)
+        const children = getNodeChildren(node)
+        if (children?.length) cascadeDown(children, willCheck)
+      })
+    }
+    cascadeDown(props.data, false)
+
+    // Upward pass: recompute parent checked/half state from their children.
+    function cascadeUp(list: TreeNodeData[]): { all: boolean; any: boolean } {
+      let all = true
+      let any = false
+      list.forEach((node) => {
+        const key = getNodeKey(node)
+        const children = getNodeChildren(node)
+        let nodeChecked = newChecked.has(key)
+        let nodeAny = nodeChecked
+        if (children?.length) {
+          const res = cascadeUp(children)
+          nodeChecked = res.all
+          nodeAny = res.any || nodeChecked
+          if (res.all) {
+            newChecked.add(key)
+            newHalf.delete(key)
+          } else if (res.any) {
+            newChecked.delete(key)
+            newHalf.add(key)
+          } else {
+            newChecked.delete(key)
+            newHalf.delete(key)
+          }
+        }
+        all = all && nodeChecked
+        any = any || nodeAny
+      })
+      return { all, any }
+    }
+    cascadeUp(props.data)
+  }
+
+  checkedKeysSet.value = newChecked
+  halfCheckedKeysSet.value = newHalf
+  emit('update:checkedKeys', [...newChecked])
+}
+
+/**
+ * Check or uncheck a single node, cascading like a user click.
+ */
+function setChecked(key: string | number, checked: boolean) {
+  const newChecked = new Set(checkedKeysSet.value)
+  const newHalf = new Set(halfCheckedKeysSet.value)
+  applyCheckCascade(newChecked, newHalf, key, checked)
+  checkedKeysSet.value = newChecked
+  halfCheckedKeysSet.value = newHalf
+  emit('update:checkedKeys', [...newChecked])
+  const node = findNodeByKey(key, props.data)
+  if (node) emit('check-change', node, checked)
+}
+
+/** Currently expanded keys. */
+function getExpandedKeys(): (string | number)[] {
+  return [...internalExpanded.value]
+}
+
+/** Replace the expanded set (also switches the tree to controlled mode). */
+function setExpandedKeys(keys: (string | number)[]) {
+  expandedKeysSet.value = new Set(keys)
+  isExpandedControlled.value = true
+  emit('update:expandedKeys', [...expandedKeysSet.value])
+}
+
+/** Find a node by its key. */
+function getNode(key: string | number): TreeNodeData | undefined {
+  return findNodeByKey(key, props.data)
+}
+
+/** Find the top-level or branch array that directly contains `key`. */
+function findContainingList(key: string | number, nodes: TreeNodeData[]): TreeNodeData[] | null {
+  for (const node of nodes) {
+    if (getNodeKey(node) === key) return nodes
+    const children = getNodeChildren(node)
+    if (children?.length) {
+      const found = findContainingList(key, children)
+      if (found) return found
+    }
+  }
+  return null
+}
+
+/**
+ * Append a node to the tree. With `parentKey`, appends to that node's
+ * children (creating the list when missing); otherwise to the root.
+ * Mutates the bound data in place — pass a reactive array.
+ */
+function append(data: TreeNodeData, parentKey?: string | number) {
+  if (parentKey != null) {
+    const parent = findNodeByKey(parentKey, props.data)
+    if (!parent) return
+    const children = getNodeChildren(parent)
+    if (children) {
+      children.push(data)
+    } else {
+      ;(parent as any)[propsConfig.value.children] = [data]
+    }
+  } else {
+    // eslint-disable-next-line vue/no-mutating-props -- imperative append mutates the bound (reactive) data in place, matching the exposed append/insert/remove API
+    props.data.push(data)
+  }
+}
+
+/** Insert a node immediately before the node with `refKey`. */
+function insertBefore(data: TreeNodeData, refKey: string | number) {
+  const list = findContainingList(refKey, props.data)
+  if (!list) return
+  const idx = list.findIndex((n) => getNodeKey(n) === refKey)
+  if (idx >= 0) list.splice(idx, 0, data)
+}
+
+/** Insert a node immediately after the node with `refKey`. */
+function insertAfter(data: TreeNodeData, refKey: string | number) {
+  const list = findContainingList(refKey, props.data)
+  if (!list) return
+  const idx = list.findIndex((n) => getNodeKey(n) === refKey)
+  if (idx >= 0) list.splice(idx + 1, 0, data)
+}
+
+/** Remove the node with `key` from the tree. */
+function remove(key: string | number) {
+  const list = findContainingList(key, props.data)
+  if (!list) return
+  const idx = list.findIndex((n) => getNodeKey(n) === key)
+  if (idx >= 0) list.splice(idx, 1)
+}
+
+defineExpose({
+  virtualContainerRef,
+  // Imperative API (Element Plus compatible)
+  getCheckedKeys,
+  getCheckedNodes,
+  getHalfCheckedKeys,
+  getHalfCheckedNodes,
+  setCheckedKeys,
+  setChecked,
+  getExpandedKeys,
+  setExpandedKeys,
+  getNode,
+  append,
+  insertBefore,
+  insertAfter,
+  remove,
+})
 </script>
 
 <template>

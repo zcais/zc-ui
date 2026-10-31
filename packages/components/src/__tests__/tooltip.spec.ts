@@ -1,10 +1,12 @@
 import { describe, it, expect, vi, afterEach } from 'vitest'
-import { mount } from '@vue/test-utils'
+import { mount, flushPromises } from '@vue/test-utils'
 import Tooltip from '../tooltip/tooltip.vue'
+import { ZcTooltipDirective } from '../tooltip/tooltip-directive'
 
 describe('ZcTooltip', () => {
   afterEach(() => {
     vi.useRealTimers()
+    vi.restoreAllMocks()
     document.body.innerHTML = ''
   })
 
@@ -109,6 +111,16 @@ describe('ZcTooltip', () => {
       props: { content: 'Top', triggers: ['hover'], showDelay: 0 },
       slots: { default: '<span>text</span>' },
     })
+    vi.spyOn(wrapper.element as HTMLElement, 'getBoundingClientRect').mockReturnValue({
+      x: 200,
+      y: 200,
+      top: 200,
+      right: 300,
+      bottom: 240,
+      left: 200,
+      width: 100,
+      height: 40,
+    } as DOMRect)
     await wrapper.trigger('mouseenter')
     const popper = document.querySelector('.zc-tooltip__popper')
     expect(popper?.classList.contains('zc-tooltip__popper--top')).toBe(true)
@@ -129,6 +141,16 @@ describe('ZcTooltip', () => {
       props: { content: 'Left', triggers: ['hover'], showDelay: 0, placement: 'left' },
       slots: { default: '<span>text</span>' },
     })
+    vi.spyOn(wrapper.element as HTMLElement, 'getBoundingClientRect').mockReturnValue({
+      x: 200,
+      y: 200,
+      top: 200,
+      right: 300,
+      bottom: 240,
+      left: 200,
+      width: 100,
+      height: 40,
+    } as DOMRect)
     await wrapper.trigger('mouseenter')
     const popper = document.querySelector('.zc-tooltip__popper')
     expect(popper?.classList.contains('zc-tooltip__popper--left')).toBe(true)
@@ -176,6 +198,16 @@ describe('ZcTooltip', () => {
       props: { content: 'TS', triggers: ['hover'], showDelay: 0, placement: 'top-start' },
       slots: { default: '<span>text</span>' },
     })
+    vi.spyOn(wrapper.element as HTMLElement, 'getBoundingClientRect').mockReturnValue({
+      x: 200,
+      y: 200,
+      top: 200,
+      right: 300,
+      bottom: 240,
+      left: 200,
+      width: 100,
+      height: 40,
+    } as DOMRect)
     await wrapper.trigger('mouseenter')
     const popper = document.querySelector('.zc-tooltip__popper')
     expect(popper?.classList.contains('zc-tooltip__popper--top-start')).toBe(true)
@@ -186,6 +218,16 @@ describe('ZcTooltip', () => {
       props: { content: 'TE', triggers: ['hover'], showDelay: 0, placement: 'top-end' },
       slots: { default: '<span>text</span>' },
     })
+    vi.spyOn(wrapper.element as HTMLElement, 'getBoundingClientRect').mockReturnValue({
+      x: 200,
+      y: 200,
+      top: 200,
+      right: 300,
+      bottom: 240,
+      left: 200,
+      width: 100,
+      height: 40,
+    } as DOMRect)
     await wrapper.trigger('mouseenter')
     const popper = document.querySelector('.zc-tooltip__popper')
     expect(popper?.classList.contains('zc-tooltip__popper--top-end')).toBe(true)
@@ -216,6 +258,16 @@ describe('ZcTooltip', () => {
       props: { content: 'LS', triggers: ['hover'], showDelay: 0, placement: 'left-start' },
       slots: { default: '<span>text</span>' },
     })
+    vi.spyOn(wrapper.element as HTMLElement, 'getBoundingClientRect').mockReturnValue({
+      x: 200,
+      y: 200,
+      top: 200,
+      right: 300,
+      bottom: 240,
+      left: 200,
+      width: 100,
+      height: 40,
+    } as DOMRect)
     await wrapper.trigger('mouseenter')
     const popper = document.querySelector('.zc-tooltip__popper')
     expect(popper?.classList.contains('zc-tooltip__popper--left-start')).toBe(true)
@@ -226,6 +278,16 @@ describe('ZcTooltip', () => {
       props: { content: 'LE', triggers: ['hover'], showDelay: 0, placement: 'left-end' },
       slots: { default: '<span>text</span>' },
     })
+    vi.spyOn(wrapper.element as HTMLElement, 'getBoundingClientRect').mockReturnValue({
+      x: 200,
+      y: 200,
+      top: 200,
+      right: 300,
+      bottom: 240,
+      left: 200,
+      width: 100,
+      height: 40,
+    } as DOMRect)
     await wrapper.trigger('mouseenter')
     const popper = document.querySelector('.zc-tooltip__popper')
     expect(popper?.classList.contains('zc-tooltip__popper--left-end')).toBe(true)
@@ -377,5 +439,50 @@ describe('ZcTooltip', () => {
     await wrapper.trigger('mouseenter')
     const popper = document.querySelector('.zc-tooltip__popper')
     expect(popper?.textContent).toContain('Content Prop')
+  })
+})
+
+describe('ZcTooltipDirective', () => {
+  afterEach(() => {
+    vi.useRealTimers()
+    vi.restoreAllMocks()
+    document.body.innerHTML = ''
+  })
+
+  function mountWithDirective(bindingValue: unknown) {
+    const Host = {
+      directives: { tooltip: ZcTooltipDirective },
+      template: '<button v-tooltip="value">Hover</button>',
+      data: () => ({ value: bindingValue }),
+    }
+    return mount(Host, { attachTo: document.body })
+  }
+
+  it('shows tooltip on hover with default placement', async () => {
+    vi.useFakeTimers()
+    const wrapper = mountWithDirective('Directive Tip')
+    const btn = wrapper.find('button')
+    await btn.trigger('mouseenter')
+    vi.advanceTimersByTime(100)
+    await flushPromises()
+
+    const tooltip = document.querySelector('.zc-tooltip-popper') as HTMLElement
+    expect(tooltip).not.toBeNull()
+    expect(tooltip.textContent).toContain('Directive Tip')
+    // Positioned by ZcPopper engine (fixed strategy)
+    expect(tooltip.style.position).toBe('fixed')
+    expect(tooltip.style.top).not.toBe('')
+
+    wrapper.unmount()
+  })
+
+  it('does not show when disabled', async () => {
+    vi.useFakeTimers()
+    const wrapper = mountWithDirective({ content: 'Tip', disabled: true })
+    await wrapper.find('button').trigger('mouseenter')
+    vi.advanceTimersByTime(100)
+    await flushPromises()
+    expect(document.querySelector('.zc-tooltip-popper')).toBeNull()
+    wrapper.unmount()
   })
 })

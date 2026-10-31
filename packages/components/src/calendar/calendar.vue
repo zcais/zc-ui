@@ -135,7 +135,7 @@ const calendarCells = computed(() => {
   const month = viewDate.value.getMonth()
   const firstDay = new Date(year, month, 1)
   // Account for firstDayOfWeek
-  let startOffset = (firstDay.getDay() - props.firstDayOfWeek + 7) % 7
+  const startOffset = (firstDay.getDay() - props.firstDayOfWeek + 7) % 7
 
   // Start date = first day shown (may be in previous month)
   const startDate = new Date(year, month, 1 - startOffset)
@@ -459,15 +459,6 @@ defineExpose({
 }
 
 /* ---- Dark mode ---- */
-.zc-calendar:where(.dark, [data-theme='dark'], [data-mode='dark']) {
-  --zc-calendar-border-color: var(--color-zc-border-base, #4c4d4f);
-  --zc-calendar-bg: var(--color-zc-bg-overlay, #1d1e1f);
-  --zc-calendar-text: var(--color-zc-text-primary, #e5eaf3);
-  --zc-calendar-text-secondary: var(--color-zc-text-secondary, #a3a6ad);
-  --zc-calendar-text-placeholder: var(--color-zc-text-placeholder, #8d9095);
-}
-
-/* Support parent dark mode selector */
 .dark .zc-calendar {
   --zc-calendar-border-color: var(--color-zc-border-base, #4c4d4f);
   --zc-calendar-bg: var(--color-zc-bg-overlay, #1d1e1f);

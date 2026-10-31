@@ -10,7 +10,8 @@ export interface ZcUiResolverOptions {
    * Whether to import CSS styles automatically.
    *
    * - `'full'` — Import the entire stylesheet (recommended for most projects).
-   * - `'component'` — Import per-component CSS (requires per-component CSS build).
+   * - `'component'` — Deprecated: the package currently ships a single
+   *   combined stylesheet, so this behaves the same as `'full'`.
    * - `false` — Don't import any CSS.
    *
    * @default 'full'

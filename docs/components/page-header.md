@@ -76,27 +76,27 @@
 
 ## 属性
 
-| 属性     | 说明                     | 类型      | 默认值  |
-| -------- | ------------------------ | --------- | ------- |
-| title    | 主标题                   | `string`  | —       |
-| subtitle | 副标题                   | `string`  | —       |
-| showBack | 是否显示返回按钮         | `boolean` | `true`  |
-| backIcon | 返回图标                 | `string`  | —       |
-| ghost    | 幽灵模式（无背景无边框） | `boolean` | `false` |
+<ApiTable type="props" :data="[
+{ name: 'title', description: '主标题', type: 'string', default: '—' },
+{ name: 'subtitle', description: '副标题', type: 'string', default: '—' },
+{ name: 'showBack', description: '是否显示返回按钮', type: 'boolean', default: 'true' },
+{ name: 'backIcon', description: '返回图标', type: 'string', default: '—' },
+{ name: 'ghost', description: '幽灵模式（无背景无边框）', type: 'boolean', default: 'false' }
+]" />
 
 ## 事件
 
-| 事件名 | 说明               | 回调参数 |
-| ------ | ------------------ | -------- |
-| back   | 点击返回按钮时触发 | —        |
+<ApiTable type="events" :data="[
+{ name: '—', description: '点击返回按钮时触发' }
+]" />
 
 ## 插槽
 
-| 插槽名     | 说明                 |
-| ---------- | -------------------- |
-| default    | 默认插槽（不使用）   |
-| title      | 自定义标题           |
-| subtitle   | 自定义副标题         |
-| breadcrumb | 面包屑区域           |
-| extra      | 右侧操作区域         |
-| footer     | 底部区域（如标签页） |
+<ApiTable type="slots" :data="[
+{ name: 'default', description: '默认插槽（不使用）' },
+{ name: 'title', description: '自定义标题' },
+{ name: 'subtitle', description: '自定义副标题' },
+{ name: 'breadcrumb', description: '面包屑区域' },
+{ name: 'extra', description: '右侧操作区域' },
+{ name: 'footer', description: '底部区域（如标签页）' }
+]" />

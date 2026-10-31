@@ -61,7 +61,9 @@ export const ZcCopyDirective: Directive = {
     el.style.cursor = 'pointer'
 
     const handler = async () => {
-      const text = binding.value as string
+      // Read the live value from the element store so `updated` refreshes
+      // take effect (a captured binding.value would go stale on re-render).
+      const text = el.__zcCopy?.value as string
       if (!text) return
 
       const success = await copyToClipboard(text)

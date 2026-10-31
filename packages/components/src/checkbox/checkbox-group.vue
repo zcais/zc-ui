@@ -12,6 +12,7 @@ export interface CheckboxGroupContext {
 <script setup lang="ts">
 import { provide, ref, watch, computed, type Ref } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
+import { useFormDisabled, useFormItem } from '../form/use-form'
 const props = withDefaults(
   defineProps<{
     modelValue?: Array<string | number | boolean>
@@ -42,14 +43,11 @@ watch(
   { deep: true }
 )
 
-// ---- Provide context to child ZcCheckbox instances ----
-const disabledRef = ref(props.disabled)
-watch(
-  () => props.disabled,
-  (val) => {
-    disabledRef.value = val
-  }
-)
+// ---- Form context integration ----
+// Effective disabled: own prop > ZcFormItem > ZcForm; provided to child checkboxes
+const formDisabled = useFormDisabled(() => props.disabled)
+const formItem = useFormItem()
+const disabledRef = computed(() => formDisabled.value)
 
 const context: CheckboxGroupContext = {
   modelValue: modelRef,
@@ -59,6 +57,8 @@ const context: CheckboxGroupContext = {
     const value = modelRef.value
     emit('update:modelValue', value)
     emit('change', value)
+    // Bridge to form-item validation rules with trigger: 'change'
+    formItem?.validate('change')
   },
 }
 

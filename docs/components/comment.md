@@ -118,29 +118,29 @@ const likeCount = ref(42)
 
 ### Comment Props
 
-| 属性名     | 说明                       | 类型      | 默认值  |
-| ---------- | -------------------------- | --------- | ------- |
-| author     | 作者名                     | `string`  | `''`    |
-| avatar     | 头像 URL                   | `string`  | `''`    |
-| datetime   | 时间文本                   | `string`  | `''`    |
-| content    | 评论内容（也可用默认插槽） | `string`  | `''`    |
-| nested     | 是否显示嵌套回复区域       | `boolean` | `false` |
-| avatarSize | 头像尺寸（px）             | `number`  | `40`    |
+<ApiTable type="props" :data="[
+{ name: 'author', description: '作者名', type: 'string', default: '''' },
+{ name: 'avatar', description: '头像 URL', type: 'string', default: '''' },
+{ name: 'datetime', description: '时间文本', type: 'string', default: '''' },
+{ name: 'content', description: '评论内容（也可用默认插槽）', type: 'string', default: '''' },
+{ name: 'nested', description: '是否显示嵌套回复区域', type: 'boolean', default: 'false' },
+{ name: 'avatarSize', description: '头像尺寸（px）', type: 'number', default: '40' }
+]" />
 
 ### Comment Events
 
-| 事件名 | 说明               | 回调参数           |
-| ------ | ------------------ | ------------------ |
-| reply  | 点击默认回复按钮时 | `(author: string)` |
-| like   | 点击默认点赞按钮时 | -                  |
+<ApiTable type="events" :data="[
+{ name: '(author: string)', description: '点击默认回复按钮时' },
+{ name: '—', description: '点击默认点赞按钮时' }
+]" />
 
 ### Slots
 
-| 插槽名       | 说明                                      |
-| ------------ | ----------------------------------------- |
-| default      | 评论正文内容                              |
-| author       | 自定义作者区域                            |
-| avatar       | 自定义头像区域                            |
-| datetime     | 自定义时间区域                            |
-| actions      | 操作栏区域，提供 `reply` 和 `like` 方法   |
-| comment-list | 嵌套回复列表（需设置 `nested` 为 `true`） |
+<ApiTable type="slots" :data="[
+{ name: 'default', description: '评论正文内容' },
+{ name: 'author', description: '自定义作者区域' },
+{ name: 'avatar', description: '自定义头像区域' },
+{ name: 'datetime', description: '自定义时间区域' },
+{ name: 'actions', description: '操作栏区域，提供 reply 和 like 方法' },
+{ name: 'comment-list', description: '嵌套回复列表（需设置 nested 为 true）' }
+]" />

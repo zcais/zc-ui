@@ -128,7 +128,11 @@ const justify = ref('center')
     <ZcRadio value="baseline">baseline</ZcRadio>
   </ZcRadioGroup>
 
-  <ZcFlex :align="align" gap="middle" style="background: #f5f5f5; padding: 12px; border-radius: 4px; height: 120px">
+  <ZcFlex
+    :align="align"
+    gap="middle"
+    style="background: #f5f5f5; padding: 12px; border-radius: 4px; height: 120px"
+  >
     <div class="flex-demo-item">A</div>
     <div class="flex-demo-item" style="height: 80px">B</div>
     <div class="flex-demo-item" style="height: 40px">C</div>
@@ -172,7 +176,11 @@ const align = ref('center')
     <ZcRadio value="wrap-reverse">wrap-reverse</ZcRadio>
   </ZcRadioGroup>
 
-  <ZcFlex :wrap="wrap" gap="small" style="background: #f5f5f5; padding: 12px; border-radius: 4px; width: 280px">
+  <ZcFlex
+    :wrap="wrap"
+    gap="small"
+    style="background: #f5f5f5; padding: 12px; border-radius: 4px; width: 280px"
+  >
     <div v-for="i in 8" :key="i" class="flex-demo-item">{{ i }}</div>
   </ZcFlex>
 </template>
@@ -256,15 +264,9 @@ const gap = ref('middle')
 ```vue
 <template>
   <ZcFlex style="height: 120px; gap: 12px">
-    <ZcFlex :flex="1" align="center" justify="center" class="flex-nested">
-      flex=1
-    </ZcFlex>
-    <ZcFlex :flex="2" align="center" justify="center" class="flex-nested">
-      flex=2
-    </ZcFlex>
-    <ZcFlex :flex="1" align="center" justify="center" class="flex-nested">
-      flex=1
-    </ZcFlex>
+    <ZcFlex :flex="1" align="center" justify="center" class="flex-nested"> flex=1 </ZcFlex>
+    <ZcFlex :flex="2" align="center" justify="center" class="flex-nested"> flex=2 </ZcFlex>
+    <ZcFlex :flex="1" align="center" justify="center" class="flex-nested"> flex=1 </ZcFlex>
   </ZcFlex>
 </template>
 
@@ -327,12 +329,12 @@ Flex 组件的属性可以自由组合，实现复杂的布局需求。
 
 <ApiTable type="props" :data="[
   { name: 'vertical', description: '垂直方向排列（flex-direction: column）', type: 'boolean', default: 'false' },
-  { name: 'justify', description: '主轴对齐方式', type: '\'flex-start\' | \'center\' | \'flex-end\' | \'space-between\' | \'space-around\' | \'space-evenly\'', default: '\'flex-start\'' },
-  { name: 'align', description: '交叉轴对齐方式', type: '\'flex-start\' | \'center\' | \'flex-end\' | \'stretch\' | \'baseline\'', default: '\'flex-start\'' },
-  { name: 'wrap', description: '换行方式', type: '\'wrap\' | \'nowrap\' | \'wrap-reverse\'', default: '\'nowrap\'' },
-  { name: 'gap', description: '子元素间距，支持预设值或像素数值', type: '\'small\' | \'middle\' | \'large\' | number', default: '0' },
+  { name: 'justify', description: '主轴对齐方式', type: ''flex-start | center | flex-end | space-between | space-around | space-evenly'', default: 'flex-start' },
+  { name: 'align', description: '交叉轴对齐方式', type: ''flex-start | center | flex-end | stretch | baseline'', default: 'flex-start' },
+  { name: 'wrap', description: '换行方式', type: ''wrap | nowrap | wrap-reverse'', default: 'nowrap' },
+  { name: 'gap', description: '子元素间距，支持预设值或像素数值', type: ''small | middle | large | number'', default: '0' },
   { name: 'flex', description: 'CSS flex 简写，用于嵌套布局中按比例分配空间', type: 'string | number', default: '—' },
-  { name: 'tag', description: '自定义根元素标签', type: 'string', default: '\'div\'' }
+  { name: 'tag', description: '自定义根元素标签', type: 'string', default: 'div' }
 ]" />
 
 ### Slots
@@ -343,10 +345,10 @@ Flex 组件的属性可以自由组合，实现复杂的布局需求。
 
 ### CSS Variables
 
-| 变量名 | 说明 | 默认值 |
-| --- | --- | --- |
-| `--zc-flex-display` | 容器的 display 属性 | `flex` |
-| `--zc-flex-box-sizing` | 容器的 box-sizing | `border-box` |
-| `--zc-flex-gap-small` | `gap="small"` 对应的间距值 | `8px` |
-| `--zc-flex-gap-middle` | `gap="middle"` 对应的间距值 | `16px` |
-| `--zc-flex-gap-large` | `gap="large"` 对应的间距值 | `24px` |
+| 变量名                 | 说明                        | 默认值       |
+| ---------------------- | --------------------------- | ------------ |
+| `--zc-flex-display`    | 容器的 display 属性         | `flex`       |
+| `--zc-flex-box-sizing` | 容器的 box-sizing           | `border-box` |
+| `--zc-flex-gap-small`  | `gap="small"` 对应的间距值  | `8px`        |
+| `--zc-flex-gap-middle` | `gap="middle"` 对应的间距值 | `16px`       |
+| `--zc-flex-gap-large`  | `gap="large"` 对应的间距值  | `24px`       |

@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, computed, watch, onBeforeUnmount, shallowRef, nextTick } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
-import { useZIndex, useFocusTrap } from '@zc-ui/hooks'
+import { useZIndex, useFocusTrap, lockBodyScroll, unlockBodyScroll } from '@zc-ui/hooks'
+import { useLocale } from '@zc-ui/locale'
 
 defineOptions({ name: 'ZcDrawer' })
 
@@ -56,6 +57,7 @@ const emit = defineEmits<{
 }>()
 
 const ns = useNamespace('drawer')
+const { t } = useLocale()
 const { nextZIndex } = useZIndex()
 const focusTrap = useFocusTrap()
 
@@ -88,13 +90,24 @@ const drawerStyle = computed(() => {
   return style
 })
 
+// Reference-counted scroll lock (see useLockScreen).
+let scrollLocked = false
+function acquireScrollLock() {
+  if (!props.lockScroll || scrollLocked) return
+  lockBodyScroll()
+  scrollLocked = true
+}
+function releaseScrollLock() {
+  if (!scrollLocked) return
+  unlockBodyScroll()
+  scrollLocked = false
+}
+
 function open() {
   isVisible.value = true
   zIndex.value = nextZIndex()
   emit('open')
-  if (props.lockScroll && typeof document !== 'undefined') {
-    document.body.style.overflow = 'hidden'
-  }
+  acquireScrollLock()
   // Activate focus trap after transition
   nextTick(() => {
     setTimeout(() => {
@@ -109,9 +122,7 @@ function close() {
   focusTrap.release()
   isVisible.value = false
   emit('close')
-  if (props.lockScroll && typeof document !== 'undefined') {
-    document.body.style.overflow = ''
-  }
+  releaseScrollLock()
 }
 
 function handleClose() {
@@ -208,9 +219,7 @@ watch(isVisible, (val) => {
 
 onBeforeUnmount(() => {
   focusTrap.release()
-  if (props.lockScroll && typeof document !== 'undefined') {
-    document.body.style.overflow = ''
-  }
+  releaseScrollLock()
   document.removeEventListener('keydown', handleEsc)
   document.removeEventListener('mousemove', handleDragMove)
   document.removeEventListener('mouseup', handleDragEnd)
@@ -253,7 +262,7 @@ onBeforeUnmount(() => {
                 v-if="showClose"
                 :class="ns.e('close-btn')"
                 type="button"
-                aria-label="关闭抽屉"
+                :aria-label="t('zc.drawer.close')"
                 @click="handleClose"
               >
                 <svg viewBox="0 0 24 24" fill="none" class="zc-drawer__icon">

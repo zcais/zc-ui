@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, useSlots, h } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
+import { useLocale } from '@zc-ui/locale'
 
 defineOptions({ name: 'ZcCodeBlock' })
 
@@ -44,8 +45,8 @@ const props = withDefaults(
     startLineNumber: 1,
     maxHeight: '',
     fontSize: 13,
-    copyText: '复制',
-    copiedText: '已复制',
+    copyText: '',
+    copiedText: '',
   }
 )
 
@@ -55,6 +56,10 @@ const emit = defineEmits<{
 
 const ns = useNamespace('code-block')
 const slots = useSlots()
+const { t } = useLocale()
+
+const copyTextComputed = computed(() => props.copyText || t('zc.codeBlock.copy'))
+const copiedTextComputed = computed(() => props.copiedText || t('zc.codeBlock.copied'))
 
 const copied = ref(false)
 let copyTimer: ReturnType<typeof setTimeout> | null = null
@@ -284,7 +289,7 @@ function tokenize(code: string, language: string): Token[] {
     },
     { type: 'function', regex: /^[a-zA-Z_$][\w$]*(?=\s*\()/ },
     { type: 'operator', regex: /^[+\-*/%=<>!&|^~?:]+/ },
-    { type: 'punctuation', regex: /^[{}()\[\];,.]/ },
+    { type: 'punctuation', regex: /^[{}()[\];,.]/ },
     { type: 'plain', regex: /^\s+/ },
     { type: 'plain', regex: /^[a-zA-Z_$][\w$]*/ },
     { type: 'plain', regex: /^[^\s]/ },
@@ -528,7 +533,7 @@ const highlightedContent = computed(() => renderHighlightedCode())
           >
             <polyline points="20 6 9 17 4 12" />
           </svg>
-          {{ copied ? copiedText : copyText }}
+          {{ copied ? copiedTextComputed : copyTextComputed }}
         </button>
       </div>
     </div>

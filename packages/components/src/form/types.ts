@@ -6,6 +6,9 @@
  * the form can trigger validation for all items (e.g. on submit).
  */
 import type { InjectionKey, Ref } from 'vue'
+import type { ComponentSize } from '../types'
+
+export type { ComponentSize }
 
 /** A single validation rule for a form field. */
 export interface FormItemRule {
@@ -77,8 +80,10 @@ export interface FormContext {
   showMessage: Ref<boolean>
   /** Whether to auto-validate on value change (watch mode). */
   validateOnValueChange: Ref<boolean>
-  /** Form-level disabled state. */
+  /** Form-level disabled state (inherited by every control inside). */
   disabled: Ref<boolean>
+  /** Form-level size (default size for every control inside). */
+  size: Ref<ComponentSize | undefined>
   /** Register a FormItem for collective validation. */
   registerField: (
     field: string,
@@ -102,6 +107,10 @@ export interface FormItemContext {
   validateMessage: Ref<string>
   /** Whether async validation is in progress. */
   validating: Ref<boolean>
+  /** Size override for controls inside this item. */
+  size: Ref<ComponentSize | undefined>
+  /** Disabled state for controls inside this item. */
+  disabled: Ref<boolean>
   /** Trigger validation programmatically. */
   validate: (trigger?: 'blur' | 'change') => Promise<FormItemValidationResult>
   /** Clear validation state. */

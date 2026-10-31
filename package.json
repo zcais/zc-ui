@@ -12,7 +12,7 @@
     "lint:check": "eslint .",
     "format": "prettier --write \"**/*.{js,ts,json,vue,md}\"",
     "format:check": "prettier --check \"**/*.{js,ts,json,vue,md}\"",
-    "typecheck": "vue-tsc --build",
+    "typecheck": "pnpm -r run typecheck && vue-tsc --noEmit -p tsconfig.node.json",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
@@ -36,7 +36,9 @@
     "docs:dev": "pnpm -C docs dev",
     "docs:build": "pnpm build && pnpm -C docs build",
     "docs:preview": "pnpm -C docs preview",
-    "gen:icons": "node scripts/gen-icons-manifest.mjs"
+    "gen:icons": "node scripts/gen-icons-manifest.mjs",
+    "validate-icons": "node validate-icons.cjs",
+    "lint:dark-selectors": "node scripts/check-dark-selectors.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.12.1",
@@ -70,6 +72,7 @@
     "vite": "^8.0.16",
     "vite-plugin-dts": "^5.0.2",
     "vitest": "^4.1.8",
+    "vue": "^3.5.0",
     "vue-eslint-parser": "^9.4.0",
     "vue-tsc": "^3.3.4"
   },

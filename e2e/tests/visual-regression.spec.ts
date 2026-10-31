@@ -11,9 +11,13 @@ import { test, expect } from '@playwright/test'
  *
  * These tests run across all browsers configured in playwright.config.ts
  * (Chromium, Firefox, WebKit) for cross-browser visual consistency.
+ *
+ * Tagged `@visual` and excluded from CI (`--grep-invert @visual`): pixel
+ * baselines depend on OS font rendering, so they are generated and compared
+ * on developer machines / dedicated runner images, not on GitHub runners.
  */
 
-test.describe('Visual Regression: Button', () => {
+test.describe('Visual Regression: Button', { tag: '@visual' }, () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/')
   })
@@ -31,7 +35,7 @@ test.describe('Visual Regression: Button', () => {
   })
 })
 
-test.describe('Visual Regression: Tags', () => {
+test.describe('Visual Regression: Tags', { tag: '@visual' }, () => {
   test('tag section screenshot', async ({ page }) => {
     await page.goto('/')
     const section = page.locator('#tags')
@@ -39,7 +43,7 @@ test.describe('Visual Regression: Tags', () => {
   })
 })
 
-test.describe('Visual Regression: Table', () => {
+test.describe('Visual Regression: Table', { tag: '@visual' }, () => {
   test('table section screenshot', async ({ page }) => {
     await page.goto('/')
     const section = page.locator('#table')
@@ -47,12 +51,12 @@ test.describe('Visual Regression: Table', () => {
   })
 })
 
-test.describe('Visual Regression: Full Page', () => {
+test.describe('Visual Regression: Full Page', { tag: '@visual' }, () => {
   test('full page screenshot', async ({ page }) => {
     await page.goto('/')
     // Wait for everything to render
     await page.waitForLoadState('networkidle')
-    await expect(page.locator('#app-content')).toHaveScreenshot('full-page.png', {
+    await expect(page).toHaveScreenshot('full-page.png', {
       fullPage: true,
     })
   })

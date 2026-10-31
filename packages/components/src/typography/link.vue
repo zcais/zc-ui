@@ -25,7 +25,7 @@ const props = withDefaults(
     disabled: false,
     href: undefined,
     target: undefined,
-  },
+  }
 )
 
 const emit = defineEmits<{
@@ -126,30 +126,30 @@ function handleClick(event: MouseEvent) {
 }
 
 /* ---- Dark mode ---- */
-html[data-theme='dark'] .zc-link {
+.dark .zc-link {
   --zc-link-color: var(--color-zc-text-primary, #e5eaf3);
 }
-html[data-theme='dark'] .zc-link--primary {
+.dark .zc-link--primary {
   --zc-link-color: var(--color-zc-primary-400, #79bbff);
   --zc-link-hover-color: var(--color-zc-primary-300, #a0cfff);
 }
-html[data-theme='dark'] .zc-link--success {
+.dark .zc-link--success {
   --zc-link-color: var(--color-zc-success-400, #95d475);
   --zc-link-hover-color: var(--color-zc-success-300, #b3e19d);
 }
-html[data-theme='dark'] .zc-link--warning {
+.dark .zc-link--warning {
   --zc-link-color: var(--color-zc-warning-400, #eebe77);
   --zc-link-hover-color: var(--color-zc-warning-300, #f3d19e);
 }
-html[data-theme='dark'] .zc-link--danger {
+.dark .zc-link--danger {
   --zc-link-color: var(--color-zc-danger-400, #f89898);
   --zc-link-hover-color: var(--color-zc-danger-300, #fab6b6);
 }
-html[data-theme='dark'] .zc-link--info {
+.dark .zc-link--info {
   --zc-link-color: var(--color-zc-info-400, #b1b3b8);
   --zc-link-hover-color: var(--color-zc-info-300, #c8c9cc);
 }
-html[data-theme='dark'] .zc-link.is-disabled {
+.dark .zc-link.is-disabled {
   --zc-link-color: var(--color-zc-text-placeholder, #414243);
 }
 </style>

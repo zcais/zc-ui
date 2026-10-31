@@ -91,11 +91,11 @@ interface ZcUiResolverOptions {
 
 ### importStyle
 
-| 值              | 说明                                                         |
-| --------------- | ------------------------------------------------------------ |
-| `'full'` (默认) | 导入完整样式文件 `@zc-ui/components/styles`                  |
-| `'component'`   | 按组件导入各自 CSS，如 `@zc-ui/components/styles/button.css` |
-| `false`         | 不自动导入 CSS（需手动引入）                                 |
+| 值              | 说明                                                                      |
+| --------------- | ------------------------------------------------------------------------- |
+| `'full'` (默认) | 导入完整样式文件 `@zc-ui/components/styles`                               |
+| `'component'`   | 当前包发布单一样式文件，此选项与 `'full'` 等效（按组件 CSS 拆分在规划中） |
+| `false`         | 不自动导入 CSS（需手动引入）                                              |
 
 ```ts
 // 按组件导入 CSS

@@ -5,68 +5,67 @@ import ZcRadio from '../radio/radio.vue'
 import ZcRadioGroup from '../radio/radio-group.vue'
 
 describe('Accessibility: Checkbox', () => {
-  it('should have role="checkbox"', () => {
+  // The native input is the single interactive element: it carries the
+  // checkbox semantics itself, and the label must not nest another one.
+  it('should expose a native checkbox input with checkbox semantics', () => {
     const wrapper = mount(ZcCheckbox)
-    expect(wrapper.attributes('role')).toBe('checkbox')
+    const input = wrapper.find('input[type="checkbox"]')
+    expect(input.exists()).toBe(true)
+    expect(wrapper.attributes('role')).toBeUndefined()
   })
 
-  it('should have aria-checked reflecting checked state', () => {
-    const wrapper = mount(ZcCheckbox, { props: { modelValue: true } })
-    expect(wrapper.attributes('aria-checked')).toBe('true')
+  it('should reflect checked state on the native input', () => {
+    const checked = mount(ZcCheckbox, { props: { modelValue: true } })
+    expect((checked.find('input').element as HTMLInputElement).checked).toBe(true)
+
+    const unchecked = mount(ZcCheckbox, { props: { modelValue: false } })
+    expect((unchecked.find('input').element as HTMLInputElement).checked).toBe(false)
   })
 
-  it('should have aria-checked false when unchecked', () => {
-    const wrapper = mount(ZcCheckbox, { props: { modelValue: false } })
-    expect(wrapper.attributes('aria-checked')).toBe('false')
-  })
-
-  it('should have aria-checked mixed when indeterminate', () => {
+  it('should set aria-checked="mixed" when indeterminate', () => {
     const wrapper = mount(ZcCheckbox, {
       props: { modelValue: false, indeterminate: true },
     })
-    expect(wrapper.attributes('aria-checked')).toBe('mixed')
+    expect(wrapper.find('input').attributes('aria-checked')).toBe('mixed')
   })
 
-  it('should have aria-disabled when disabled', () => {
+  it('should disable the native input when disabled', () => {
     const wrapper = mount(ZcCheckbox, { props: { disabled: true } })
-    expect(wrapper.attributes('aria-disabled')).toBe('true')
+    expect((wrapper.find('input').element as HTMLInputElement).disabled).toBe(true)
   })
 })
 
 describe('Accessibility: Radio', () => {
-  it('should have role="radio"', () => {
+  it('should expose a native radio input with radio semantics', () => {
     const wrapper = mount(ZcRadio, {
       props: { label: 'A', modelValue: 'A' },
     })
-    expect(wrapper.attributes('role')).toBe('radio')
+    const input = wrapper.find('input[type="radio"]')
+    expect(input.exists()).toBe(true)
+    expect(wrapper.attributes('role')).toBeUndefined()
   })
 
-  it('should have aria-checked reflecting checked state', () => {
-    const wrapper = mount(ZcRadio, {
+  it('should reflect checked state on the native input', () => {
+    const checked = mount(ZcRadio, {
       props: { label: 'A', modelValue: 'A' },
     })
-    expect(wrapper.attributes('aria-checked')).toBe('true')
+    expect((checked.find('input[type="radio"]').element as HTMLInputElement).checked).toBe(true)
   })
 
-  it('should have aria-disabled when disabled', () => {
+  it('should disable the native input when disabled', () => {
     const wrapper = mount(ZcRadio, {
       props: { label: 'A', modelValue: '', disabled: true },
     })
-    expect(wrapper.attributes('aria-disabled')).toBe('true')
+    expect((wrapper.find('input[type="radio"]').element as HTMLInputElement).disabled).toBe(true)
   })
 
-  it('should have tabindex 0 when checked (roving tabindex)', () => {
+  it('should keep the native input keyboard-focusable', () => {
     const wrapper = mount(ZcRadio, {
       props: { label: 'A', modelValue: 'A' },
     })
-    expect(wrapper.attributes('tabindex')).toBe('0')
-  })
-
-  it('should have tabindex -1 when unchecked (roving tabindex)', () => {
-    const wrapper = mount(ZcRadio, {
-      props: { label: 'B', modelValue: 'A' },
-    })
-    expect(wrapper.attributes('tabindex')).toBe('-1')
+    const input = wrapper.find('input[type="radio"]')
+    // Native inputs are focusable; no tabindex override is applied.
+    expect(input.attributes('tabindex')).toBeUndefined()
   })
 })
 

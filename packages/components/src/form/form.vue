@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { computed, provide, toRef } from 'vue'
+import { computed, provide, ref, toRef } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
 import {
   formContextKey,
+  type ComponentSize,
   type FormLabelPosition,
   type FormRules,
   type FormItemValidationResult,
@@ -20,8 +21,10 @@ const props = withDefaults(
     inline?: boolean
     /** Whether to auto-validate when field values change (watch mode). Default: true */
     validateOnValueChange?: boolean
-    /** Form-level disabled state. */
+    /** Form-level disabled state. Controls inside render their disabled state. */
     disabled?: boolean
+    /** Form-level size. Controls inside default to this size. */
+    size?: ComponentSize
   }>(),
   {
     rules: () => ({}),
@@ -31,6 +34,7 @@ const props = withDefaults(
     inline: false,
     validateOnValueChange: true,
     disabled: false,
+    size: undefined,
   }
 )
 
@@ -96,6 +100,7 @@ provide(formContextKey, {
   showMessage: toRef(props, 'showMessage'),
   validateOnValueChange: toRef(props, 'validateOnValueChange'),
   disabled: toRef(props, 'disabled'),
+  size: toRef(props, 'size'),
   registerField,
   unregisterField,
 })
@@ -117,33 +122,63 @@ const labelStyle = computed(() => {
 provide('zcFormLabelStyle', labelStyle)
 
 // ---- Public API ----
-/** Validate all registered fields. Returns true if all pass. */
+
+/**
+ * Structured validation failure, keyed by field path (Element Plus
+ * compatible: `validate()` rejects with this object).
+ */
+export type FormValidationFailure = Record<string, Array<{ message: string; field: string }>>
+
+function collectFailures(results: FormItemValidationResult[]): FormValidationFailure {
+  const invalidFields: FormValidationFailure = {}
+  for (const r of results) {
+    if (!r.valid) {
+      ;(invalidFields[r.field] ??= []).push({ message: r.message, field: r.field })
+    }
+  }
+  return invalidFields
+}
+
+/**
+ * Validate all registered fields.
+ *
+ * Resolves `true` when every field passes; rejects with the invalid fields
+ * object (`{ [field]: Array<{ message, field }> }`) on failure — mirroring
+ * Element Plus so callers can `catch` and inspect which fields failed.
+ */
 async function validate(): Promise<boolean> {
   const results = await Promise.all(Array.from(fields.values()).map((f) => f.validate()))
-  const hasError = results.some((r) => !r.valid)
   // Emit per-field results
   for (const r of results) {
     emit('validate', r.field, r.valid, r.message)
   }
-  return !hasError
+  const invalidFields = collectFailures(results)
+  if (Object.keys(invalidFields).length) {
+    return Promise.reject(invalidFields)
+  }
+  return true
 }
 
-/** Validate a specific field. */
-async function validateFieldByName(name: string): Promise<boolean> {
+/**
+ * Validate a specific field. Same resolve/reject semantics as `validate()`.
+ */
+async function validateFieldByName(name: string, ...rest: unknown[]): Promise<boolean> {
+  void rest
   const entry = fields.get(name)
   if (!entry) return true
   const result = await entry.validate()
   emit('validate', result.field, result.valid, result.message)
-  return result.valid
+  if (!result.valid) {
+    return Promise.reject(collectFailures([result]))
+  }
+  return true
 }
 
 /** Reset all fields: restore initial model values and clear validation. */
 function resetFields() {
-  // Restore each field to its initial value
+  // Restore each field to its initial value (clone keeps Date/Map/Set intact)
   for (const [fieldName, field] of fields) {
-    ;(props.model as Record<string, unknown>)[fieldName] = JSON.parse(
-      JSON.stringify(field.initialValue)
-    )
+    ;(props.model as Record<string, unknown>)[fieldName] = safeClone(field.initialValue)
     field.clearValidate()
   }
 }
@@ -155,11 +190,27 @@ async function clearValidate() {
   }
 }
 
-defineExpose({ validate, validateField: validateFieldByName, resetFields, clearValidate })
+const formRef = ref<HTMLFormElement | null>(null)
+
+/** Scroll to the form item bound to `prop` (Element Plus compatible). */
+function scrollToField(prop: string) {
+  const root = formRef.value
+  if (!root) return
+  const el = root.querySelector<HTMLElement>(`[data-zc-form-field="${prop}"]`)
+  el?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+}
+
+defineExpose({
+  validate,
+  validateField: validateFieldByName,
+  resetFields,
+  clearValidate,
+  scrollToField,
+})
 </script>
 
 <template>
-  <form :class="classes" @submit.prevent>
+  <form ref="formRef" :class="classes" @submit.prevent>
     <slot />
   </form>
 </template>

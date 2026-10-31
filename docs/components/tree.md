@@ -145,3 +145,21 @@ const bigTreeData = Array.from({ length: 2000 }, (_, i) => ({
 <ApiTable type="slots" :data="[
   { name: 'default', description: '自定义节点内容', sub: '作用域参数: { node, data }' },
 ]" />
+
+### Exposes
+
+<ApiTable type="methods" :data="[
+  { name: 'getCheckedKeys', description: '获取全部选中 key（leafOnly 为 true 时仅返回叶子节点）', type: '(leafOnly?: boolean) => (string | number)[]', default: '—' },
+  { name: 'getCheckedNodes', description: '获取全部选中节点', type: '(leafOnly?: boolean) => TreeNodeData[]', default: '—' },
+  { name: 'getHalfCheckedKeys', description: '获取半选中状态的 key', type: '() => (string | number)[]', default: '—' },
+  { name: 'getHalfCheckedNodes', description: '获取半选中状态的节点', type: '() => TreeNodeData[]', default: '—' },
+  { name: 'setCheckedKeys', description: '设置选中 key 集合（父子联动模式下自动级联）', type: '(keys: (string | number)[]) => void', default: '—' },
+  { name: 'setChecked', description: '设置单个节点选中状态（级联）', type: '(key, checked: boolean) => void', default: '—' },
+  { name: 'getExpandedKeys', description: '获取当前展开的 key', type: '() => (string | number)[]', default: '—' },
+  { name: 'setExpandedKeys', description: '设置展开的 key 集合', type: '(keys: (string | number)[]) => void', default: '—' },
+  { name: 'getNode', description: '按 key 查找节点', type: '(key) => TreeNodeData | undefined', default: '—' },
+  { name: 'append', description: '追加节点（传 parentKey 追加为子节点；直接修改绑定的响应式数据）', type: '(data: TreeNodeData, parentKey?) => void', default: '—' },
+  { name: 'insertBefore', description: '在指定节点前插入', type: '(data: TreeNodeData, refKey) => void', default: '—' },
+  { name: 'insertAfter', description: '在指定节点后插入', type: '(data: TreeNodeData, refKey) => void', default: '—' },
+  { name: 'remove', description: '移除指定节点', type: '(key) => void', default: '—' },
+]" />

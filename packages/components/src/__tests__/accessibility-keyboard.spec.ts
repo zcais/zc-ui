@@ -37,38 +37,46 @@ describe('Keyboard: Switch', () => {
 })
 
 describe('Keyboard: Checkbox', () => {
-  it('should toggle on Enter', async () => {
+  // Keyboard semantics live on the native input: Space toggles and fires
+  // change natively; the component reacts through the change handler.
+  it('should emit update:modelValue when the native input changes', async () => {
     const wrapper = mount(ZcCheckbox)
-    // Checkbox handles Enter via keydown on the component root
-    // Check if the component responds to keyboard
-    expect(wrapper.attributes('role')).toBe('checkbox')
+    await wrapper.find('input[type="checkbox"]').setValue(true)
+    expect(wrapper.emitted('update:modelValue')![0][0]).toBe(true)
   })
 
-  it('should toggle on Space', async () => {
+  it('should keep the native input focusable for keyboard users', () => {
     const wrapper = mount(ZcCheckbox)
-    // Checkbox supports Space key as a standard checkbox interaction
-    expect(wrapper.attributes('role')).toBe('checkbox')
+    const input = wrapper.find('input[type="checkbox"]')
+    expect(input.exists()).toBe(true)
+    expect(input.attributes('tabindex')).toBeUndefined()
   })
 
-  it('should not be focusable when disabled', async () => {
+  it('should not be interactive when disabled', async () => {
     const wrapper = mount(ZcCheckbox, { props: { disabled: true } })
-    expect(wrapper.attributes('aria-disabled')).toBe('true')
+    const input = wrapper.find('input[type="checkbox"]')
+    expect((input.element as HTMLInputElement).disabled).toBe(true)
+    await input.setValue(true)
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
   })
 })
 
-describe('Keyboard: Radio (roving tabindex)', () => {
-  it('should have tabindex 0 when checked', () => {
+describe('Keyboard: Radio', () => {
+  it('should keep the native input keyboard-focusable (no tabindex override)', () => {
     const wrapper = mount(ZcRadio, {
       props: { label: 'A', modelValue: 'A' },
     })
-    expect(wrapper.attributes('tabindex')).toBe('0')
+    const input = wrapper.find('input[type="radio"]')
+    expect(input.exists()).toBe(true)
+    expect(input.attributes('tabindex')).toBeUndefined()
   })
 
-  it('should have tabindex -1 when not checked', () => {
+  it('should emit update:modelValue when a radio input changes', async () => {
     const wrapper = mount(ZcRadio, {
-      props: { label: 'B', modelValue: 'A' },
+      props: { label: 'A', modelValue: '' },
     })
-    expect(wrapper.attributes('tabindex')).toBe('-1')
+    await wrapper.find('input[type="radio"]').setValue(true)
+    expect(wrapper.emitted('update:modelValue')![0][0]).toBe('A')
   })
 })
 

@@ -10,6 +10,7 @@ import {
   shallowRef,
 } from 'vue'
 import { useNamespace, useZIndex } from '@zc-ui/hooks'
+import { useLocale } from '@zc-ui/locale'
 import { isClient } from '@zc-ui/utils'
 import type { TourPlacement, TourStep, TourTarget, TourIndicatorType } from './types'
 
@@ -82,10 +83,10 @@ const props = withDefaults(
     }),
     showPrevButton: true,
     showSkipButton: true,
-    prevButtonText: '上一步',
-    nextButtonText: '下一步',
-    finishButtonText: '完成',
-    skipButtonText: '跳过',
+    prevButtonText: '',
+    nextButtonText: '',
+    finishButtonText: '',
+    skipButtonText: '',
   }
 )
 
@@ -100,7 +101,14 @@ const emit = defineEmits<{
 
 const ns = useNamespace('tour')
 const { nextZIndex } = useZIndex()
+const { t } = useLocale()
 const slots = useSlots()
+
+/** Localized fallbacks for button texts */
+const prevButtonTextComputed = computed(() => props.prevButtonText || t('zc.tour.prev'))
+const nextButtonTextComputed = computed(() => props.nextButtonText || t('zc.tour.next'))
+const finishButtonTextComputed = computed(() => props.finishButtonText || t('zc.tour.finish'))
+const skipButtonTextComputed = computed(() => props.skipButtonText || t('zc.tour.skip'))
 
 // ── State ────────────────────────────────────────────────────────
 const internalOpen = ref(false)
@@ -541,8 +549,8 @@ defineExpose({
               v-if="showSkipButton"
               :class="ns.e('close-btn')"
               type="button"
-              :title="skipButtonText"
-              :aria-label="skipButtonText"
+              :title="skipButtonTextComputed"
+              :aria-label="skipButtonTextComputed"
               @click="skip"
             >
               <svg viewBox="0 0 24 24" fill="none" :class="ns.e('icon')">
@@ -599,11 +607,11 @@ defineExpose({
                 type="button"
                 @click="prev"
               >
-                <slot name="prev-text">{{ prevButtonText }}</slot>
+                <slot name="prev-text">{{ prevButtonTextComputed }}</slot>
               </button>
               <button :class="[ns.e('btn'), ns.e('btn--next')]" type="button" @click="next">
-                <slot v-if="!isLast" name="next-text">{{ nextButtonText }}</slot>
-                <slot v-else name="finish-text">{{ finishButtonText }}</slot>
+                <slot v-if="!isLast" name="next-text">{{ nextButtonTextComputed }}</slot>
+                <slot v-else name="finish-text">{{ finishButtonTextComputed }}</slot>
               </button>
             </slot>
           </div>

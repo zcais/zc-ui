@@ -125,19 +125,19 @@ const items = ref(
 
 ### Masonry Props
 
-| 属性名      | 说明                                              | 类型                     | 默认值  |
-| ----------- | ------------------------------------------------- | ------------------------ | ------- |
-| columns     | 列数                                              | `number`                 | `3`     |
-| gap         | 项间距（数值为 px，也可传 CSS 字符串如 `'1rem'`） | `number \| string`       | `16`    |
-| useColumns  | 是否使用 CSS columns 模式（`false` 为 JS 均衡）   | `boolean`                | `true`  |
-| breakpoints | 响应式断点：key 为最小宽度(px)，value 为列数      | `Record<number, number>` | -       |
-| as          | 容器 HTML 标签                                    | `string`                 | `'div'` |
+<ApiTable type="props" :data="[
+{ name: 'columns', description: '列数', type: 'number', default: '3' },
+{ name: 'gap', description: '项间距（数值为 px，也可传 CSS 字符串如 '1rem'）', type: '`number \', default: 'string`' },
+{ name: 'useColumns', description: '是否使用 CSS columns 模式（false 为 JS 均衡）', type: 'boolean', default: 'true' },
+{ name: 'breakpoints', description: '响应式断点：key 为最小宽度(px)，value 为列数', type: 'Record<number, number>', default: '—' },
+{ name: 'as', description: '容器 HTML 标签', type: 'string', default: ''div'' }
+]" />
 
 ### Masonry Events
 
-| 事件名     | 说明           | 回调参数                       |
-| ---------- | -------------- | ------------------------------ |
-| item-click | 点击某项时触发 | `(item: VNode, index: number)` |
+<ApiTable type="events" :data="[
+{ name: '(item: VNode, index: number)', description: '点击某项时触发' }
+]" />
 
 ### Masonry Methods
 
@@ -149,6 +149,6 @@ const items = ref(
 
 ### Slots
 
-| 插槽名  | 说明         |
-| ------- | ------------ |
-| default | 瀑布流子元素 |
+<ApiTable type="slots" :data="[
+{ name: 'default', description: '瀑布流子元素' }
+]" />

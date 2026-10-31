@@ -3,6 +3,7 @@ import { computed, inject, ref } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
 import { useGlobalConfig } from '../config-provider/useGlobalConfig'
 import type { ComponentSize } from '../config-provider/types'
+import { useFormDisabled, useFormSize, useFormItem } from '../form/use-form'
 import { checkboxGroupKey, type CheckboxGroupContext } from './checkbox-group.vue'
 
 defineOptions({ name: 'ZcCheckbox' })
@@ -52,14 +53,22 @@ const isChecked = computed(() => {
   return !!props.modelValue
 })
 
+// ---- Form context integration ----
+const formDisabled = useFormDisabled(() => props.disabled)
+const formItem = useFormItem()
+
 const isDisabled = computed(() => {
-  return props.disabled || (isGroup.value && checkboxGroup!.disabled.value)
+  return formDisabled.value || (isGroup.value && checkboxGroup!.disabled.value)
 })
 
 // ---- ConfigProvider size integration ----
+// Priority: explicit prop > ZcFormItem > ZcForm > ConfigProvider global size
+// CheckboxSize is 'large'|'medium'|'small' (no 'mini'), so 'mini' degrades to 'small'
 const { size: globalSize } = useGlobalConfig()
+const formSize = useFormSize(() => props.size)
 const effectiveSize = computed<ComponentSize | undefined>(() => {
-  return props.size ?? globalSize.value ?? undefined
+  const resolved = formSize.value ?? globalSize.value
+  return resolved === 'mini' ? 'small' : resolved
 })
 
 // ---- Handlers ----
@@ -95,10 +104,13 @@ function toggleCheck(newChecked: boolean) {
       // Remove label
       groupModel.value = groupModel.value.filter((v) => v !== labelVal)
     }
+    // Group's changeEvent bridges to form-item validation
     checkboxGroup!.changeEvent()
   } else {
     emit('update:modelValue', newChecked)
     emit('change', newChecked)
+    // Bridge to form-item validation rules with trigger: 'change'
+    formItem?.validate('change')
   }
 }
 
@@ -108,6 +120,8 @@ function handleFocus() {
 
 function handleBlur() {
   isFocused.value = false
+  // Bridge to form-item validation rules with trigger: 'blur'
+  formItem?.validate('blur')
 }
 
 const classes = computed(() => [
@@ -122,15 +136,9 @@ const classes = computed(() => [
 </script>
 
 <template>
-  <label
-    :class="classes"
-    role="checkbox"
-    :aria-checked="indeterminate ? 'mixed' : isChecked"
-    :aria-disabled="isDisabled"
-    :aria-label="ariaLabel || (typeof label === 'string' ? label : undefined)"
-  >
+  <label :class="classes" :aria-disabled="isDisabled">
     <span :class="ns.e('input')">
-      <span :class="ns.e('inner')">
+      <span :class="ns.e('inner')" aria-hidden="true">
         <!-- Checkmark SVG (shown when checked) -->
         <svg
           v-if="isChecked && !indeterminate"
@@ -157,6 +165,8 @@ const classes = computed(() => [
           <line x1="5" y1="12" x2="19" y2="12" />
         </svg>
       </span>
+      <!-- The native input is the single interactive element: it carries the
+           checkbox semantics (role, checked state, keyboard focus) itself. -->
       <input
         :checked="isChecked"
         :disabled="isDisabled"
@@ -164,6 +174,8 @@ const classes = computed(() => [
         :value="label"
         type="checkbox"
         :class="ns.e('original')"
+        :aria-label="ariaLabel || (typeof label === 'string' ? label : undefined)"
+        :aria-checked="indeterminate ? 'mixed' : isChecked"
         @change="handleChange"
         @focus="handleFocus"
         @blur="handleBlur"

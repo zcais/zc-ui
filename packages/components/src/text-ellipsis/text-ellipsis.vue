@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch, nextTick, onMounted, onBeforeUnmount, useSlots } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
+import { useLocale } from '@zc-ui/locale'
 
 defineOptions({ name: 'ZcTextEllipsis' })
 
@@ -40,6 +41,7 @@ const emit = defineEmits<{
 
 const ns = useNamespace('text-ellipsis')
 const slots = useSlots()
+const { t } = useLocale()
 
 const containerRef = ref<HTMLElement | null>(null)
 const isExpanded = ref(false)
@@ -151,7 +153,7 @@ const textStyles = computed(() => {
       type="button"
       @click="toggleExpand"
     >
-      {{ isExpanded ? '收起' : '展开' }}
+      {{ isExpanded ? t('zc.textEllipsis.collapse') : t('zc.textEllipsis.expand') }}
     </button>
   </div>
 </template>

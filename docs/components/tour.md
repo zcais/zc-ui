@@ -35,9 +35,7 @@ const steps = [
 
 <template>
   <ZcSpace>
-    <ZcButton id="tour-demo-btn-1" type="primary" @click="open = true">
-      开始引导
-    </ZcButton>
+    <ZcButton id="tour-demo-btn-1" type="primary" @click="open = true"> 开始引导 </ZcButton>
     <ZcButton id="tour-demo-btn-2">功能按钮</ZcButton>
     <ZcButton id="tour-demo-btn-3" type="success">更多功能</ZcButton>
     <ZcTour v-model="open" :steps="steps" />
@@ -73,9 +71,7 @@ const steps = [
 
 <template>
   <div>
-    <ZcButton id="tour-placement-demo" type="primary" @click="open = true">
-      右侧弹出
-    </ZcButton>
+    <ZcButton id="tour-placement-demo" type="primary" @click="open = true"> 右侧弹出 </ZcButton>
     <ZcTour v-model="open" :steps="steps" />
   </div>
 </template>
@@ -108,9 +104,7 @@ const steps = [
 
 <template>
   <div>
-    <ZcButton id="tour-dot-demo" type="primary" @click="open = true">
-      圆点指示器
-    </ZcButton>
+    <ZcButton id="tour-dot-demo" type="primary" @click="open = true"> 圆点指示器 </ZcButton>
     <ZcTour v-model="open" :steps="steps" indicator="dot" />
   </div>
 </template>
@@ -135,15 +129,17 @@ import { ref } from 'vue'
 const open = ref(false)
 
 const steps = [
-  { title: '键盘操作', description: '尝试使用方向键切换步骤，ESC 关闭引导。', target: '#tour-keyboard-demo' },
+  {
+    title: '键盘操作',
+    description: '尝试使用方向键切换步骤，ESC 关闭引导。',
+    target: '#tour-keyboard-demo',
+  },
 ]
 </script>
 
 <template>
   <div>
-    <ZcButton id="tour-keyboard-demo" type="primary" @click="open = true">
-      开启键盘导航
-    </ZcButton>
+    <ZcButton id="tour-keyboard-demo" type="primary" @click="open = true"> 开启键盘导航 </ZcButton>
     <ZcTour v-model="open" :steps="steps" :keyboard="true" />
   </div>
 </template>
@@ -171,9 +167,7 @@ const steps = [
 
 <template>
   <div>
-    <ZcButton id="tour-text-demo" type="primary" @click="open = true">
-      自定义文案
-    </ZcButton>
+    <ZcButton id="tour-text-demo" type="primary" @click="open = true"> 自定义文案 </ZcButton>
     <ZcTour
       v-model="open"
       :steps="steps"
@@ -207,9 +201,7 @@ const steps = [
 
 <template>
   <div>
-    <ZcButton id="tour-slot-demo" type="primary" @click="open = true">
-      自定义内容
-    </ZcButton>
+    <ZcButton id="tour-slot-demo" type="primary" @click="open = true"> 自定义内容 </ZcButton>
     <ZcTour v-model="open" :steps="steps">
       <template #title="{ current }">
         <span style="color: var(--color-zc-primary-500)">✦ 自定义标题 #{{ current + 1 }}</span>
@@ -236,23 +228,23 @@ const steps = [
   { name: 'open / v-model:open', description: '是否显示引导（别名）', type: 'boolean', default: 'false' },
   { name: 'steps', description: '引导步骤配置', type: 'TourStep[]', default: '[]' },
   { name: 'current / v-model:current', description: '当前步骤索引', type: 'number', default: '0' },
-  { name: 'placement', description: '默认弹出位置', type: 'TourPlacement', default: '\'bottom\'' },
+  { name: 'placement', description: '默认弹出位置', type: 'TourPlacement', default: 'bottom' },
   { name: 'arrow', description: '是否显示箭头', type: 'boolean', default: 'true' },
   { name: 'showMask', description: '是否显示遮罩', type: 'boolean', default: 'true' },
   { name: 'closeOnOverlayClick', description: '点击遮罩是否关闭', type: 'boolean', default: 'true' },
   { name: 'keyboard', description: '是否启用键盘导航', type: 'boolean', default: 'true' },
   { name: 'gap', description: '高亮区域内边距 (px)', type: 'number', default: '6' },
   { name: 'offset', description: '面板与目标的间距 (px)', type: 'number', default: '12' },
-  { name: 'maskColor', description: '遮罩颜色', type: 'string', default: '\'rgba(0,0,0,0.5)\'' },
+  { name: 'maskColor', description: '遮罩颜色', type: 'string', default: 'rgba(0,0,0,0.5)' },
   { name: 'zIndex', description: '层级', type: 'number', default: '—' },
-  { name: 'indicator', description: '指示器类型', type: '\'default\' | \'dot\' | \'none\'', default: '\'default\'' },
-  { name: 'scrollIntoViewOptions', description: '滚动到目标的选项', type: 'ScrollIntoViewOptions', default: '{ behavior: \'smooth\', block: \'center\' }' },
+  { name: 'indicator', description: '指示器类型', type: ''default | dot | none'', default: 'default' },
+  { name: 'scrollIntoViewOptions', description: '滚动到目标的选项', type: 'ScrollIntoViewOptions', default: '{ behavior: 'smooth', block: 'center' }' },
   { name: 'showPrevButton', description: '是否显示上一步按钮', type: 'boolean', default: 'true' },
   { name: 'showSkipButton', description: '是否显示跳过按钮', type: 'boolean', default: 'true' },
-  { name: 'prevButtonText', description: '上一步按钮文案', type: 'string', default: '\'上一步\'' },
-  { name: 'nextButtonText', description: '下一步按钮文案', type: 'string', default: '\'下一步\'' },
-  { name: 'finishButtonText', description: '完成按钮文案', type: 'string', default: '\'完成\'' },
-  { name: 'skipButtonText', description: '跳过按钮文案', type: 'string', default: '\'跳过\'' },
+  { name: 'prevButtonText', description: '上一步按钮文案', type: 'string', default: '上一步' },
+  { name: 'nextButtonText', description: '下一步按钮文案', type: 'string', default: '下一步' },
+  { name: 'finishButtonText', description: '完成按钮文案', type: 'string', default: '完成' },
+  { name: 'skipButtonText', description: '跳过按钮文案', type: 'string', default: '跳过' },
 ]" />
 
 ### TourStep

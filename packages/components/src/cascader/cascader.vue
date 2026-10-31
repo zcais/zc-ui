@@ -3,6 +3,8 @@ import { computed, ref, shallowRef, type Ref } from 'vue'
 import { useNamespace, useVirtualList } from '@zc-ui/hooks'
 import { useClickOutside } from '@zc-ui/hooks'
 import { useLocale } from '@zc-ui/locale'
+import { usePopper } from '../popper/usePopper'
+import { useFormDisabled, useFormSize, useFormItem } from '../form/use-form'
 import type { CascaderOption, CascaderExpandTrigger } from './types'
 
 defineOptions({ name: 'ZcCascader' })
@@ -27,7 +29,7 @@ const props = withDefaults(
     placeholder: '',
     disabled: false,
     clearable: false,
-    size: 'medium',
+    size: undefined,
     filterable: false,
     expandTrigger: 'click',
     multiple: false,
@@ -47,12 +49,35 @@ const emit = defineEmits<{
 const ns = useNamespace('cascader')
 const { t } = useLocale()
 
+// ---- Form context integration ----
+// Priority: explicit prop > ZcFormItem > ZcForm > ConfigProvider global > 'medium'
+// Size union has no 'mini', so 'mini' degrades to 'small'
+const formSize = useFormSize(() => props.size)
+const formDisabled = useFormDisabled(() => props.disabled)
+const formItem = useFormItem()
+const isDisabled = formDisabled
+const effectiveSize = computed<'large' | 'medium' | 'small'>(() => {
+  const resolved = formSize.value ?? 'medium'
+  return resolved === 'mini' ? 'small' : (resolved as 'large' | 'medium' | 'small')
+})
+
 const placeholderText = computed(() => props.placeholder || t('zc.cascader.placeholder'))
 const containerRef = shallowRef<HTMLElement>()
+const dropdownRef = shallowRef<HTMLElement>()
 
 const visible = ref(false)
 const isFocused = ref(false)
 const expandedPaths = ref<(string | number)[][]>([])
+
+// ---- Dropdown positioning (usePopper absolute strategy) ----
+const { styles: dropdownStyles } = usePopper({
+  reference: containerRef,
+  popper: dropdownRef,
+  placement: 'bottom-start',
+  offset: 4,
+  strategy: 'absolute',
+  visible,
+})
 const activePath = ref<(string | number)[]>([])
 const searchText = ref('')
 
@@ -69,7 +94,7 @@ function getChildren(option: CascaderOption): CascaderOption[] | undefined {
   return option.children
 }
 
-function isDisabled(option: CascaderOption): boolean {
+function isOptionDisabled(option: CascaderOption): boolean {
   return option.disabled === true
 }
 
@@ -150,15 +175,15 @@ const showFilterPanel = computed(() => props.filterable && searchText.value.leng
 // ---- Classes ----
 const classes = computed(() => [
   ns.b(),
-  ns.m(props.size),
-  ns.is('disabled', props.disabled),
+  ns.m(effectiveSize.value),
+  ns.is('disabled', isDisabled.value),
   ns.is('focused', isFocused.value),
   ns.is('open', visible.value),
 ])
 
 // ---- Actions ----
 function expandNode(option: CascaderOption, panelIndex: number) {
-  if (isDisabled(option)) return
+  if (isOptionDisabled(option)) return
 
   const newPath = [...activePath.value.slice(0, panelIndex), option.value]
   activePath.value = newPath
@@ -175,14 +200,14 @@ function expandNode(option: CascaderOption, panelIndex: number) {
 
 function handleNodeHover(option: CascaderOption, panelIndex: number) {
   if (props.expandTrigger !== 'hover') return
-  if (isDisabled(option)) return
+  if (isOptionDisabled(option)) return
   if (getChildren(option)?.length) {
     expandNode(option, panelIndex)
   }
 }
 
 function selectNode(option: CascaderOption, panelIndex: number) {
-  if (isDisabled(option)) return
+  if (isOptionDisabled(option)) return
   const hasChildren = !!getChildren(option)?.length
 
   // When checkStrictly is true, allow selecting any node (including parents)
@@ -203,9 +228,13 @@ function selectNode(option: CascaderOption, panelIndex: number) {
     }
     emit('update:modelValue', current)
     emit('change', current)
+    // Bridge to form-item validation rules with trigger: 'change'
+    formItem?.validate('change')
   } else {
     emit('update:modelValue', [newPath])
     emit('change', [newPath])
+    // Bridge to form-item validation rules with trigger: 'change'
+    formItem?.validate('change')
     closeDropdown()
   }
 }
@@ -223,9 +252,13 @@ function selectFilteredOption(option: CascaderOption) {
       }
       emit('update:modelValue', current)
       emit('change', current)
+      // Bridge to form-item validation rules with trigger: 'change'
+      formItem?.validate('change')
     } else {
       emit('update:modelValue', [path])
       emit('change', [path])
+      // Bridge to form-item validation rules with trigger: 'change'
+      formItem?.validate('change')
       closeDropdown()
     }
   }
@@ -248,7 +281,7 @@ function findPathToOption(
 }
 
 function toggleDropdown() {
-  if (props.disabled) return
+  if (isDisabled.value) return
   if (visible.value) {
     closeDropdown()
   } else {
@@ -294,6 +327,8 @@ function handleClear(event: Event) {
   event.stopPropagation()
   emit('update:modelValue', [])
   emit('change', [])
+  // Bridge to form-item validation rules with trigger: 'change'
+  formItem?.validate('change')
 }
 
 function handleSearchInput(event: Event) {
@@ -302,13 +337,15 @@ function handleSearchInput(event: Event) {
 }
 
 function removeMultiplePath(path: (string | number)[]) {
-  if (props.disabled) return
+  if (isDisabled.value) return
   const current = [...props.modelValue]
   const index = current.findIndex((p) => JSON.stringify(p) === JSON.stringify(path))
   if (index >= 0) {
     current.splice(index, 1)
     emit('update:modelValue', current)
     emit('change', current)
+    // Bridge to form-item validation rules with trigger: 'change'
+    formItem?.validate('change')
   }
 }
 
@@ -319,6 +356,8 @@ function handleFocus(event: FocusEvent) {
 
 function handleBlur(event: FocusEvent) {
   emit('blur', event)
+  // Bridge to form-item validation rules with trigger: 'blur'
+  formItem?.validate('blur')
 }
 
 function handleKeyDown(event: KeyboardEvent) {
@@ -348,8 +387,8 @@ defineExpose({
     aria-haspopup="listbox"
     :aria-expanded="visible"
     :aria-label="placeholderText"
-    :aria-disabled="disabled"
-    :tabindex="disabled ? -1 : 0"
+    :aria-disabled="isDisabled"
+    :tabindex="isDisabled ? -1 : 0"
     @keydown="handleKeyDown"
   >
     <!-- Input wrapper -->
@@ -369,10 +408,10 @@ defineExpose({
 
       <!-- Clear -->
       <span
-        v-if="clearable && displayText && !disabled"
+        v-if="clearable && displayText && !isDisabled"
         :class="ns.e('clear')"
         role="button"
-        aria-label="清除选择"
+        :aria-label="t('zc.cascader.clear')"
         @click="handleClear"
       >
         <svg
@@ -405,7 +444,7 @@ defineExpose({
 
     <!-- Dropdown -->
     <transition name="zc-cascader-dropdown">
-      <div v-show="visible" :class="ns.e('dropdown')">
+      <div v-show="visible" ref="dropdownRef" :style="dropdownStyles" :class="ns.e('dropdown')">
         <!-- Search input -->
         <div v-if="filterable" :class="ns.e('search')">
           <input
@@ -425,7 +464,7 @@ defineExpose({
             <div
               v-for="option in filteredOptions"
               :key="String(option.value)"
-              :class="[ns.e('node'), ns.is('disabled', isDisabled(option))]"
+              :class="[ns.e('node'), ns.is('disabled', isOptionDisabled(option))]"
               @click="selectFilteredOption(option)"
             >
               {{ getLabel(option) }}
@@ -461,7 +500,7 @@ defineExpose({
                       :class="[
                         ns.e('node'),
                         ns.is('active', activePath[panelIdx] === option.value),
-                        ns.is('disabled', isDisabled(option)),
+                        ns.is('disabled', isOptionDisabled(option)),
                         ns.is('expand', !!getChildren(option)?.length),
                       ]"
                       @click="selectNode(option, panelIdx)"
@@ -485,15 +524,15 @@ defineExpose({
                   :class="[
                     ns.e('node'),
                     ns.is('active', activePath[panelIdx] === option.value),
-                    ns.is('disabled', isDisabled(option)),
+                    ns.is('disabled', isOptionDisabled(option)),
                     ns.is('expand', !!getChildren(option)?.length),
                   ]"
                   role="option"
                   :aria-selected="activePath[panelIdx] === option.value"
-                  :aria-disabled="isDisabled(option)"
+                  :aria-disabled="isOptionDisabled(option)"
                   :aria-level="panelIdx + 1"
                   :aria-label="getLabel(option)"
-                  :tabindex="isDisabled(option) ? -1 : 0"
+                  :tabindex="isOptionDisabled(option) ? -1 : 0"
                   @click="selectNode(option, panelIdx)"
                   @keydown.enter.prevent="selectNode(option, panelIdx)"
                   @mouseenter="handleNodeHover(option, panelIdx)"
@@ -671,8 +710,7 @@ defineExpose({
 /* Dropdown */
 .zc-cascader__dropdown {
   position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
+  min-width: 100%;
   z-index: var(--z-zc-dropdown, 1000);
   background: var(--color-zc-white, #fff);
   border: 1px solid var(--color-zc-border-light, #e4e7ed);

@@ -40,10 +40,10 @@ describe('useColorMode', () => {
     const { mode } = useColorMode()
     mode.value = 'dark'
     await nextTick()
-    expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
+    expect(document.documentElement.getAttribute('class')).toContain('dark')
     mode.value = 'light'
     await nextTick()
-    expect(document.documentElement.getAttribute('data-theme')).toBe('light')
+    expect(document.documentElement.getAttribute('class') || '').not.toContain('dark')
   })
 
   it('should support custom attribute', async () => {

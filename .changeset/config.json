@@ -2,7 +2,18 @@
   "$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
   "changelog": "@changesets/cli/changelog",
   "commit": false,
-  "fixed": [],
+  "fixed": [
+    [
+      "@zc-ui/components",
+      "@zc-ui/hooks",
+      "@zc-ui/icons",
+      "@zc-ui/locale",
+      "@zc-ui/nuxt",
+      "@zc-ui/resolver",
+      "@zc-ui/theme",
+      "@zc-ui/utils"
+    ]
+  ],
   "linked": [],
   "access": "public",
   "baseBranch": "master",

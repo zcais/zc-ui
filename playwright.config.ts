@@ -45,14 +45,14 @@ export default defineConfig({
 
     // Capture video on failure
     video: 'retain-on-failure',
+  },
 
-    // Visual regression: tolerance for screenshot comparison
-    // Allows minor anti-aliasing differences across browsers
-    expect: {
-      toHaveScreenshot: {
-        maxDiffPixelRatio: 0.01,
-        threshold: 0.2,
-      },
+  // Visual regression: tolerance for screenshot comparison
+  // Allows minor anti-aliasing differences across browsers
+  expect: {
+    toHaveScreenshot: {
+      maxDiffPixelRatio: 0.01,
+      threshold: 0.2,
     },
   },
 

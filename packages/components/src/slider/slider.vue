@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef, watch, onBeforeUnmount } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
+import { useFormDisabled, useFormSize, useFormItem } from '../form/use-form'
 import type { SliderMark, SliderValue } from './types'
 
 defineOptions({ name: 'ZcSlider' })
@@ -30,7 +31,7 @@ const props = withDefaults(
     showTooltip: true,
     range: false,
     marks: () => [],
-    size: 'medium',
+    size: undefined,
     tooltipClass: '',
     height: '',
   }
@@ -44,6 +45,18 @@ const emit = defineEmits<{
 
 const ns = useNamespace('slider')
 const runwayRef = shallowRef<HTMLElement>()
+
+// ---- Form context integration ----
+// Priority: explicit prop > ZcFormItem > ZcForm > default 'medium'
+// Slider size is 'large'|'medium'|'small' (no 'mini'), so 'mini' degrades to 'small'
+const formSize = useFormSize(() => props.size)
+const formDisabled = useFormDisabled(() => props.disabled)
+const formItem = useFormItem()
+const isDisabled = formDisabled
+const effectiveSize = computed<'large' | 'medium' | 'small'>(() => {
+  const resolved = formSize.value ?? 'medium'
+  return resolved === 'mini' ? 'small' : (resolved as 'large' | 'medium' | 'small')
+})
 
 const dragging = ref(false)
 const showThumbTooltip = ref(false)
@@ -89,8 +102,8 @@ const singlePercent = computed(() => {
 
 const classes = computed(() => [
   ns.b(),
-  ns.m(props.size),
-  ns.is('disabled', props.disabled),
+  ns.m(effectiveSize.value),
+  ns.is('disabled', isDisabled.value),
   ns.is('vertical', props.vertical),
   ns.is('dragging', dragging.value),
   ns.is('range', props.range),
@@ -132,11 +145,13 @@ function emitChange(oldVal: SliderValue) {
   emit('update:modelValue', newVal)
   emit('input', newVal)
   emit('change', newVal, oldVal)
+  // Bridge to form-item validation rules with trigger: 'change'
+  formItem?.validate('change')
 }
 
 // ---- Drag handling ----
 function startDrag(index: number, event: MouseEvent) {
-  if (props.disabled) return
+  if (isDisabled.value) return
   event.preventDefault()
   event.stopPropagation()
   draggingIndex.value = index
@@ -179,7 +194,7 @@ function onDragEnd() {
 }
 
 function handleTrackClick(event: MouseEvent) {
-  if (props.disabled || dragging.value) return
+  if (isDisabled.value || dragging.value) return
   const value = getValueFromPosition(event.clientX, event.clientY)
 
   const oldVal = props.modelValue
@@ -201,7 +216,7 @@ function handleTrackClick(event: MouseEvent) {
 }
 
 function handleKeyDown(event: KeyboardEvent) {
-  if (props.disabled) return
+  if (isDisabled.value) return
   const isDecrement = event.key === 'ArrowLeft' || event.key === 'ArrowDown'
   const isIncrement = event.key === 'ArrowRight' || event.key === 'ArrowUp'
   const isHome = event.key === 'Home'
@@ -247,6 +262,11 @@ function handleKeyDown(event: KeyboardEvent) {
   }
 
   emitChange(oldVal)
+}
+
+function handleBlur() {
+  // Bridge to form-item validation rules with trigger: 'blur'
+  formItem?.validate('blur')
 }
 
 // ---- Watch modelValue changes ----
@@ -312,11 +332,12 @@ onBeforeUnmount(() => {
           :aria-valuemin="min"
           :aria-valuemax="max"
           :aria-orientation="vertical ? 'vertical' : 'horizontal'"
-          :aria-disabled="disabled"
+          :aria-disabled="isDisabled"
           tabindex="0"
           @mousedown="startDrag(0, $event)"
           @mouseenter="showThumbTooltip = true"
           @mouseleave="!dragging && (showThumbTooltip = false)"
+          @blur="handleBlur"
         >
           <div :class="ns.e('thumb')">
             <div v-if="showTooltip && showThumbTooltip" :class="ns.e('tooltip')">
@@ -333,11 +354,12 @@ onBeforeUnmount(() => {
           :aria-valuemin="min"
           :aria-valuemax="max"
           :aria-orientation="vertical ? 'vertical' : 'horizontal'"
-          :aria-disabled="disabled"
+          :aria-disabled="isDisabled"
           tabindex="0"
           @mousedown="startDrag(1, $event)"
           @mouseenter="showThumbTooltip = true"
           @mouseleave="!dragging && (showThumbTooltip = false)"
+          @blur="handleBlur"
         >
           <div :class="ns.e('thumb')">
             <div v-if="showTooltip && showThumbTooltip" :class="ns.e('tooltip')">
@@ -356,11 +378,12 @@ onBeforeUnmount(() => {
         :aria-valuemin="min"
         :aria-valuemax="max"
         :aria-orientation="vertical ? 'vertical' : 'horizontal'"
-        :aria-disabled="disabled"
+        :aria-disabled="isDisabled"
         tabindex="0"
         @mousedown="startDrag(0, $event)"
         @mouseenter="showThumbTooltip = true"
         @mouseleave="!dragging && (showThumbTooltip = false)"
+        @blur="handleBlur"
       >
         <div :class="ns.e('thumb')">
           <div v-if="showTooltip && showThumbTooltip" :class="ns.e('tooltip')">

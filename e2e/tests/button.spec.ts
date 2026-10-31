@@ -22,8 +22,8 @@ test.describe('Button E2E', () => {
     await expect(btn).toBeVisible()
     await btn.click()
     // Dialog should appear
-    await expect(page.locator('.zc-dialog')).toBeVisible()
-    await expect(page.locator('.zc-dialog__title')).toHaveText('Test Dialog')
+    await expect(page.locator('.zc-dialog__panel')).toBeVisible()
+    await expect(page.locator('.zc-dialog__title-text')).toHaveText('Test Dialog')
   })
 
   test('disabled button should not be clickable', async ({ page }) => {

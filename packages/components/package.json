@@ -31,7 +31,8 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
-    "./styles": "./dist/style.css"
+    "./styles": "./dist/style.css",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"
@@ -45,11 +46,11 @@
     "registry": "https://registry.npmjs.org"
   },
   "scripts": {
-    "build": "vite build",
+    "build": "vite build && vite build -c vite.config.umd.ts",
     "typecheck": "vue-tsc --noEmit -p tsconfig.json"
   },
   "peerDependencies": {
-    "vue": "^3.4.0"
+    "vue": "^3.5.0"
   },
   "dependencies": {
     "@zc-ui/utils": "workspace:*",

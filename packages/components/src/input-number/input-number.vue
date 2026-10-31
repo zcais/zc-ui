@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef, watch, nextTick } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
+import { useFormDisabled, useFormSize, useFormItem } from '../form/use-form'
 import type { InputNumberSize, ControlsPosition } from './types'
 
 defineOptions({ name: 'ZcInputNumber' })
@@ -30,7 +31,7 @@ const props = withDefaults(
     disabled: false,
     controls: true,
     controlsPosition: '',
-    size: 'medium',
+    size: undefined,
     placeholder: '',
     readonly: false,
   }
@@ -47,6 +48,18 @@ const emit = defineEmits<{
 const ns = useNamespace('input-number')
 const inputRef = shallowRef<HTMLInputElement>()
 
+// ---- Form context integration ----
+// Priority: explicit prop > ZcFormItem > ZcForm > ConfigProvider global > 'medium'
+// InputNumberSize is 'large'|'medium'|'small' (no 'mini'), so 'mini' degrades to 'small'
+const formSize = useFormSize(() => props.size)
+const formDisabled = useFormDisabled(() => props.disabled)
+const formItem = useFormItem()
+const isDisabled = formDisabled
+const effectiveSize = computed<InputNumberSize>(() => {
+  const resolved = formSize.value ?? 'medium'
+  return resolved === 'mini' ? 'small' : (resolved as InputNumberSize)
+})
+
 const userInput = ref<string | null>(null)
 const oldValue: { value: number | undefined } = { value: undefined }
 
@@ -58,21 +71,21 @@ const displayValue = computed(() => {
 })
 
 const minDisabled = computed(() => {
-  if (props.disabled) return true
+  if (isDisabled.value) return true
   const val = getCurrentValue()
   return val !== undefined && val - props.step < props.min
 })
 
 const maxDisabled = computed(() => {
-  if (props.disabled) return true
+  if (isDisabled.value) return true
   const val = getCurrentValue()
   return val !== undefined && val + props.step > props.max
 })
 
 const containerClasses = computed(() => [
   ns.b(),
-  ns.m(props.size),
-  ns.is('disabled', props.disabled),
+  ns.m(effectiveSize.value),
+  ns.is('disabled', isDisabled.value),
   ns.is('without-controls', !props.controls),
   ns.is('controls-right', props.controlsPosition === 'right'),
 ])
@@ -135,10 +148,12 @@ function handleChange(event: Event) {
   userInput.value = null
   setValue(num)
   emit('change', num, oldValue.value)
+  // Bridge to form-item validation rules with trigger: 'change'
+  formItem?.validate('change')
 }
 
 function handleStep(step: number) {
-  if (props.disabled || props.readonly) return
+  if (isDisabled.value || props.readonly) return
   const current = getCurrentValue() ?? props.min
   let next = toPrecision(current + step)
   next = clampValue(next)
@@ -148,6 +163,8 @@ function handleStep(step: number) {
   userInput.value = null
   setValue(next)
   emit('change', next, oldValue.value)
+  // Bridge to form-item validation rules with trigger: 'change'
+  formItem?.validate('change')
 }
 
 function increase() {
@@ -166,10 +183,12 @@ function handleFocus(event: FocusEvent) {
 
 function handleBlur(event: FocusEvent) {
   emit('blur', event)
+  // Bridge to form-item validation rules with trigger: 'blur'
+  formItem?.validate('blur')
 }
 
 function handleKeyDown(event: KeyboardEvent) {
-  if (props.disabled || props.readonly) return
+  if (isDisabled.value || props.readonly) return
   switch (event.key) {
     case 'ArrowUp':
       event.preventDefault()
@@ -216,7 +235,7 @@ defineExpose({ focus, blur, increase, decrease })
     :aria-valuenow="modelValue ?? undefined"
     :aria-valuemin="min === -Infinity ? undefined : min"
     :aria-valuemax="max === Infinity ? undefined : max"
-    :aria-disabled="disabled"
+    :aria-disabled="isDisabled"
   >
     <!-- Decrease button -->
     <span
@@ -246,7 +265,7 @@ defineExpose({ focus, blur, increase, decrease })
         type="text"
         :value="displayValue"
         :placeholder="placeholder"
-        :disabled="disabled"
+        :disabled="isDisabled"
         :readonly="readonly"
         @input="handleInput"
         @change="handleChange"

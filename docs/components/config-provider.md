@@ -240,10 +240,10 @@ const { size, locale, zIndex } = useGlobalConfig()
 ### Props
 
 <ApiTable type="props" :data="[
-  { name: 'size', description: '全局组件尺寸', type: '\'large\' | \'medium\' | \'small\' | \'mini\'', default: '—' },
+  { name: 'size', description: '全局组件尺寸', type: ''large | medium | small | mini'', default: '—' },
   { name: 'locale', description: '国际化语言代码', type: 'string', default: '—' },
   { name: 'zIndex', description: '弹层 z-index 起始值', type: 'number', default: '—' },
-  { name: 'namespace', description: 'CSS 类名命名空间前缀', type: 'string', default: '\'zc\'' },
+  { name: 'namespace', description: 'CSS 类名命名空间前缀', type: 'string', default: 'zc' },
   { name: 'brandColors', description: '品牌色覆盖（自动生成完整色阶）', type: 'Record<string, string>', default: '—' },
   { name: 'themeVariables', description: '全局 CSS 变量覆盖', type: 'ThemeVariables', default: '—' },
   { name: 'themeOverrides', description: '组件级 CSS 变量覆写', type: 'ComponentThemeOverrides', default: '—' },
@@ -272,7 +272,7 @@ const { size, locale, zIndex } = useGlobalConfig()
 <ApiTable type="props" :data="[
   { name: 'max', description: '同时显示的最大数量', type: 'number', default: '—' },
   { name: 'duration', description: '默认关闭时间（毫秒）', type: 'number', default: '—' },
-  { name: 'position', description: '默认显示位置', type: '\'top-right\' | \'top-left\' | \'bottom-right\' | \'bottom-left\'', default: '—' },
+  { name: 'position', description: '默认显示位置', type: ''top-right | top-left | bottom-right | bottom-left'', default: '—' },
 ]" />
 
 ### Slots

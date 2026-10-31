@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef, watch, nextTick, useSlots } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
+import { useLocale } from '@zc-ui/locale'
 import { useGlobalConfig } from '../config-provider/useGlobalConfig'
+import { useFormDisabled, useFormSize, useFormItem } from '../form/use-form'
 
 defineOptions({ name: 'ZcInput' })
 
@@ -59,13 +61,18 @@ const emit = defineEmits<{
 
 const ns = useNamespace('input')
 const slots = useSlots()
+const { t } = useLocale()
 
-// ---- ConfigProvider size integration ----
-// Priority: explicit prop > ConfigProvider global size > default 'medium'
+// ---- Form context integration ----
+// Priority: explicit prop > ZcFormItem > ZcForm > ConfigProvider global > 'medium'
 // InputSize is 'large'|'medium'|'small' (no 'mini'), so 'mini' degrades to 'small'
 const { size: globalSize } = useGlobalConfig()
+const formSize = useFormSize(() => props.size)
+const formDisabled = useFormDisabled(() => props.disabled)
+const formItem = useFormItem()
+const isDisabled = formDisabled
 const effectiveSize = computed<InputSize>(() => {
-  const resolved = props.size ?? globalSize.value ?? 'medium'
+  const resolved = formSize.value ?? globalSize.value ?? 'medium'
   return resolved === 'mini' ? 'small' : (resolved as InputSize)
 })
 
@@ -99,14 +106,14 @@ const effectiveType = computed(() => {
 const showClear = computed(
   () =>
     props.clearable &&
-    !props.disabled &&
+    !isDisabled.value &&
     !props.readonly &&
     nativeInputValue.value !== '' &&
     (focused.value || hovering.value)
 )
 
 const showPwdToggle = computed(
-  () => props.showPassword && !props.disabled && !props.readonly && nativeInputValue.value !== ''
+  () => props.showPassword && !isDisabled.value && !props.readonly && nativeInputValue.value !== ''
 )
 
 const textLength = computed(() =>
@@ -120,7 +127,7 @@ const isExceed = computed(() => !!props.maxlength && textLength.value > props.ma
 const containerClasses = computed(() => [
   ns.b(),
   ns.m(effectiveSize.value),
-  ns.is('disabled', props.disabled),
+  ns.is('disabled', isDisabled.value),
   ns.is('focus', focused.value),
   ns.is('textarea', isTextarea.value),
   ns.is('exceed', isExceed.value),
@@ -136,6 +143,8 @@ function handleInput(event: Event) {
 function handleChange(event: Event) {
   const target = event.target as HTMLInputElement | HTMLTextAreaElement
   emit('change', target.value)
+  // Bridge to form-item validation rules with trigger: 'change'
+  formItem?.validate('change')
 }
 
 function handleFocus(event: FocusEvent) {
@@ -146,6 +155,8 @@ function handleFocus(event: FocusEvent) {
 function handleBlur(event: FocusEvent) {
   focused.value = false
   emit('blur', event)
+  // Bridge to form-item validation rules with trigger: 'blur'
+  formItem?.validate('blur')
 }
 
 function handleClear() {
@@ -184,7 +195,7 @@ defineExpose({ focus, blur, inputRef })
       :value="modelValue"
       :placeholder="placeholder"
       :aria-label="ariaLabel || placeholder"
-      :disabled="disabled"
+      :disabled="isDisabled"
       :readonly="readonly"
       :maxlength="maxlength"
       :rows="rows"
@@ -227,7 +238,7 @@ defineExpose({ focus, blur, inputRef })
         :type="effectiveType"
         :value="modelValue"
         :placeholder="placeholder"
-        :disabled="disabled"
+        :disabled="isDisabled"
         :readonly="readonly"
         :maxlength="maxlength"
         :autocomplete="autocomplete"
@@ -249,7 +260,7 @@ defineExpose({ focus, blur, inputRef })
           v-if="showClear"
           :class="ns.e('clear')"
           role="button"
-          aria-label="清除"
+          :aria-label="t('zc.input.clear')"
           tabindex="0"
           @click="handleClear"
           @keydown.enter="handleClear"
@@ -272,7 +283,7 @@ defineExpose({ focus, blur, inputRef })
           v-if="showPwdToggle"
           :class="ns.e('password')"
           role="button"
-          :aria-label="isPasswordVisible ? '隐藏密码' : '显示密码'"
+          :aria-label="isPasswordVisible ? t('zc.input.hidePassword') : t('zc.input.showPassword')"
           tabindex="0"
           @click="togglePassword"
           @keydown.enter="togglePassword"

@@ -182,7 +182,7 @@ function isActive(page: number | string) {
           ]"
           :role="page === '...' ? 'none' : undefined"
           :aria-current="isActive(page) ? 'page' : undefined"
-          :aria-label="page === '...' ? undefined : `第 ${page} 页`"
+          :aria-label="page === '...' ? undefined : t('zc.pagination.page', { page })"
           :tabindex="page === '...' || isActive(page) ? -1 : 0"
           :aria-hidden="page === '...' ? 'true' : undefined"
           @click="page !== '...' && goTo(page as number)"

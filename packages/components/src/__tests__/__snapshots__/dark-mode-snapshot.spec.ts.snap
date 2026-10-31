@@ -1,0 +1,269 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Dark mode: component snapshots > Calendar renders correctly under .dark 1`] = `
+"<div data-v-b1519bef="" class="zc-calendar">
+  <!-- Header -->
+  <div data-v-b1519bef="" class="zc-calendar__header">
+    <div data-v-b1519bef="" class="zc-calendar__title">2025 年 六月</div>
+    <div data-v-b1519bef="" class="zc-calendar__actions"><button data-v-b1519bef="" class="zc-calendar__btn zc-calendar__btn-prev-year" type="button" aria-label="年 <<"> « </button><button data-v-b1519bef="" class="zc-calendar__btn zc-calendar__btn-prev-month" type="button"> ‹ </button><button data-v-b1519bef="" class="zc-calendar__btn zc-calendar__btn-today" type="button">今天</button><button data-v-b1519bef="" class="zc-calendar__btn zc-calendar__btn-next-month" type="button"> › </button><button data-v-b1519bef="" class="zc-calendar__btn zc-calendar__btn-next-year" type="button"> » </button></div>
+  </div><!-- Body -->
+  <div data-v-b1519bef="" class="zc-calendar__body">
+    <!-- Weekday headers -->
+    <div data-v-b1519bef="" class="zc-calendar__weekdays">
+      <div data-v-b1519bef="" class="zc-calendar__weekday">日</div>
+      <div data-v-b1519bef="" class="zc-calendar__weekday">一</div>
+      <div data-v-b1519bef="" class="zc-calendar__weekday">二</div>
+      <div data-v-b1519bef="" class="zc-calendar__weekday">三</div>
+      <div data-v-b1519bef="" class="zc-calendar__weekday">四</div>
+      <div data-v-b1519bef="" class="zc-calendar__weekday">五</div>
+      <div data-v-b1519bef="" class="zc-calendar__weekday">六</div>
+    </div><!-- Days grid -->
+    <div data-v-b1519bef="" class="zc-calendar__days">
+      <div data-v-b1519bef="" class="zc-calendar__day" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">1</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">2</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">3</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">4</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">5</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">6</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">7</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">8</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">9</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">10</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">11</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">12</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">13</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">14</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day is-today is-selected" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">15</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">16</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">17</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">18</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">19</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">20</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">21</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">22</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">23</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">24</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">25</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">26</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">27</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">28</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">29</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">30</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day is-other-month" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">1</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day is-other-month" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">2</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day is-other-month" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">3</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day is-other-month" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">4</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day is-other-month" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">5</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day is-other-month" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">6</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day is-other-month" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">7</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day is-other-month" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">8</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day is-other-month" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">9</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day is-other-month" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">10</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day is-other-month" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">11</span></div>
+      <div data-v-b1519bef="" class="zc-calendar__day is-other-month" role="button" tabindex="0"><span data-v-b1519bef="" class="zc-calendar__day-text">12</span></div>
+    </div>
+  </div>
+</div>"
+`;
+
+exports[`Dark mode: component snapshots > Card renders correctly under .dark 1`] = `
+"<div data-v-03d4d815="" class="zc-card zc-card--shadow-always">
+  <!--v-if-->
+  <div data-v-03d4d815="" class="zc-card__body">Card content in dark mode</div>
+  <!--v-if-->
+</div>"
+`;
+
+exports[`Dark mode: component snapshots > Comment renders correctly under .dark 1`] = `
+"<div data-v-38a067b4="" class="zc-comment">
+  <!-- Avatar -->
+  <div data-v-38a067b4="" class="zc-comment__avatar" style="width: 40px; height: 40px;"><span data-v-38a067b4="" class="zc-comment__avatar-placeholder">T</span></div><!-- Content area -->
+  <div data-v-38a067b4="" class="zc-comment__content">
+    <!-- Header: author + datetime -->
+    <div data-v-38a067b4="" class="zc-comment__header"><span data-v-38a067b4="" class="zc-comment__author">Test</span>
+      <!--v-if-->
+    </div><!-- Body: comment content -->
+    <div data-v-38a067b4="" class="zc-comment__body">Dark mode comment</div><!-- Actions -->
+    <!-- Default action buttons when no actions slot -->
+    <div data-v-38a067b4="" class="zc-comment__actions"><button data-v-38a067b4="" type="button" class="zc-comment__action zc-comment__action--reply"><svg data-v-38a067b4="" viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+          <path data-v-38a067b4="" d="M10 9V5l-7 7 7 7v-4.1c5 0 8.5 1.6 11 5.1-1-5-4-10-11-11z"></path>
+        </svg><span data-v-38a067b4="">Reply</span></button><button data-v-38a067b4="" type="button" class="zc-comment__action zc-comment__action--like"><svg data-v-38a067b4="" viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+          <path data-v-38a067b4="" d="M2 21h2V9H2v12zm20-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L13.17 1 6.59 7.59C6.22 7.95 6 8.45 6 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"></path>
+        </svg><span data-v-38a067b4="">Like</span></button></div><!-- Nested replies -->
+    <transition-stub data-v-38a067b4="" name="zc-comment-nested" appear="false" persisted="false" css="true">
+      <!--v-if-->
+    </transition-stub>
+  </div>
+</div>"
+`;
+
+exports[`Dark mode: component snapshots > Divider renders correctly under .dark 1`] = `
+"<div data-v-d9a157d6="" class="zc-divider zc-divider--horizontal" role="separator">
+  <div data-v-d9a157d6="" class="zc-divider__line" style="border-top-style: solid;"></div>
+</div>"
+`;
+
+exports[`Dark mode: component snapshots > ErrorBoundary error state renders correctly under .dark 1`] = `
+"<div data-v-d40bfdc5="" class="zc-error-boundary" role="alert" aria-live="polite">
+  <!-- Custom error slot -->
+  <div data-v-d40bfdc5="" class="zc-error-boundary__content">
+    <!-- Icon -->
+    <div data-v-d40bfdc5="" class="zc-error-boundary__icon" aria-hidden="true"><svg data-v-d40bfdc5="" viewBox="0 0 64 64" width="56" height="56" fill="none">
+        <circle data-v-d40bfdc5="" cx="32" cy="32" r="28" stroke="currentColor" stroke-width="3" opacity="0.15"></circle>
+        <path data-v-d40bfdc5="" d="M32 18v16" stroke="currentColor" stroke-width="4" stroke-linecap="round"></path>
+        <circle data-v-d40bfdc5="" cx="32" cy="44" r="3" fill="currentColor"></circle>
+      </svg></div><!-- Title -->
+    <div data-v-d40bfdc5="" class="zc-error-boundary__title">Something went wrong</div><!-- Description -->
+    <!--v-if-->
+    <!-- Action -->
+    <div data-v-d40bfdc5="" class="zc-error-boundary__action"><button data-v-d40bfdc5="" type="button" class="zc-error-boundary__retry-btn">重试</button></div><!-- Details (collapsible) -->
+    <div data-v-d40bfdc5="" class="zc-error-boundary__details"><button data-v-d40bfdc5="" type="button" class="zc-error-boundary__details-toggle">▸ 错误详情</button>
+      <!--v-if-->
+    </div>
+  </div>
+</div>"
+`;
+
+exports[`Dark mode: component snapshots > ErrorBoundary renders correctly under .dark 1`] = `"<p class="normal-content">Hello from child</p>"`;
+
+exports[`Dark mode: component snapshots > FloatButton renders correctly under .dark 1`] = `
+"<transition-stub data-v-8066fe0a="" name="zc-float-button-fade" appear="false" persisted="true" css="true">
+  <div data-v-8066fe0a="" class="zc-float-button zc-float-button--circle zc-float-button--default zc-float-button--default" style="z-index: 999; right: 40px; bottom: 40px;" role="button" tabindex="0" aria-disabled="false" aria-label="">
+    <!--v-if--><span data-v-8066fe0a="" class="zc-float-button__inner"><!--v-if--></span>
+  </div>
+</transition-stub>"
+`;
+
+exports[`Dark mode: component snapshots > FloatButtonGroup renders correctly under .dark 1`] = `
+"<div class="zc-float-button-group zc-float-button-group--circle zc-float-button-group--bottom-right is-open" style="right: 40px; bottom: 40px;">
+  <!--
+      Expose the group context as a scoped slot prop, so children can
+      opt-in to inheriting shape/type without relying solely on
+      provide/inject (which doesn't cross slot boundaries reliably).
+    -->
+  <!--v-if-->
+</div>"
+`;
+
+exports[`Dark mode: component snapshots > InputOTP renders correctly under .dark 1`] = `
+"<div data-v-5c2d1b44="" class="zc-input-otp zc-input-otp--medium" role="group" aria-label="OTP input">
+  <div data-v-5c2d1b44="" class="zc-input-otp__box"><input data-v-5c2d1b44="" type="text" placeholder="" maxlength="1" inputmode="text" autocomplete="one-time-code" class="zc-input-otp__input" value="">
+    <!--v-if-->
+  </div>
+  <!--v-if-->
+  <div data-v-5c2d1b44="" class="zc-input-otp__box"><input data-v-5c2d1b44="" type="text" placeholder="" maxlength="1" inputmode="text" autocomplete="off" class="zc-input-otp__input" value="">
+    <!--v-if-->
+  </div>
+  <!--v-if-->
+  <div data-v-5c2d1b44="" class="zc-input-otp__box"><input data-v-5c2d1b44="" type="text" placeholder="" maxlength="1" inputmode="text" autocomplete="off" class="zc-input-otp__input" value="">
+    <!--v-if-->
+  </div>
+  <!--v-if-->
+  <div data-v-5c2d1b44="" class="zc-input-otp__box"><input data-v-5c2d1b44="" type="text" placeholder="" maxlength="1" inputmode="text" autocomplete="off" class="zc-input-otp__input" value="">
+    <!--v-if-->
+  </div>
+  <!--v-if-->
+  <div data-v-5c2d1b44="" class="zc-input-otp__box"><input data-v-5c2d1b44="" type="text" placeholder="" maxlength="1" inputmode="text" autocomplete="off" class="zc-input-otp__input" value="">
+    <!--v-if-->
+  </div>
+  <!--v-if-->
+  <div data-v-5c2d1b44="" class="zc-input-otp__box"><input data-v-5c2d1b44="" type="text" placeholder="" maxlength="1" inputmode="text" autocomplete="off" class="zc-input-otp__input" value="">
+    <!--v-if-->
+  </div>
+  <!--v-if-->
+</div>"
+`;
+
+exports[`Dark mode: component snapshots > Link renders correctly under .dark 1`] = `"<a data-v-011ed3da="" class="zc-link zc-link--primary"></a>"`;
+
+exports[`Dark mode: component snapshots > Link with all types renders under .dark 1`] = `
+"<a data-v-011ed3da="" class="zc-link zc-link--primary"></a>
+<a data-v-011ed3da="" class="zc-link zc-link--success"></a>
+<a data-v-011ed3da="" class="zc-link zc-link--warning"></a>
+<a data-v-011ed3da="" class="zc-link zc-link--danger"></a>
+<a data-v-011ed3da="" class="zc-link zc-link--info"></a>"
+`;
+
+exports[`Dark mode: component snapshots > Paragraph renders correctly under .dark 1`] = `
+"<div data-v-d23e3386="" class="zc-paragraph">
+  <!-- Display mode -->
+  <p data-v-d23e3386="" class="zc-paragraph__content">Dark mode paragraph text</p><!-- Suffix (ellipsis + expandable) -->
+  <!--v-if-->
+  <!-- Copy -->
+  <!--v-if-->
+  <!-- Edit trigger -->
+  <!--v-if-->
+</div>"
+`;
+
+exports[`Dark mode: component snapshots > Spin renders correctly under .dark 1`] = `
+"<!-- Fullscreen mode -->
+<!-- Standalone spinner -->
+<div data-v-cec9ccdd="" class="zc-spin">
+  <div data-v-cec9ccdd="" class="zc-spin__spinner zc-spin--medium" role="status" aria-live="polite"><span data-v-cec9ccdd="" class="sr-only">Loading</span></div>
+  <!--v-if-->
+</div>"
+`;
+
+exports[`Dark mode: component snapshots > Splitter renders correctly under .dark 1`] = `
+"<div data-v-730c0abf="" class="zc-splitter zc-splitter--horizontal">
+  <div data-v-730c0abf="" class="zc-splitter__panel is-collapsed" style="width: 50%; overflow: hidden;">
+    <div>Panel 1</div>
+  </div><!-- Gutter between panels -->
+  <div data-v-730c0abf="" class="zc-splitter__gutter" style="width: 6px; cursor: col-resize;">
+    <div data-v-730c0abf="" class="zc-splitter__gutter-handle"><span data-v-730c0abf="" class="zc-splitter__gutter-dots"></span></div>
+  </div>
+  <div data-v-730c0abf="" class="zc-splitter__panel is-collapsed" style="width: 50%; overflow: hidden;">
+    <div>Panel 2</div>
+  </div><!-- Gutter between panels -->
+  <!--v-if-->
+</div>"
+`;
+
+exports[`Dark mode: component snapshots > StatisticCard renders correctly under .dark 1`] = `
+"<div data-v-5c2bf695="" class="zc-statistic-card is-bordered" style="padding: 20px;">
+  <!-- Loading skeleton -->
+  <!-- Actual content -->
+  <!-- Header: title + avatar -->
+  <div data-v-5c2bf695="" class="zc-statistic-card__header">
+    <div data-v-5c2bf695="" class="zc-statistic-card__title">Revenue</div>
+    <!--v-if-->
+  </div><!-- Body: value + trend -->
+  <div data-v-5c2bf695="" class="zc-statistic-card__body">
+    <div data-v-5c2bf695="" class="zc-statistic-card__value">
+      <!--v-if--><span data-v-5c2bf695="" class="zc-statistic-card__value-content">9,999</span>
+      <!--v-if-->
+    </div><!-- Trend indicator -->
+    <!--v-if-->
+  </div><!-- Footer slot -->
+  <!--v-if-->
+</div>"
+`;
+
+exports[`Dark mode: component snapshots > Text renders correctly under .dark 1`] = `"<span data-v-2478857a="" class="zc-text zc-text--primary"></span>"`;
+
+exports[`Dark mode: component snapshots > Text with all types renders under .dark 1`] = `
+"<span data-v-2478857a="" class="zc-text zc-text--primary"></span>
+<span data-v-2478857a="" class="zc-text zc-text--success"></span>
+<span data-v-2478857a="" class="zc-text zc-text--warning"></span>
+<span data-v-2478857a="" class="zc-text zc-text--danger"></span>
+<span data-v-2478857a="" class="zc-text zc-text--info"></span>"
+`;
+
+exports[`Dark mode: component snapshots > TextEllipsis renders correctly under .dark 1`] = `
+"<div data-v-1929330e="" class="zc-text-ellipsis" text="A very long text that should be ellipsized in dark mode"><span data-v-1929330e="" class="zc-text-ellipsis__text" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"></span>
+  <!--v-if-->
+</div>"
+`;
+
+exports[`Dark mode: component snapshots > Title level-5 renders correctly under .dark 1`] = `
+"<h5 data-v-414b9fd4="" class="zc-title zc-title--level-5"><span data-v-414b9fd4="" class="zc-title__content"></span>
+  <!--v-if-->
+</h5>"
+`;
+
+exports[`Dark mode: component snapshots > Title renders correctly under .dark 1`] = `
+"<h1 data-v-414b9fd4="" class="zc-title zc-title--level-1"><span data-v-414b9fd4="" class="zc-title__content"></span>
+  <!--v-if-->
+</h1>"
+`;

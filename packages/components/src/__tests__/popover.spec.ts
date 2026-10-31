@@ -5,6 +5,7 @@ import Popover from '../popover/popover.vue'
 describe('ZcPopover', () => {
   afterEach(() => {
     vi.useRealTimers()
+    vi.restoreAllMocks()
     document.body.innerHTML = ''
   })
 
@@ -58,9 +59,7 @@ describe('ZcPopover', () => {
     // Call exposed hide method (same code path as outside-click handler)
     wrapper.vm.hide()
     await wrapper.vm.$nextTick()
-    expect(wrapper.emitted('update:visible')?.some((v) => v[0] === false)).toBe(
-      true,
-    )
+    expect(wrapper.emitted('update:visible')?.some((v) => v[0] === false)).toBe(true)
     wrapper.unmount()
   })
 
@@ -178,9 +177,7 @@ describe('ZcPopover', () => {
       slots: { default: '<span>text</span>' },
     })
     await wrapper.trigger('click')
-    expect(document.querySelector('.zc-popover__popper')?.textContent).toContain(
-      'My content text',
-    )
+    expect(document.querySelector('.zc-popover__popper')?.textContent).toContain('My content text')
   })
 
   it('renders title prop text', async () => {
@@ -203,9 +200,7 @@ describe('ZcPopover', () => {
       },
     })
     await wrapper.trigger('click')
-    expect(
-      document.querySelector('.zc-popover__title strong'),
-    ).not.toBeNull()
+    expect(document.querySelector('.zc-popover__title strong')).not.toBeNull()
   })
 
   it('renders content slot', async () => {
@@ -236,6 +231,16 @@ describe('ZcPopover', () => {
       props: { content: 'Top', trigger: 'click', placement: 'top' },
       slots: { default: '<span>text</span>' },
     })
+    vi.spyOn(wrapper.element as HTMLElement, 'getBoundingClientRect').mockReturnValue({
+      x: 200,
+      y: 200,
+      top: 200,
+      right: 300,
+      bottom: 240,
+      left: 200,
+      width: 100,
+      height: 40,
+    } as DOMRect)
     await wrapper.trigger('click')
     const popper = document.querySelector('.zc-popover__popper')
     expect(popper?.classList.contains('zc-popover-popper--top')).toBe(true)
@@ -246,6 +251,16 @@ describe('ZcPopover', () => {
       props: { content: 'Left', trigger: 'click', placement: 'left' },
       slots: { default: '<span>text</span>' },
     })
+    vi.spyOn(wrapper.element as HTMLElement, 'getBoundingClientRect').mockReturnValue({
+      x: 200,
+      y: 200,
+      top: 200,
+      right: 300,
+      bottom: 240,
+      left: 200,
+      width: 100,
+      height: 40,
+    } as DOMRect)
     await wrapper.trigger('click')
     const popper = document.querySelector('.zc-popover__popper')
     expect(popper?.classList.contains('zc-popover-popper--left')).toBe(true)
@@ -266,6 +281,16 @@ describe('ZcPopover', () => {
       props: { content: 'TS', trigger: 'click', placement: 'top-start' },
       slots: { default: '<span>text</span>' },
     })
+    vi.spyOn(wrapper.element as HTMLElement, 'getBoundingClientRect').mockReturnValue({
+      x: 200,
+      y: 200,
+      top: 200,
+      right: 300,
+      bottom: 240,
+      left: 200,
+      width: 100,
+      height: 40,
+    } as DOMRect)
     await wrapper.trigger('click')
     const popper = document.querySelector('.zc-popover__popper')
     expect(popper?.classList.contains('zc-popover-popper--top-start')).toBe(true)
@@ -278,9 +303,7 @@ describe('ZcPopover', () => {
     })
     await wrapper.trigger('click')
     const popper = document.querySelector('.zc-popover__popper')
-    expect(
-      popper?.classList.contains('zc-popover-popper--bottom-end'),
-    ).toBe(true)
+    expect(popper?.classList.contains('zc-popover-popper--bottom-end')).toBe(true)
   })
 
   // ---- Arrow ----
@@ -340,9 +363,7 @@ describe('ZcPopover', () => {
       slots: { default: '<span>text</span>' },
     })
     await wrapper.trigger('click')
-    expect(
-      document.querySelector('.zc-popover__popper.my-custom'),
-    ).not.toBeNull()
+    expect(document.querySelector('.zc-popover__popper.my-custom')).not.toBeNull()
   })
 
   // ---- Teleport ----

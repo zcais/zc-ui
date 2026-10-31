@@ -26,20 +26,20 @@ pnpm changeset:publish:otp
 
 ---
 
-## 1. 当前包状态（截至 2026-07-14）
+## 1. 当前包状态（截至 2026-10-31）
 
 | 包名                | 当前版本 | 角色                    | 状态             |
 | ------------------- | -------- | ----------------------- | ---------------- |
-| `@zc-ui/components` | 1.0.0    | 80+ Vue 3 组件          | ✅ 已发布 latest |
-| `@zc-ui/hooks`      | 1.0.0    | 16 个 composables       | ✅ 已发布 latest |
-| `@zc-ui/utils`      | 1.0.0    | 通用工具                | ✅ 已发布 latest |
-| `@zc-ui/theme`      | 1.0.0    | CSS 变量 + 主题         | ✅ 已发布 latest |
-| `@zc-ui/locale`     | 1.0.0    | i18n 字典               | ✅ 已发布 latest |
-| `@zc-ui/resolver`   | 1.0.0    | unplugin-vue-components | ✅ 已发布 latest |
-| `@zc-ui/nuxt`       | 1.0.0    | Nuxt 3 模块             | ✅ 已发布 latest |
-| `@zc-ui/icons`      | 1.0.0    | 5093 个 Tabler 图标     | ⏳ 待发布        |
+| `@zc-ui/components` | 1.0.2    | 80+ Vue 3 组件          | ✅ 已发布 latest |
+| `@zc-ui/hooks`      | 1.0.2    | 16 个 composables       | ✅ 已发布 latest |
+| `@zc-ui/utils`      | 1.0.2    | 通用工具                | ✅ 已发布 latest |
+| `@zc-ui/theme`      | 1.0.2    | CSS 变量 + 主题         | ✅ 已发布 latest |
+| `@zc-ui/locale`     | 1.0.2    | i18n 字典               | ✅ 已发布 latest |
+| `@zc-ui/resolver`   | 1.0.2    | unplugin-vue-components | ✅ 已发布 latest |
+| `@zc-ui/nuxt`       | 1.0.2    | Nuxt 3 模块             | ✅ 已发布 latest |
+| `@zc-ui/icons`      | 1.0.2    | 5093 个 Tabler 图标     | ⏳ 待发布        |
 
-**8 个包统一以 `1.0.0` 作为 latest tag**。从今天起任何发布都将基于此基线。
+**8 个包统一以 `1.0.2` 作为 latest tag**（changesets 已配置 `fixed` 锁定同版本）。
 
 ---
 

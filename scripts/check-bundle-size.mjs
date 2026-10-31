@@ -32,6 +32,11 @@ const REPORT_OUTPUT_PATH = resolve(ROOT, 'reports', 'bundle-size-report.json')
  * Files matching the pattern are checked against the corresponding limit.
  */
 const THRESHOLDS = [
+  // Icons ship 5000+ tree-shakeable components through a single barrel
+  // file; consumers pull individual icons via named imports, so the
+  // published file size is expected to be large.
+  { pattern: /icons[\\/].*\.mjs$/, limit: 8 * 1024 * 1024, label: 'Icons ESM bundle' },
+  { pattern: /icons[\\/].*\.cjs$/, limit: 8 * 1024 * 1024, label: 'Icons CJS bundle' },
   { pattern: /\.umd\.js$/, limit: 800 * 1024, label: 'UMD bundle' },
   { pattern: /\.mjs$/, limit: 600 * 1024, label: 'ESM bundle' },
   { pattern: /\.cjs$/, limit: 600 * 1024, label: 'CJS bundle' },

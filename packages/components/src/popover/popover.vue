@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, computed, watch, onBeforeUnmount, nextTick } from 'vue'
-import { useNamespace } from '@zc-ui/hooks'
+import { ref, computed, watch, onBeforeUnmount, nextTick, type CSSProperties } from 'vue'
+import { useNamespace, useZIndex } from '@zc-ui/hooks'
+import { usePopper } from '../popper/usePopper'
 
 defineOptions({ name: 'ZcPopover' })
 
@@ -90,72 +91,20 @@ let hideTimer: ReturnType<typeof setTimeout> | null = null
 
 const GAP = computed(() => props.offset)
 
-/** Dynamically compute popper position based on trigger element rect */
-const popperPosition = ref<Record<string, string>>({})
-
-function updatePosition() {
-  if (!triggerRef.value) return
-  const rect = triggerRef.value.getBoundingClientRect()
-  const winH = window.innerHeight
-  const winW = window.innerWidth
-  const gap = GAP.value
-
-  const placements: Record<string, Record<string, string>> = {
-    top: {
-      left: `${rect.left + rect.width / 2}px`,
-      bottom: `${winH - rect.top + gap}px`,
-      transform: 'translateX(-50%)',
-    },
-    'top-start': {
-      left: `${rect.left}px`,
-      bottom: `${winH - rect.top + gap}px`,
-    },
-    'top-end': {
-      right: `${winW - rect.right}px`,
-      bottom: `${winH - rect.top + gap}px`,
-    },
-    bottom: {
-      left: `${rect.left + rect.width / 2}px`,
-      top: `${rect.bottom + gap}px`,
-      transform: 'translateX(-50%)',
-    },
-    'bottom-start': {
-      left: `${rect.left}px`,
-      top: `${rect.bottom + gap}px`,
-    },
-    'bottom-end': {
-      right: `${winW - rect.right}px`,
-      top: `${rect.bottom + gap}px`,
-    },
-    left: {
-      top: `${rect.top + rect.height / 2}px`,
-      right: `${winW - rect.left + gap}px`,
-      transform: 'translateY(-50%)',
-    },
-    'left-start': {
-      top: `${rect.top}px`,
-      right: `${winW - rect.left + gap}px`,
-    },
-    'left-end': {
-      bottom: `${winH - rect.bottom}px`,
-      right: `${winW - rect.left + gap}px`,
-    },
-    right: {
-      top: `${rect.top + rect.height / 2}px`,
-      left: `${rect.right + gap}px`,
-      transform: 'translateY(-50%)',
-    },
-    'right-start': {
-      top: `${rect.top}px`,
-      left: `${rect.right + gap}px`,
-    },
-    'right-end': {
-      bottom: `${winH - rect.bottom}px`,
-      left: `${rect.right + gap}px`,
-    },
-  }
-  popperPosition.value = placements[props.placement] || placements.bottom
-}
+// ---- Positioning via ZcPopper engine (fixed strategy, teleported to body) ----
+const popperVisible = computed(() => internalVisible.value)
+const {
+  styles: popperStyles,
+  actualPlacement,
+  update: updatePopper,
+} = usePopper({
+  reference: triggerRef,
+  popper: popperRef,
+  placement: computed(() => props.placement),
+  offset: GAP,
+  strategy: 'fixed',
+  visible: popperVisible,
+})
 
 function clearTimers() {
   if (showTimer) {
@@ -250,14 +199,6 @@ watch(
   { immediate: true }
 )
 
-// ---- Update position whenever popper becomes visible ----
-watch(internalVisible, async (visible) => {
-  if (visible) {
-    await nextTick()
-    updatePosition()
-  }
-})
-
 // ---- Click outside handler for click trigger ----
 let documentClickHandler: ((e: MouseEvent) => void) | null = null
 
@@ -304,16 +245,25 @@ onBeforeUnmount(() => {
   detachDocumentClick()
 })
 
-// ---- Popper style (width + position) ----
+// ---- Layering: allocate from the shared z-index manager on every show ----
+const { nextZIndex } = useZIndex()
+const popperZIndex = ref<number>()
+watch(internalVisible, (val) => {
+  if (val) popperZIndex.value = nextZIndex()
+})
+
+// ---- Popper style (width + position + layer) ----
 const popperStyle = computed(() => {
-  const styles: Record<string, string> = {}
+  const styles: CSSProperties = {
+    zIndex: popperZIndex.value,
+  }
   if (props.width !== undefined) {
     styles.width = typeof props.width === 'number' ? `${props.width}px` : props.width
   }
   if (props.minWidth !== undefined) {
     styles.minWidth = typeof props.minWidth === 'number' ? `${props.minWidth}px` : props.minWidth
   }
-  return [styles, popperPosition.value]
+  return [styles, popperStyles.value]
 })
 
 // ---- Transition hooks ----
@@ -330,7 +280,7 @@ defineExpose({
   show: handleShow,
   hide: handleHide,
   toggle: handleToggle,
-  updatePosition,
+  updatePosition: updatePopper,
 })
 </script>
 
@@ -343,7 +293,7 @@ defineExpose({
         <div
           v-if="internalVisible"
           ref="popperRef"
-          :class="[ns.e('popper'), `zc-popover-popper--${placement}`, popperClass]"
+          :class="[ns.e('popper'), `zc-popover-popper--${actualPlacement}`, popperClass]"
           :style="popperStyle"
           role="dialog"
           @mouseenter="trigger === 'hover' && handleShow()"
@@ -360,7 +310,7 @@ defineExpose({
           </div>
 
           <!-- Arrow -->
-          <span v-if="showArrow" :class="[ns.e('arrow'), `zc-popover-arrow--${placement}`]" />
+          <span v-if="showArrow" :class="[ns.e('arrow'), `zc-popover-arrow--${actualPlacement}`]" />
         </div>
       </Transition>
     </Teleport>

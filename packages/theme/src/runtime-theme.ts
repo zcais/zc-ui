@@ -26,10 +26,7 @@
  * ```
  */
 
-import {
-  generateColorScale,
-  type PaletteInput,
-} from './color-generator'
+import { generateColorScale, type PaletteInput } from './color-generator'
 import type { ColorName } from './colors'
 import type { ThemePreset, ThemeVariables } from './presets'
 
@@ -113,7 +110,7 @@ export function switchTheme(name: string, options?: ApplyThemeOptions): void {
   const preset = themeRegistry.get(name)
   if (!preset) {
     throw new Error(
-      `Theme "${name}" is not registered. Use registerTheme() first. Available: ${listRegisteredThemes().join(', ')}`,
+      `Theme "${name}" is not registered. Use registerTheme() first. Available: ${listRegisteredThemes().join(', ')}`
     )
   }
   applyTheme(preset, options)
@@ -140,14 +137,12 @@ export function getCurrentThemeName(): string | null {
 function applyVariables(
   variables: ThemeVariables,
   target: HTMLElement,
-  options?: ApplyThemeOptions,
+  options?: ApplyThemeOptions
 ): void {
   const prefix = options?.prefix
 
   for (const [name, value] of Object.entries(variables)) {
-    const varName = prefix && !name.startsWith(prefix)
-      ? `${prefix}-${name}`
-      : name
+    const varName = prefix && !name.startsWith(prefix) ? `${prefix}-${name}` : name
     target.style.setProperty(varName, value)
   }
 }
@@ -231,11 +226,7 @@ export function applyTheme(preset: ThemePreset, options?: ApplyThemeOptions): vo
  * setBrandColor('danger', '#ff4d4f')
  * ```
  */
-export function setBrandColor(
-  name: ColorName,
-  hex: string,
-  options?: ApplyThemeOptions,
-): void {
+export function setBrandColor(name: ColorName, hex: string, options?: ApplyThemeOptions): void {
   const target = getRootElement(options?.target)
   if (!target) return
 
@@ -259,10 +250,7 @@ export function setBrandColor(
  * })
  * ```
  */
-export function setBrandColors(
-  palette: PaletteInput,
-  options?: ApplyThemeOptions,
-): void {
+export function setBrandColors(palette: PaletteInput, options?: ApplyThemeOptions): void {
   const target = getRootElement(options?.target)
   if (!target) return
 
@@ -280,11 +268,7 @@ export function setBrandColors(
  * setThemeVariable('--radius-zc-base', '8px')
  * ```
  */
-export function setThemeVariable(
-  name: string,
-  value: string,
-  options?: ApplyThemeOptions,
-): void {
+export function setThemeVariable(name: string, value: string, options?: ApplyThemeOptions): void {
   const target = getRootElement(options?.target)
   if (!target) return
   target.style.setProperty(name, value)
@@ -293,10 +277,7 @@ export function setThemeVariable(
 /**
  * Remove a CSS variable that was set at runtime.
  */
-export function removeThemeVariable(
-  name: string,
-  options?: ApplyThemeOptions,
-): void {
+export function removeThemeVariable(name: string, options?: ApplyThemeOptions): void {
   const target = getRootElement(options?.target)
   if (!target) return
   target.style.removeProperty(name)
@@ -317,6 +298,14 @@ export function applyDarkMode(isDark: boolean, target?: HTMLElement | null): voi
   } else {
     el.classList.remove('dark')
   }
+
+  // Clean up legacy dark mode attributes so only .dark class is authoritative
+  const legacyAttrs = ['data-theme', 'data-mode']
+  for (const attr of legacyAttrs) {
+    if (el.getAttribute(attr) === 'dark') {
+      el.removeAttribute(attr)
+    }
+  }
 }
 
 /**
@@ -328,9 +317,7 @@ export function applyDarkMode(isDark: boolean, target?: HTMLElement | null): voi
  * clearThemeOverrides() // removes all --color-zc-* inline overrides
  * ```
  */
-export function clearThemeOverrides(
-  options?: ApplyThemeOptions & { prefix?: string },
-): void {
+export function clearThemeOverrides(options?: ApplyThemeOptions & { prefix?: string }): void {
   const target = getRootElement(options?.target)
   if (!target) return
   const prefix = options?.prefix ?? DEFAULT_COLOR_PREFIX
@@ -353,7 +340,7 @@ export function clearThemeOverrides(
 export function applyComponentOverrides(
   element: HTMLElement,
   componentName: string,
-  overrides: ThemeVariables,
+  overrides: ThemeVariables
 ): void {
   for (const [name, value] of Object.entries(overrides)) {
     element.style.setProperty(name, value)
@@ -373,7 +360,7 @@ export function applyComponentOverrides(
 export function removeComponentOverrides(
   element: HTMLElement,
   componentName: string,
-  overrides: ThemeVariables,
+  overrides: ThemeVariables
 ): void {
   for (const name of Object.keys(overrides)) {
     element.style.removeProperty(name)

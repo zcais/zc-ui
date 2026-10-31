@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, computed, watch, onBeforeUnmount, provide, nextTick } from 'vue'
+import { ref, computed, watch, onBeforeUnmount, provide } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
+import { usePopper } from '../popper/usePopper'
 import type { DropdownTrigger, DropdownPlacement } from './types'
 import { DROPDOWN_KEY } from './types'
 
@@ -56,47 +57,16 @@ let timeout: ReturnType<typeof setTimeout> | null = null
 
 const GAP = 8 // px gap between trigger and dropdown
 
-/** Dynamically compute dropdown position based on trigger element rect */
-const popperPosition = ref<Record<string, string>>({})
-
-function updatePosition() {
-  if (!triggerRef.value) return
-  const rect = triggerRef.value.getBoundingClientRect()
-  const winH = window.innerHeight
-  const winW = window.innerWidth
-
-  const placements: Record<string, Record<string, string>> = {
-    top: {
-      left: `${rect.left + rect.width / 2}px`,
-      bottom: `${winH - rect.top + GAP}px`,
-      transform: 'translateX(-50%)',
-    },
-    'top-start': {
-      left: `${rect.left}px`,
-      bottom: `${winH - rect.top + GAP}px`,
-    },
-    'top-end': {
-      right: `${winW - rect.right}px`,
-      bottom: `${winH - rect.top + GAP}px`,
-    },
-    bottom: {
-      left: `${rect.left + rect.width / 2}px`,
-      top: `${rect.bottom + GAP}px`,
-      transform: 'translateX(-50%)',
-    },
-    'bottom-start': {
-      left: `${rect.left}px`,
-      top: `${rect.bottom + GAP}px`,
-    },
-    'bottom-end': {
-      right: `${winW - rect.right}px`,
-      top: `${rect.bottom + GAP}px`,
-    },
-  }
-  const result = { ...(placements[props.placement] || placements.bottom) }
-  if (props.maxHeight) result.maxHeight = props.maxHeight
-  popperPosition.value = result
-}
+// ---- Positioning via ZcPopper engine (fixed strategy, teleported to body) ----
+const popperVisible = computed(() => internalVisible.value)
+const { styles: popperStyles, actualPlacement } = usePopper({
+  reference: triggerRef,
+  popper: popperRef,
+  placement: computed(() => props.placement),
+  offset: GAP,
+  strategy: 'fixed',
+  visible: popperVisible,
+})
 
 function show() {
   if (props.disabled) return
@@ -164,14 +134,6 @@ watch(
   }
 )
 
-// Update position whenever the dropdown becomes visible
-watch(internalVisible, async (visible) => {
-  if (visible) {
-    await nextTick()
-    updatePosition()
-  }
-})
-
 onBeforeUnmount(() => {
   if (timeout) clearTimeout(timeout)
   if (typeof document !== 'undefined') {
@@ -202,6 +164,12 @@ const triggerEvents = computed(() => {
   }
   return events
 })
+
+const menuStyle = computed(() => {
+  const styles: Record<string, string> = {}
+  if (props.maxHeight) styles.maxHeight = props.maxHeight
+  return [styles, popperStyles.value]
+})
 </script>
 
 <template>
@@ -218,8 +186,8 @@ const triggerEvents = computed(() => {
         <div
           v-if="internalVisible"
           ref="popperRef"
-          :class="[ns.e('menu'), ns.e('menu--' + placement), popperClass]"
-          :style="popperPosition"
+          :class="[ns.e('menu'), ns.e('menu--' + actualPlacement), popperClass]"
+          :style="menuStyle"
           role="menu"
           @mouseenter="trigger === 'hover' && handleShowDelayed()"
           @mouseleave="trigger === 'hover' && handleHideDelayed()"

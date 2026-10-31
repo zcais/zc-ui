@@ -96,3 +96,12 @@ const num2 = ref(1)
   { name: 'increase', description: '增加数值' },
   { name: 'decrease', description: '减少数值' },
 ]" />
+
+### Exposes
+
+<ApiTable type="methods" :data="[
+  { name: 'focus', description: '聚焦输入框', type: '() => void', default: '—' },
+  { name: 'blur', description: '使输入框失焦', type: '() => void', default: '—' },
+  { name: 'increase', description: '数值增加一步', type: '() => void', default: '—' },
+  { name: 'decrease', description: '数值减少一步', type: '() => void', default: '—' }
+]" />

@@ -1,9 +1,5 @@
 import { componentMap, functionMap } from './component-map'
-import type {
-  ZcUiResolverOptions,
-  ResolvedComponent,
-  ComponentResolver,
-} from './types'
+import type { ZcUiResolverOptions, ResolvedComponent, ComponentResolver } from './types'
 
 /**
  * Default options merged with user-provided options.
@@ -26,30 +22,28 @@ function resolveOptions(options: ZcUiResolverOptions = {}): Required<
 
 /**
  * Builds the CSS side effects array based on the component directory and options.
+ *
+ * The published package currently ships a single combined stylesheet
+ * (`@zc-ui/components/styles` → dist/style.css), so `importStyle: 'component'`
+ * resolves to the same full stylesheet instead of a dead per-component path.
  */
 function buildSideEffects(
-  componentDir: string,
-  opts: ReturnType<typeof resolveOptions>,
+  _componentDir: string,
+  opts: ReturnType<typeof resolveOptions>
 ): string[] | undefined {
   if (opts.importStyle === false) {
     return undefined
   }
 
-  if (opts.importStyle === 'full') {
-    return [opts.stylePath]
-  }
-
-  // Per-component CSS
-  return [`${opts.stylePath}/${componentDir}.css`]
+  // Both 'full' and 'component' import the combined stylesheet.
+  return [opts.stylePath]
 }
 
 /**
  * Gets the component directory name from the component map.
  * Returns `null` if the component is not found.
  */
-function getComponentDir(
-  name: string,
-): string | null {
+function getComponentDir(name: string): string | null {
   return componentMap[name] ?? null
 }
 
@@ -80,17 +74,8 @@ function getComponentDir(
  *   resolvers: [ZcUiResolver({ ssr: true })],
  * })
  * ```
- *
- * @example Per-component CSS
- * ```ts
- * Components({
- *   resolvers: [ZcUiResolver({ importStyle: 'component' })],
- * })
- * ```
  */
-export function ZcUiResolver(
-  options: ZcUiResolverOptions = {},
-): ComponentResolver {
+export function ZcUiResolver(options: ZcUiResolverOptions = {}): ComponentResolver {
   const opts = resolveOptions(options)
 
   return {
@@ -112,10 +97,7 @@ export function ZcUiResolver(
       }
 
       // For custom prefixes, map to the canonical Zc-prefixed name
-      const canonicalName =
-        opts.prefix === 'Zc'
-          ? name
-          : 'Zc' + name.slice(opts.prefix.length)
+      const canonicalName = opts.prefix === 'Zc' ? name : 'Zc' + name.slice(opts.prefix.length)
 
       // Resolve functional APIs (ZcMessage, ZcNotification, etc.)
       if (functionMap[canonicalName]) {
@@ -123,9 +105,7 @@ export function ZcUiResolver(
         return {
           name: canonicalName,
           from: fn.from,
-          sideEffects: opts.importStyle !== false
-            ? fn.sideEffects
-            : undefined,
+          sideEffects: opts.importStyle !== false ? fn.sideEffects : undefined,
         }
       }
 
@@ -162,7 +142,7 @@ export function ZcUiResolver(
  */
 export function resolveZcComponent(
   name: string,
-  options: ZcUiResolverOptions = {},
+  options: ZcUiResolverOptions = {}
 ): ResolvedComponent | null | undefined {
   const resolver = ZcUiResolver(options)
   return resolver.resolve(name)
@@ -183,8 +163,6 @@ export function resolveZcComponent(
  * })
  * ```
  */
-export function ZcUiResolverSSR(
-  options: Omit<ZcUiResolverOptions, 'ssr'> = {},
-): ComponentResolver {
+export function ZcUiResolverSSR(options: Omit<ZcUiResolverOptions, 'ssr'> = {}): ComponentResolver {
   return ZcUiResolver({ ...options, ssr: true })
 }

@@ -127,19 +127,25 @@ describe('ZcStatistic', () => {
   })
 
   // ---- countUp animation ----
-  it('animates countUp to final value', () => {
+  it('animates countUp to final value', async () => {
+    vi.useFakeTimers()
     const wrapper = mount(Statistic, {
       props: { value: 100, countUp: true, countFrom: 0, duration: 2000 },
     })
+    await vi.advanceTimersByTimeAsync(2100)
     // Animation should have completed
     expect(wrapper.find('.zc-statistic__value').text()).toBe('100')
+    vi.useRealTimers()
   })
 
-  it('applies displayValue correctly for countUp with non-default value', () => {
+  it('applies displayValue correctly for countUp with non-default value', async () => {
+    vi.useFakeTimers()
     const wrapper = mount(Statistic, {
       props: { value: 5000, countUp: true, countFrom: 100, duration: 3000 },
     })
+    await vi.advanceTimersByTimeAsync(3100)
     expect(wrapper.find('.zc-statistic__value').text()).toBe('5,000')
+    vi.useRealTimers()
   })
 
   // ---- countdown ----

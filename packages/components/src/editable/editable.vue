@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, nextTick, watch } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
+import { useLocale } from '@zc-ui/locale'
 
 defineOptions({ name: 'ZcEditable' })
 
@@ -37,7 +38,7 @@ const props = withDefaults(
   }>(),
   {
     modelValue: '',
-    placeholder: '请输入',
+    placeholder: '',
     mode: 'text',
     disabled: false,
     showAction: true,
@@ -61,10 +62,14 @@ const emit = defineEmits<{
 }>()
 
 const ns = useNamespace('editable')
+const { t } = useLocale()
 
 const isEditing = ref(false)
 const editValue = ref(props.modelValue)
 const inputRef = ref<HTMLInputElement | HTMLTextAreaElement | null>(null)
+
+/** Localized placeholder fallback */
+const placeholderComputed = computed(() => props.placeholder || t('zc.editable.placeholder'))
 
 watch(
   () => props.modelValue,
@@ -75,7 +80,7 @@ watch(
   }
 )
 
-const displayText = computed(() => props.modelValue || props.placeholder || '')
+const displayText = computed(() => props.modelValue || placeholderComputed.value || '')
 
 const containerClasses = computed(() => [
   ns.b(),
@@ -182,7 +187,7 @@ const showInput = computed(() => isEditing.value)
         ref="inputRef"
         v-model="editValue"
         :class="inputClasses"
-        :placeholder="placeholder"
+        :placeholder="placeholderComputed"
         :maxlength="maxLength || undefined"
         :disabled="disabled"
         type="text"
@@ -194,7 +199,7 @@ const showInput = computed(() => isEditing.value)
         ref="inputRef"
         v-model="editValue"
         :class="inputClasses"
-        :placeholder="placeholder"
+        :placeholder="placeholderComputed"
         :maxlength="maxLength || undefined"
         :disabled="disabled"
         rows="3"

@@ -3,6 +3,7 @@ import { computed, inject, ref } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
 import { useGlobalConfig } from '../config-provider/useGlobalConfig'
 import type { ComponentSize } from '../config-provider/types'
+import { useFormDisabled, useFormSize, useFormItem } from '../form/use-form'
 import { radioGroupKey, type RadioGroupContext } from './radio-group.vue'
 
 defineOptions({ name: 'ZcRadio' })
@@ -49,8 +50,12 @@ const isChecked = computed(() => {
 })
 
 // Determine if this radio is disabled
+// ---- Form context integration ----
+const formDisabled = useFormDisabled(() => props.disabled)
+const formItem = useFormItem()
+
 const isDisabled = computed(() => {
-  return radioGroup ? radioGroup.disabled.value || props.disabled : props.disabled
+  return formDisabled.value || (radioGroup ? radioGroup.disabled.value : false)
 })
 
 // The name attribute (from group context or own prop)
@@ -61,9 +66,14 @@ const inputName = computed(() => {
 // ---- Focus tracking for is-focused class ----
 const isFocused = ref(false)
 
+// ---- ConfigProvider size integration ----
+// Priority: explicit prop > ZcFormItem > ZcForm > ConfigProvider global size
+// RadioSize is 'large'|'medium'|'small' (no 'mini'), so 'mini' degrades to 'small'
 const { size: globalSize } = useGlobalConfig()
+const formSize = useFormSize(() => props.size)
 const effectiveSize = computed<ComponentSize | undefined>(() => {
-  return props.size ?? globalSize.value ?? undefined
+  const resolved = formSize.value ?? globalSize.value
+  return resolved === 'mini' ? 'small' : resolved
 })
 
 // ---- BEM classes ----
@@ -97,6 +107,8 @@ function handleFocus() {
 
 function handleBlur() {
   isFocused.value = false
+  // Bridge to form-item validation rules with trigger: 'blur'
+  formItem?.validate('blur')
 }
 
 function select() {
@@ -104,10 +116,13 @@ function select() {
   const value = props.label === undefined ? true : props.label
 
   if (radioGroup) {
+    // Group's changeEvent bridges to form-item validation
     radioGroup.changeEvent(value)
   } else {
     emit('update:modelValue', value)
     emit('change', value)
+    // Bridge to form-item validation rules with trigger: 'change'
+    formItem?.validate('change')
   }
 }
 
@@ -120,20 +135,11 @@ function handleInputChange(event: Event) {
 </script>
 
 <template>
-  <label
-    :class="classes"
-    role="radio"
-    :aria-checked="isChecked"
-    :aria-disabled="isDisabled"
-    :aria-label="ariaLabel || (typeof label === 'string' ? label : undefined)"
-    :data-label="label"
-    :tabindex="isDisabled ? -1 : isChecked ? 0 : -1"
-    @click="handleClick"
-    @keydown.enter.prevent="select"
-    @keydown.space.prevent="select"
-  >
+  <label :class="classes" :data-label="label" @click="handleClick">
     <span :class="[ns.e('input'), ns.is('checked', isChecked), ns.is('disabled', isDisabled)]">
-      <span :class="[ns.e('inner'), ns.is('checked', isChecked)]" />
+      <span :class="[ns.e('inner'), ns.is('checked', isChecked)]" aria-hidden="true" />
+      <!-- The native input is the single interactive element: it carries the
+           radio semantics (role, checked state, keyboard focus) itself. -->
       <input
         :class="ns.e('original')"
         type="radio"
@@ -141,7 +147,7 @@ function handleInputChange(event: Event) {
         :value="label"
         :disabled="isDisabled"
         :checked="isChecked"
-        tabindex="-1"
+        :aria-label="ariaLabel || (typeof label === 'string' ? label : undefined)"
         @change="handleInputChange"
         @focus="handleFocus"
         @blur="handleBlur"

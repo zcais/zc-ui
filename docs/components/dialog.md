@@ -30,7 +30,7 @@ const dialogVisible = ref(false)
 
 <DemoBlock>
 
-```vue
+````vue
 <template>
   <ZcButton @click="openDialog('small')">小尺寸</ZcButton>
     <ZcButton @click="openDialog('medium')">中等尺寸</ZcButton>
@@ -40,12 +40,12 @@ const dialogVisible = ref(false)
     <p>当前尺寸：{{ size }}</p>
   </ZcDialog>
   </template>
-    
+
       <script setup>
       import { ref } from 'vue'
     const visible = ref(false)
     const size = ref('medium')
-  
+
   function openDialog(s) {
     size.value = s
       visible.value = true
@@ -72,7 +72,7 @@ const dialogVisible = ref(false)
 import { ref } from 'vue'
 const visible = ref(false)
 </script>
-```
+````
 
 </DemoBlock>
 
@@ -167,3 +167,11 @@ const visible = ref(false)
 - **z-index 管理**：Dialog 使用全局 z-index 管理器自动递增，确保后打开的 Dialog 始终覆盖在先打开的之上。
 - **拖拽限制**：启用 `draggable` 后仅可通过 header 区域拖拽。全屏模式下拖拽会被禁用。
 - **无障碍**：建议为 Dialog 添加语义化的 `title` 属性，以便屏幕阅读器正确识别对话框标题。
+
+### Exposes
+
+<ApiTable type="methods" :data="[
+  { name: 'show', description: '打开对话框', type: '() => void', default: '—' },
+  { name: 'hide', description: '关闭对话框', type: '() => void', default: '—' },
+  { name: 'isVisible', description: '当前可见状态', type: 'Ref<boolean>', default: 'false' }
+]" />

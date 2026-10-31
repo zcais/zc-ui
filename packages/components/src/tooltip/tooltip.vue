@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, computed, watch, onBeforeUnmount, nextTick } from 'vue'
-import { useNamespace } from '@zc-ui/hooks'
+import { ref, computed, watch, onBeforeUnmount } from 'vue'
+import { useNamespace, useZIndex } from '@zc-ui/hooks'
+import { usePopper } from '../popper/usePopper'
 
 defineOptions({ name: 'ZcTooltip' })
 
@@ -70,71 +71,30 @@ let hideTimer: ReturnType<typeof setTimeout> | null = null
 
 const GAP = 8 // px gap between trigger and popper
 
-/** Dynamically compute popper position based on trigger element rect */
-const popperPosition = ref<Record<string, string>>({})
+// ---- Layering: allocate from the shared z-index manager on every show so
+// stacked overlays (dialogs, selects, ...) keep a deterministic order. ----
+const { nextZIndex } = useZIndex()
+const popperZIndex = ref<number>()
 
-function updatePosition() {
-  if (!triggerRef.value) return
-  const rect = triggerRef.value.getBoundingClientRect()
-  const winH = window.innerHeight
-  const winW = window.innerWidth
+// ---- Positioning via ZcPopper engine (fixed strategy, teleported to body) ----
+const popperVisible = computed(() => internalVisible.value)
+const { styles: popperStyles, actualPlacement } = usePopper({
+  reference: triggerRef,
+  popper: popperRef,
+  placement: computed(() => props.placement),
+  offset: GAP,
+  strategy: 'fixed',
+  visible: popperVisible,
+})
 
-  const placements: Record<string, Record<string, string>> = {
-    top: {
-      left: `${rect.left + rect.width / 2}px`,
-      bottom: `${winH - rect.top + GAP}px`,
-      transform: 'translateX(-50%)',
-    },
-    'top-start': {
-      left: `${rect.left}px`,
-      bottom: `${winH - rect.top + GAP}px`,
-    },
-    'top-end': {
-      right: `${winW - rect.right}px`,
-      bottom: `${winH - rect.top + GAP}px`,
-    },
-    bottom: {
-      left: `${rect.left + rect.width / 2}px`,
-      top: `${rect.bottom + GAP}px`,
-      transform: 'translateX(-50%)',
-    },
-    'bottom-start': {
-      left: `${rect.left}px`,
-      top: `${rect.bottom + GAP}px`,
-    },
-    'bottom-end': {
-      right: `${winW - rect.right}px`,
-      top: `${rect.bottom + GAP}px`,
-    },
-    left: {
-      top: `${rect.top + rect.height / 2}px`,
-      right: `${winW - rect.left + GAP}px`,
-      transform: 'translateY(-50%)',
-    },
-    'left-start': {
-      top: `${rect.top}px`,
-      right: `${winW - rect.left + GAP}px`,
-    },
-    'left-end': {
-      bottom: `${winH - rect.bottom}px`,
-      right: `${winW - rect.left + GAP}px`,
-    },
-    right: {
-      top: `${rect.top + rect.height / 2}px`,
-      left: `${rect.right + GAP}px`,
-      transform: 'translateY(-50%)',
-    },
-    'right-start': {
-      top: `${rect.top}px`,
-      left: `${rect.right + GAP}px`,
-    },
-    'right-end': {
-      bottom: `${winH - rect.bottom}px`,
-      left: `${rect.right + GAP}px`,
-    },
-  }
-  popperPosition.value = placements[props.placement] || placements.top
-}
+const popperStyle = computed(() => ({
+  ...popperStyles.value,
+  zIndex: popperZIndex.value,
+}))
+
+watch(internalVisible, (val) => {
+  if (val) popperZIndex.value = nextZIndex()
+})
 
 function clearTimers() {
   if (showTimer) {
@@ -210,14 +170,6 @@ watch(
   }
 )
 
-// Update position whenever the popper becomes visible
-watch(internalVisible, async (visible) => {
-  if (visible) {
-    await nextTick()
-    updatePosition()
-  }
-})
-
 // Document click handler for click trigger
 function onDocumentClick(e: MouseEvent) {
   if (!props.triggers.includes('click')) return
@@ -251,16 +203,16 @@ onBeforeUnmount(() => {
       <Transition name="zc-tooltip">
         <div
           v-if="internalVisible"
-          ref="popperRef"
           id="zc-tooltip-content"
-          :class="[ns.e('popper'), ns.e('popper--' + placement), popperClass]"
-          :style="popperPosition"
+          ref="popperRef"
+          :class="[ns.e('popper'), ns.e('popper--' + actualPlacement), popperClass]"
+          :style="popperStyle"
           role="tooltip"
           @mouseenter="triggers.includes('hover') && handleShow()"
           @mouseleave="triggers.includes('hover') && handleHide()"
         >
           <slot name="content">{{ content }}</slot>
-          <span v-if="showArrow" :class="[ns.e('arrow'), ns.e('arrow--' + placement)]" />
+          <span v-if="showArrow" :class="[ns.e('arrow'), ns.e('arrow--' + actualPlacement)]" />
         </div>
       </Transition>
     </Teleport>

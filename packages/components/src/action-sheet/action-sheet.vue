@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, watch, onBeforeUnmount, useSlots } from 'vue'
-import { useNamespace } from '@zc-ui/hooks'
+import { useNamespace, lockBodyScroll, unlockBodyScroll } from '@zc-ui/hooks'
 
 defineOptions({ name: 'ZcActionSheet' })
 
@@ -67,7 +67,7 @@ const ns = useNamespace('action-sheet')
 const slots = useSlots()
 
 const isOpen = ref(false)
-let savedOverflow = ''
+let scrollLocked = false
 
 // Sync internal state with v-model:visible
 watch(
@@ -85,9 +85,9 @@ watch(
 function openSheet() {
   if (isOpen.value) return
   isOpen.value = true
-  if (props.lockScroll && typeof document !== 'undefined') {
-    savedOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
+  if (props.lockScroll) {
+    lockBodyScroll()
+    scrollLocked = true
   }
 }
 
@@ -95,8 +95,9 @@ function closeSheet() {
   if (!isOpen.value) return
   isOpen.value = false
   emit('close')
-  if (props.lockScroll && typeof document !== 'undefined') {
-    document.body.style.overflow = savedOverflow
+  if (scrollLocked) {
+    unlockBodyScroll()
+    scrollLocked = false
   }
 }
 
@@ -131,8 +132,9 @@ const showCancel = computed(() => {
 })
 
 onBeforeUnmount(() => {
-  if (props.lockScroll && typeof document !== 'undefined') {
-    document.body.style.overflow = savedOverflow
+  if (scrollLocked) {
+    unlockBodyScroll()
+    scrollLocked = false
   }
 })
 </script>

@@ -91,14 +91,14 @@ function onContextMenu(e) {
 
 ## 属性
 
-| 属性     | 说明                | 类型                | 默认值  |
-| -------- | ------------------- | ------------------- | ------- |
-| items    | 菜单项列表          | `ContextMenuItem[]` | `[]`    |
-| visible  | 是否显示（v-model） | `boolean`           | `false` |
-| x        | X 坐标              | `number`            | `0`     |
-| y        | Y 坐标              | `number`            | `0`     |
-| minWidth | 最小宽度            | `number`            | `160`   |
-| maxWidth | 最大宽度            | `number`            | `300`   |
+<ApiTable type="props" :data="[
+{ name: 'items', description: '菜单项列表', type: 'ContextMenuItem[]', default: '[]' },
+{ name: 'visible', description: '是否显示（v-model）', type: 'boolean', default: 'false' },
+{ name: 'x', description: 'X 坐标', type: 'number', default: '0' },
+{ name: 'y', description: 'Y 坐标', type: 'number', default: '0' },
+{ name: 'minWidth', description: '最小宽度', type: 'number', default: '160' },
+{ name: 'maxWidth', description: '最大宽度', type: 'number', default: '300' }
+]" />
 
 ## ContextMenuItem
 
@@ -113,7 +113,7 @@ function onContextMenu(e) {
 
 ## 事件
 
-| 事件名         | 说明             | 回调参数                  |
-| -------------- | ---------------- | ------------------------- |
-| select         | 选择菜单项时触发 | `(item: ContextMenuItem)` |
-| update:visible | 显示状态变化     | `(val: boolean)`          |
+<ApiTable type="events" :data="[
+{ name: '(item: ContextMenuItem)', description: '选择菜单项时触发' },
+{ name: '(val: boolean)', description: '显示状态变化' }
+]" />

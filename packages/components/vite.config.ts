@@ -11,15 +11,16 @@ import { visualizer } from 'rollup-plugin-visualizer'
  * Outputs:
  *  - ESM:   dist/index.mjs (tree-shakeable)
  *  - CJS:   dist/index.cjs
- *  - UMD:   dist/index.umd.js (with inlined CSS)
- *  - CSS:   dist/style.css (all component styles)
+ *  - CSS:   dist/style.css (all component styles, stable path — matches
+ *           the "./styles" entry in package.json exports)
  *  - Types: dist/types/index.d.ts
  *
- * CSS code splitting is enabled (cssCodeSplit: true) for better
- * per-chunk CSS extraction when used with manual chunks.
+ * The UMD build lives in `vite.config.umd.ts` and is run separately so it
+ * can inline the workspace packages (@zc-ui/utils, ...) instead of
+ * externalizing them to private globals.
  *
- * sideEffects: Only "*.css" files are marked as side-effects,
- * allowing bundlers to tree-shake unused component JS.
+ * `qrcode` is a real runtime dependency (used by qr-code) and is kept
+ * external so consumers don't get a second copy bundled inside this one.
  */
 export default defineConfig({
   plugins: [
@@ -28,6 +29,7 @@ export default defineConfig({
     dts({
       tsconfigPath: './tsconfig.json',
       outDirs: ['dist/types'],
+      entryRoot: 'src',
       include: ['src/**/*.ts', 'src/**/*.vue'],
       exclude: ['node_modules', 'dist', '**/*.test.ts', '**/*.spec.ts'],
       cleanVueFileName: true,
@@ -48,27 +50,23 @@ export default defineConfig({
   build: {
     target: 'es2018',
     outDir: 'dist',
-    cssCodeSplit: true,
+    sourcemap: true,
+    cssCodeSplit: false,
     lib: {
       entry: resolve(import.meta.dirname, 'src/index.ts'),
       name: 'ZcUI',
-      formats: ['es', 'cjs', 'umd'],
+      formats: ['es', 'cjs'],
       fileName: (format) => {
         if (format === 'es') return 'index.mjs'
-        if (format === 'cjs') return 'index.cjs'
-        return 'index.umd.js'
+        return 'index.cjs'
       },
+      // Emit the combined stylesheet as dist/style.css (stable, matches exports).
+      cssFileName: 'style',
     },
     rollupOptions: {
-      external: ['vue', '@vue/*', /^@zc-ui\//],
+      external: [/^vue($|\/)/, /^@vue\//, /^@zc-ui\//, 'qrcode'],
       output: {
-        globals: {
-          vue: 'Vue',
-        },
         exports: 'named',
-        // Use default asset naming so CSS chunks get proper hashed names.
-        // The full combined CSS is available as dist/style.css.
-        assetFileNames: 'assets/[name]-[hash][extname]',
       },
     },
   },

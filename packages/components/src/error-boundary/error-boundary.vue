@@ -263,7 +263,7 @@ defineExpose({ reset })
  * Dark mode
  * ============================================================ */
 
-:where(.dark, [data-theme='dark']) .zc-error-boundary {
+.dark .zc-error-boundary {
   --zc-error-boundary-color: var(--color-zc-text-primary, #e5eaf3);
   --zc-error-boundary-title-color: var(--color-zc-text-primary, #e5eaf3);
   --zc-error-boundary-description-color: var(--color-zc-text-secondary, #a3a6ad);
@@ -273,7 +273,7 @@ defineExpose({ reset })
   --zc-error-boundary-title-font-size: var(--text-zc-lg, 16px);
 }
 
-:where(.dark, [data-theme='dark']) .zc-error-boundary__stack {
+.dark .zc-error-boundary__stack {
   background-color: var(--color-zc-fill-darker, #1d1e1f);
 }
 </style>

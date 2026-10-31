@@ -51,10 +51,7 @@ import {
   type ConfigProviderContext,
   type ComponentSize,
 } from './types'
-import {
-  setGlobalMessageConfig,
-  setGlobalNotificationConfig,
-} from './global-config'
+import { setGlobalMessageConfig, setGlobalNotificationConfig } from './global-config'
 
 defineOptions({ name: 'ZcConfigProvider', inheritAttrs: false })
 
@@ -83,42 +80,26 @@ const parentCtx = inject(configProviderInjectionKey, null)
  * enabling nested ConfigProviders to override only specific keys.
  */
 const mergedSize: ComputedRef<ComponentSize | undefined> = computed(
-  () => props.size ?? parentCtx?.size.value,
+  () => props.size ?? parentCtx?.size.value
 )
 
 const mergedLocale = computed(() => props.locale ?? parentCtx?.locale.value)
 
-const mergedZIndex = computed(
-  () => props.zIndex ?? parentCtx?.zIndex.value,
-)
+const mergedZIndex = computed(() => props.zIndex ?? parentCtx?.zIndex.value)
 
-const mergedNamespace = computed(
-  () => props.namespace ?? parentCtx?.namespace.value,
-)
+const mergedNamespace = computed(() => props.namespace ?? parentCtx?.namespace.value)
 
-const mergedButton = computed(
-  () => props.button ?? parentCtx?.button.value,
-)
+const mergedButton = computed(() => props.button ?? parentCtx?.button.value)
 
-const mergedMessage = computed(
-  () => props.message ?? parentCtx?.message.value,
-)
+const mergedMessage = computed(() => props.message ?? parentCtx?.message.value)
 
-const mergedNotification = computed(
-  () => props.notification ?? parentCtx?.notification.value,
-)
+const mergedNotification = computed(() => props.notification ?? parentCtx?.notification.value)
 
-const mergedBrandColors = computed(
-  () => props.brandColors ?? parentCtx?.brandColors.value,
-)
+const mergedBrandColors = computed(() => props.brandColors ?? parentCtx?.brandColors.value)
 
-const mergedThemeVariables = computed(
-  () => props.themeVariables ?? parentCtx?.themeVariables.value,
-)
+const mergedThemeVariables = computed(() => props.themeVariables ?? parentCtx?.themeVariables.value)
 
-const mergedThemeOverrides = computed(
-  () => props.themeOverrides ?? parentCtx?.themeOverrides.value,
-)
+const mergedThemeOverrides = computed(() => props.themeOverrides ?? parentCtx?.themeOverrides.value)
 
 // ---- Sync locale to global locale system ----
 
@@ -129,7 +110,7 @@ watch(
       setGlobalLocale(lang)
     }
   },
-  { immediate: true },
+  { immediate: true }
 )
 
 // ---- Sync zIndex to global z-index system ----
@@ -141,7 +122,7 @@ watch(
       setBaseZIndex(val)
     }
   },
-  { immediate: true },
+  { immediate: true }
 )
 
 // ---- Sync message / notification config for service-style APIs ----
@@ -151,7 +132,7 @@ watch(
   (val) => {
     setGlobalMessageConfig(val ?? undefined)
   },
-  { immediate: true },
+  { immediate: true }
 )
 
 watch(
@@ -159,18 +140,27 @@ watch(
   (val) => {
     setGlobalNotificationConfig(val ?? undefined)
   },
-  { immediate: true },
+  { immediate: true }
 )
 
 // ---- Apply brand colors at runtime ----
 
 const rootRef = ref<HTMLElement | null>(null)
 
+/**
+ * Theme variables are written onto the provider root when it renders an
+ * element (`as`), otherwise onto <html>. Guarded for SSR: watchEffects run
+ * synchronously during setup, where `document` does not exist.
+ */
+function getThemeTarget(): HTMLElement | null {
+  return rootRef.value ?? (typeof document === 'undefined' ? null : document.documentElement)
+}
+
 watchEffect(() => {
   const brandColors = mergedBrandColors.value
   if (!brandColors) return
 
-  const target = rootRef.value ?? document.documentElement
+  const target = getThemeTarget()
   if (!target) return
 
   for (const [name, hex] of Object.entries(brandColors)) {
@@ -189,7 +179,7 @@ watchEffect(() => {
   const themeVars = mergedThemeVariables.value
   if (!themeVars) return
 
-  const target = rootRef.value ?? document.documentElement
+  const target = getThemeTarget()
   if (!target) return
 
   for (const [name, value] of Object.entries(themeVars)) {
@@ -204,7 +194,7 @@ let lastOverrides: Record<string, Record<string, string>> | null = null
 
 watchEffect(() => {
   const overrides = mergedThemeOverrides.value
-  const target = rootRef.value ?? document.documentElement
+  const target = getThemeTarget()
 
   if (!target) return
 
@@ -231,7 +221,7 @@ watchEffect(() => {
 
 onBeforeUnmount(() => {
   // Clean up all applied theme overrides on unmount
-  const target = rootRef.value ?? document.documentElement
+  const target = getThemeTarget()
   if (!target || !lastOverrides) return
 
   for (const [, vars] of Object.entries(lastOverrides)) {

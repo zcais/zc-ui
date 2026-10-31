@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref, computed, watch, nextTick, shallowRef } from 'vue'
+import { ref, computed, watch, nextTick, shallowRef, onBeforeUnmount } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
-import { useZIndex, useFocusTrap } from '@zc-ui/hooks'
+import { useZIndex, useFocusTrap, lockBodyScroll, unlockBodyScroll } from '@zc-ui/hooks'
+import { useLocale } from '@zc-ui/locale'
 import type { MessageBoxType } from './types'
 
 defineOptions({ name: 'ZcMessageBox' })
@@ -44,11 +45,11 @@ const props = withDefaults(
   {
     title: '',
     message: '',
-    confirmText: '确定',
-    cancelText: '取消',
+    confirmText: '',
+    cancelText: '',
     confirmButtonType: 'primary',
     cancelButtonType: 'default',
-    inputPlaceholder: '请输入',
+    inputPlaceholder: '',
     inputValue: '',
     inputType: 'text',
     showClose: true,
@@ -66,6 +67,7 @@ const emit = defineEmits<{
 }>()
 
 const ns = useNamespace('message-box')
+const { t } = useLocale()
 const { nextZIndex } = useZIndex()
 const focusTrap = useFocusTrap()
 
@@ -81,6 +83,13 @@ const panelRef = shallowRef<HTMLElement>()
 
 const showCancel = computed(() => props.type !== 'alert')
 const showInput = computed(() => props.type === 'prompt')
+
+// Localized fallbacks for button/placeholder text
+const confirmTextComputed = computed(() => props.confirmText || t('zc.messageBox.confirm'))
+const cancelTextComputed = computed(() => props.cancelText || t('zc.messageBox.cancel'))
+const inputPlaceholderComputed = computed(
+  () => props.inputPlaceholder || t('zc.messageBox.placeholder')
+)
 
 const boxWidth = computed(() =>
   typeof props.width === 'number' ? `${props.width}px` : props.width
@@ -119,7 +128,7 @@ function handleConfirm() {
   if (showInput.value && props.inputValidator) {
     const result = props.inputValidator(inputValue.value)
     if (result === false) {
-      inputError.value = '输入无效'
+      inputError.value = t('zc.messageBox.inputInvalid')
       return
     }
     if (typeof result === 'string') {
@@ -161,13 +170,28 @@ function handleKeydown(e: KeyboardEvent) {
   }
 }
 
+let scrollLocked = false
+
 watch(isVisible, (val) => {
   if (val) {
     document.addEventListener('keydown', handleKeydown)
-    document.body.style.overflow = 'hidden'
+    if (!scrollLocked) {
+      lockBodyScroll()
+      scrollLocked = true
+    }
   } else {
     document.removeEventListener('keydown', handleKeydown)
-    document.body.style.overflow = ''
+    if (scrollLocked) {
+      unlockBodyScroll()
+      scrollLocked = false
+    }
+  }
+})
+
+onBeforeUnmount(() => {
+  if (scrollLocked) {
+    unlockBodyScroll()
+    scrollLocked = false
   }
 })
 
@@ -199,7 +223,7 @@ open()
               v-if="showClose"
               :class="ns.e('close')"
               type="button"
-              aria-label="关闭"
+              :aria-label="t('common.close')"
               @click="handleClose"
             >
               <svg viewBox="0 0 24 24" fill="none">
@@ -257,7 +281,7 @@ open()
                     ref="inputRef"
                     v-model="inputValue"
                     :type="inputType"
-                    :placeholder="inputPlaceholder"
+                    :placeholder="inputPlaceholderComputed"
                     :class="[ns.e('input'), { 'is-error': inputError }]"
                     @keydown.enter.prevent="handleConfirm"
                   />
@@ -274,14 +298,14 @@ open()
                 type="button"
                 @click="handleCancel"
               >
-                {{ cancelText }}
+                {{ cancelTextComputed }}
               </button>
               <button
                 :class="[ns.e('btn'), confirmBtnClass, { 'is-loading': isConfirming }]"
                 type="button"
                 @click="handleConfirm"
               >
-                {{ confirmText }}
+                {{ confirmTextComputed }}
               </button>
             </div>
           </div>

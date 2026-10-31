@@ -12,6 +12,7 @@ export default defineConfig({
       '@zc-ui/utils': resolve(__dirname, 'packages/utils/src/index.ts'),
       '@zc-ui/hooks': resolve(__dirname, 'packages/hooks/src/index.ts'),
       '@zc-ui/locale': resolve(__dirname, 'packages/locale/src/index.ts'),
+      '@zc-ui/theme': resolve(__dirname, 'packages/theme/src/index.ts'),
     },
   },
   test: {

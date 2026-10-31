@@ -178,18 +178,18 @@ const colors = ['#409eff', '#67c23a', '#e6a23c', '#f56c6c', '#9b59b6']
 
 ### ActionSheet Props
 
-| 属性名             | 说明                     | 类型                | 默认值     |
-| ------------------ | ------------------------ | ------------------- | ---------- |
-| visible (v-model)  | 是否显示                 | `boolean`           | `false`    |
-| actions            | 操作项列表               | `ActionSheetItem[]` | `[]`       |
-| cancelText         | 取消按钮文字（空串隐藏） | `string`            | `'Cancel'` |
-| title              | 标题                     | `string`            | `''`       |
-| description        | 描述文字                 | `string`            | `''`       |
-| closeOnClickMask   | 点击遮罩是否关闭         | `boolean`           | `true`     |
-| closeOnClickAction | 点击操作项后是否关闭     | `boolean`           | `true`     |
-| round              | 是否圆角                 | `boolean`           | `true`     |
-| zIndex             | 层级                     | `number`            | `2000`     |
-| lockScroll         | 是否锁定 body 滚动       | `boolean`           | `true`     |
+<ApiTable type="props" :data="[
+{ name: 'visible (v-model)', description: '是否显示', type: 'boolean', default: 'false' },
+{ name: 'actions', description: '操作项列表', type: 'ActionSheetItem[]', default: '[]' },
+{ name: 'cancelText', description: '取消按钮文字（空串隐藏）', type: 'string', default: ''Cancel'' },
+{ name: 'title', description: '标题', type: 'string', default: '''' },
+{ name: 'description', description: '描述文字', type: 'string', default: '''' },
+{ name: 'closeOnClickMask', description: '点击遮罩是否关闭', type: 'boolean', default: 'true' },
+{ name: 'closeOnClickAction', description: '点击操作项后是否关闭', type: 'boolean', default: 'true' },
+{ name: 'round', description: '是否圆角', type: 'boolean', default: 'true' },
+{ name: 'zIndex', description: '层级', type: 'number', default: '2000' },
+{ name: 'lockScroll', description: '是否锁定 body 滚动', type: 'boolean', default: 'true' }
+]" />
 
 ### ActionSheetItem
 
@@ -204,17 +204,17 @@ const colors = ['#409eff', '#67c23a', '#e6a23c', '#f56c6c', '#9b59b6']
 
 ### ActionSheet Events
 
-| 事件名         | 说明               | 回调参数                                 |
-| -------------- | ------------------ | ---------------------------------------- |
-| update:visible | 显隐状态变化       | `(visible: boolean)`                     |
-| select         | 选择操作项时触发   | `(item: ActionSheetItem, index: number)` |
-| cancel         | 点击取消按钮时触发 | -                                        |
-| close          | 面板关闭时触发     | -                                        |
+<ApiTable type="events" :data="[
+{ name: '(visible: boolean)', description: '显隐状态变化' },
+{ name: '(item: ActionSheetItem, index: number)', description: '选择操作项时触发' },
+{ name: '—', description: '点击取消按钮时触发' },
+{ name: '—', description: '面板关闭时触发' }
+]" />
 
 ### Slots
 
-| 插槽名  | 说明           |
-| ------- | -------------- |
-| default | 自定义面板内容 |
-| header  | 自定义头部区域 |
-| footer  | 自定义底部区域 |
+<ApiTable type="slots" :data="[
+{ name: 'default', description: '自定义面板内容' },
+{ name: 'header', description: '自定义头部区域' },
+{ name: 'footer', description: '自定义底部区域' }
+]" />

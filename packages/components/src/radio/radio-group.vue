@@ -12,8 +12,9 @@ export const radioGroupKey: symbol = Symbol('radioGroup')
 </script>
 
 <script setup lang="ts">
-import { ref, provide, watch, shallowRef } from 'vue'
+import { ref, computed, provide, watch, shallowRef } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
+import { useFormDisabled, useFormItem } from '../form/use-form'
 
 defineOptions({ name: 'ZcRadioGroup' })
 
@@ -39,20 +40,19 @@ const ns = useNamespace('radio-group')
 
 // ---- Provide RadioGroup context ----
 const modelValueRef = ref(props.modelValue)
-const disabledRef = ref(props.disabled)
 const nameRef = ref(props.name)
+
+// ---- Form context integration ----
+// Effective disabled: own prop > ZcFormItem > ZcForm; provided to child radios
+const formDisabled = useFormDisabled(() => props.disabled)
+const formItem = useFormItem()
+const disabledRef = computed(() => formDisabled.value)
 
 // ---- Sync props → refs so child components react to dynamic changes ----
 watch(
   () => props.modelValue,
   (val) => {
     modelValueRef.value = val
-  }
-)
-watch(
-  () => props.disabled,
-  (val) => {
-    disabledRef.value = val
   }
 )
 watch(
@@ -66,6 +66,8 @@ function changeEvent(value: string | number | boolean) {
   modelValueRef.value = value
   emit('update:modelValue', value)
   emit('change', value)
+  // Bridge to form-item validation rules with trigger: 'change'
+  formItem?.validate('change')
 }
 
 provide<RadioGroupContext>(radioGroupKey, {
@@ -85,8 +87,9 @@ function handleKeydown(event: KeyboardEvent) {
   const container = navRef.value
   if (!container) return
 
+  // Navigate the native radio inputs — they are the interactive elements.
   const radios = Array.from(
-    container.querySelectorAll<HTMLElement>('[role="radio"]:not(.is-disabled)')
+    container.querySelectorAll<HTMLInputElement>('input[type="radio"]:not(:disabled)')
   )
   if (radios.length === 0) return
 
@@ -109,11 +112,11 @@ function handleKeydown(event: KeyboardEvent) {
   }
 
   radios[nextIndex]?.focus()
-  // Find the label value of the focused radio and select it
+  // Select the radio whose input is focused; input.value mirrors the label value.
   const target = radios[nextIndex]
-  const labelAttr = target?.getAttribute('data-label')
-  if (labelAttr !== null) {
-    const labelVal = isNaN(Number(labelAttr)) ? labelAttr : Number(labelAttr)
+  if (target) {
+    const raw = target.getAttribute('value') ?? target.value
+    const labelVal = raw !== null && raw !== '' && !isNaN(Number(raw)) ? Number(raw) : raw
     changeEvent(labelVal as string | number | boolean)
   }
 }
@@ -124,7 +127,7 @@ function handleKeydown(event: KeyboardEvent) {
     ref="navRef"
     :class="ns.b()"
     role="radiogroup"
-    :aria-disabled="disabled"
+    :aria-disabled="disabledRef"
     @keydown="handleKeydown"
   >
     <slot />

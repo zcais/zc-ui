@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
 import { mount, flushPromises } from '@vue/test-utils'
-import { defineComponent, h, nextTick } from 'vue'
+import { defineComponent, h } from 'vue'
 import ErrorBoundary from '../error-boundary/error-boundary.vue'
 
 /** Suppress Vue's default error logging in tests */
@@ -57,7 +57,7 @@ describe('ZcErrorBoundary', () => {
 
   it('emits "error" event with Error and info when child throws', () => {
     const onError = vi.fn()
-    const wrapper = mountEB({
+    mountEB({
       attrs: { onError },
       slots: { default: h(ThrowingComponent) },
     })

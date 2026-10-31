@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, onBeforeUnmount, ref } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
+import { useLocale } from '@zc-ui/locale'
 
 defineOptions({ name: 'ZcMessage' })
 
@@ -29,6 +30,7 @@ const emit = defineEmits<{
 }>()
 
 const ns = useNamespace('message')
+const { t } = useLocale()
 const isVisible = ref(true)
 let timer: ReturnType<typeof setTimeout> | null = null
 
@@ -92,7 +94,7 @@ defineExpose({ close })
         v-if="showClose"
         :class="ns.e('close')"
         type="button"
-        aria-label="关闭消息"
+        :aria-label="t('zc.message.close')"
         @click="close"
       >
         <svg viewBox="0 0 24 24" fill="none" width="14" height="14">

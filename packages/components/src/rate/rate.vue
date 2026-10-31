@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
 import { useLocale } from '@zc-ui/locale'
+import { useFormDisabled, useFormSize, useFormItem } from '../form/use-form'
 
 defineOptions({ name: 'ZcRate' })
 
@@ -28,7 +29,7 @@ const props = withDefaults(
   {
     modelValue: 0,
     max: 5,
-    size: 'medium',
+    size: undefined,
     disabled: false,
     allowHalf: false,
     lowThreshold: 2,
@@ -54,6 +55,18 @@ const emit = defineEmits<{
 const ns = useNamespace('rate')
 const { t } = useLocale()
 
+// ---- Form context integration ----
+// Priority: explicit prop > ZcFormItem > ZcForm > default 'medium'
+// Rate size is 'large'|'medium'|'small' (no 'mini'), so 'mini' degrades to 'small'
+const formSize = useFormSize(() => props.size)
+const formDisabled = useFormDisabled(() => props.disabled)
+const formItem = useFormItem()
+const isDisabled = formDisabled
+const effectiveSize = computed<'large' | 'medium' | 'small'>(() => {
+  const resolved = formSize.value ?? 'medium'
+  return resolved === 'mini' ? 'small' : (resolved as 'large' | 'medium' | 'small')
+})
+
 const defaultTexts = computed(() => [
   t('zc.rate.texts.1'),
   t('zc.rate.texts.2'),
@@ -70,7 +83,7 @@ const sizeMap: Record<string, number> = {
   small: 14,
 }
 
-const starSize = computed(() => sizeMap[props.size] ?? 20)
+const starSize = computed(() => sizeMap[effectiveSize.value] ?? 20)
 
 const currentValue = computed(() => hoverValue.value ?? props.modelValue)
 
@@ -83,8 +96,8 @@ const activeColor = computed(() => {
 
 const classes = computed(() => [
   ns.b(),
-  ns.m(props.size),
-  ns.is('disabled', props.disabled),
+  ns.m(effectiveSize.value),
+  ns.is('disabled', isDisabled.value),
   ns.is('readonly', props.readonly),
 ])
 
@@ -100,7 +113,7 @@ function getStarFillValue(index: number): number {
 }
 
 function handleMouseMove(index: number, event: MouseEvent) {
-  if (props.disabled || props.readonly) return
+  if (isDisabled.value || props.readonly) return
   const target = event.currentTarget as HTMLElement
   const rect = target.getBoundingClientRect()
   const isLeftHalf = event.clientX - rect.left < rect.width / 2
@@ -113,12 +126,12 @@ function handleMouseMove(index: number, event: MouseEvent) {
 }
 
 function handleMouseLeave() {
-  if (props.disabled || props.readonly) return
+  if (isDisabled.value || props.readonly) return
   hoverValue.value = null
 }
 
 function selectValue(index: number) {
-  if (props.disabled || props.readonly) return
+  if (isDisabled.value || props.readonly) return
   let newValue = hoverValue.value ?? index
 
   if (props.clearable && newValue === props.modelValue) {
@@ -128,10 +141,17 @@ function selectValue(index: number) {
   const oldValue = props.modelValue
   emit('update:modelValue', newValue)
   emit('change', newValue, oldValue)
+  // Bridge to form-item validation rules with trigger: 'change'
+  formItem?.validate('change')
+}
+
+function handleBlur() {
+  // Bridge to form-item validation rules with trigger: 'blur'
+  formItem?.validate('blur')
 }
 
 function handleKeydown(event: KeyboardEvent) {
-  if (props.disabled || props.readonly) return
+  if (isDisabled.value || props.readonly) return
 
   switch (event.key) {
     case 'ArrowRight':
@@ -142,6 +162,8 @@ function handleKeydown(event: KeyboardEvent) {
       hoverValue.value = null
       emit('update:modelValue', newValue)
       emit('change', newValue, oldValue)
+      // Bridge to form-item validation rules with trigger: 'change'
+      formItem?.validate('change')
       break
     }
     case 'ArrowLeft':
@@ -152,6 +174,8 @@ function handleKeydown(event: KeyboardEvent) {
       hoverValue.value = null
       emit('update:modelValue', newValue)
       emit('change', newValue, oldValue)
+      // Bridge to form-item validation rules with trigger: 'change'
+      formItem?.validate('change')
       break
     }
     case 'Home': {
@@ -160,6 +184,8 @@ function handleKeydown(event: KeyboardEvent) {
       hoverValue.value = null
       emit('update:modelValue', 0)
       emit('change', 0, oldValue)
+      // Bridge to form-item validation rules with trigger: 'change'
+      formItem?.validate('change')
       break
     }
     case 'End': {
@@ -168,6 +194,8 @@ function handleKeydown(event: KeyboardEvent) {
       hoverValue.value = null
       emit('update:modelValue', props.max)
       emit('change', props.max, oldValue)
+      // Bridge to form-item validation rules with trigger: 'change'
+      formItem?.validate('change')
       break
     }
   }
@@ -192,9 +220,10 @@ const displayText = computed(() => {
     :aria-valuenow="modelValue"
     :aria-valuemin="0"
     :aria-valuemax="max"
-    :aria-disabled="disabled || readonly"
-    :tabindex="disabled || readonly ? -1 : 0"
+    :aria-disabled="isDisabled || readonly"
+    :tabindex="isDisabled || readonly ? -1 : 0"
     @mouseleave="handleMouseLeave"
+    @blur="handleBlur"
     @keydown="handleKeydown"
   >
     <span
@@ -211,7 +240,9 @@ const displayText = computed(() => {
         :height="starSize"
         viewBox="0 0 24 24"
         :fill="getStarFillValue(n) >= 1 ? activeColor : 'none'"
-        :stroke="getStarFillValue(n) >= 1 ? activeColor : disabled ? disabledVoidColor : voidColor"
+        :stroke="
+          getStarFillValue(n) >= 1 ? activeColor : isDisabled ? disabledVoidColor : voidColor
+        "
         stroke-width="1.5"
       >
         <path d="M12 2l2.9 6.5 7.1.6-5.4 4.7 1.7 7L12 17.3 5.7 21l1.7-7L2 9.1l7.1-.6L12 2z" />

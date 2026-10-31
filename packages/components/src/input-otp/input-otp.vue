@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch, nextTick } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
+import { useFormDisabled, useFormSize, useFormItem } from '../form/use-form'
 
 defineOptions({ name: 'ZcInputOTP' })
 
@@ -32,7 +33,7 @@ const props = withDefaults(
   {
     modelValue: '',
     length: 6,
-    size: 'medium',
+    size: undefined,
     masked: false,
     placeholder: '',
     disabled: false,
@@ -50,6 +51,18 @@ const emit = defineEmits<{
 }>()
 
 const ns = useNamespace('input-otp')
+
+// ---- Form context integration ----
+// Priority: explicit prop > ZcFormItem > ZcForm > ConfigProvider global > 'medium'
+// InputOTPSize is 'large'|'medium'|'small' (no 'mini'), so 'mini' degrades to 'small'
+const formSize = useFormSize(() => props.size)
+const formDisabled = useFormDisabled(() => props.disabled)
+const formItem = useFormItem()
+const isDisabled = formDisabled
+const effectiveSize = computed<InputOTPSize>(() => {
+  const resolved = formSize.value ?? 'medium'
+  return resolved === 'mini' ? 'small' : (resolved as InputOTPSize)
+})
 
 // Individual box values
 const values = ref<string[]>(Array(props.length).fill(''))
@@ -75,6 +88,8 @@ function emitChange() {
   const result = values.value.join('')
   emit('update:modelValue', result)
   emit('change', result)
+  // Bridge to form-item validation rules with trigger: 'change'
+  formItem?.validate('change')
   if (result.length === props.length && !values.value.includes('')) {
     emit('complete', result)
   }
@@ -122,7 +137,7 @@ function onInput(e: Event, index: number) {
 }
 
 function onKeydown(e: KeyboardEvent, index: number) {
-  if (props.disabled || props.readonly) return
+  if (isDisabled.value || props.readonly) return
 
   switch (e.key) {
     case 'Backspace': {
@@ -186,6 +201,8 @@ function onFocus(index: number) {
 
 function onBlur() {
   activeIndex.value = -1
+  // Bridge to form-item validation rules with trigger: 'blur'
+  formItem?.validate('blur')
 }
 
 function focusBox(index: number) {
@@ -203,15 +220,15 @@ function handleClick(index: number) {
 
 // Autofocus on mount
 nextTick(() => {
-  if (props.autofocus && !props.disabled) {
+  if (props.autofocus && !isDisabled.value) {
     focusBox(0)
   }
 })
 
 const containerClasses = computed(() => [
   ns.b(),
-  ns.m(props.size),
-  ns.is('disabled', props.disabled),
+  ns.m(effectiveSize.value),
+  ns.is('disabled', isDisabled.value),
 ])
 
 function boxClasses(index: number) {
@@ -251,7 +268,7 @@ defineExpose({ focus, clear })
           :type="masked ? 'password' : 'text'"
           :value="values[index]"
           :placeholder="placeholder"
-          :disabled="disabled"
+          :disabled="isDisabled"
           :readonly="readonly"
           :maxlength="1"
           :inputmode="numericOnly ? 'numeric' : 'text'"

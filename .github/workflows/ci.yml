@@ -7,12 +7,13 @@ on:
     branches: [main, master]
 
 jobs:
-  ci:
+  quality:
+    name: Lint / Typecheck / Unit tests
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x]
+        node-version: [20.x, 22.x]
 
     steps:
       - name: Checkout
@@ -46,10 +47,58 @@ jobs:
         env:
           CI: true
 
+      - name: Bundle size check
+        run: pnpm bundle-size
+
+      - name: Dark-mode selector convention check
+        run: pnpm lint:dark-selectors
+
+      - name: Icons manifest validation
+        run: pnpm validate-icons
+
       - name: Upload coverage
-        if: matrix.node-version == '20.x'
+        if: matrix.node-version == '22.x'
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: coverage/
+          retention-days: 7
+
+  e2e:
+    name: E2E (Playwright)
+    runs-on: ubuntu-latest
+    needs: quality
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run E2E tests
+        # @visual tests are excluded: pixel baselines are OS-dependent and
+        # are only compared on developer machines (see visual-regression.spec.ts).
+        run: pnpm exec playwright test --project=chromium --grep-invert @visual
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
           retention-days: 7

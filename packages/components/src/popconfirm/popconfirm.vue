@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, computed, watch, onBeforeUnmount, nextTick } from 'vue'
+import { ref, computed, watch, onBeforeUnmount } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
+import { usePopper } from '../popper/usePopper'
 
 defineOptions({ name: 'ZcPopconfirm' })
 
@@ -90,71 +91,16 @@ let hideTimer: ReturnType<typeof setTimeout> | null = null
 
 const GAP = 10 // px gap between trigger and popper
 
-/** Dynamically compute popper position based on trigger element rect */
-const popperPosition = ref<Record<string, string>>({})
-
-function updatePosition() {
-  if (!triggerRef.value) return
-  const rect = triggerRef.value.getBoundingClientRect()
-  const winH = window.innerHeight
-  const winW = window.innerWidth
-
-  const placements: Record<string, Record<string, string>> = {
-    top: {
-      left: `${rect.left + rect.width / 2}px`,
-      bottom: `${winH - rect.top + GAP}px`,
-      transform: 'translateX(-50%)',
-    },
-    'top-start': {
-      left: `${rect.left}px`,
-      bottom: `${winH - rect.top + GAP}px`,
-    },
-    'top-end': {
-      right: `${winW - rect.right}px`,
-      bottom: `${winH - rect.top + GAP}px`,
-    },
-    bottom: {
-      left: `${rect.left + rect.width / 2}px`,
-      top: `${rect.bottom + GAP}px`,
-      transform: 'translateX(-50%)',
-    },
-    'bottom-start': {
-      left: `${rect.left}px`,
-      top: `${rect.bottom + GAP}px`,
-    },
-    'bottom-end': {
-      right: `${winW - rect.right}px`,
-      top: `${rect.bottom + GAP}px`,
-    },
-    left: {
-      top: `${rect.top + rect.height / 2}px`,
-      right: `${winW - rect.left + GAP}px`,
-      transform: 'translateY(-50%)',
-    },
-    'left-start': {
-      top: `${rect.top}px`,
-      right: `${winW - rect.left + GAP}px`,
-    },
-    'left-end': {
-      bottom: `${winH - rect.bottom}px`,
-      right: `${winW - rect.left + GAP}px`,
-    },
-    right: {
-      top: `${rect.top + rect.height / 2}px`,
-      left: `${rect.right + GAP}px`,
-      transform: 'translateY(-50%)',
-    },
-    'right-start': {
-      top: `${rect.top}px`,
-      left: `${rect.right + GAP}px`,
-    },
-    'right-end': {
-      bottom: `${winH - rect.bottom}px`,
-      left: `${rect.right + GAP}px`,
-    },
-  }
-  popperPosition.value = placements[props.placement] || placements.top
-}
+// ---- Positioning via ZcPopper engine (fixed strategy, teleported to body) ----
+const popperVisible = computed(() => internalVisible.value)
+const { styles: popperStyles, actualPlacement } = usePopper({
+  reference: triggerRef,
+  popper: popperRef,
+  placement: computed(() => props.placement),
+  offset: GAP,
+  strategy: 'fixed',
+  visible: popperVisible,
+})
 
 function show() {
   if (props.disabled) return
@@ -228,14 +174,6 @@ watch(
   { immediate: true }
 )
 
-// Update position whenever the popper becomes visible
-watch(internalVisible, async (visible) => {
-  if (visible) {
-    await nextTick()
-    updatePosition()
-  }
-})
-
 /* ---- Click outside handler ---- */
 function onDocumentClick(e: MouseEvent) {
   if (!internalVisible.value) return
@@ -270,10 +208,14 @@ const computedConfirmType = computed(() => {
       <Transition name="zc-popconfirm">
         <div
           v-if="internalVisible"
-          ref="popperRef"
           id="zc-popconfirm-dialog"
-          :class="[ns.e('popper'), `zc-popconfirm-popper--${placement}`, ns.is('danger', danger)]"
-          :style="[{ width: `${width}px` }, popperPosition]"
+          ref="popperRef"
+          :class="[
+            ns.e('popper'),
+            `zc-popconfirm-popper--${actualPlacement}`,
+            ns.is('danger', danger),
+          ]"
+          :style="[{ width: `${width}px` }, popperStyles]"
           role="dialog"
           aria-modal="true"
           aria-labelledby="zc-popconfirm-title"
@@ -302,8 +244,8 @@ const computedConfirmType = computed(() => {
               </svg>
             </span>
             <div :class="ns.e('header-content')">
-              <div :class="ns.e('title')" id="zc-popconfirm-title">{{ title }}</div>
-              <div v-if="description" :class="ns.e('description')" id="zc-popconfirm-desc">
+              <div id="zc-popconfirm-title" :class="ns.e('title')">{{ title }}</div>
+              <div v-if="description" id="zc-popconfirm-desc" :class="ns.e('description')">
                 {{ description }}
               </div>
             </div>
@@ -329,7 +271,10 @@ const computedConfirmType = computed(() => {
           </div>
 
           <!-- Arrow -->
-          <span v-if="showArrow" :class="[ns.e('arrow'), `zc-popconfirm-arrow--${placement}`]" />
+          <span
+            v-if="showArrow"
+            :class="[ns.e('arrow'), `zc-popconfirm-arrow--${actualPlacement}`]"
+          />
         </div>
       </Transition>
     </Teleport>

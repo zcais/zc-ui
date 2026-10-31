@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { ref, computed, watch, onBeforeUnmount } from 'vue'
-import { useNamespace } from '@zc-ui/hooks'
-import { useZIndex } from '@zc-ui/hooks'
-import { useClickOutside } from '@zc-ui/hooks'
+import { ref, computed, watch, nextTick, onBeforeUnmount } from 'vue'
+import { useNamespace, useZIndex, useClickOutside } from '@zc-ui/hooks'
+import { usePopper } from '../popper/usePopper'
 import type { ContextMenuItem } from './types'
 
 defineOptions({ name: 'ZcContextMenu' })
@@ -41,42 +40,37 @@ const ns = useNamespace('context-menu')
 const { nextZIndex } = useZIndex()
 
 const menuRef = ref<HTMLElement>()
-const actualX = ref(props.x)
-const actualY = ref(props.y)
 const zIndex = ref(nextZIndex())
 
 const menuStyle = computed(() => ({
-  left: `${actualX.value}px`,
-  top: `${actualY.value}px`,
+  ...popperStyles.value,
   minWidth: `${props.minWidth}px`,
   maxWidth: `${props.maxWidth}px`,
   zIndex: zIndex.value,
 }))
 
-/** Adjust position to keep menu within viewport */
-function adjustPosition() {
-  if (!menuRef.value) return
-  const rect = menuRef.value.getBoundingClientRect()
-  const vw = window.innerWidth
-  const vh = window.innerHeight
-
-  if (actualX.value + rect.width > vw) {
-    actualX.value = Math.max(0, vw - rect.width - 8)
-  }
-  if (actualY.value + rect.height > vh) {
-    actualY.value = Math.max(0, vh - rect.height - 8)
-  }
-}
+// ---- Positioning via ZcPopper engine (virtual reference at x/y, viewport-clamped) ----
+const virtualRef = ref<{ x: number; y: number } | null>({ x: props.x, y: props.y })
+const popperVisible = computed(() => props.visible)
+const { styles: popperStyles, update: updatePopper } = usePopper({
+  virtualReference: virtualRef,
+  popper: menuRef,
+  placement: 'bottom-start',
+  offset: 0,
+  flip: false,
+  preventOverflow: true,
+  strategy: 'fixed',
+  visible: popperVisible,
+})
 
 watch(
   () => props.visible,
   (val) => {
     if (val) {
-      actualX.value = props.x
-      actualY.value = props.y
+      virtualRef.value = { x: props.x, y: props.y }
       zIndex.value = nextZIndex()
-      // Adjust after render
-      setTimeout(adjustPosition, 0)
+      // Menu v-if renders after this watch — position on next tick
+      nextTick(() => updatePopper())
     }
   }
 )

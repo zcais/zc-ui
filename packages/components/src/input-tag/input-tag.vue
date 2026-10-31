@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, computed, shallowRef } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
+import { useLocale } from '@zc-ui/locale'
+import { useFormDisabled, useFormSize, useFormItem } from '../form/use-form'
 import type { InputTagSize } from './types'
 
 defineOptions({ name: 'ZcInputTag' })
@@ -22,14 +24,14 @@ const props = withDefaults(
   }>(),
   {
     modelValue: () => [],
-    placeholder: '请输入标签',
+    placeholder: '',
     disabled: false,
     readonly: false,
     max: 0,
     allowDuplicate: false,
     trigger: 'enter',
     clearable: false,
-    size: 'medium',
+    size: undefined,
     closable: true,
   }
 )
@@ -44,9 +46,25 @@ const emit = defineEmits<{
 }>()
 
 const ns = useNamespace('input-tag')
+const { t } = useLocale()
 const inputValue = ref('')
 const inputRef = shallowRef<HTMLInputElement>()
 const isFocused = ref(false)
+
+/** Localized placeholder fallback */
+const placeholderComputed = computed(() => props.placeholder || t('zc.inputTag.placeholder'))
+
+// ---- Form context integration ----
+// Priority: explicit prop > ZcFormItem > ZcForm > ConfigProvider global > 'medium'
+// InputTagSize is 'large'|'medium'|'small' (no 'mini'), so 'mini' degrades to 'small'
+const formSize = useFormSize(() => props.size)
+const formDisabled = useFormDisabled(() => props.disabled)
+const formItem = useFormItem()
+const isDisabled = formDisabled
+const effectiveSize = computed<InputTagSize>(() => {
+  const resolved = formSize.value ?? 'medium'
+  return resolved === 'mini' ? 'small' : (resolved as InputTagSize)
+})
 
 const tags = computed(() => props.modelValue)
 
@@ -81,7 +99,7 @@ function clearAll() {
 }
 
 function handleKeydown(e: KeyboardEvent) {
-  if (props.disabled || props.readonly) return
+  if (isDisabled.value || props.readonly) return
 
   // Backspace on empty input removes last tag
   if (e.key === 'Backspace' && inputValue.value === '' && tags.value.length > 0) {
@@ -118,6 +136,9 @@ function handleBlur() {
     addTag(inputValue.value)
   }
   emit('blur')
+  // Bridge to form-item validation rules with trigger: 'blur'
+  // (component has no change event, so blur is the only validation trigger)
+  formItem?.validate('blur')
 }
 
 function handleFocus() {
@@ -136,8 +157,8 @@ defineExpose({ focus: focusInput })
   <div
     :class="[
       ns.b(),
-      ns.m(size),
-      ns.is('disabled', disabled),
+      ns.m(effectiveSize),
+      ns.is('disabled', isDisabled),
       ns.is('readonly', readonly),
       ns.is('focused', isFocused),
     ]"
@@ -147,10 +168,10 @@ defineExpose({ focus: focusInput })
     <span v-for="(tag, index) in tags" :key="`${tag}-${index}`" :class="ns.e('tag')">
       {{ tag }}
       <button
-        v-if="closable && !disabled && !readonly"
+        v-if="closable && !isDisabled && !readonly"
         :class="ns.e('tag-close')"
         type="button"
-        :aria-label="`移除标签 ${tag}`"
+        :aria-label="t('zc.inputTag.removeTag', { tag })"
         @click.stop="removeTag(index)"
       >
         <svg viewBox="0 0 24 24" fill="none">
@@ -169,8 +190,8 @@ defineExpose({ focus: focusInput })
       ref="inputRef"
       v-model="inputValue"
       :class="ns.e('input')"
-      :placeholder="tags.length === 0 ? placeholder : ''"
-      :disabled="disabled"
+      :placeholder="tags.length === 0 ? placeholderComputed : ''"
+      :disabled="isDisabled"
       :readonly="readonly || isMaxed"
       @keydown="handleKeydown"
       @blur="handleBlur"
@@ -179,10 +200,10 @@ defineExpose({ focus: focusInput })
 
     <!-- Clear all -->
     <button
-      v-if="clearable && tags.length > 0 && !disabled && !readonly"
+      v-if="clearable && tags.length > 0 && !isDisabled && !readonly"
       :class="ns.e('clear')"
       type="button"
-      aria-label="清除全部"
+      :aria-label="t('zc.inputTag.clearAll')"
       @click.stop="clearAll"
     >
       <svg viewBox="0 0 24 24" fill="none">

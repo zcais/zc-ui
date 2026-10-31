@@ -533,9 +533,7 @@ function onTooltipHide() {
 /* ============================================================
  * Dark mode support
  * ============================================================ */
-:global(html.zc-dark) .zc-float-button,
-:global(.zc-dark) .zc-float-button,
-:global([data-theme='dark']) .zc-float-button {
+.dark .zc-float-button {
   --zc-float-button-bg-color: var(--color-zc-bg-base-dark, #1f1f1f);
   --zc-float-button-text-color: var(--color-zc-text-regular-dark, #dcdfe6);
   --zc-float-button-border-color: var(--color-zc-border-dark, #4c4d4f);

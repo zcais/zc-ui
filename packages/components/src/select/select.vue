@@ -1,9 +1,21 @@
 <script setup lang="ts" generic="T extends SelectOption">
-import { computed, ref, shallowRef, watch, nextTick, useSlots, onUnmounted } from 'vue'
+import {
+  computed,
+  ref,
+  shallowRef,
+  watch,
+  nextTick,
+  useSlots,
+  onUnmounted,
+  type CSSProperties,
+} from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
 import { useClickOutside } from '@zc-ui/hooks'
 import { useVirtualList } from '@zc-ui/hooks'
+import { useZIndex } from '@zc-ui/hooks'
 import { useLocale } from '@zc-ui/locale'
+import { usePopper } from '../popper/usePopper'
+import { useFormDisabled, useFormSize, useFormItem } from '../form/use-form'
 import type { SelectOption, SelectOptionGroup, SelectValue, SelectSize } from './types'
 
 defineOptions({ name: 'ZcSelect' })
@@ -26,6 +38,10 @@ const props = withDefaults(
     filterable?: boolean
     remote?: boolean
     remoteMethod?: (query: string) => Promise<T[]>
+    /** Custom filter function; receives the query and returns matching options. */
+    filterMethod?: (query: string) => T[]
+    /** Max number of selectable items in multiple mode (0 = unlimited). */
+    multipleLimit?: number
     allowCreate?: boolean
     loading?: boolean
     disabled?: boolean
@@ -47,12 +63,14 @@ const props = withDefaults(
     multiple: false,
     filterable: false,
     remote: false,
+    filterMethod: undefined,
+    multipleLimit: 0,
     allowCreate: false,
     loading: false,
     disabled: false,
     clearable: false,
     placeholder: '',
-    size: 'medium',
+    size: undefined,
     collapseTags: false,
     collapseTagsLimit: 1,
     noDataText: '',
@@ -79,11 +97,21 @@ const ns = useNamespace('select')
 const slots = useSlots()
 const { t } = useLocale()
 
+// ---- Form context integration ----
+const formSize = useFormSize(() => props.size)
+const isDisabled = useFormDisabled(() => props.disabled)
+const formItem = useFormItem()
+const effectiveSize = computed<SelectSize>(() => {
+  const resolved = formSize.value ?? 'medium'
+  return resolved === 'mini' ? 'small' : (resolved as SelectSize)
+})
+
 const placeholderText = computed(() => props.placeholder || t('zc.select.placeholder'))
 
 // ---- Refs ----
 const triggerRef = shallowRef<HTMLElement>()
 const inputRef = shallowRef<HTMLInputElement>()
+const dropdownRef = shallowRef<HTMLElement>()
 
 const visible = ref(false)
 const isFocused = ref(false)
@@ -91,6 +119,24 @@ const hoveringIndex = ref(-1)
 const query = ref('')
 const internalLoading = ref(props.loading)
 const internalOptions = ref<SelectOption[]>([])
+
+// ---- Dropdown positioning (usePopper absolute strategy) ----
+const { styles: dropdownStyles } = usePopper({
+  reference: triggerRef,
+  popper: dropdownRef,
+  placement: 'bottom-start',
+  offset: 4,
+  strategy: 'absolute',
+  visible,
+})
+
+// ---- Layering: allocate from the shared z-index manager on every open ----
+const { nextZIndex } = useZIndex()
+const dropdownZIndex = ref<number>()
+const dropdownStyle = computed<CSSProperties>(() => ({
+  ...dropdownStyles.value,
+  zIndex: dropdownZIndex.value,
+}))
 
 // ---- Sync external loading prop ----
 watch(
@@ -124,6 +170,9 @@ useClickOutside(triggerRef, () => {
 // ---- Filter helper ----
 function matchesFilter(opt: SelectOption): boolean {
   if (!props.filterable || !query.value || props.remote) return true
+  if (props.filterMethod) {
+    return props.filterMethod(query.value).some((matched) => matched.value === opt.value)
+  }
   const q = query.value.toLowerCase()
   return String(opt.label).toLowerCase().includes(q)
 }
@@ -244,18 +293,23 @@ function toggleSelectAll() {
   if (isAllSelected.value) {
     emit('update:modelValue', [])
     emit('change', [])
+    formItem?.validate('change')
   } else {
-    const allValues = selectableOptions.value.map((opt) => opt.value)
+    let allValues = selectableOptions.value.map((opt) => opt.value)
+    if (props.multipleLimit > 0) {
+      allValues = allValues.slice(0, props.multipleLimit)
+    }
     emit('update:modelValue', allValues)
     emit('change', allValues)
+    formItem?.validate('change')
   }
 }
 
 // ---- Classes ----
 const containerClasses = computed(() => [
   ns.b(),
-  ns.m(props.size),
-  ns.is('disabled', props.disabled),
+  ns.m(effectiveSize.value),
+  ns.is('disabled', isDisabled.value),
   ns.is('focused', isFocused.value),
   ns.is('open', visible.value),
   ns.is('multiple', props.multiple),
@@ -266,7 +320,7 @@ const dropdownClasses = computed(() => [ns.e('dropdown'), ns.is('entering', visi
 
 // ---- Show clear icon ----
 const showClear = computed(
-  () => props.clearable && !props.disabled && selectedValues.value.length > 0 && visible.value
+  () => props.clearable && !isDisabled.value && selectedValues.value.length > 0 && visible.value
 )
 
 // ---- No-data text ----
@@ -281,9 +335,10 @@ const noDataTextComputed = computed(() => {
 
 // ---- Dropdown control ----
 function openDropdown() {
-  if (props.disabled) return
+  if (isDisabled.value) return
   visible.value = true
   isFocused.value = true
+  dropdownZIndex.value = nextZIndex()
   emit('visible-change', true)
   nextTick(() => {
     if (props.filterable && inputRef.value) {
@@ -300,7 +355,7 @@ function closeDropdown() {
 }
 
 function toggleDropdown() {
-  if (props.disabled) return
+  if (isDisabled.value) return
   if (visible.value) closeDropdown()
   else openDropdown()
 }
@@ -324,13 +379,16 @@ function selectOption(opt: SelectOption) {
     if (idx > -1) {
       currentValues.splice(idx, 1)
     } else {
+      if (props.multipleLimit > 0 && currentValues.length >= props.multipleLimit) return
       currentValues.push(opt.value)
     }
     emit('update:modelValue', currentValues)
     emit('change', currentValues)
+    formItem?.validate('change')
   } else {
     emit('update:modelValue', opt.value)
     emit('change', opt.value)
+    formItem?.validate('change')
     closeDropdown()
   }
 }
@@ -366,6 +424,7 @@ function removeTag(value: string | number, event?: Event) {
     emit('update:modelValue', currentValues)
     emit('change', currentValues)
     emit('remove-tag', value)
+    formItem?.validate('change')
   }
 }
 
@@ -374,6 +433,7 @@ function handleClear() {
   emit('update:modelValue', empty as SelectValue)
   emit('clear')
   emit('change', empty as SelectValue)
+  formItem?.validate('change')
 }
 
 // ---- Search ----
@@ -462,6 +522,7 @@ function handleFocus(event: FocusEvent) {
 function handleBlur(event: FocusEvent) {
   isFocused.value = false
   emit('blur', event)
+  formItem?.validate('blur')
 }
 
 // ---- Collapsed tags ----
@@ -532,8 +593,8 @@ defineExpose({
       visible && hoveringIndex >= 0 ? `zc-select-option-${hoveringIndex}` : undefined
     "
     :aria-label="placeholderText"
-    :aria-disabled="disabled"
-    :tabindex="disabled ? -1 : filterable ? undefined : 0"
+    :aria-disabled="isDisabled"
+    :tabindex="isDisabled ? -1 : filterable ? undefined : 0"
     @click="toggleDropdown"
     @keydown="handleKeyDown"
   >
@@ -575,7 +636,7 @@ defineExpose({
         :placeholder="
           isEmpty || (multiple && selectedOptions.length === 0) ? placeholderText : displayLabel
         "
-        :disabled="disabled"
+        :disabled="isDisabled"
         @input="handleSearchInput"
         @focus="handleFocus"
         @blur="handleBlur"
@@ -622,7 +683,7 @@ defineExpose({
 
     <!-- Dropdown menu -->
     <transition name="zc-select-dropdown">
-      <div v-show="visible" :class="dropdownClasses">
+      <div v-show="visible" ref="dropdownRef" :style="dropdownStyle" :class="dropdownClasses">
         <!-- Loading -->
         <div v-if="loading || internalLoading" :class="ns.e('loading')">
           <svg class="zc-select__loading-icon" viewBox="0 0 24 24" fill="none">
@@ -713,6 +774,15 @@ defineExpose({
                       <span :class="ns.e('create-prefix')">+</span>
                       {{ item.label }}
                     </template>
+                    <slot
+                      v-else-if="item.option"
+                      name="option"
+                      :option="item.option"
+                      :selected="isItemSelected(item)"
+                      :disabled="item.disabled"
+                    >
+                      {{ item.label }}
+                    </slot>
                     <template v-else>
                       {{ item.label }}
                     </template>
@@ -785,7 +855,18 @@ defineExpose({
                 @click.stop="onItemClick(item)"
                 @mouseenter="hoveringIndex = index"
               >
-                <span :class="ns.e('option-label')">{{ item.label }}</span>
+                <span :class="ns.e('option-label')">
+                  <slot
+                    v-if="item.option"
+                    name="option"
+                    :option="item.option"
+                    :selected="isItemSelected(item)"
+                    :disabled="item.disabled"
+                  >
+                    {{ item.label }}
+                  </slot>
+                  <template v-else>{{ item.label }}</template>
+                </span>
                 <span v-if="isItemSelected(item)" :class="ns.e('check')">
                   <svg
                     viewBox="0 0 24 24"
@@ -1006,9 +1087,7 @@ defineExpose({
 /* ---- Dropdown ---- */
 .zc-select__dropdown {
   position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
-  right: 0;
+  width: 100%;
   z-index: var(--z-zc-dropdown, 1000);
   background: var(--zc-select-dropdown-bg-color);
   border: 1px solid var(--zc-select-dropdown-border-color);

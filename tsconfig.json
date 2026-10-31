@@ -1,12 +1,3 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./packages/utils" },
-    { "path": "./packages/hooks" },
-    { "path": "./packages/locale" },
-    { "path": "./packages/theme" },
-    { "path": "./packages/components" },
-    { "path": "./packages/resolver" },
-    { "path": "./tsconfig.node.json" }
-  ]
+  "files": []
 }

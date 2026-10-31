@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
+import { useLocale } from '@zc-ui/locale'
 import { useGlobalConfig } from '../config-provider/useGlobalConfig'
+import { useFormDisabled, useFormSize, useFormItem } from '../form/use-form'
 
 defineOptions({ name: 'ZcSwitch' })
 
@@ -50,13 +52,18 @@ const emit = defineEmits<{
 }>()
 
 const ns = useNamespace('switch')
+const { t } = useLocale()
 
-// ---- ConfigProvider size integration ----
-// Priority: explicit prop > ConfigProvider global size > default 'medium'
+// ---- Form context integration ----
+// Priority: explicit prop > ZcFormItem > ZcForm > ConfigProvider global size > default 'medium'
 // SwitchSize is 'large'|'medium'|'small' (no 'mini'), so 'mini' degrades to 'small'
 const { size: globalSize } = useGlobalConfig()
+const formSize = useFormSize(() => props.size)
+const formDisabled = useFormDisabled(() => props.disabled)
+const formItem = useFormItem()
+const isDisabled = formDisabled
 const effectiveSize = computed<SwitchSize>(() => {
-  const resolved = props.size ?? globalSize.value ?? 'medium'
+  const resolved = formSize.value ?? globalSize.value ?? 'medium'
   return resolved === 'mini' ? 'small' : (resolved as SwitchSize)
 })
 
@@ -76,7 +83,7 @@ const classes = computed(() => [
   ns.b(),
   ns.m(effectiveSize.value),
   ns.is('checked', isChecked.value),
-  ns.is('disabled', props.disabled),
+  ns.is('disabled', isDisabled.value),
   ns.is('loading', props.loading),
 ])
 
@@ -116,10 +123,12 @@ const labelStyle = computed(() => ({
 }))
 
 function handleToggle() {
-  if (props.disabled || props.loading) return
+  if (isDisabled.value || props.loading) return
   const newValue = !props.modelValue
   emit('update:modelValue', newValue)
   emit('change', newValue)
+  // Bridge to form-item validation rules with trigger: 'change'
+  formItem?.validate('change')
 }
 
 function handleKeydown(event: KeyboardEvent) {
@@ -135,9 +144,9 @@ function handleKeydown(event: KeyboardEvent) {
     :class="classes"
     role="switch"
     :aria-checked="isChecked"
-    :aria-disabled="disabled || loading"
-    :aria-label="ariaLabel || (isChecked ? '已开启' : '已关闭')"
-    :tabindex="disabled || loading ? -1 : 0"
+    :aria-disabled="isDisabled || loading"
+    :aria-label="ariaLabel || (isChecked ? t('zc.switch.openLabel') : t('zc.switch.closeLabel'))"
+    :tabindex="isDisabled || loading ? -1 : 0"
     @click="handleToggle"
     @keydown="handleKeydown"
   >

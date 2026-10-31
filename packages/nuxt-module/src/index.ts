@@ -1,11 +1,4 @@
-import {
-  defineNuxtModule,
-  addPlugin,
-  createResolver,
-  addImports,
-  addComponent,
-} from '@nuxt/kit'
-import type { Component } from '@zc-ui/components'
+import { defineNuxtModule, addPlugin, createResolver, addImports, addComponent } from '@nuxt/kit'
 import * as ZcComponents from '@zc-ui/components'
 
 /**
@@ -68,7 +61,8 @@ export default defineNuxtModule<ModuleOptions>({
 
     // ---- 2. Inject CSS theme ----
     if (options.styles) {
-      nuxt.options.css.push('@zc-ui/theme/dist/index.css')
+      // "./styles" is the package.json exports entry for the stylesheet.
+      nuxt.options.css.push('@zc-ui/theme/styles')
     }
 
     // ---- 3. Register a plugin for imperative APIs (message, notification, loading) ----
@@ -83,9 +77,14 @@ export default defineNuxtModule<ModuleOptions>({
       const prefix = options.prefix ?? 'Zc'
       for (const [exportName, component] of Object.entries(ZcComponents)) {
         // Skip non-component exports (types, functions, etc.)
-        if (exportName.startsWith('Zc') && typeof component === 'object' && component !== null && 'install' in component) {
+        if (
+          exportName.startsWith('Zc') &&
+          typeof component === 'object' &&
+          component !== null &&
+          'install' in component
+        ) {
           addComponent({
-            name: exportName,
+            name: prefix === 'Zc' ? exportName : prefix + exportName.slice(2),
             filePath: '@zc-ui/components',
             export: exportName,
             // Ensure SSR-friendly: components resolve their own environment
@@ -93,9 +92,6 @@ export default defineNuxtModule<ModuleOptions>({
           })
         }
       }
-
-      // Also register the imperative API components
-      void prefix
     }
 
     // ---- 5. Auto-import composables ----
@@ -173,7 +169,3 @@ export default defineNuxtModule<ModuleOptions>({
     }
   },
 })
-
-export type { ModuleOptions }
-// Re-export types for consumers
-export type { Component }

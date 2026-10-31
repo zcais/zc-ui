@@ -10,22 +10,18 @@ import ZcInput from '../../packages/components/src/input/input.vue'
 import ZcSwitch from '../../packages/components/src/switch/switch.vue'
 import ZcDialog from '../../packages/components/src/dialog/dialog.vue'
 import ZcTag from '../../packages/components/src/tag/tag.vue'
-import ZcSelect from '../../packages/components/src/select/select.vue'
 import ZcTable from '../../packages/components/src/table/table.vue'
 import ZcCheckbox from '../../packages/components/src/checkbox/checkbox.vue'
 import ZcRadio from '../../packages/components/src/radio/radio.vue'
-import ZcForm from '../../packages/components/src/form/form.vue'
-import ZcFormItem from '../../packages/components/src/form/form-item.vue'
 import ZcPagination from '../../packages/components/src/pagination/pagination.vue'
-import { ZcMessage } from '../../packages/components/src/message/message.ts'
+import { ZcMessage } from '../../packages/components/src/message/message'
 
 const app = createApp({
   setup() {
     const dialogVisible = ref(false)
     const inputValue = ref('')
     const switchValue = ref(false)
-    const selectValue = ref('')
-    const checkboxValue = ref([])
+    const checkboxValue = ref<string[]>([])
     const radioValue = ref('')
     const currentPage = ref(1)
     const messageShown = ref('')
@@ -62,46 +58,57 @@ const app = createApp({
             h(ZcButton, { id: 'btn-success', type: 'success' }, () => 'Success'),
             h(ZcButton, { id: 'btn-warning', type: 'warning' }, () => 'Warning'),
             h(ZcButton, { id: 'btn-danger', type: 'danger' }, () => 'Danger'),
-            h(
-              ZcButton,
-              { id: 'btn-disabled', disabled: true },
-              () => 'Disabled'
-            ),
+            h(ZcButton, { id: 'btn-disabled', disabled: true }, () => 'Disabled'),
           ]),
         ]),
 
         // --- Form Section ---
         h('section', { id: 'form-controls', class: 'demo-section' }, [
           h('h2', { class: 'demo-title' }, 'Form Controls'),
-          h('div', { style: 'display: flex; flex-direction: column; gap: 12px; max-width: 400px;' }, [
-            h(ZcInput, {
-              id: 'test-input',
-              placeholder: 'Enter text...',
-              modelValue: inputValue.value,
-              'onUpdate:modelValue': (v: string) => (inputValue.value = v),
-            }),
-            h('div', { style: 'display: flex; align-items: center; gap: 8px;' }, [
-              h(ZcSwitch, {
-                id: 'test-switch',
-                modelValue: switchValue.value,
-                'onUpdate:modelValue': (v: boolean) => (switchValue.value = v),
+          h(
+            'div',
+            { style: 'display: flex; flex-direction: column; gap: 12px; max-width: 400px;' },
+            [
+              h(ZcInput, {
+                id: 'test-input',
+                placeholder: 'Enter text...',
+                modelValue: inputValue.value,
+                'onUpdate:modelValue': (v: string | number) => (inputValue.value = String(v)),
               }),
-              h('span', () => `Switch: ${switchValue.value ? 'ON' : 'OFF'}`),
-            ]),
-            h(ZcCheckbox, {
-              modelValue: checkboxValue.value.includes('apple'),
-              'onUpdate:modelValue': (v: boolean) => {
-                if (v) checkboxValue.value.push('apple')
-                else checkboxValue.value = checkboxValue.value.filter((i) => i !== 'apple')
-              },
-            }, () => 'Apple'),
-            h(ZcRadio, {
-              modelValue: radioValue.value === 'option1',
-              'onUpdate:modelValue': (v: boolean) => {
-                if (v) radioValue.value = 'option1'
-              },
-            }, () => 'Option 1'),
-          ]),
+              h('div', { style: 'display: flex; align-items: center; gap: 8px;' }, [
+                h(ZcSwitch, {
+                  id: 'test-switch',
+                  modelValue: switchValue.value,
+                  'onUpdate:modelValue': (v: boolean) => (switchValue.value = v),
+                }),
+                h('span', { style: 'margin-left: 8px;' }, [
+                  `Switch: ${switchValue.value ? 'ON' : 'OFF'}`,
+                ]),
+              ]),
+              h(
+                ZcCheckbox,
+                {
+                  modelValue: checkboxValue.value.includes('apple'),
+                  'onUpdate:modelValue': (v: boolean) => {
+                    if (v) checkboxValue.value.push('apple')
+                    else
+                      checkboxValue.value = checkboxValue.value.filter((i: string) => i !== 'apple')
+                  },
+                },
+                () => 'Apple'
+              ),
+              h(
+                ZcRadio,
+                {
+                  modelValue: radioValue.value === 'option1',
+                  'onUpdate:modelValue': (v: string | number | boolean) => {
+                    if (v) radioValue.value = 'option1'
+                  },
+                },
+                () => 'Option 1'
+              ),
+            ]
+          ),
         ]),
 
         // --- Tag Section ---

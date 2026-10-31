@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useNamespace, useClipboard } from '@zc-ui/hooks'
+import { useLocale } from '@zc-ui/locale'
 
 defineOptions({ name: 'ZcTitle' })
 
@@ -22,7 +23,7 @@ const props = withDefaults(
     copyable: false,
     copyText: undefined,
     copyTooltip: undefined,
-  },
+  }
 )
 
 const emit = defineEmits<{
@@ -31,6 +32,7 @@ const emit = defineEmits<{
 
 const ns = useNamespace('title')
 const { copy, copied } = useClipboard()
+const { t } = useLocale()
 
 const titleRef = ref<HTMLElement>()
 
@@ -56,16 +58,34 @@ async function handleCopy() {
       v-if="copyable"
       :class="[ns.e('copy'), ns.is('copied', copied)]"
       type="button"
-      :title="copyTooltip ?? (copied ? '已复制' : '复制')"
+      :title="copyTooltip ?? (copied ? t('zc.typography.copied') : t('zc.typography.copy'))"
       @click="handleCopy"
     >
       <!-- Copy icon -->
-      <svg v-if="!copied" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <svg
+        v-if="!copied"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
         <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
         <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
       </svg>
       <!-- Check icon -->
-      <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <svg
+        v-else
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
         <polyline points="20 6 9 17 4 12" />
       </svg>
     </button>
@@ -147,13 +167,13 @@ async function handleCopy() {
 }
 
 /* ---- Dark mode ---- */
-html[data-theme='dark'] .zc-title {
+.dark .zc-title {
   --zc-title-color: var(--color-zc-text-primary, #e5eaf3);
 }
-html[data-theme='dark'] .zc-title--level-5 {
+.dark .zc-title--level-5 {
   color: var(--color-zc-text-secondary, #a3a6ad);
 }
-html[data-theme='dark'] .zc-title__copy {
+.dark .zc-title__copy {
   color: var(--color-zc-text-secondary, #a3a6ad);
 }
 </style>

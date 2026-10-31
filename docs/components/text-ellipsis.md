@@ -75,24 +75,24 @@
 
 ### TextEllipsis Props
 
-| 属性名       | 说明                   | 类型                                     | 默认值  |
-| ------------ | ---------------------- | ---------------------------------------- | ------- |
-| content      | 文本内容               | `string`                                 | `''`    |
-| lines        | 最大行数（0=单行省略） | `number`                                 | `0`     |
-| showTooltip  | 是否显示悬浮提示       | `boolean`                                | `true`  |
-| placement    | 提示框位置             | `'top' \| 'bottom' \| 'left' \| 'right'` | `'top'` |
-| expandable   | 是否显示展开/收起按钮  | `boolean`                                | `false` |
-| ellipsis     | 自定义省略符号         | `string`                                 | `'…'`   |
-| tooltipClass | 提示框自定义类名       | `string`                                 | `''`    |
+<ApiTable type="props" :data="[
+{ name: 'content', description: '文本内容', type: 'string', default: '''' },
+{ name: 'lines', description: '最大行数（0=单行省略）', type: 'number', default: '0' },
+{ name: 'showTooltip', description: '是否显示悬浮提示', type: 'boolean', default: 'true' },
+{ name: 'placement', description: '提示框位置', type: '`'top' \', default: ''bottom' \' },
+{ name: 'expandable', description: '是否显示展开/收起按钮', type: 'boolean', default: 'false' },
+{ name: 'ellipsis', description: '自定义省略符号', type: 'string', default: ''…'' },
+{ name: 'tooltipClass', description: '提示框自定义类名', type: 'string', default: '''' }
+]" />
 
 ### TextEllipsis Events
 
-| 事件名 | 说明            | 回调参数              |
-| ------ | --------------- | --------------------- |
-| expand | 展开/收起时触发 | `(expanded: boolean)` |
+<ApiTable type="events" :data="[
+{ name: '(expanded: boolean)', description: '展开/收起时触发' }
+]" />
 
 ### Slots
 
-| 插槽名  | 说明                               |
-| ------- | ---------------------------------- |
-| default | 文本内容（与 content prop 二选一） |
+<ApiTable type="slots" :data="[
+{ name: 'default', description: '文本内容（与 content prop 二选一）' }
+]" />

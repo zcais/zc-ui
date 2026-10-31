@@ -1,70 +1,90 @@
 {
-  "updatedAt": "2026-07-10T01:30:43.498Z",
+  "updatedAt": "2026-10-31T02:13:02.506Z",
   "summary": {
-    "totalFiles": 14,
-    "totalRawSize": 1664779,
-    "totalGzipSize": 346386
+    "totalFiles": 18,
+    "totalRawSize": 15410721,
+    "totalGzipSize": 1415518
   },
   "files": {
     "packages/components/dist/index.cjs": {
-      "rawSize": 372901,
-      "gzipSize": 82921,
-      "brotliSize": 66731
-    },
-    "packages/components/dist/index.css": {
-      "rawSize": 219255,
-      "gzipSize": 28457,
-      "brotliSize": 23611
+      "rawSize": 500173,
+      "gzipSize": 107200,
+      "brotliSize": 84006
     },
     "packages/components/dist/index.mjs": {
-      "rawSize": 388227,
-      "gzipSize": 91426,
-      "brotliSize": 72329
+      "rawSize": 511788,
+      "gzipSize": 117989,
+      "brotliSize": 90659
     },
     "packages/components/dist/index.umd.js": {
-      "rawSize": 591756,
-      "gzipSize": 111779,
-      "brotliSize": 90134
+      "rawSize": 541976,
+      "gzipSize": 125437,
+      "brotliSize": 97844
+    },
+    "packages/components/dist/style.css": {
+      "rawSize": 310714,
+      "gzipSize": 40605,
+      "brotliSize": 33291
     },
     "packages/hooks/dist/index.cjs": {
-      "rawSize": 13149,
-      "gzipSize": 4732,
-      "brotliSize": 4212
+      "rawSize": 15158,
+      "gzipSize": 5336,
+      "brotliSize": 4735
     },
     "packages/hooks/dist/index.mjs": {
-      "rawSize": 16286,
-      "gzipSize": 5284,
-      "brotliSize": 4676
+      "rawSize": 18828,
+      "gzipSize": 5968,
+      "brotliSize": 5267
+    },
+    "packages/icons/dist/index.cjs": {
+      "rawSize": 6074279,
+      "gzipSize": 480957,
+      "brotliSize": 318399
+    },
+    "packages/icons/dist/index.mjs": {
+      "rawSize": 7358364,
+      "gzipSize": 504884,
+      "brotliSize": 323100
     },
     "packages/locale/dist/index.cjs": {
-      "rawSize": 7517,
-      "gzipSize": 2461,
-      "brotliSize": 1947
+      "rawSize": 11310,
+      "gzipSize": 3590,
+      "brotliSize": 2866
     },
     "packages/locale/dist/index.mjs": {
-      "rawSize": 8366,
-      "gzipSize": 2592,
-      "brotliSize": 2049
+      "rawSize": 12573,
+      "gzipSize": 3817,
+      "brotliSize": 2949
     },
-    "packages/resolver/dist/index.cjs": {
-      "rawSize": 3833,
-      "gzipSize": 1460,
+    "packages/nuxt-module/dist/module.cjs": {
+      "rawSize": 4044,
+      "gzipSize": 1476,
       "brotliSize": 1284
     },
+    "packages/nuxt-module/dist/module.mjs": {
+      "rawSize": 2522,
+      "gzipSize": 966,
+      "brotliSize": 820
+    },
+    "packages/resolver/dist/index.cjs": {
+      "rawSize": 4522,
+      "gzipSize": 1708,
+      "brotliSize": 1501
+    },
     "packages/resolver/dist/index.mjs": {
-      "rawSize": 4525,
-      "gzipSize": 1567,
-      "brotliSize": 1375
+      "rawSize": 5310,
+      "gzipSize": 1817,
+      "brotliSize": 1629
     },
     "packages/theme/dist/index.cjs": {
-      "rawSize": 14586,
-      "gzipSize": 5341,
-      "brotliSize": 4710
+      "rawSize": 14676,
+      "gzipSize": 5370,
+      "brotliSize": 4737
     },
     "packages/theme/dist/index.mjs": {
-      "rawSize": 17800,
-      "gzipSize": 5870,
-      "brotliSize": 5111
+      "rawSize": 17906,
+      "gzipSize": 5902,
+      "brotliSize": 5112
     },
     "packages/utils/dist/index.cjs": {
       "rawSize": 3045,

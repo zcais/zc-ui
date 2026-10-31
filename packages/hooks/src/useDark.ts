@@ -31,16 +31,14 @@ export interface UseColorModeOptions {
  * const { mode, isDark, store } = useColorMode()
  * mode.value = 'dark'
  */
-export function useColorMode(
-  options: UseColorModeOptions = {}
-): {
+export function useColorMode(options: UseColorModeOptions = {}): {
   mode: WritableComputedRef<ColorMode>
   isDark: Ref<boolean>
   store: Ref<ColorMode>
   system: Ref<ColorMode>
 } {
   const {
-    attribute = 'data-theme',
+    attribute = 'class',
     selector = 'html',
     initialValue = 'auto',
     storageKey = 'zc-color-mode',
@@ -73,7 +71,21 @@ export function useColorMode(
 
     const resolved = mode.value === 'auto' ? system.value : mode.value
     const attrVal = modes?.[resolved] ?? resolved
-    el.setAttribute(attribute, attrVal)
+
+    if (attribute === 'class') {
+      // Default: toggle .dark class on the root element
+      const cls = el.getAttribute('class') || ''
+      const classes = cls.split(/\s+/).filter(Boolean)
+      const darkIdx = classes.indexOf('dark')
+      if (attrVal === 'dark' && darkIdx === -1) {
+        classes.push('dark')
+      } else if (attrVal !== 'dark' && darkIdx >= 0) {
+        classes.splice(darkIdx, 1)
+      }
+      el.setAttribute('class', classes.join(' '))
+    } else {
+      el.setAttribute(attribute, attrVal)
+    }
   }
 
   watch([mode, systemPrefersDark], applyMode, { immediate: true })
@@ -104,9 +116,7 @@ export interface UseDarkOptions {
  * const { isDark, toggle } = useDark()
  * toggle() // switch dark/light
  */
-export function useDark(
-  options: UseDarkOptions = {}
-): {
+export function useDark(options: UseDarkOptions = {}): {
   isDark: WritableComputedRef<boolean>
   toggle: () => void
 } {

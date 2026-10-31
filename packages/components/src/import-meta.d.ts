@@ -6,6 +6,8 @@
  * `import.meta.env.DEV` without per-line `@ts-expect-error` directives.
  */
 interface ImportMeta {
+  /** `true` in browser builds (Vite/Nuxt). `undefined` in raw Node/Webpack. */
+  readonly client?: boolean
   readonly env?: ImportMetaEnv
 }
 

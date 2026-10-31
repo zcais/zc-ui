@@ -1,5 +1,8 @@
 import type { Directive, DirectiveBinding } from 'vue'
+import { ref, watch, type Ref } from 'vue'
 import { isClient } from '@zc-ui/utils'
+import { usePopper } from '../popper/usePopper'
+import type { UsePopperReturn } from '../popper/usePopper'
 
 export type TooltipDirectivePlacement =
   | 'top'
@@ -39,6 +42,8 @@ type TooltipValue = string | TooltipDirectiveOptions
 interface TooltipElement extends HTMLElement {
   __zcTooltip?: {
     tooltipEl: HTMLDivElement | null
+    popper: UsePopperReturn | null
+    popperElRef?: Ref<HTMLElement | null>
     content: string
     placement: TooltipDirectivePlacement
     showDelay: number
@@ -111,73 +116,6 @@ function parseOptions(binding: DirectiveBinding): Required<
   }
 }
 
-/** Compute position for tooltip element */
-function computePosition(
-  el: HTMLElement,
-  tooltipEl: HTMLDivElement,
-  placement: TooltipDirectivePlacement
-) {
-  const rect = el.getBoundingClientRect()
-  const tooltipRect = tooltipEl.getBoundingClientRect()
-  const scrollX = window.scrollX || window.pageXOffset
-  const scrollY = window.scrollY || window.pageYOffset
-
-  let top = 0
-  let left = 0
-  const gap = 8
-
-  const [side, align] = placement.split('-')
-
-  switch (side) {
-    case 'top':
-      top = rect.top + scrollY - tooltipRect.height - gap
-      break
-    case 'bottom':
-      top = rect.bottom + scrollY + gap
-      break
-    case 'left':
-      left = rect.left + scrollX - tooltipRect.width - gap
-      break
-    case 'right':
-      left = rect.right + scrollX + gap
-      break
-  }
-
-  // Handle alignment for top/bottom
-  if (side === 'top' || side === 'bottom') {
-    left = rect.left + scrollX + rect.width / 2 - tooltipRect.width / 2
-    if (align === 'start') {
-      left = rect.left + scrollX
-    } else if (align === 'end') {
-      left = rect.right + scrollX - tooltipRect.width
-    }
-  }
-
-  // Handle alignment for left/right
-  if (side === 'left' || side === 'right') {
-    top = rect.top + scrollY + rect.height / 2 - tooltipRect.height / 2
-    if (align === 'start') {
-      top = rect.top + scrollY
-    } else if (align === 'end') {
-      top = rect.bottom + scrollY - tooltipRect.height
-    }
-  }
-
-  // Clamp to viewport
-  const margin = 8
-  if (left < scrollX + margin) left = scrollX + margin
-  if (left + tooltipRect.width > scrollX + window.innerWidth - margin) {
-    left = scrollX + window.innerWidth - tooltipRect.width - margin
-  }
-  if (top < scrollY + margin) top = scrollY + margin
-  if (top + tooltipRect.height > scrollY + window.innerHeight - margin) {
-    top = scrollY + window.innerHeight - tooltipRect.height - margin
-  }
-
-  tooltipEl.style.top = `${top}px`
-  tooltipEl.style.left = `${left}px`
-}
-
 /** Inject tooltip styles once */
 let stylesInjected = false
 function injectStyles() {
@@ -187,7 +125,7 @@ function injectStyles() {
   style.setAttribute('data-zc-tooltip', '')
   style.textContent = `
 .zc-tooltip-popper {
-  position: absolute;
+  position: fixed;
   z-index: 3000;
   padding: 6px 12px;
   font-size: 13px;
@@ -266,6 +204,8 @@ export const ZcTooltipDirective: Directive = {
 
     const state = {
       tooltipEl: null as HTMLDivElement | null,
+      popper: null as UsePopperReturn | null,
+      popperElRef: undefined as Ref<HTMLElement | null> | undefined,
       content: opts.content,
       placement: opts.placement,
       showDelay: opts.showDelay,
@@ -283,6 +223,37 @@ export const ZcTooltipDirective: Directive = {
       onBlur: () => {},
     }
 
+    // ---- Positioning via ZcPopper engine (fixed strategy, appended to body) ----
+    const popperElRef = ref<HTMLElement | null>(null)
+    const popper = usePopper({
+      reference: () => el,
+      popper: popperElRef,
+      placement: state.placement,
+      offset: 8,
+      strategy: 'fixed',
+    })
+
+    // Sync engine styles onto the tooltip element
+    const stopStyleWatch = watch(
+      popper.styles,
+      (styles) => {
+        if (!state.tooltipEl) return
+        state.tooltipEl.style.position = String(styles.position ?? '')
+        state.tooltipEl.style.top = String(styles.top ?? '')
+        state.tooltipEl.style.left = String(styles.left ?? '')
+      },
+      { immediate: true }
+    )
+
+    state.popper = {
+      ...popper,
+      stop: () => {
+        stopStyleWatch()
+        popper.stop()
+      },
+    }
+    state.popperElRef = popperElRef
+
     state.onMouseEnter = () => {
       if (state.disabled || !state.content) return
       if (state.hideTimer) {
@@ -291,7 +262,7 @@ export const ZcTooltipDirective: Directive = {
       }
       if (state.isVisible) return
       state.showTimer = setTimeout(() => {
-        showTooltip(el, state)
+        showTooltip(state)
       }, state.showDelay)
     }
 
@@ -333,7 +304,7 @@ export const ZcTooltipDirective: Directive = {
     // Update tooltip content if visible
     if (el.__zcTooltip.tooltipEl && el.__zcTooltip.isVisible) {
       el.__zcTooltip.tooltipEl.textContent = opts.content
-      computePosition(el, el.__zcTooltip.tooltipEl, opts.placement)
+      el.__zcTooltip.popper?.update()
     }
 
     // Hide if disabled
@@ -354,6 +325,8 @@ export const ZcTooltipDirective: Directive = {
     el.removeEventListener('focusin', state.onFocus)
     el.removeEventListener('focusout', state.onBlur)
 
+    state.popper?.stop()
+
     if (state.tooltipEl && state.tooltipEl.parentNode) {
       state.tooltipEl.parentNode.removeChild(state.tooltipEl)
     }
@@ -363,7 +336,7 @@ export const ZcTooltipDirective: Directive = {
 }
 
 /** Show tooltip for element */
-function showTooltip(el: TooltipElement, state: NonNullable<TooltipElement['__zcTooltip']>) {
+function showTooltip(state: NonNullable<TooltipElement['__zcTooltip']>) {
   if (state.tooltipEl) {
     state.tooltipEl.parentNode?.removeChild(state.tooltipEl)
   }
@@ -384,13 +357,17 @@ function showTooltip(el: TooltipElement, state: NonNullable<TooltipElement['__zc
 
   document.body.appendChild(tooltipEl)
 
-  // Position after DOM insertion to get accurate measurements
+  state.tooltipEl = tooltipEl
+  if (state.popperElRef) state.popperElRef.value = tooltipEl
+
+  // Position via ZcPopper engine after DOM insertion to get accurate measurements
+  state.popper?.update()
+
   requestAnimationFrame(() => {
-    computePosition(el, tooltipEl, state.placement)
+    state.popper?.update()
     tooltipEl.classList.add('is-visible')
   })
 
-  state.tooltipEl = tooltipEl
   state.isVisible = true
 }
 
@@ -400,6 +377,7 @@ function hideTooltip(state: NonNullable<TooltipElement['__zcTooltip']>) {
   state.tooltipEl.classList.remove('is-visible')
   const tooltipEl = state.tooltipEl
   state.tooltipEl = null
+  if (state.popperElRef) state.popperElRef.value = null
   state.isVisible = false
 
   setTimeout(() => {

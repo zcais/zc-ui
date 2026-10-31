@@ -121,6 +121,8 @@ import TypographyParagraph from './typography/paragraph.vue'
 import TypographyLink from './typography/link.vue'
 // ---- Overlay Components ----
 import Popover from './popover/popover.vue'
+// ---- Popper Engine ----
+import Popper from './popper/popper.vue'
 // ---- Utility Components ----
 import QRCode from './qr-code/qr-code.vue'
 // ---- Feedback Components ----
@@ -295,6 +297,9 @@ export const ZcConfigProvider = withInstall(ConfigProvider, 'ZcConfigProvider')
 
 // ---- Utility Components ----
 export const ZcQRCode = withInstall(QRCode, 'ZcQRCode')
+
+// ---- Popper Engine ----
+export const ZcPopper = withInstall(Popper, 'ZcPopper')
 
 // ---- Feedback Components ----
 export const ZcMessageBoxComponent = withInstall(MessageBoxComponent, 'ZcMessageBox')
@@ -477,6 +482,8 @@ export default withInstallAll({
   ZcLink,
   // Overlay Components
   ZcPopover,
+  // Popper Engine
+  ZcPopper,
   // Feedback Components
   ZcMessageBoxComponent,
   // Image Viewer
@@ -629,6 +636,17 @@ export type {
   ContextMenuProps,
   ContextMenuEmits,
 } from './context-menu/types'
+
+// ---- Popper Engine Types & Composable ----
+export { usePopper } from './popper/usePopper'
+export type { PopperStrategy, UsePopperOptions, UsePopperReturn } from './popper/usePopper'
+export type {
+  PopperPlacement,
+  Rect,
+  ViewportSize,
+  ComputePositionOptions,
+  PositionResult,
+} from './popper/types'
 
 // ---- Custom Directives ----
 export { ZcCopyDirective } from './directives/copy'

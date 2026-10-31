@@ -41,13 +41,13 @@ export {
   mergeThemes,
   getComponentOverrides,
   themeToCssText,
-componentShorthandToCssVars,
+  componentShorthandToCssVars,
 } from './presets'
-  export type {
+export type {
   ThemeVariables,
   ComponentThemeOverrides,
   ComponentShorthandOverrides,
-ThemePreset,
+  ThemePreset,
   CreateThemeOptions,
 } from './presets'
 
@@ -217,6 +217,7 @@ export const cssVarPrefix = '--zc'
 /**
  * Dark mode color overrides.
  * Applied when the `.dark` class is present on <html>.
+ * This is the single authoritative dark mode selector in ZC UI.
  */
 export const darkColors = {
   text: {

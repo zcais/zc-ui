@@ -45,7 +45,6 @@
 <DemoBlock>
 
 ```vue
-
 <template>
   <ZcSpace direction="vertical" alignment="start" :size="30">
     <ZcRadioGroup v-model="size">
@@ -71,9 +70,9 @@
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue'
+import { ref } from 'vue'
 
-  const size = ref('medium')
+const size = ref('medium')
 </script>
 ```
 
@@ -287,7 +286,7 @@ const fill = ref(true)
 
 <ApiTable type="props" :data="[
   { name: 'direction', description: '排列的方向', type: 'horizontal | vertical', default: 'horizontal' },
-  { name: 'alignment', description: '对齐的方式', type: '\'start\' | \'end\' | \'center\' | \'baseline\' | \'stretch\' | flex 对应值', default: 'center' },
+  { name: 'alignment', description: '对齐的方式', type: ''start | end | center | baseline | stretch | flex' 对应值', default: 'center' },
   { name: 'class', description: 'className', type: 'string / object / array', default: '—' },
   { name: 'style', description: '额外样式', type: 'string / object', default: '—' },
   { name: 'spacer', description: '间隔符', type: 'string / number / VNode', default: '—' },

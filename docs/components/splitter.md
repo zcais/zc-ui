@@ -107,27 +107,27 @@
 
 ### Splitter Props
 
-| 属性名           | 说明                     | 类型                         | 默认值         |
-| ---------------- | ------------------------ | ---------------------------- | -------------- |
-| direction        | 分割方向                 | `'horizontal' \| 'vertical'` | `'horizontal'` |
-| sizes            | 各面板初始尺寸（百分比） | `number[]`                   | `[50, 50]`     |
-| minSizes         | 各面板最小尺寸（百分比） | `number[]`                   | `[]`           |
-| maxSizes         | 各面板最大尺寸（百分比） | `number[]`                   | `[]`           |
-| gutterSize       | 分隔条宽度（px）         | `number`                     | `6`            |
-| collapsible      | 是否支持双击折叠         | `boolean`                    | `false`        |
-| disabled         | 是否禁用拖拽             | `boolean`                    | `false`        |
-| showGutterHandle | 是否显示分隔条指示器     | `boolean`                    | `true`         |
+<ApiTable type="props" :data="[
+{ name: 'direction', description: '分割方向', type: '`'horizontal' \', default: ''vertical'`' },
+{ name: 'sizes', description: '各面板初始尺寸（百分比）', type: 'number[]', default: '[50, 50]' },
+{ name: 'minSizes', description: '各面板最小尺寸（百分比）', type: 'number[]', default: '[]' },
+{ name: 'maxSizes', description: '各面板最大尺寸（百分比）', type: 'number[]', default: '[]' },
+{ name: 'gutterSize', description: '分隔条宽度（px）', type: 'number', default: '6' },
+{ name: 'collapsible', description: '是否支持双击折叠', type: 'boolean', default: 'false' },
+{ name: 'disabled', description: '是否禁用拖拽', type: 'boolean', default: 'false' },
+{ name: 'showGutterHandle', description: '是否显示分隔条指示器', type: 'boolean', default: 'true' }
+]" />
 
 ### Splitter Events
 
-| 事件名       | 说明                | 回调参数                              |
-| ------------ | ------------------- | ------------------------------------- |
-| update:sizes | 面板尺寸变化时触发  | `(sizes: number[])`                   |
-| resize       | 拖拽过程中持续触发  | `(sizes: number[])`                   |
-| collapsed    | 面板折叠/展开时触发 | `(index: number, collapsed: boolean)` |
+<ApiTable type="events" :data="[
+{ name: '(sizes: number[])', description: '面板尺寸变化时触发' },
+{ name: '(sizes: number[])', description: '拖拽过程中持续触发' },
+{ name: '(index: number, collapsed: boolean)', description: '面板折叠/展开时触发' }
+]" />
 
 ### Slots
 
-| 插槽名  | 说明                             |
-| ------- | -------------------------------- |
-| default | 面板内容，多个子元素对应多个面板 |
+<ApiTable type="slots" :data="[
+{ name: 'default', description: '面板内容，多个子元素对应多个面板' }
+]" />

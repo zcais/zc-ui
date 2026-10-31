@@ -1,9 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import {
-  ZcUiResolver,
-  ZcUiResolverSSR,
-  resolveZcComponent,
-} from '../resolver'
+import { ZcUiResolver, ZcUiResolverSSR, resolveZcComponent } from '../resolver'
 import { componentMap } from '../component-map'
 
 describe('ZcUiResolver', () => {
@@ -105,20 +101,16 @@ describe('ZcUiResolver', () => {
       expect(result?.sideEffects).toEqual(['@zc-ui/components/styles'])
     })
 
-    it('should support component-level CSS import', () => {
+    it('should treat component-level import as the full stylesheet (single CSS bundle)', () => {
       const r = ZcUiResolver({ importStyle: 'component' })
       const result = r.resolve('ZcButton')
-      expect(result?.sideEffects).toEqual([
-        '@zc-ui/components/styles/button.css',
-      ])
+      expect(result?.sideEffects).toEqual(['@zc-ui/components/styles'])
     })
 
-    it('should support component-level CSS for nested components', () => {
+    it('should treat component-level import as the full stylesheet for nested components', () => {
       const r = ZcUiResolver({ importStyle: 'component' })
       const result = r.resolve('ZcFormItem')
-      expect(result?.sideEffects).toEqual([
-        '@zc-ui/components/styles/form.css',
-      ])
+      expect(result?.sideEffects).toEqual(['@zc-ui/components/styles'])
     })
 
     it('should support disabling style import', () => {
@@ -141,13 +133,13 @@ describe('ZcUiResolver', () => {
       expect(result?.sideEffects).toEqual(['@my-org/zc-ui/dist/styles'])
     })
 
-    it('should support custom style path with component CSS', () => {
+    it('should support custom style path with component import (degrades to full stylesheet)', () => {
       const r = ZcUiResolver({
         importStyle: 'component',
         stylePath: 'custom-styles',
       })
       const result = r.resolve('ZcTag')
-      expect(result?.sideEffects).toEqual(['custom-styles/tag.css'])
+      expect(result?.sideEffects).toEqual(['custom-styles'])
     })
   })
 
