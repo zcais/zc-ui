@@ -95,6 +95,7 @@ let startTime: number | null = null
 let paused = false
 let startedFrom = props.countFrom
 let countdownTimer: ReturnType<typeof setInterval> | null = null
+let countdownDeadline = 0 // absolute timestamp (ms) when countdown ends
 
 /* ------------------------------------------------------------------ *
  * Number formatting
@@ -197,9 +198,9 @@ function updateCountdown() {
   const now = Date.now()
   let diff = props.startValue - now
 
-  // If startValue is small, treat as duration in ms
+  // If startValue is small, treat as duration in ms from mount
   if (props.startValue < 1e10) {
-    diff = props.startValue
+    diff = countdownDeadline - now
   }
 
   if (diff <= 0) {
@@ -236,6 +237,8 @@ watch(
  * ------------------------------------------------------------------ */
 onMounted(() => {
   if (props.countdown) {
+    // Duration mode: lock the deadline at mount; timestamp mode: use startValue directly
+    countdownDeadline = props.startValue < 1e10 ? Date.now() + props.startValue : props.startValue
     updateCountdown()
     countdownTimer = setInterval(updateCountdown, 1000)
   } else if (props.countUp) {

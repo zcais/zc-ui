@@ -100,6 +100,27 @@ describe('ZcInputNumber', () => {
     expect(typeof vm.blur).toBe('function')
   })
 
+  it('handles invalid input when modelValue undefined', async () => {
+    const wrapper = mount(InputNumber)
+    const input = wrapper.find('.zc-input-number__inner')
+    await input.setValue('abc')
+    await input.trigger('change')
+    // Invalid input falls back to 0 (not -Infinity) when no modelValue
+    expect(wrapper.emitted('update:modelValue')?.[0]).toEqual([0])
+  })
+
+  it('increase works from empty value without min bound', async () => {
+    const wrapper = mount(InputNumber)
+    await wrapper.find('.zc-input-number__increase').trigger('click')
+    expect(wrapper.emitted('update:modelValue')?.[0]).toEqual([1])
+  })
+
+  it('decrease works from empty value without min bound', async () => {
+    const wrapper = mount(InputNumber)
+    await wrapper.find('.zc-input-number__decrease').trigger('click')
+    expect(wrapper.emitted('update:modelValue')?.[0]).toEqual([-1])
+  })
+
   // ---- Bug #11: InputNumber step value should not double on keyboard ----
   it('ArrowUp increases value by exactly one step', async () => {
     const wrapper = mount(InputNumber, { props: { modelValue: 5, step: 1 } })

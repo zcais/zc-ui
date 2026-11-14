@@ -137,7 +137,7 @@ function handleChange(event: Event) {
 
   let num = Number(raw)
   if (isNaN(num)) {
-    num = props.modelValue ?? props.min
+    num = props.modelValue ?? Math.max(props.min, 0)
   }
 
   if (props.stepStrictly) {
@@ -153,8 +153,8 @@ function handleChange(event: Event) {
 }
 
 function handleStep(step: number) {
-  if (isDisabled.value || props.readonly) return
-  const current = getCurrentValue() ?? props.min
+if (isDisabled.value || props.readonly) return
+  const current = getCurrentValue() ?? Math.max(props.min, 0)
   let next = toPrecision(current + step)
   next = clampValue(next)
 

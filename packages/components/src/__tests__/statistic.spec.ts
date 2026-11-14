@@ -132,8 +132,8 @@ describe('ZcStatistic', () => {
     const wrapper = mount(Statistic, {
       props: { value: 100, countUp: true, countFrom: 0, duration: 2000 },
     })
+// Advance past duration so rAF-driven animation completes
     await vi.advanceTimersByTimeAsync(2100)
-    // Animation should have completed
     expect(wrapper.find('.zc-statistic__value').text()).toBe('100')
     vi.useRealTimers()
   })
@@ -177,6 +177,22 @@ describe('ZcStatistic', () => {
     })
     await flushPromises()
     expect(wrapper.find('.zc-statistic__value').text()).toBe('00:00:00')
+  })
+
+  it('ticks down over time in duration mode', async () => {
+    vi.useFakeTimers()
+    try {
+      const wrapper = mount(Statistic, {
+        props: { countdown: true, startValue: 60000 },
+      })
+      await flushPromises()
+      expect(wrapper.find('.zc-statistic__value').text()).toBe('00:01:00')
+      vi.advanceTimersByTime(3000)
+      await wrapper.vm.$nextTick()
+      expect(wrapper.find('.zc-statistic__value').text()).toBe('00:00:57')
+    } finally {
+      vi.useRealTimers()
+    }
   })
 
   // ---- value change via watch ----
