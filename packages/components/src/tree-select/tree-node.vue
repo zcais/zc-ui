@@ -15,6 +15,7 @@ const ZcTreeSelectNode = defineComponent({
     },
     checkedValues: { type: Array as PropType<(string | number)[]>, default: () => [] },
     multiple: { type: Boolean, default: false },
+    parentSelectable: { type: Boolean, default: false },
   },
   emits: ['toggle-expand', 'select'],
   setup(nodeProps, { emit }) {
@@ -33,13 +34,15 @@ const ZcTreeSelectNode = defineComponent({
       const leaf = isLeafNode(node)
       const selected = !nodeProps.multiple && nodeProps.selectedValue === node.value
       const checked = nodeProps.multiple && nodeProps.checkedValues.includes(node.value)
+      const isGroup = !leaf && !nodeProps.parentSelectable
 
       const nodeClasses = [
         nsNode.e('node'),
         nsNode.is('expanded', expanded),
         nsNode.is('leaf', leaf),
         nsNode.is('selected', selected || checked),
-        nsNode.is('disabled', node.disabled),
+        nsNode.is('group', isGroup),
+        nsNode.is('disabled', node.disabled === true),
       ]
 
       const contentChildren: VNode[] = []
@@ -82,8 +85,8 @@ const ZcTreeSelectNode = defineComponent({
         contentChildren.push(h('span', { class: [nsNode.e('node-expand'), nsNode.is('leaf')] }))
       }
 
-      // Checkbox
-      if (nodeProps.multiple) {
+      // Checkbox — group-header parents are never checkable, so hide it
+      if (nodeProps.multiple && !isGroup) {
         contentChildren.push(
           h('span', { class: [nsNode.e('node-checkbox'), nsNode.is('checked', checked)] }, [
             h(
@@ -135,6 +138,7 @@ const ZcTreeSelectNode = defineComponent({
               selectedValue: nodeProps.selectedValue,
               checkedValues: nodeProps.checkedValues,
               multiple: nodeProps.multiple,
+              parentSelectable: nodeProps.parentSelectable,
               'onToggle-expand': (key: string | number) => emit('toggle-expand', key),
               onSelect: (opt: TreeSelectOption) => emit('select', opt),
             })

@@ -36,6 +36,10 @@ export function usePopper(options: UsePopperOptions): UsePopperReturn {
   const arrowStyles = ref<CSSProperties>({})
 
   const scrollListeners = new Map<HTMLElement, () => void>()
+
+  function onAnyScroll() {
+    update()
+  }
   const stopFns: Array<() => void> = []
   const stopWatches: Array<() => void> = []
 
@@ -113,6 +117,8 @@ export function usePopper(options: UsePopperOptions): UsePopperReturn {
     }
   }
 
+  // Per-ancestor scroll listeners (kept for back-compat; the window
+  // capture-phase listener above already covers every scroll container).
   function setupScrollListeners(referenceEl: HTMLElement) {
     let current: HTMLElement | null = referenceEl.parentElement
     while (current) {
@@ -127,6 +133,18 @@ export function usePopper(options: UsePopperOptions): UsePopperReturn {
       current = current.parentElement
     }
   }
+
+  // Page scroll events don't bubble and don't fire on the reference's
+  // ancestors when the scrolling element is <html>/<body>. A capture-phase
+  // listener on window observes every scroll in the document (page + nested
+  // containers), so the popper stays anchored while scrolling.
+  const stopPageScroll = useEventListener(
+    typeof window !== 'undefined' ? window : null,
+    'scroll',
+    onAnyScroll,
+    { capture: true, passive: true, immediate: true }
+  )
+  stopFns.push(stopPageScroll)
 
   const stopResize = useEventListener(
     typeof window !== 'undefined' ? window : null,

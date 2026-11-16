@@ -266,6 +266,57 @@ describe('ZcPopper usePopper composable', () => {
     expect(styles.value.top).toBe('348px')
   })
 
+  it('tracks page (document) scroll so a fixed popper follows the reference', async () => {
+    // Reference NOT inside any scroll container — simulates page-level scrolling
+    const reference = document.createElement('button')
+    document.body.appendChild(reference)
+    const popperEl = document.createElement('div')
+
+    const { styles } = usePopper({
+      reference: () => reference,
+      popper: () => popperEl,
+      placement: ref<PopperPlacement>('bottom'),
+      offset: ref(8),
+    })
+
+    const rectSpy = vi.spyOn(reference, 'getBoundingClientRect')
+
+    rectSpy.mockReturnValue({
+      x: 0,
+      y: 500,
+      top: 500,
+      bottom: 540,
+      left: 0,
+      right: 100,
+      width: 100,
+      height: 40,
+      toJSON: () => ({}),
+    } as DOMRect)
+
+    // Page scroll fires on document, not on any reference ancestor —
+    // the window capture-phase listener must still catch it
+    document.dispatchEvent(new Event('scroll'))
+    await new Promise((r) => setTimeout(r, 20))
+    expect(styles.value.top).toBe('548px')
+
+    // Keep scrolling: reference moves up, popper must follow
+    rectSpy.mockReturnValue({
+      x: 0,
+      y: 120,
+      top: 120,
+      bottom: 160,
+      left: 0,
+      right: 100,
+      width: 100,
+      height: 40,
+      toJSON: () => ({}),
+    } as DOMRect)
+
+    document.dispatchEvent(new Event('scroll'))
+    await new Promise((r) => setTimeout(r, 20))
+    expect(styles.value.top).toBe('168px')
+  })
+
   it('reports flipped placement via actualPlacement', () => {
     const reference = document.createElement('button')
     document.body.appendChild(reference)

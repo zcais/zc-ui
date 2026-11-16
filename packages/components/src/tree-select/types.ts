@@ -18,8 +18,12 @@ export interface TreeSelectProps {
   multiple?: boolean
   filterable?: boolean
   checkStrictly?: boolean
+  /** Whether parent (non-leaf) nodes are selectable. When false, parents act as group headers (expand/collapse only). Default: false */
+  parentSelectable?: boolean
   size?: TreeSelectSize
   virtual?: boolean
+  /** Whether to teleport the dropdown to body (avoids clipping by overflow ancestors). Default: true */
+  teleport?: boolean
   props?: {
     value?: string
     label?: string

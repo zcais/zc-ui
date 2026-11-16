@@ -89,7 +89,10 @@ const treeData = [
 { name: 'multiple', description: '是否多选', type: 'boolean', default: 'false' },
 { name: 'filterable', description: '是否可搜索', type: 'boolean', default: 'false' },
 { name: 'checkStrictly', description: '父子节点不关联', type: 'boolean', default: 'false' },
+{ name: 'parentSelectable', description: '父节点是否可选中。默认 false：父节点仅作分组，点击只展开/收起，多选模式下不显示勾选框', type: 'boolean', default: 'false' },
 { name: 'size', description: '尺寸', type: `'large' | 'medium' | 'small'`, default: `'medium'` },
+{ name: 'teleport', description: '下拉面板是否挂载到 body（避免被父容器 overflow 裁切）', type: 'boolean', default: 'true' },
+{ name: 'virtual', description: '虚拟滚动（保留字段，当前实现同非虚拟模式）', type: 'boolean', default: 'false' },
 ]" />
 
 ### Events

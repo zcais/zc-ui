@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { computed, ref, shallowRef } from 'vue'
+import { computed, ref, shallowRef, type CSSProperties } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
 import { useClickOutside } from '@zc-ui/hooks'
+import { useZIndex } from '@zc-ui/hooks'
 import { useLocale } from '@zc-ui/locale'
 import { usePopper } from '../popper/usePopper'
 import { useFormDisabled, useFormSize, useFormItem } from '../form/use-form'
+import type { PopperPlacement } from '../popper/types'
 import type { TreeSelectOption } from './types'
 import ZcTreeSelectNode from './tree-node.vue'
 
@@ -20,8 +22,12 @@ const props = withDefaults(
     multiple?: boolean
     filterable?: boolean
     checkStrictly?: boolean
+    /** Whether parent (non-leaf) nodes are selectable. When false, parents act as group headers (expand/collapse only). Default: false */
+    parentSelectable?: boolean
     size?: 'large' | 'medium' | 'small'
     virtual?: boolean
+    /** Whether to teleport the dropdown to body (avoids being clipped by overflow ancestors) */
+    teleport?: boolean
   }>(),
   {
     modelValue: undefined,
@@ -32,8 +38,10 @@ const props = withDefaults(
     multiple: false,
     filterable: false,
     checkStrictly: false,
+    parentSelectable: false,
     size: undefined,
     virtual: false,
+    teleport: true,
   }
 )
 
@@ -68,22 +76,46 @@ const dropdownRef = shallowRef<HTMLElement>()
 
 const visible = ref(false)
 
-// ---- Dropdown positioning (usePopper absolute strategy) ----
+// ---- Dropdown positioning ----
+// Teleported to body with fixed strategy so the dropdown is never clipped
+// by ancestor `overflow: hidden` containers.
 const { styles: dropdownStyles } = usePopper({
   reference: containerRef,
   popper: dropdownRef,
-  placement: 'bottom-start',
+  placement: 'bottom-start' as PopperPlacement,
   offset: 4,
-  strategy: 'absolute',
+  strategy: computed(() => (props.teleport ? 'fixed' : 'absolute')),
   visible,
+})
+
+// ---- Layering: allocate from the shared z-index manager on every open ----
+const { nextZIndex } = useZIndex()
+const dropdownZIndex = ref<number>()
+const dropdownStyle = computed<CSSProperties>(() => {
+  const styles = { ...dropdownStyles.value }
+  if (!props.teleport) {
+    // In-place dropdown spans the trigger width via CSS `width: 100%`
+    return styles
+  }
+  const el = containerRef.value
+  return {
+    ...styles,
+    zIndex: dropdownZIndex.value,
+    width: el ? `${el.getBoundingClientRect().width}px` : undefined,
+  }
 })
 const isFocused = ref(false)
 const expandedKeys = ref<Set<string | number>>(new Set())
 const searchText = ref('')
 
-useClickOutside(containerRef, () => {
-  if (visible.value) closeDropdown()
-})
+// ---- Click outside (dropdown is teleported, so ignore it explicitly) ----
+useClickOutside(
+  containerRef,
+  () => {
+    if (visible.value) closeDropdown()
+  },
+  { ignore: [dropdownRef] }
+)
 
 // ---- Helpers ----
 function getLabel(option: TreeSelectOption): string {
@@ -172,7 +204,8 @@ function selectNode(option: TreeSelectOption) {
   if (option.disabled) return
   emit('node-click', option)
 
-  if (!isLeaf(option) && !props.checkStrictly) {
+  // Non-leaf nodes act as group headers (expand/collapse only) unless selectable
+  if (!isLeaf(option) && !props.parentSelectable) {
     toggleExpand(option.value)
     return
   }
@@ -187,15 +220,11 @@ function selectNode(option: TreeSelectOption) {
     // Bridge to form-item validation rules with trigger: 'change'
     formItem?.validate('change')
   } else {
-    if (props.checkStrictly || isLeaf(option)) {
-      emit('update:modelValue', option.value)
-      emit('change', option.value)
-      // Bridge to form-item validation rules with trigger: 'change'
-      formItem?.validate('change')
-      closeDropdown()
-    } else {
-      toggleExpand(option.value)
-    }
+    emit('update:modelValue', option.value)
+    emit('change', option.value)
+    // Bridge to form-item validation rules with trigger: 'change'
+    formItem?.validate('change')
+    closeDropdown()
   }
 }
 
@@ -206,6 +235,7 @@ function toggleDropdown() {
   } else {
     visible.value = true
     isFocused.value = true
+    dropdownZIndex.value = nextZIndex()
     if (expandedKeys.value.size === 0) {
       props.data.forEach((opt) => {
         if (opt.children && opt.children.length > 0) expandedKeys.value.add(opt.value)
@@ -320,38 +350,41 @@ defineExpose({
       </span>
     </div>
 
-    <!-- Dropdown -->
-    <transition name="zc-tree-select-dropdown">
-      <div v-show="visible" ref="dropdownRef" :style="dropdownStyles" :class="ns.e('dropdown')">
-        <div v-if="filterable" :class="ns.e('search')">
-          <input
-            :class="ns.e('search-input')"
-            type="text"
-            :placeholder="searchPlaceholderText"
-            :value="searchText"
-            @input="handleSearchInput"
-          />
-        </div>
+    <!-- Dropdown (teleported to body so it is not clipped by overflow ancestors) -->
+    <Teleport to="body" :disabled="!teleport">
+      <transition name="zc-tree-select-dropdown">
+        <div v-show="visible" ref="dropdownRef" :style="dropdownStyle" :class="ns.e('dropdown')">
+          <div v-if="filterable" :class="ns.e('search')">
+            <input
+              :class="ns.e('search-input')"
+              type="text"
+              :placeholder="searchPlaceholderText"
+              :value="searchText"
+              @input="handleSearchInput"
+            />
+          </div>
 
-        <div :class="ns.e('tree')">
-          <ZcTreeSelectNode
-            v-for="option in filteredData"
-            :key="String(option.value)"
-            :node="option"
-            :level="0"
-            :expanded-keys="expandedKeys"
-            :selected-value="
-              multiple ? undefined : Array.isArray(modelValue) ? undefined : modelValue
-            "
-            :checked-values="multiple ? (Array.isArray(modelValue) ? modelValue : []) : []"
-            :multiple="multiple"
-            @toggle-expand="toggleExpand"
-            @select="selectNode"
-          />
-          <div v-if="filteredData.length === 0" :class="ns.e('empty')">{{ noDataText }}</div>
+          <div :class="ns.e('tree')">
+            <ZcTreeSelectNode
+              v-for="option in filteredData"
+              :key="String(option.value)"
+              :node="option"
+              :level="0"
+              :expanded-keys="expandedKeys"
+              :selected-value="
+                multiple ? undefined : Array.isArray(modelValue) ? undefined : modelValue
+              "
+              :checked-values="multiple ? (Array.isArray(modelValue) ? modelValue : []) : []"
+              :multiple="multiple"
+              :parent-selectable="parentSelectable"
+              @toggle-expand="toggleExpand"
+              @select="selectNode"
+            />
+            <div v-if="filteredData.length === 0" :class="ns.e('empty')">{{ noDataText }}</div>
+          </div>
         </div>
-      </div>
-    </transition>
+      </transition>
+    </Teleport>
   </div>
 </template>
 
@@ -541,7 +574,9 @@ defineExpose({
   user-select: none;
 }
 
-.zc-tree-select__node-content {
+/* tree-node.vue renders these elements in a child scope (no data-v of this
+ * component), so they must be reached via :deep() or scoped styles won't match */
+:deep(.zc-tree-select__node-content) {
   display: flex;
   align-items: center;
   height: 32px;
@@ -553,21 +588,32 @@ defineExpose({
   box-sizing: border-box;
 }
 
-.zc-tree-select__node-content:hover {
+:deep(.zc-tree-select__node-content:hover) {
   background: var(--color-zc-fill-light, #f5f7fa);
 }
 
-.zc-tree-select__node.is-selected > .zc-tree-select__node-content {
+.zc-tree-select__node.is-selected > :deep(.zc-tree-select__node-content) {
   color: var(--color-zc-primary-500, #409eff);
   font-weight: 600;
 }
 
-.zc-tree-select__node.is-disabled > .zc-tree-select__node-content {
+.zc-tree-select__node.is-disabled > :deep(.zc-tree-select__node-content) {
   color: var(--color-zc-text-placeholder, #a8abb2);
   cursor: not-allowed;
 }
 
-.zc-tree-select__node.is-disabled > .zc-tree-select__node-content:hover {
+/* Group-header parent nodes (parentSelectable=false): label-only header look */
+.zc-tree-select__node.is-group > :deep(.zc-tree-select__node-content) {
+  color: var(--color-zc-text-secondary, #909399);
+  font-weight: 600;
+}
+
+.zc-tree-select__node.is-group.is-expanded > :deep(.zc-tree-select__node-content:hover),
+.zc-tree-select__node.is-group > :deep(.zc-tree-select__node-content:hover) {
+  color: var(--color-zc-text-secondary, #909399);
+}
+
+.zc-tree-select__node.is-disabled > :deep(.zc-tree-select__node-content:hover) {
   background: transparent;
 }
 
@@ -585,12 +631,12 @@ defineExpose({
   background: var(--color-zc-fill-light, #f5f7fa);
 }
 
-.zc-tree-select__virtual-tree .zc-tree-select__node-label.is-selected {
+.zc-tree-select__virtual-tree :deep(.zc-tree-select__node-label.is-selected) {
   color: var(--color-zc-primary-500, #409eff);
   font-weight: 600;
 }
 
-.zc-tree-select__node-expand {
+:deep(.zc-tree-select__node-expand) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -601,11 +647,11 @@ defineExpose({
   flex-shrink: 0;
 }
 
-.zc-tree-select__node-expand.is-leaf {
+:deep(.zc-tree-select__node-expand.is-leaf) {
   visibility: hidden;
 }
 
-.zc-tree-select__node-checkbox {
+:deep(.zc-tree-select__node-checkbox) {
   display: inline-flex;
   align-items: center;
   margin-right: 6px;
@@ -613,11 +659,11 @@ defineExpose({
   flex-shrink: 0;
 }
 
-.zc-tree-select__node-checkbox.is-checked {
+:deep(.zc-tree-select__node-checkbox.is-checked) {
   color: var(--color-zc-primary-500, #409eff);
 }
 
-.zc-tree-select__node-label {
+:deep(.zc-tree-select__node-label) {
   flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;

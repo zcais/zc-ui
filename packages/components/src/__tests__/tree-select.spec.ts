@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest'
+import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 import TreeSelect from '../tree-select/tree-select.vue'
 
@@ -63,7 +64,7 @@ describe('ZcTreeSelect', () => {
   })
 
   it('opens dropdown on click', async () => {
-    const wrapper = mount(TreeSelect, { props: { data: mockData } })
+    const wrapper = mount(TreeSelect, { props: { data: mockData, teleport: false } })
     await wrapper.find('.zc-tree-select__wrapper').trigger('click')
     expect(wrapper.find('.zc-tree-select__dropdown').exists()).toBe(true)
   })
@@ -82,7 +83,7 @@ describe('ZcTreeSelect', () => {
   })
 
   it('renders tree nodes when open', async () => {
-    const wrapper = mount(TreeSelect, { props: { data: mockData } })
+    const wrapper = mount(TreeSelect, { props: { data: mockData, teleport: false } })
     await wrapper.find('.zc-tree-select__wrapper').trigger('click')
     const nodes = wrapper.findAll('.zc-tree-select__node')
     // Should have at least root nodes
@@ -91,7 +92,7 @@ describe('ZcTreeSelect', () => {
 
   it('shows search input when filterable', async () => {
     const wrapper = mount(TreeSelect, {
-      props: { data: mockData, filterable: true },
+      props: { data: mockData, filterable: true, teleport: false },
     })
     await wrapper.find('.zc-tree-select__wrapper').trigger('click')
     expect(wrapper.find('.zc-tree-select__search').exists()).toBe(true)
@@ -143,8 +144,111 @@ describe('ZcTreeSelect', () => {
   })
 
   it('shows empty state when no data', async () => {
-    const wrapper = mount(TreeSelect, { props: { data: [] } })
+    const wrapper = mount(TreeSelect, { props: { data: [], teleport: false } })
     await wrapper.find('.zc-tree-select__wrapper').trigger('click')
     expect(wrapper.find('.zc-tree-select__empty').exists()).toBe(true)
+  })
+})
+
+describe('ZcTreeSelect — dropdown teleport', () => {
+  it('teleports dropdown to body by default (avoids overflow clipping)', async () => {
+    const wrapper = mount(TreeSelect, {
+      props: { data: mockData },
+      attachTo: document.body,
+    })
+    await wrapper.find('.zc-tree-select__wrapper').trigger('click')
+    await nextTick()
+    // Dropdown should be in document.body, not inside the component container
+    expect(wrapper.find('.zc-tree-select__dropdown').exists()).toBe(false)
+    const bodyDropdowns = document.body.querySelectorAll('.zc-tree-select__dropdown')
+    expect(bodyDropdowns.length).toBeGreaterThan(0)
+    wrapper.unmount()
+  })
+
+  it('renders dropdown inline when teleport=false', async () => {
+    const wrapper = mount(TreeSelect, {
+      props: { data: mockData, teleport: false },
+    })
+    await wrapper.find('.zc-tree-select__wrapper').trigger('click')
+    expect(wrapper.find('.zc-tree-select__dropdown').exists()).toBe(true)
+  })
+})
+
+describe('ZcTreeSelect — parentSelectable', () => {
+  const findNodeByLabel = (wrapper: ReturnType<typeof mount>, label: string) =>
+    wrapper.findAll('.zc-tree-select__node-content').find((n) => n.text().includes(label))
+
+  it('parents are group headers by default: click expands instead of selecting', async () => {
+    const wrapper = mount(TreeSelect, {
+      props: { data: mockData, teleport: false },
+    })
+    await wrapper.find('.zc-tree-select__wrapper').trigger('click')
+
+    const rootNode = findNodeByLabel(wrapper, 'Node 1')
+    expect(rootNode).toBeTruthy()
+    await rootNode!.trigger('click')
+
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+    expect(wrapper.emitted('change')).toBeUndefined()
+    // Root node should be expanded now (default-open state toggled to collapsed
+    // and back — either way no selection happened)
+    expect(wrapper.find('.zc-tree-select__node.is-group').exists()).toBe(true)
+    wrapper.unmount()
+  })
+
+  it('hides checkboxes on group-header parents in multiple mode', async () => {
+    const wrapper = mount(TreeSelect, {
+      props: { data: mockData, multiple: true, teleport: false },
+    })
+    await wrapper.find('.zc-tree-select__wrapper').trigger('click')
+
+    // Roots (Node 1 / Node 2) are group headers — no checkbox
+    // Their children (expanded by default) — have checkboxes
+    const nodes = wrapper.findAll('.zc-tree-select__node')
+    const groupNodes = nodes.filter((n) => n.classes().includes('is-group'))
+    const leafNodes = nodes.filter((n) => n.classes().includes('is-leaf'))
+    // root1, child1-1 (has children), root2 are group headers
+    expect(groupNodes.length).toBe(3)
+    for (const g of groupNodes) {
+      // Query the node's own content row (children nest inside the node div)
+      const ownCheckbox = g.element.querySelector(
+        ':scope > .zc-tree-select__node-content > .zc-tree-select__node-checkbox'
+      )
+      expect(ownCheckbox).toBeNull()
+    }
+    expect(leafNodes.length).toBeGreaterThan(0)
+    for (const l of leafNodes) {
+      const ownCheckbox = l.element.querySelector(
+        ':scope > .zc-tree-select__node-content > .zc-tree-select__node-checkbox'
+      )
+      expect(ownCheckbox).not.toBeNull()
+    }
+    wrapper.unmount()
+  })
+
+  it('parentSelectable=true allows selecting a parent node', async () => {
+    const wrapper = mount(TreeSelect, {
+      props: { data: mockData, parentSelectable: true, checkStrictly: true, teleport: false },
+    })
+    await wrapper.find('.zc-tree-select__wrapper').trigger('click')
+
+    const rootNode = findNodeByLabel(wrapper, 'Node 1')
+    await rootNode!.trigger('click')
+
+    expect(wrapper.emitted('update:modelValue')?.[0]).toEqual(['root1'])
+    wrapper.unmount()
+  })
+
+  it('parent nodes are expandable via the arrow even when acting as group headers', async () => {
+    const wrapper = mount(TreeSelect, {
+      props: { data: mockData, teleport: false },
+    })
+    await wrapper.find('.zc-tree-select__wrapper').trigger('click')
+
+    const arrow = wrapper.find('.zc-tree-select__node:not(.is-leaf) .zc-tree-select__node-expand')
+    await arrow.trigger('click')
+    // Collapsing root1 hides its subtree: roots + root2's child remain
+    expect(wrapper.findAll('.zc-tree-select__node').length).toBe(3)
+    wrapper.unmount()
   })
 })
