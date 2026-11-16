@@ -108,14 +108,14 @@
 ### Splitter Props
 
 <ApiTable type="props" :data="[
-{ name: 'direction', description: '分割方向', type: '`'horizontal' \', default: ''vertical'`' },
+{ name: 'direction', description: '分割方向', type: '\'horizontal\' | \'vertical\'', default: '\'horizontal\'' },
 { name: 'sizes', description: '各面板初始尺寸（百分比）', type: 'number[]', default: '[50, 50]' },
 { name: 'minSizes', description: '各面板最小尺寸（百分比）', type: 'number[]', default: '[]' },
 { name: 'maxSizes', description: '各面板最大尺寸（百分比）', type: 'number[]', default: '[]' },
 { name: 'gutterSize', description: '分隔条宽度（px）', type: 'number', default: '6' },
 { name: 'collapsible', description: '是否支持双击折叠', type: 'boolean', default: 'false' },
 { name: 'disabled', description: '是否禁用拖拽', type: 'boolean', default: 'false' },
-{ name: 'showGutterHandle', description: '是否显示分隔条指示器', type: 'boolean', default: 'true' }
+{ name: 'showGutterHandle', description: '是否显示分隔条指示器', type: 'boolean', default: 'true' },
 ]" />
 
 ### Splitter Events

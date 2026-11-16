@@ -121,8 +121,8 @@ const RiskyComponent = defineComponent({
 <ApiTable type="props" :data="[
 { name: 'catchErrors', description: '是否捕获错误（false 时透传）', type: 'boolean', default: 'true' },
 { name: 'showDetails', description: '是否显示错误详情折叠', type: 'boolean', default: '开发环境为 true，生产环境 false' },
-{ name: 'errorTitle', description: '错误标题', type: 'string', default: ''Something went wrong'' },
-{ name: 'errorDescription', description: '错误描述', type: 'string', default: '''' }
+{ name: 'errorTitle', description: '错误标题', type: 'string', default: '\'Something went wrong\'' },
+{ name: 'errorDescription', description: '错误描述', type: 'string', default: '\'\'' },
 ]" />
 
 ### ErrorBoundary Events

@@ -285,16 +285,16 @@ const fill = ref(true)
 ## Space API
 
 <ApiTable type="props" :data="[
-  { name: 'direction', description: '排列的方向', type: 'horizontal | vertical', default: 'horizontal' },
-  { name: 'alignment', description: '对齐的方式', type: ''start | end | center | baseline | stretch | flex' 对应值', default: 'center' },
-  { name: 'class', description: 'className', type: 'string / object / array', default: '—' },
-  { name: 'style', description: '额外样式', type: 'string / object', default: '—' },
-  { name: 'spacer', description: '间隔符', type: 'string / number / VNode', default: '—' },
-  { name: 'size', description: '间隔大小', type: 'small | medium | large | number | [number, number]', default: 'medium' },
-  { name: 'wrap', description: '设置是否自动折行', type: 'boolean', default: 'false' },
-  { name: 'fill', description: '子元素是否填充父容器', type: 'boolean', default: 'false' },
-  { name: 'fillRatio', description: '填充父容器的比例', type: 'number', default: '100' },
-  { name: 'tag', description: '自定义根元素标签', type: 'string', default: 'div' }
+{ name: 'direction', description: '排列的方向', type: 'horizontal | vertical', default: 'horizontal' },
+{ name: 'alignment', description: '对齐的方式', type: '\'start\' | \'end\' | \'center\' | \'baseline\' | \'stretch\' | flex 对应值', default: 'center' },
+{ name: 'class', description: 'className', type: 'string / object / array', default: '—' },
+{ name: 'style', description: '额外样式', type: 'string / object', default: '—' },
+{ name: 'spacer', description: '间隔符', type: 'string / number / VNode', default: '—' },
+{ name: 'size', description: '间隔大小', type: 'small | medium | large | number | [number, number]', default: 'medium' },
+{ name: 'wrap', description: '设置是否自动折行', type: 'boolean', default: 'false' },
+{ name: 'fill', description: '子元素是否填充父容器', type: 'boolean', default: 'false' },
+{ name: 'fillRatio', description: '填充父容器的比例', type: 'number', default: '100' },
+{ name: 'tag', description: '自定义根元素标签', type: 'string', default: 'div' },
 ]" />
 
 ### Slots

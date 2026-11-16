@@ -240,17 +240,17 @@ const { size, locale, zIndex } = useGlobalConfig()
 ### Props
 
 <ApiTable type="props" :data="[
-  { name: 'size', description: '全局组件尺寸', type: ''large | medium | small | mini'', default: '—' },
-  { name: 'locale', description: '国际化语言代码', type: 'string', default: '—' },
-  { name: 'zIndex', description: '弹层 z-index 起始值', type: 'number', default: '—' },
-  { name: 'namespace', description: 'CSS 类名命名空间前缀', type: 'string', default: 'zc' },
-  { name: 'brandColors', description: '品牌色覆盖（自动生成完整色阶）', type: 'Record<string, string>', default: '—' },
-  { name: 'themeVariables', description: '全局 CSS 变量覆盖', type: 'ThemeVariables', default: '—' },
-  { name: 'themeOverrides', description: '组件级 CSS 变量覆写', type: 'ComponentThemeOverrides', default: '—' },
-  { name: 'button', description: '按钮默认配置', type: 'ButtonConfig', default: '—' },
-  { name: 'message', description: '消息提示默认配置', type: 'MessageConfig', default: '—' },
-  { name: 'notification', description: '通知默认配置', type: 'NotificationConfig', default: '—' },
-  { name: 'as', description: '渲染为的 HTML 标签（不设置则为无渲染模式）', type: 'string', default: '—' },
+{ name: 'size', description: '全局组件尺寸', type: '\'large\' | \'medium\' | \'small\' | \'mini\'', default: '—' },
+{ name: 'locale', description: '国际化语言代码', type: 'string', default: '—' },
+{ name: 'zIndex', description: '弹层 z-index 起始值', type: 'number', default: '—' },
+{ name: 'namespace', description: 'CSS 类名命名空间前缀', type: 'string', default: '\'zc\'' },
+{ name: 'brandColors', description: '品牌色覆盖（自动生成完整色阶）', type: 'Record<string, string>', default: '—' },
+{ name: 'themeVariables', description: '全局 CSS 变量覆盖', type: 'ThemeVariables', default: '—' },
+{ name: 'themeOverrides', description: '组件级 CSS 变量覆写', type: 'ComponentThemeOverrides', default: '—' },
+{ name: 'button', description: '按钮默认配置', type: 'ButtonConfig', default: '—' },
+{ name: 'message', description: '消息提示默认配置', type: 'MessageConfig', default: '—' },
+{ name: 'notification', description: '通知默认配置', type: 'NotificationConfig', default: '—' },
+{ name: 'as', description: '渲染为的 HTML 标签（不设置则为无渲染模式）', type: 'string', default: '—' },
 ]" />
 
 ### ButtonConfig
@@ -270,9 +270,9 @@ const { size, locale, zIndex } = useGlobalConfig()
 ### NotificationConfig
 
 <ApiTable type="props" :data="[
-  { name: 'max', description: '同时显示的最大数量', type: 'number', default: '—' },
-  { name: 'duration', description: '默认关闭时间（毫秒）', type: 'number', default: '—' },
-  { name: 'position', description: '默认显示位置', type: ''top-right | top-left | bottom-right | bottom-left'', default: '—' },
+{ name: 'max', description: '同时显示的最大数量', type: 'number', default: '—' },
+{ name: 'duration', description: '默认关闭时间（毫秒）', type: 'number', default: '—' },
+{ name: 'position', description: '默认显示位置', type: '\'top-right\' | \'top-left\' | \'bottom-right\' | \'bottom-left\'', default: '—' },
 ]" />
 
 ### Slots

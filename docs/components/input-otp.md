@@ -98,16 +98,16 @@ const onComplete = (val) => console.log('完成:', val)
 ### InputOTP Props
 
 <ApiTable type="props" :data="[
-{ name: 'modelValue', description: '绑定值', type: 'string', default: '''' },
+{ name: 'modelValue', description: '绑定值', type: 'string', default: '\'\'' },
 { name: 'length', description: '输入框数量', type: 'number', default: '6' },
-{ name: 'size', description: '尺寸', type: '`'large' \', default: ''medium' \' },
+{ name: 'size', description: '尺寸', type: '\'large\' | \'medium\' | \'small\'', default: '\'medium\'' },
 { name: 'masked', description: '是否密码模式', type: 'boolean', default: 'false' },
-{ name: 'placeholder', description: '占位文本', type: 'string', default: '''' },
+{ name: 'placeholder', description: '占位文本', type: 'string', default: '\'\'' },
 { name: 'disabled', description: '是否禁用', type: 'boolean', default: 'false' },
 { name: 'readonly', description: '是否只读', type: 'boolean', default: 'false' },
 { name: 'numericOnly', description: '是否仅允许数字', type: 'boolean', default: 'false' },
 { name: 'autofocus', description: '是否自动聚焦', type: 'boolean', default: 'false' },
-{ name: 'separator', description: '输入框之间的分隔符', type: 'string', default: '''' }
+{ name: 'separator', description: '输入框之间的分隔符', type: 'string', default: '\'\'' },
 ]" />
 
 ### InputOTP Events

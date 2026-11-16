@@ -6,7 +6,7 @@ import ComponentOverview from './components/ComponentOverview.vue'
 import IconGallery from './components/IconGallery.vue'
 import ZcIconName from './components/ZcIconName.vue'
 import DesignTokenPage from './components/DesignTokenPage.vue'
-import ZcUI, { ZcLoadingDirective } from '@zc-ui/components'
+import ZcUI, { ZcLoadingDirective, ZcInfiniteScrollDirective } from '@zc-ui/components'
 import './styles.css'
 
 export default {
@@ -14,8 +14,9 @@ export default {
   enhanceApp({ app }) {
     // Register all Zc UI components globally
     app.use(ZcUI)
-    // Register the v-loading directive
+    // Register the v-loading / v-infinite-scroll directives
     app.directive('loading', ZcLoadingDirective)
+    app.directive('infinite-scroll', ZcInfiniteScrollDirective)
     // Register documentation helper components
     app.component('DemoBlock', DemoBlock)
     app.component('ApiTable', ApiTable)

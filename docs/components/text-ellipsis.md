@@ -76,13 +76,13 @@
 ### TextEllipsis Props
 
 <ApiTable type="props" :data="[
-{ name: 'content', description: '文本内容', type: 'string', default: '''' },
+{ name: 'content', description: '文本内容', type: 'string', default: '\'\'' },
 { name: 'lines', description: '最大行数（0=单行省略）', type: 'number', default: '0' },
 { name: 'showTooltip', description: '是否显示悬浮提示', type: 'boolean', default: 'true' },
-{ name: 'placement', description: '提示框位置', type: '`'top' \', default: ''bottom' \' },
+{ name: 'placement', description: '提示框位置', type: '\'top\' | \'bottom\' | \'left\' | \'right\'', default: '\'top\'' },
 { name: 'expandable', description: '是否显示展开/收起按钮', type: 'boolean', default: 'false' },
-{ name: 'ellipsis', description: '自定义省略符号', type: 'string', default: ''…'' },
-{ name: 'tooltipClass', description: '提示框自定义类名', type: 'string', default: '''' }
+{ name: 'ellipsis', description: '自定义省略符号', type: 'string', default: '\'…\'' },
+{ name: 'tooltipClass', description: '提示框自定义类名', type: 'string', default: '\'\'' },
 ]" />
 
 ### TextEllipsis Events

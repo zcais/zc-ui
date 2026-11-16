@@ -10,7 +10,7 @@
 
 ```vue
 <script setup>
-import { ZcMessageBox } from 'zc-ui'
+import { ZcMessageBox } from '@zc-ui/components'
 
 async function showAlert() {
   await ZcMessageBox.alert('操作成功完成', '提示')
@@ -32,7 +32,7 @@ async function showAlert() {
 
 ```vue
 <script setup>
-import { ZcMessageBox, ZcMessage } from 'zc-ui'
+import { ZcMessageBox, ZcMessage } from '@zc-ui/components'
 
 async function showConfirm() {
   try {
@@ -63,7 +63,7 @@ async function showConfirm() {
 
 ```vue
 <script setup>
-import { ZcMessageBox, ZcMessage } from 'zc-ui'
+import { ZcMessageBox, ZcMessage } from '@zc-ui/components'
 
 async function showPrompt() {
   try {

@@ -30,28 +30,29 @@ const dialogVisible = ref(false)
 
 <DemoBlock>
 
-````vue
+```vue
 <template>
   <ZcButton @click="openDialog('small')">小尺寸</ZcButton>
-    <ZcButton @click="openDialog('medium')">中等尺寸</ZcButton>
-      <ZcButton @click="openDialog('large')">大尺寸</ZcButton>
-      <ZcButton @click="openDialog('full')">全屏</ZcButton>
-    <ZcDialog v-model="visible" :size="size" title="对话框尺寸">
+  <ZcButton @click="openDialog('medium')">中等尺寸</ZcButton>
+  <ZcButton @click="openDialog('large')">大尺寸</ZcButton>
+  <ZcButton @click="openDialog('full')">全屏</ZcButton>
+  <ZcDialog v-model="visible" :size="size" title="对话框尺寸">
     <p>当前尺寸：{{ size }}</p>
   </ZcDialog>
-  </template>
+</template>
 
-      <script setup>
-      import { ref } from 'vue'
-    const visible = ref(false)
-    const size = ref('medium')
+<script setup>
+import { ref } from 'vue'
+const visible = ref(false)
+const size = ref('medium')
 
-  function openDialog(s) {
-    size.value = s
-      visible.value = true
-      }
-    </script>
-    ```
+function openDialog(s) {
+  size.value = s
+  visible.value = true
+}
+</script>
+```
+
 </DemoBlock>
 
 ## 自定义宽度
@@ -72,7 +73,7 @@ const dialogVisible = ref(false)
 import { ref } from 'vue'
 const visible = ref(false)
 </script>
-````
+```
 
 </DemoBlock>
 

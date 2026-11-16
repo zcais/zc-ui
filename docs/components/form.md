@@ -301,13 +301,13 @@ interface UseFormArrayReturn<T> {
 <ApiTable type="props" :data="[
 { name: 'model', description: '表单数据对象', type: 'Record<string, unknown>', default: '—' },
 { name: 'rules', description: '表单校验规则', type: 'FormRules', default: '{}' },
-{ name: 'labelWidth', description: '标签宽度', type: 'string | number', default: '' },
+{ name: 'labelWidth', description: '标签宽度', type: 'string | number' },
 { name: 'labelPosition', description: '标签对齐方式', type: 'left | right | top', default: 'right' },
 { name: 'showMessage', description: '是否显示校验错误信息', type: 'boolean', default: 'true' },
 { name: 'inline', description: '是否行内排列', type: 'boolean', default: 'false' },
 { name: 'validateOnValueChange', description: '是否在值变化时自动校验（Watch 模式）', type: 'boolean', default: 'true' },
 { name: 'disabled', description: '表单级禁用状态（内部所有控件渲染各自的禁用态）', type: 'boolean', default: 'false' },
-{ name: 'size', description: '表单级尺寸（内部所有控件的默认尺寸）', type: "'large' | 'medium' | 'small' | 'mini'", default: '—' }
+{ name: 'size', description: '表单级尺寸（内部所有控件的默认尺寸）', type: '\'large\' | \'medium\' | \'small\' | \'mini\'', default: '—' },
 ]" />
 
 ### Form Events
@@ -333,10 +333,10 @@ interface UseFormArrayReturn<T> {
 { name: 'label', description: '标签文本', type: 'string', default: '—' },
 { name: 'labelWidth', description: '标签宽度覆盖', type: 'string | number', default: '—' },
 { name: 'rules', description: '自定义校验规则', type: 'FormItemRule | FormItemRule[]', default: '—' },
-{ name: 'required', description: '是否必填（显示 \* 号）', type: 'boolean', default: 'false' },
+{ name: 'required', description: '是否必填（显示 * 号）', type: 'boolean', default: 'false' },
 { name: 'showMessage', description: '是否显示错误信息', type: 'boolean', default: 'true' },
 { name: 'disabled', description: '是否禁用（内部控件渲染各自的禁用态）', type: 'boolean', default: 'false' },
-{ name: 'size', description: '尺寸覆盖（优先级高于 Form 的 size）', type: "'large' | 'medium' | 'small' | 'mini'", default: '—' }
+{ name: 'size', description: '尺寸覆盖（优先级高于 Form 的 size）', type: '\'large\' | \'medium\' | \'small\' | \'mini\'', default: '—' },
 ]" />
 
 ### FormItem Slots
@@ -350,6 +350,6 @@ interface UseFormArrayReturn<T> {
 ### FormItem 暴露的方法
 
 <ApiTable type="methods" :data="[
-{ name: 'validate', description: '触发该项校验，可传 trigger 过滤规则', type: "(trigger?: 'blur' | 'change') => Promise<FormItemValidationResult>", default: '—' },
-{ name: 'clearValidate', description: '清除该项校验状态', type: '() => void', default: '—' }
+{ name: 'validate', description: '触发该项校验，可传 trigger 过滤规则', type: '(trigger?: \'blur\' | \'change\') => Promise<FormItemValidationResult>', default: '—' },
+{ name: 'clearValidate', description: '清除该项校验状态', type: '() => void', default: '—' },
 ]" />

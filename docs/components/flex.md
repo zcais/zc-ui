@@ -328,13 +328,13 @@ Flex 组件的属性可以自由组合，实现复杂的布局需求。
 ### Props
 
 <ApiTable type="props" :data="[
-  { name: 'vertical', description: '垂直方向排列（flex-direction: column）', type: 'boolean', default: 'false' },
-  { name: 'justify', description: '主轴对齐方式', type: ''flex-start | center | flex-end | space-between | space-around | space-evenly'', default: 'flex-start' },
-  { name: 'align', description: '交叉轴对齐方式', type: ''flex-start | center | flex-end | stretch | baseline'', default: 'flex-start' },
-  { name: 'wrap', description: '换行方式', type: ''wrap | nowrap | wrap-reverse'', default: 'nowrap' },
-  { name: 'gap', description: '子元素间距，支持预设值或像素数值', type: ''small | middle | large | number'', default: '0' },
-  { name: 'flex', description: 'CSS flex 简写，用于嵌套布局中按比例分配空间', type: 'string | number', default: '—' },
-  { name: 'tag', description: '自定义根元素标签', type: 'string', default: 'div' }
+{ name: 'vertical', description: '垂直方向排列（flex-direction: column）', type: 'boolean', default: 'false' },
+{ name: 'justify', description: '主轴对齐方式', type: '\'flex-start\' | \'center\' | \'flex-end\' | \'space-between\' | \'space-around\' | \'space-evenly\'', default: '\'flex-start\'' },
+{ name: 'align', description: '交叉轴对齐方式', type: '\'flex-start\' | \'center\' | \'flex-end\' | \'stretch\' | \'baseline\'', default: '\'flex-start\'' },
+{ name: 'wrap', description: '换行方式', type: '\'wrap\' | \'nowrap\' | \'wrap-reverse\'', default: '\'nowrap\'' },
+{ name: 'gap', description: '子元素间距，支持预设值或像素数值', type: '\'small\' | \'middle\' | \'large\' | number', default: '0' },
+{ name: 'flex', description: 'CSS flex 简写，用于嵌套布局中按比例分配空间', type: 'string | number', default: '—' },
+{ name: 'tag', description: '自定义根元素标签', type: 'string', default: '\'div\'' },
 ]" />
 
 ### Slots

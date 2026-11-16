@@ -114,18 +114,18 @@
 ### StatisticCard Props
 
 <ApiTable type="props" :data="[
-{ name: 'title', description: '卡片标题', type: 'string', default: '''' },
-{ name: 'value', description: '数值', type: '`number \', default: 'string`' },
-{ name: 'prefix', description: '前缀（如货币符号）', type: 'string', default: '''' },
-{ name: 'suffix', description: '后缀（如单位）', type: 'string', default: '''' },
-{ name: 'trend', description: '趋势方向', type: '`'up' \', default: ''down' \' },
-{ name: 'trendValue', description: '趋势百分比（如 12.5 表示 +12.5%）', type: 'number', default: '—' },
-{ name: 'trendLabel', description: '趋势标签文字', type: 'string', default: ''vs last period'' },
+{ name: 'title', description: '卡片标题', type: 'string', default: '\'\'' },
+{ name: 'value', description: '数值', type: 'number | string', default: '\'\'' },
+{ name: 'prefix', description: '前缀（如货币符号）', type: 'string', default: '\'\'' },
+{ name: 'suffix', description: '后缀（如单位）', type: 'string', default: '\'\'' },
+{ name: 'trend', description: '趋势方向', type: '\'up\' | \'down\' | \'none\'', default: '\'none\'' },
+{ name: 'trendValue', description: '趋势百分比（如 12.5 表示 +12.5%）', type: 'number' },
+{ name: 'trendLabel', description: '趋势标签文字', type: 'string', default: '\'vs last period\'' },
 { name: 'decimals', description: '小数位数', type: 'number', default: '0' },
 { name: 'separator', description: '是否显示千分位分隔符', type: 'boolean', default: 'true' },
 { name: 'loading', description: '是否加载中', type: 'boolean', default: 'false' },
 { name: 'bordered', description: '是否显示边框', type: 'boolean', default: 'true' },
-{ name: 'padding', description: '卡片内边距（px）', type: 'number', default: '20' }
+{ name: 'padding', description: '卡片内边距（px）', type: 'number', default: '20' },
 ]" />
 
 ### StatisticCard Events

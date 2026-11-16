@@ -129,18 +129,18 @@ const code = `<div class="card">
 ### CodeBlock Props
 
 <ApiTable type="props" :data="[
-{ name: 'code', description: '代码内容', type: 'string', default: '''' },
-{ name: 'language', description: '编程语言', type: 'string', default: ''text'' },
-{ name: 'theme', description: '主题', type: '`'light' \', default: ''dark'`' },
+{ name: 'code', description: '代码内容', type: 'string', default: '\'\'' },
+{ name: 'language', description: '编程语言', type: 'string', default: '\'text\'' },
+{ name: 'theme', description: '主题', type: '\'light\' | \'dark\'', default: '\'light\'' },
 { name: 'showLineNumbers', description: '是否显示行号', type: 'boolean', default: 'false' },
 { name: 'showCopy', description: '是否显示复制按钮', type: 'boolean', default: 'true' },
 { name: 'showLanguage', description: '是否显示语言标签', type: 'boolean', default: 'true' },
 { name: 'showHeader', description: '是否显示头部栏', type: 'boolean', default: 'true' },
 { name: 'startLineNumber', description: '起始行号', type: 'number', default: '1' },
-{ name: 'maxHeight', description: '最大高度（超出滚动）', type: 'string', default: '—' },
+{ name: 'maxHeight', description: '最大高度（超出滚动）', type: 'string' },
 { name: 'fontSize', description: '字体大小（px）', type: 'number', default: '13' },
-{ name: 'copyText', description: '复制按钮文字', type: 'string', default: ''复制'' },
-{ name: 'copiedText', description: '复制成功提示文字', type: 'string', default: ''已复制'' }
+{ name: 'copyText', description: '复制按钮文字', type: 'string', default: '\'复制\'' },
+{ name: 'copiedText', description: '复制成功提示文字', type: 'string', default: '\'已复制\'' },
 ]" />
 
 ### CodeBlock Events

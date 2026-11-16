@@ -181,14 +181,14 @@ const colors = ['#409eff', '#67c23a', '#e6a23c', '#f56c6c', '#9b59b6']
 <ApiTable type="props" :data="[
 { name: 'visible (v-model)', description: '是否显示', type: 'boolean', default: 'false' },
 { name: 'actions', description: '操作项列表', type: 'ActionSheetItem[]', default: '[]' },
-{ name: 'cancelText', description: '取消按钮文字（空串隐藏）', type: 'string', default: ''Cancel'' },
-{ name: 'title', description: '标题', type: 'string', default: '''' },
-{ name: 'description', description: '描述文字', type: 'string', default: '''' },
+{ name: 'cancelText', description: '取消按钮文字（空串隐藏）', type: 'string', default: '\'Cancel\'' },
+{ name: 'title', description: '标题', type: 'string', default: '\'\'' },
+{ name: 'description', description: '描述文字', type: 'string', default: '\'\'' },
 { name: 'closeOnClickMask', description: '点击遮罩是否关闭', type: 'boolean', default: 'true' },
 { name: 'closeOnClickAction', description: '点击操作项后是否关闭', type: 'boolean', default: 'true' },
 { name: 'round', description: '是否圆角', type: 'boolean', default: 'true' },
 { name: 'zIndex', description: '层级', type: 'number', default: '2000' },
-{ name: 'lockScroll', description: '是否锁定 body 滚动', type: 'boolean', default: 'true' }
+{ name: 'lockScroll', description: '是否锁定 body 滚动', type: 'boolean', default: 'true' },
 ]" />
 
 ### ActionSheetItem

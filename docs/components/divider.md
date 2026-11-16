@@ -225,16 +225,16 @@
 ### Props
 
 <ApiTable type="props" :data="[
-  { name: 'direction', description: '分割线方向', type: ''horizontal | vertical'', default: 'horizontal' },
-  { name: 'contentPosition', description: '文字对齐（水平方向有效）', type: ''left | center | right'', default: 'center' },
-  { name: 'borderStyle', description: '线条样式', type: ''solid | dashed | dotted | double'', default: 'solid' },
-  { name: 'dashed', description: '是否为虚线（快捷设置，优先于 borderStyle）', type: 'boolean', default: 'false' },
-  { name: 'plain', description: '简洁模式，文字使用更轻的样式', type: 'boolean', default: 'false' },
-  { name: 'color', description: '自定义分割线颜色', type: 'string', default: '—' },
-  { name: 'borderWidth', description: '自定义线条粗细（如 '2px'）', type: 'string', default: '—' },
-  { name: 'margin', description: '水平分割线上下间距（如 '16px 0'）', type: 'string', default: '24px 0' },
-  { name: 'height', description: '垂直分割线高度（如 '24px'、'2em'）', type: 'string', default: '1em' },
-  { name: 'contentWidth', description: '左/右对齐时内容侧线条宽度（如 '20%'、'100px'），仅对非居中对齐生效', type: 'string', default: '5%' },
+{ name: 'direction', description: '分割线方向', type: '\'horizontal\' | \'vertical\'', default: '\'horizontal\'' },
+{ name: 'contentPosition', description: '文字对齐（水平方向有效）', type: '\'left\' | \'center\' | \'right\'', default: '\'center\'' },
+{ name: 'borderStyle', description: '线条样式', type: '\'solid\' | \'dashed\' | \'dotted\' | \'double\'', default: '\'solid\'' },
+{ name: 'dashed', description: '是否为虚线（快捷设置，优先于 borderStyle）', type: 'boolean', default: 'false' },
+{ name: 'plain', description: '简洁模式，文字使用更轻的样式', type: 'boolean', default: 'false' },
+{ name: 'color', description: '自定义分割线颜色', type: 'string', default: '—' },
+{ name: 'borderWidth', description: '自定义线条粗细（如 \'2px\'）', type: 'string', default: '—' },
+{ name: 'margin', description: '水平分割线上下间距（如 \'16px 0\'）', type: 'string', default: '24px 0' },
+{ name: 'height', description: '垂直分割线高度（如 \'24px\'、\'2em\'）', type: 'string', default: '1em' },
+{ name: 'contentWidth', description: '左/右对齐时内容侧线条宽度（如 \'20%\'、\'100px\'），仅对非居中对齐生效', type: 'string', default: '5%' },
 ]" />
 
 ### Slots

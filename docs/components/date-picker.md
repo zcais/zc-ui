@@ -98,19 +98,17 @@ const date = ref('')
 ### Props
 
 <ApiTable type="props" :data="[
-{ name: 'modelValue', description: '绑定值（value-format 设置时为格式化字符串）', type: 'Date | [Date, Date] | string | [string, string]', default: \"''\" },
-{ name: 'type', description: '选择器类型', type: 'date | daterange | datetime | datetimerange | month | year | week', default: 'date' },
+{ name: 'modelValue', description: '绑定值', type: 'Date | [Date, Date] | string' },
+{ name: 'type', description: '选择器类型', type: 'date | daterange', default: 'date' },
 { name: 'placeholder', description: '占位文本', type: 'string', default: '请选择日期' },
 { name: 'startPlaceholder', description: '范围选择时开始日期的占位文本', type: 'string', default: '开始日期' },
 { name: 'endPlaceholder', description: '范围选择时结束日期的占位文本', type: 'string', default: '结束日期' },
-{ name: 'size', description: '尺寸（默认继承 Form / ConfigProvider 的 size）', type: \"'large' | 'medium' | 'small'\", default: 'medium' },
-{ name: 'disabled', description: '是否禁用（也可由 Form / FormItem 注入）', type: 'boolean', default: 'false' },
+{ name: 'size', description: '选择器尺寸', type: 'large | medium | small', default: 'medium' },
+{ name: 'disabled', description: '是否禁用', type: 'boolean', default: 'false' },
 { name: 'clearable', description: '是否可清空', type: 'boolean', default: 'false' },
-{ name: 'format', description: '显示格式，支持令牌 YYYY / MM / DD / HH / mm / ss', type: 'string', default: 'YYYY-MM-DD' },
-{ name: 'valueFormat', description: '绑定值的格式；设置后 v-model 交换格式化字符串', type: 'string', default: '—' },
-{ name: 'editable', description: '是否允许在输入框直接键入日期（单值类型）', type: 'boolean', default: 'true' },
+{ name: 'format', description: '日期显示格式', type: 'string', default: 'YYYY-MM-DD' },
 { name: 'shortcuts', description: '快捷选项列表', type: 'DatePickerShortcut[]', default: '—' },
-{ name: 'disabledDate', description: '禁用日期判断函数（手动输入同样受其约束）', type: '(date: Date) => boolean', default: '—' }
+{ name: 'disabledDate', description: '禁用日期判断函数', type: '(date: Date) => boolean', default: '—' },
 ]" />
 
 ### Events

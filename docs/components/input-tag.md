@@ -94,15 +94,15 @@ const tags = ref(['标签1', '标签2', '标签3'])
 
 <ApiTable type="props" :data="[
 { name: 'modelValue', description: '标签数组（v-model）', type: 'string[]', default: '[]' },
-{ name: 'placeholder', description: '占位文本', type: 'string', default: ''请输入标签'' },
+{ name: 'placeholder', description: '占位文本', type: 'string', default: '\'请输入标签\'' },
 { name: 'disabled', description: '是否禁用', type: 'boolean', default: 'false' },
 { name: 'readonly', description: '是否只读', type: 'boolean', default: 'false' },
 { name: 'max', description: '最大标签数（0=不限）', type: 'number', default: '0' },
 { name: 'allowDuplicate', description: '是否允许重复', type: 'boolean', default: 'false' },
-{ name: 'trigger', description: '添加触发键', type: '`'enter' \', default: ''space' \' },
+{ name: 'trigger', description: '添加触发键', type: '\'enter\' | \'space\' | \'comma\'', default: '\'enter\'' },
 { name: 'clearable', description: '是否可清除', type: 'boolean', default: 'false' },
-{ name: 'size', description: '输入框大小', type: '`'small' \', default: ''medium' \' },
-{ name: 'closable', description: '标签是否可关闭', type: 'boolean', default: 'true' }
+{ name: 'size', description: '输入框大小', type: '\'small\' | \'medium\' | \'large\'', default: '\'medium\'' },
+{ name: 'closable', description: '标签是否可关闭', type: 'boolean', default: 'true' },
 ]" />
 
 ## 事件

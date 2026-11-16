@@ -339,9 +339,9 @@ interface SelectOptionGroup {
 { name: 'virtualScroll', description: '是否启用虚拟滚动（推荐 1000+ 选项时开启）', type: 'boolean', default: 'false' },
 { name: 'estimatedOptionHeight', description: '虚拟滚动选项的预估行高（px）', type: 'number', default: '36' },
 { name: 'placeholder', description: '占位文本', type: 'string', default: '请选择' },
-{ name: 'size', description: '尺寸（默认继承 Form / ConfigProvider 的 size）', type: "'large' | 'medium' | 'small'", default: 'medium' },
+{ name: 'size', description: '尺寸（默认继承 Form / ConfigProvider 的 size）', type: '\'large\' | \'medium\' | \'small\'', default: 'medium' },
 { name: 'noDataText', description: '无数据时显示的文本', type: 'string', default: '暂无数据' },
-{ name: 'noMatchText', description: '无匹配时显示的文本', type: 'string', default: '无匹配数据' }
+{ name: 'noMatchText', description: '无匹配时显示的文本', type: 'string', default: '无匹配数据' },
 ]" />
 
 ### Events

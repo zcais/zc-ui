@@ -120,12 +120,12 @@ const showFull = () => {
 
 <ApiTable type="props" :data="[
 { name: 'spinning', description: '是否正在加载', type: 'boolean', default: 'true' },
-{ name: 'size', description: '尺寸', type: '`'large' \', default: ''medium' \' },
-{ name: 'tip', description: '加载提示文字', type: 'string', default: '''' },
-{ name: 'color', description: '自定义旋转器颜色', type: 'string', default: '—' },
+{ name: 'size', description: '尺寸', type: '\'large\' | \'medium\' | \'small\'', default: '\'medium\'' },
+{ name: 'tip', description: '加载提示文字', type: 'string', default: '\'\'' },
+{ name: 'color', description: '自定义旋转器颜色', type: 'string' },
 { name: 'fullscreen', description: '是否全屏覆盖', type: 'boolean', default: 'false' },
 { name: 'delay', description: '加载延迟（ms）', type: 'number', default: '0' },
-{ name: 'overlay', description: '是否显示遮罩背景（包裹模式）', type: 'boolean', default: 'false' }
+{ name: 'overlay', description: '是否显示遮罩背景（包裹模式）', type: 'boolean', default: 'false' },
 ]" />
 
 ### Slots

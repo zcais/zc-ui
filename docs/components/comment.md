@@ -119,12 +119,12 @@ const likeCount = ref(42)
 ### Comment Props
 
 <ApiTable type="props" :data="[
-{ name: 'author', description: '作者名', type: 'string', default: '''' },
-{ name: 'avatar', description: '头像 URL', type: 'string', default: '''' },
-{ name: 'datetime', description: '时间文本', type: 'string', default: '''' },
-{ name: 'content', description: '评论内容（也可用默认插槽）', type: 'string', default: '''' },
+{ name: 'author', description: '作者名', type: 'string', default: '\'\'' },
+{ name: 'avatar', description: '头像 URL', type: 'string', default: '\'\'' },
+{ name: 'datetime', description: '时间文本', type: 'string', default: '\'\'' },
+{ name: 'content', description: '评论内容（也可用默认插槽）', type: 'string', default: '\'\'' },
 { name: 'nested', description: '是否显示嵌套回复区域', type: 'boolean', default: 'false' },
-{ name: 'avatarSize', description: '头像尺寸（px）', type: 'number', default: '40' }
+{ name: 'avatarSize', description: '头像尺寸（px）', type: 'number', default: '40' },
 ]" />
 
 ### Comment Events

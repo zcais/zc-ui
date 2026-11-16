@@ -118,16 +118,16 @@ const text = ref('限制长度')
 ### Editable Props
 
 <ApiTable type="props" :data="[
-{ name: 'modelValue', description: '绑定值', type: 'string', default: '''' },
-{ name: 'placeholder', description: '占位文本', type: 'string', default: ''请输入'' },
-{ name: 'mode', description: '编辑模式', type: '`'text' \', default: ''textarea'`' },
+{ name: 'modelValue', description: '绑定值', type: 'string', default: '\'\'' },
+{ name: 'placeholder', description: '占位文本', type: 'string', default: '\'请输入\'' },
+{ name: 'mode', description: '编辑模式', type: '\'text\' | \'textarea\'', default: '\'text\'' },
 { name: 'disabled', description: '是否禁用', type: 'boolean', default: 'false' },
 { name: 'showAction', description: '是否显示操作按钮', type: 'boolean', default: 'true' },
 { name: 'maxLength', description: '最大输入长度', type: 'number', default: '0' },
 { name: 'autofocus', description: '编辑时是否自动聚焦', type: 'boolean', default: 'true' },
-{ name: 'trigger', description: '触发编辑方式', type: '`'click' \', default: ''dblclick'`' },
+{ name: 'trigger', description: '触发编辑方式', type: '\'click\' | \'dblclick\'', default: '\'click\'' },
 { name: 'confirmOnBlur', description: '失焦时是否确认', type: 'boolean', default: 'true' },
-{ name: 'loading', description: '加载状态', type: 'boolean', default: 'false' }
+{ name: 'loading', description: '加载状态', type: 'boolean', default: 'false' },
 ]" />
 
 ### Editable Events

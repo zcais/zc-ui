@@ -127,16 +127,16 @@ const items = ref(
 
 <ApiTable type="props" :data="[
 { name: 'columns', description: '列数', type: 'number', default: '3' },
-{ name: 'gap', description: '项间距（数值为 px，也可传 CSS 字符串如 '1rem'）', type: '`number \', default: 'string`' },
+{ name: 'gap', description: '项间距（数值为 px，也可传 CSS 字符串如 \'1rem\'）', type: 'number | string', default: '16' },
 { name: 'useColumns', description: '是否使用 CSS columns 模式（false 为 JS 均衡）', type: 'boolean', default: 'true' },
 { name: 'breakpoints', description: '响应式断点：key 为最小宽度(px)，value 为列数', type: 'Record<number, number>', default: '—' },
-{ name: 'as', description: '容器 HTML 标签', type: 'string', default: ''div'' }
+{ name: 'as', description: '容器 HTML 标签', type: 'string', default: '\'div\'' }
 ]" />
 
 ### Masonry Events
 
 <ApiTable type="events" :data="[
-{ name: '(item: VNode, index: number)', description: '点击某项时触发' }
+{ name: 'item-click', description: '点击某项时触发', parameters: '(item: VNode, index: number)' }
 ]" />
 
 ### Masonry Methods
