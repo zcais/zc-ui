@@ -63,6 +63,7 @@ import LoadingComponent from './loading/loading.vue'
 import Menu from './menu/menu.vue'
 import MenuItem from './menu/menu-item.vue'
 import Submenu from './menu/submenu.vue'
+import MenuItemGroup from './menu/menu-item-group.vue'
 import Tabs from './tabs/tabs.vue'
 import TabPane from './tabs/tab-pane.vue'
 import Breadcrumb from './breadcrumb/breadcrumb.vue'
@@ -237,6 +238,7 @@ export const ZcLoadingComponent = withInstall(LoadingComponent, 'ZcLoading')
 export const ZcMenu = withInstall(Menu, 'ZcMenu')
 export const ZcMenuItem = withInstall(MenuItem, 'ZcMenuItem')
 export const ZcSubmenu = withInstall(Submenu, 'ZcSubmenu')
+export const ZcMenuItemGroup = withInstall(MenuItemGroup, 'ZcMenuItemGroup')
 export const ZcTabs = withInstall(Tabs, 'ZcTabs')
 export const ZcTabPane = withInstall(TabPane, 'ZcTabPane')
 export const ZcBreadcrumb = withInstall(Breadcrumb, 'ZcBreadcrumb')
@@ -422,6 +424,7 @@ export default withInstallAll({
   ZcMenu,
   ZcMenuItem,
   ZcSubmenu,
+  ZcMenuItemGroup,
   ZcTabs,
   ZcTabPane,
   ZcBreadcrumb,
@@ -662,7 +665,7 @@ export { ZcInfiniteScrollDirective } from './infinite-scroll/infinite-scroll'
 export type { InfiniteScrollOptions } from './infinite-scroll/infinite-scroll'
 
 // ---- Navigation Component Types ----
-export type { MenuMode } from './menu/types'
+export type { MenuMode, MenuTrigger, MenuPopperEffect } from './menu/types'
 export type { TabsType, TabsPosition, PaneData, TabsProps, TabsEmits } from './tabs/types'
 export type { BreadcrumbSeparator } from './breadcrumb/breadcrumb.vue'
 export type { DropdownTrigger, DropdownPlacement } from './dropdown/types'

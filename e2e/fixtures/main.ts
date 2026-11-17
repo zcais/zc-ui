@@ -15,6 +15,9 @@ import ZcCheckbox from '../../packages/components/src/checkbox/checkbox.vue'
 import ZcRadio from '../../packages/components/src/radio/radio.vue'
 import ZcPagination from '../../packages/components/src/pagination/pagination.vue'
 import { ZcMessage } from '../../packages/components/src/message/message'
+import ZcMenu from '../../packages/components/src/menu/menu.vue'
+import ZcMenuItem from '../../packages/components/src/menu/menu-item.vue'
+import ZcSubmenu from '../../packages/components/src/menu/submenu.vue'
 
 const app = createApp({
   setup() {
@@ -25,6 +28,8 @@ const app = createApp({
     const radioValue = ref('')
     const currentPage = ref(1)
     const messageShown = ref('')
+    const menuActive = ref('1')
+    const menuCollapsed = ref(true)
 
     const tableData = ref(
       Array.from({ length: 20 }, (_, i) => ({
@@ -195,6 +200,186 @@ const app = createApp({
             currentPage: currentPage.value,
             'onUpdate:currentPage': (v: number) => (currentPage.value = v),
           }),
+        ]),
+
+        // --- Menu Section ---
+        // Icons are span-wrapped (same shape as ZcIconName in the docs) to
+        // guard the collapse-mode CSS: text spans must be hidden while
+        // span-wrapped icons stay visible and centered.
+        h('section', { id: 'menu', class: 'demo-section' }, [
+          h('h2', { class: 'demo-title' }, 'Menu'),
+          h(
+            ZcMenu,
+            {
+              id: 'menu-collapsed',
+              mode: 'vertical',
+              defaultActive: menuActive.value,
+              collapse: menuCollapsed.value,
+            },
+            () => [
+              h(ZcMenuItem, { index: '1' }, () => [
+                h(
+                  'span',
+                  {
+                    id: 'menu-icon-home',
+                    style: 'width: 18px; height: 18px; display: inline-flex;',
+                    'aria-label': 'home',
+                    role: 'img',
+                  },
+                  [
+                    h(
+                      'svg',
+                      {
+                        viewBox: '0 0 24 24',
+                        fill: 'none',
+                        stroke: 'currentColor',
+                        'stroke-width': 2,
+                        style: 'width: 100%; height: 100%;',
+                      },
+                      h('path', { d: 'M3 12 L12 3 L21 12' })
+                    ),
+                  ]
+                ),
+                h('span', { class: 'menu-item-label' }, '首页'),
+              ]),
+              h(
+                ZcSubmenu,
+                { index: '2' },
+                {
+                  title: () => [
+                    h(
+                      'span',
+                      {
+                        id: 'menu-icon-star',
+                        style: 'width: 18px; height: 18px; display: inline-flex;',
+                        'aria-label': 'star',
+                        role: 'img',
+                      },
+                      [
+                        h(
+                          'svg',
+                          {
+                            viewBox: '0 0 24 24',
+                            fill: 'none',
+                            stroke: 'currentColor',
+                            'stroke-width': 2,
+                            style: 'width: 100%; height: 100%;',
+                          },
+                          h('path', {
+                            d: 'M12 2 L15 9 L22 9 L17 14 L19 21 L12 17 L5 21 L7 14 L2 9 L9 9 Z',
+                          })
+                        ),
+                      ]
+                    ),
+                    h('span', { class: 'menu-item-label' }, '管理'),
+                  ],
+                  default: () => [
+                    h(ZcMenuItem, { index: '2-1' }, () => '用户'),
+                    h(ZcMenuItem, { index: '2-2' }, () => '设置'),
+                  ],
+                }
+              ),
+            ]
+          ),
+          // Vertical expanded submenu: children must flatten into the
+          // sidebar (no card chrome) and indent by nesting depth.
+          h(
+            ZcMenu,
+            {
+              id: 'menu-expanded',
+              mode: 'vertical',
+              defaultActive: '1',
+            },
+            () => [
+              h(ZcMenuItem, { index: '1' }, () => '首页'),
+              h(
+                ZcSubmenu,
+                { index: '2' },
+                {
+                  title: () => '系统管理',
+                  default: () => [
+                    h(ZcMenuItem, { index: '2-1' }, () => '用户管理'),
+                    h(
+                      ZcSubmenu,
+                      { index: '2-2' },
+                      {
+                        title: () => '安全设置',
+                        default: () => [
+                          h(ZcMenuItem, { index: '2-2-1' }, () => '登录日志'),
+                          h(ZcMenuItem, { index: '2-2-2' }, () => '操作日志'),
+                        ],
+                      }
+                    ),
+                  ],
+                }
+              ),
+              h(ZcMenuItem, { index: '3' }, () => '数据分析'),
+            ]
+          ),
+          // Custom dark sidebar colors: text-color/active-text-color must
+          // reach submenu titles too (docs "自定义颜色" demo).
+          h(
+            ZcMenu,
+            {
+              id: 'menu-dark',
+              mode: 'vertical',
+              defaultActive: '2-1',
+              backgroundColor: '#1f2d3d',
+              textColor: '#bfcbd9',
+              activeTextColor: '#409eff',
+            },
+            () => [
+              h(ZcMenuItem, { index: '1' }, () => '首页'),
+              h(
+                ZcSubmenu,
+                { index: '2' },
+                {
+                  title: () => '系统管理',
+                  default: () => [
+                    h(ZcMenuItem, { index: '2-1' }, () => '用户管理'),
+                    h(ZcMenuItem, { index: '2-2' }, () => '角色管理'),
+                  ],
+                }
+              ),
+              h(ZcMenuItem, { index: '3' }, () => '日志'),
+            ]
+          ),
+          // Horizontal click-trigger popups: opening one submenu must close
+          // the sibling's popup so the two panels never stay open together.
+          h(
+            ZcMenu,
+            {
+              id: 'menu-horiz-click',
+              mode: 'horizontal',
+              defaultActive: '1',
+              menuTrigger: 'click',
+            },
+            () => [
+              h(ZcMenuItem, { index: '1' }, () => '首页'),
+              h(
+                ZcSubmenu,
+                { index: '2' },
+                {
+                  title: () => '组件',
+                  default: () => [
+                    h(ZcMenuItem, { index: '2-1' }, () => '基础组件'),
+                    h(ZcMenuItem, { index: '2-2' }, () => '表单组件'),
+                  ],
+                }
+              ),
+              h(
+                ZcSubmenu,
+                { index: '3' },
+                {
+                  title: () => '文档',
+                  default: () => [
+                    h(ZcMenuItem, { index: '3-1' }, () => '快速上手'),
+                    h(ZcMenuItem, { index: '3-2' }, () => '主题定制'),
+                  ],
+                }
+              ),
+            ]
+          ),
         ]),
       ])
   },
