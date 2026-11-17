@@ -3,6 +3,11 @@ import { mount } from '@vue/test-utils'
 import { nextTick } from 'vue'
 import Select from '../select/select.vue'
 
+// The dropdown is teleported to <body> in production so it escapes overflow
+// clipping. In tests, stub Teleport to render the dropdown in place, keeping
+// wrapper.findAll assertions working without attachTo ceremony.
+const globalStubs = { stubs: { teleport: true } }
+
 const testOptions = [
   { label: 'Option 1', value: '1' },
   { label: 'Option 2', value: '2' },
@@ -11,28 +16,29 @@ const testOptions = [
 
 describe('ZcSelect', () => {
   it('renders with default props', () => {
-    const wrapper = mount(Select)
+    const wrapper = mount(Select, { global: globalStubs })
     expect(wrapper.classes()).toContain('zc-select')
   })
 
   it('applies medium size class by default', () => {
-    const wrapper = mount(Select)
+    const wrapper = mount(Select, { global: globalStubs })
     expect(wrapper.classes()).toContain('zc-select--medium')
   })
 
   // ---- Placeholder ----
   it('displays placeholder when empty', () => {
-    const wrapper = mount(Select, { props: { placeholder: '请选择' } })
+    const wrapper = mount(Select, { global: globalStubs, props: { placeholder: '请选择' } })
     expect(wrapper.text()).toContain('请选择')
   })
 
   it('displays default placeholder when not provided', () => {
-    const wrapper = mount(Select)
+    const wrapper = mount(Select, { global: globalStubs })
     expect(wrapper.text()).toContain('请选择')
   })
 
   it('displays selected label when value is set', () => {
     const wrapper = mount(Select, {
+      global: globalStubs,
       props: { modelValue: '1', options: testOptions },
     })
     expect(wrapper.text()).toContain('Option 1')
@@ -40,13 +46,13 @@ describe('ZcSelect', () => {
 
   // ---- Dropdown ----
   it('opens dropdown on click', async () => {
-    const wrapper = mount(Select, { props: { options: testOptions } })
+    const wrapper = mount(Select, { global: globalStubs, props: { options: testOptions } })
     await wrapper.trigger('click')
     expect(wrapper.classes()).toContain('is-open')
   })
 
   it('closes dropdown on second click', async () => {
-    const wrapper = mount(Select, { props: { options: testOptions } })
+    const wrapper = mount(Select, { global: globalStubs, props: { options: testOptions } })
     await wrapper.trigger('click')
     expect(wrapper.classes()).toContain('is-open')
     await wrapper.trigger('click')
@@ -54,7 +60,7 @@ describe('ZcSelect', () => {
   })
 
   it('renders dropdown options when opened', async () => {
-    const wrapper = mount(Select, { props: { options: testOptions } })
+    const wrapper = mount(Select, { global: globalStubs, props: { options: testOptions } })
     await wrapper.trigger('click')
     const options = wrapper.findAll('.zc-select__option')
     expect(options).toHaveLength(3)
@@ -65,7 +71,7 @@ describe('ZcSelect', () => {
 
   // ---- Option selection ----
   it('emits update:modelValue when option is selected', async () => {
-    const wrapper = mount(Select, { props: { options: testOptions } })
+    const wrapper = mount(Select, { global: globalStubs, props: { options: testOptions } })
     await wrapper.trigger('click')
     await wrapper.findAll('.zc-select__option')[1].trigger('click')
     expect(wrapper.emitted('update:modelValue')).toBeTruthy()
@@ -73,7 +79,7 @@ describe('ZcSelect', () => {
   })
 
   it('emits change event when option is selected', async () => {
-    const wrapper = mount(Select, { props: { options: testOptions } })
+    const wrapper = mount(Select, { global: globalStubs, props: { options: testOptions } })
     await wrapper.trigger('click')
     await wrapper.findAll('.zc-select__option')[0].trigger('click')
     expect(wrapper.emitted('change')).toBeTruthy()
@@ -81,7 +87,7 @@ describe('ZcSelect', () => {
   })
 
   it('closes dropdown after selecting a single option', async () => {
-    const wrapper = mount(Select, { props: { options: testOptions } })
+    const wrapper = mount(Select, { global: globalStubs, props: { options: testOptions } })
     await wrapper.trigger('click')
     await wrapper.findAll('.zc-select__option')[0].trigger('click')
     expect(wrapper.classes()).not.toContain('is-open')
@@ -89,6 +95,7 @@ describe('ZcSelect', () => {
 
   it('applies selected class to chosen option', async () => {
     const wrapper = mount(Select, {
+      global: globalStubs,
       props: { modelValue: '1', options: testOptions },
     })
     await wrapper.trigger('click')
@@ -99,12 +106,16 @@ describe('ZcSelect', () => {
 
   // ---- Multiple mode ----
   it('applies multiple class in multiple mode', () => {
-    const wrapper = mount(Select, { props: { multiple: true, options: testOptions } })
+    const wrapper = mount(Select, {
+      global: globalStubs,
+      props: { multiple: true, options: testOptions },
+    })
     expect(wrapper.classes()).toContain('is-multiple')
   })
 
   it('shows tags for selected options in multiple mode', () => {
     const wrapper = mount(Select, {
+      global: globalStubs,
       props: {
         multiple: true,
         modelValue: ['1', '2'],
@@ -119,6 +130,7 @@ describe('ZcSelect', () => {
 
   it('emits array values in multiple mode', async () => {
     const wrapper = mount(Select, {
+      global: globalStubs,
       props: { multiple: true, options: testOptions },
     })
     await wrapper.trigger('click')
@@ -129,6 +141,7 @@ describe('ZcSelect', () => {
 
   it('does not close dropdown after selecting in multiple mode', async () => {
     const wrapper = mount(Select, {
+      global: globalStubs,
       props: { multiple: true, options: testOptions },
     })
     await wrapper.trigger('click')
@@ -138,12 +151,12 @@ describe('ZcSelect', () => {
 
   // ---- Disabled ----
   it('applies disabled class when disabled', () => {
-    const wrapper = mount(Select, { props: { disabled: true } })
+    const wrapper = mount(Select, { global: globalStubs, props: { disabled: true } })
     expect(wrapper.classes()).toContain('is-disabled')
   })
 
   it('does not open dropdown when disabled', async () => {
-    const wrapper = mount(Select, { props: { disabled: true } })
+    const wrapper = mount(Select, { global: globalStubs, props: { disabled: true } })
     await wrapper.trigger('click')
     expect(wrapper.classes()).not.toContain('is-open')
   })
@@ -151,6 +164,7 @@ describe('ZcSelect', () => {
   // ---- Clearable ----
   it('shows clear button when clearable and value is selected and dropdown is open', async () => {
     const wrapper = mount(Select, {
+      global: globalStubs,
       props: { clearable: true, modelValue: '1', options: testOptions },
     })
     await wrapper.trigger('click')
@@ -159,6 +173,7 @@ describe('ZcSelect', () => {
 
   it('emits clear event when clear is clicked', async () => {
     const wrapper = mount(Select, {
+      global: globalStubs,
       props: { clearable: true, modelValue: '1', options: testOptions },
     })
     await wrapper.trigger('click')
@@ -168,6 +183,7 @@ describe('ZcSelect', () => {
 
   it('resets value when clear is clicked', async () => {
     const wrapper = mount(Select, {
+      global: globalStubs,
       props: { clearable: true, modelValue: '1', options: testOptions },
     })
     await wrapper.trigger('click')
@@ -177,23 +193,23 @@ describe('ZcSelect', () => {
 
   // ---- Filterable ----
   it('renders input element when filterable', () => {
-    const wrapper = mount(Select, { props: { filterable: true } })
+    const wrapper = mount(Select, { global: globalStubs, props: { filterable: true } })
     expect(wrapper.find('.zc-select__input').exists()).toBe(true)
   })
 
   it('applies filterable class when filterable', () => {
-    const wrapper = mount(Select, { props: { filterable: true } })
+    const wrapper = mount(Select, { global: globalStubs, props: { filterable: true } })
     expect(wrapper.classes()).toContain('is-filterable')
   })
 
   // ---- Sizes ----
   it('applies large size class', () => {
-    const wrapper = mount(Select, { props: { size: 'large' } })
+    const wrapper = mount(Select, { global: globalStubs, props: { size: 'large' } })
     expect(wrapper.classes()).toContain('zc-select--large')
   })
 
   it('applies small size class', () => {
-    const wrapper = mount(Select, { props: { size: 'small' } })
+    const wrapper = mount(Select, { global: globalStubs, props: { size: 'small' } })
     expect(wrapper.classes()).toContain('zc-select--small')
   })
 
@@ -203,7 +219,7 @@ describe('ZcSelect', () => {
       { label: 'Normal', value: '1' },
       { label: 'Disabled', value: '2', disabled: true },
     ]
-    const wrapper = mount(Select, { props: { options } })
+    const wrapper = mount(Select, { global: globalStubs, props: { options } })
     await wrapper.trigger('click')
     const opts = wrapper.findAll('.zc-select__option')
     expect(opts[0].classes()).not.toContain('is-disabled')
@@ -213,6 +229,7 @@ describe('ZcSelect', () => {
   // ---- Collapse tags ----
   it('shows hidden tag count when collapseTags is enabled', () => {
     const wrapper = mount(Select, {
+      global: globalStubs,
       props: {
         multiple: true,
         collapseTags: true,
@@ -227,6 +244,7 @@ describe('ZcSelect', () => {
   // ---- Bug #4: Select remote search ----
   it('displays remote search results in filteredOptions', async () => {
     const wrapper = mount(Select, {
+      global: globalStubs,
       props: {
         filterable: true,
         remote: true,
@@ -252,6 +270,7 @@ describe('ZcSelect', () => {
   // ---- Bug #5: Selected item remains visible after filtering ----
   it('selected option label remains visible even when filtered out', () => {
     const wrapper = mount(Select, {
+      global: globalStubs,
       props: {
         modelValue: '1',
         filterable: true,
@@ -267,6 +286,7 @@ describe('ZcSelect', () => {
   // =====================================================
   it('emits remove-tag when tag close button is clicked', async () => {
     const wrapper = mount(Select, {
+      global: globalStubs,
       props: {
         multiple: true,
         modelValue: ['1', '2'],
@@ -281,6 +301,7 @@ describe('ZcSelect', () => {
 
   it('removes the correct value from modelValue when tag is closed', async () => {
     const wrapper = mount(Select, {
+      global: globalStubs,
       props: {
         multiple: true,
         modelValue: ['1', '2'],
@@ -298,6 +319,7 @@ describe('ZcSelect', () => {
   // =====================================================
   it('renders prefix slot content', () => {
     const wrapper = mount(Select, {
+      global: globalStubs,
       slots: { prefix: '<span class="test-prefix">🔍</span>' },
     })
     expect(wrapper.find('.zc-select__prefix').exists()).toBe(true)
@@ -309,6 +331,7 @@ describe('ZcSelect', () => {
   // =====================================================
   it('renders custom empty slot when no options', async () => {
     const wrapper = mount(Select, {
+      global: globalStubs,
       props: { options: [] },
       slots: { empty: '<span class="custom-empty">无数据</span>' },
     })
@@ -340,6 +363,7 @@ describe('ZcSelect', () => {
 
     it('renders group title headers', async () => {
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: { optionGroups: groupedOptions },
       })
       await wrapper.trigger('click')
@@ -351,6 +375,7 @@ describe('ZcSelect', () => {
 
     it('renders all options within groups', async () => {
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: { optionGroups: groupedOptions },
       })
       await wrapper.trigger('click')
@@ -362,6 +387,7 @@ describe('ZcSelect', () => {
 
     it('can select an option from a group', async () => {
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: { optionGroups: groupedOptions },
       })
       await wrapper.trigger('click')
@@ -371,6 +397,7 @@ describe('ZcSelect', () => {
 
     it('filters options within groups when filterable', async () => {
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: { optionGroups: groupedOptions, filterable: true },
       })
       await wrapper.trigger('click')
@@ -384,6 +411,7 @@ describe('ZcSelect', () => {
 
     it('hides group title when no options match filter', async () => {
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: { optionGroups: groupedOptions, filterable: true },
       })
       await wrapper.trigger('click')
@@ -402,6 +430,7 @@ describe('ZcSelect', () => {
   describe('Allow Create', () => {
     it('shows create option when query does not match any existing option', async () => {
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: { options: testOptions, filterable: true, allowCreate: true },
       })
       await wrapper.trigger('click')
@@ -415,6 +444,7 @@ describe('ZcSelect', () => {
 
     it('does not show create option when query matches an existing option', async () => {
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: { options: testOptions, filterable: true, allowCreate: true },
       })
       await wrapper.trigger('click')
@@ -427,6 +457,7 @@ describe('ZcSelect', () => {
 
     it('emits create-tag when create option is clicked', async () => {
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: { options: testOptions, filterable: true, allowCreate: true },
       })
       await wrapper.trigger('click')
@@ -441,6 +472,7 @@ describe('ZcSelect', () => {
 
     it('auto-selects the newly created option', async () => {
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: { options: testOptions, filterable: true, allowCreate: true },
       })
       await wrapper.trigger('click')
@@ -455,6 +487,7 @@ describe('ZcSelect', () => {
 
     it('does not show create option when allowCreate is false', async () => {
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: { options: testOptions, filterable: true, allowCreate: false },
       })
       await wrapper.trigger('click')
@@ -471,6 +504,7 @@ describe('ZcSelect', () => {
   describe('Select All', () => {
     it('shows select-all bar in multiple mode', async () => {
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: { multiple: true, options: testOptions },
       })
       await wrapper.trigger('click')
@@ -479,6 +513,7 @@ describe('ZcSelect', () => {
 
     it('does not show select-all bar in single mode', async () => {
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: { multiple: false, options: testOptions },
       })
       await wrapper.trigger('click')
@@ -487,6 +522,7 @@ describe('ZcSelect', () => {
 
     it('selects all options when clicking select-all', async () => {
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: { multiple: true, options: testOptions },
       })
       await wrapper.trigger('click')
@@ -497,6 +533,7 @@ describe('ZcSelect', () => {
 
     it('deselects all when clicking select-all with all selected', async () => {
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: { multiple: true, options: testOptions, modelValue: ['1', '2', '3'] },
       })
       await wrapper.trigger('click')
@@ -506,6 +543,7 @@ describe('ZcSelect', () => {
 
     it('shows checked state when all options are selected', async () => {
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: { multiple: true, options: testOptions, modelValue: ['1', '2', '3'] },
       })
       await wrapper.trigger('click')
@@ -515,6 +553,7 @@ describe('ZcSelect', () => {
 
     it('shows indeterminate state when some options are selected', async () => {
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: { multiple: true, options: testOptions, modelValue: ['1'] },
       })
       await wrapper.trigger('click')
@@ -528,9 +567,7 @@ describe('ZcSelect', () => {
         { label: 'B', value: 'b', disabled: true },
         { label: 'C', value: 'c' },
       ]
-      const wrapper = mount(Select, {
-        props: { multiple: true, options },
-      })
+      const wrapper = mount(Select, { global: globalStubs, props: { multiple: true, options } })
       await wrapper.trigger('click')
       await wrapper.find('.zc-select__select-all').trigger('click')
       expect(wrapper.emitted('update:modelValue')![0]).toEqual([['a', 'c']])
@@ -548,6 +585,7 @@ describe('ZcSelect', () => {
 
     it('renders virtual list container when virtualScroll is enabled', async () => {
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: { options: bigOptions, virtualScroll: true },
       })
       await wrapper.trigger('click')
@@ -556,6 +594,7 @@ describe('ZcSelect', () => {
 
     it('does not render virtual list when virtualScroll is disabled', async () => {
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: { options: bigOptions, virtualScroll: false },
       })
       await wrapper.trigger('click')
@@ -564,6 +603,7 @@ describe('ZcSelect', () => {
 
     it('renders virtual scroll structure with correct total height', async () => {
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: { options: bigOptions, virtualScroll: true },
         attachTo: document.body,
       })
@@ -584,6 +624,7 @@ describe('ZcSelect', () => {
 
     it('renders all options without virtual scroll', async () => {
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: { options: bigOptions, virtualScroll: false },
       })
       await wrapper.trigger('click')
@@ -593,6 +634,7 @@ describe('ZcSelect', () => {
 
     it('can select an option in virtual scroll mode', async () => {
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: { options: bigOptions, virtualScroll: true },
         attachTo: document.body,
       })
@@ -607,6 +649,7 @@ describe('ZcSelect', () => {
     // ---- Virtual + Filterable ----
     it('filters options correctly in virtual scroll mode', async () => {
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: { options: bigOptions, virtualScroll: true, filterable: true },
         attachTo: document.body,
       })
@@ -631,6 +674,7 @@ describe('ZcSelect', () => {
     // ---- Virtual + Multiple ----
     it('supports multiple selection in virtual scroll mode', async () => {
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: {
           options: bigOptions,
           virtualScroll: true,
@@ -656,6 +700,7 @@ describe('ZcSelect', () => {
     // ---- Virtual + Remote loading ----
     it('works with remote loading in virtual scroll mode', async () => {
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: {
           virtualScroll: true,
           filterable: true,
@@ -693,6 +738,7 @@ describe('ZcSelect', () => {
         })),
       }))
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: { optionGroups: groups, virtualScroll: true },
         attachTo: document.body,
       })
@@ -711,6 +757,7 @@ describe('ZcSelect', () => {
     // ---- Custom option height ----
     it('uses custom estimatedOptionHeight for item height', async () => {
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: {
           options: bigOptions,
           virtualScroll: true,
@@ -732,6 +779,7 @@ describe('ZcSelect', () => {
 
     it('defaults to 36px when estimatedOptionHeight is not provided', async () => {
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: {
           options: bigOptions,
           virtualScroll: true,
@@ -750,6 +798,7 @@ describe('ZcSelect', () => {
     // ---- Reactive estimatedOptionHeight change ----
     it('reacts to estimatedOptionHeight prop changes at runtime', async () => {
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: {
           options: bigOptions,
           virtualScroll: true,
@@ -767,8 +816,12 @@ describe('ZcSelect', () => {
       // Change height at runtime
       await wrapper.setProps({ estimatedOptionHeight: 50 })
       await nextTick()
+      // Re-query: the teleport stub remounts its subtree on re-render,
+      // so the previously captured spacer element may be stale.
+      const spacerAfter = wrapper.find('.zc-select__virtual-list').element
+        .firstElementChild as HTMLElement
       // After change: 100 × 50 = 5000px
-      expect(spacer.style.height).toBe('5000px')
+      expect(spacerAfter.style.height).toBe('5000px')
       // Rendered items should have 50px height
       const renderedOption = wrapper.findAll('.zc-select__virtual-list .zc-select__option')[0]
       expect((renderedOption.element as HTMLElement).style.height).toBe('50px')
@@ -796,6 +849,7 @@ describe('ZcSelect', () => {
         value: `opt-${i + 1}`,
       }))
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: { options: largeOptions, virtualScroll: true },
         attachTo: document.body,
       })
@@ -818,6 +872,7 @@ describe('ZcSelect', () => {
     // ---- Keyboard navigation in virtual mode ----
     it('navigates with keyboard in virtual scroll mode', async () => {
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: { options: bigOptions, virtualScroll: true },
         attachTo: document.body,
       })
@@ -848,6 +903,7 @@ describe('ZcSelect advanced: filterMethod, multipleLimit, #option slot', () => {
   describe('filterMethod', () => {
     it('filters options using the custom filterMethod (value prefix match)', async () => {
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: {
           options: prefixOptions,
           filterable: true,
@@ -867,6 +923,7 @@ describe('ZcSelect advanced: filterMethod, multipleLimit, #option slot', () => {
 
     it('shows the empty state when filterMethod matches nothing', async () => {
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: {
           options: prefixOptions,
           filterable: true,
@@ -886,6 +943,7 @@ describe('ZcSelect advanced: filterMethod, multipleLimit, #option slot', () => {
         prefixOptions.filter((o) => o.value.startsWith(query))
       )
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: { options: prefixOptions, filterable: true, filterMethod },
       })
       await wrapper.trigger('click')
@@ -900,6 +958,7 @@ describe('ZcSelect advanced: filterMethod, multipleLimit, #option slot', () => {
   describe('multipleLimit', () => {
     it('stops selecting beyond multipleLimit in multiple mode', async () => {
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: {
           multiple: true,
           multipleLimit: 2,
@@ -924,6 +983,7 @@ describe('ZcSelect advanced: filterMethod, multipleLimit, #option slot', () => {
 
     it('select-all respects multipleLimit', async () => {
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: {
           multiple: true,
           multipleLimit: 2,
@@ -941,6 +1001,7 @@ describe('ZcSelect advanced: filterMethod, multipleLimit, #option slot', () => {
   describe('#option scoped slot', () => {
     it('renders custom option content from the scoped slot', async () => {
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: { options: testOptions },
         slots: {
           option: `<template #option="{ option }"><span class="custom-option">{{ option.label }} (custom)</span></template>`,
@@ -959,6 +1020,7 @@ describe('ZcSelect advanced: filterMethod, multipleLimit, #option slot', () => {
         { label: 'B', value: 'b', disabled: true },
       ]
       const wrapper = mount(Select, {
+        global: globalStubs,
         props: { options, modelValue: 'a' },
         slots: {
           option: `<template #option="{ option, selected, disabled }"><span class="custom-option">{{ option.label }}{{ selected ? ' [selected]' : '' }}{{ disabled ? ' [disabled]' : '' }}</span></template>`,

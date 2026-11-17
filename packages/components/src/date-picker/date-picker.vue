@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed, ref, shallowRef, watch } from 'vue'
+import { computed, ref, shallowRef, watch, type CSSProperties } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
-import { useClickOutside } from '@zc-ui/hooks'
+import { useClickOutside, useZIndex } from '@zc-ui/hooks'
 import { useLocale } from '@zc-ui/locale'
 import { usePopper } from '../popper/usePopper'
 import { useFormDisabled, useFormSize, useFormItem } from '../form/use-form'
@@ -95,15 +95,25 @@ const dropdownRef = shallowRef<HTMLElement>()
 const visible = ref(false)
 const isFocused = ref(false)
 
-// ---- Dropdown positioning (usePopper absolute strategy) ----
+// ---- Dropdown positioning ----
+// Teleported to body with fixed strategy so the panel is never clipped
+// by ancestor `overflow: hidden` containers.
 const { styles: dropdownStyles } = usePopper({
   reference: triggerRef,
   popper: dropdownRef,
   placement: 'bottom-start',
   offset: 4,
-  strategy: 'absolute',
+  strategy: 'fixed',
   visible,
 })
+
+// ---- Layering: allocate from the shared z-index manager on every open ----
+const { nextZIndex } = useZIndex()
+const dropdownZIndex = ref<number>()
+const dropdownStyle = computed<CSSProperties>(() => ({
+  ...dropdownStyles.value,
+  zIndex: dropdownZIndex.value,
+}))
 
 // ---- Calendar state ----
 const viewDate = ref(new Date())
@@ -195,10 +205,14 @@ function emitValue(value: Date | [Date, Date] | '' | null) {
   formItem?.validate('change')
 }
 
-// ---- Click outside ----
-useClickOutside(triggerRef, () => {
-  if (visible.value) closePicker()
-})
+// ---- Click outside (panel is teleported, so ignore it explicitly) ----
+useClickOutside(
+  triggerRef,
+  () => {
+    if (visible.value) closePicker()
+  },
+  { ignore: [dropdownRef] }
+)
 
 // ---- Date helpers ----
 const WEEKDAYS = computed(() => [
@@ -459,6 +473,7 @@ function openPicker() {
   else panelMode.value = 'date'
   visible.value = true
   isFocused.value = true
+  dropdownZIndex.value = nextZIndex()
   emit('focus', new FocusEvent('focus'))
 }
 
@@ -834,241 +849,247 @@ defineExpose({
       </span>
     </div>
 
-    <!-- Dropdown panel -->
-    <transition name="zc-date-picker-dropdown">
-      <div v-if="visible" ref="dropdownRef" :style="dropdownStyles" :class="ns.e('panel')">
-        <div :class="ns.e('body')">
-          <!-- Shortcuts sidebar -->
-          <div v-if="shortcuts && shortcuts.length" :class="ns.e('shortcuts')">
-            <button
-              v-for="(sc, i) in shortcuts"
-              :key="i"
-              :class="ns.e('shortcut')"
-              @click.stop="applyShortcut(sc)"
-            >
-              {{ sc.text }}
-            </button>
-          </div>
-
-          <!-- Calendar -->
-          <div :class="ns.e('calendar')">
-            <!-- Header -->
-            <div :class="ns.e('header')">
+    <!-- Dropdown panel (teleported to body so it is not clipped by overflow ancestors) -->
+    <Teleport to="body">
+      <transition name="zc-date-picker-dropdown">
+        <div v-if="visible" ref="dropdownRef" :style="dropdownStyle" :class="ns.e('panel')">
+          <div :class="ns.e('body')">
+            <!-- Shortcuts sidebar -->
+            <div v-if="shortcuts && shortcuts.length" :class="ns.e('shortcuts')">
               <button
-                :class="ns.e('prev-year')"
-                type="button"
-                @click.stop="panelMode === 'year' ? prevYearRange() : prevYear()"
+                v-for="(sc, i) in shortcuts"
+                :key="i"
+                :class="ns.e('shortcut')"
+                @click.stop="applyShortcut(sc)"
               >
-                «
-              </button>
-              <button :class="ns.e('prev-month')" type="button" @click.stop="prevMonth">‹</button>
-              <span
-                :class="[ns.e('header-label'), { 'is-clickable': panelMode !== 'year' }]"
-                @click.stop="
-                  panelMode === 'date'
-                    ? switchToMonthPanel()
-                    : panelMode === 'month'
-                      ? switchToYearPanel()
-                      : undefined
-                "
-                >{{ headerLabel }}</span
-              >
-              <button :class="ns.e('next-month')" type="button" @click.stop="nextMonth">›</button>
-              <button
-                :class="ns.e('next-year')"
-                type="button"
-                @click.stop="panelMode === 'year' ? nextYearRange() : nextYear()"
-              >
-                »
+                {{ sc.text }}
               </button>
             </div>
 
-            <!-- Year panel -->
-            <div v-if="panelMode === 'year'" :class="ns.e('year-grid')">
-              <div
-                v-for="yr in yearRange"
-                :key="yr"
-                :class="[
-                  ns.e('year-cell'),
-                  ns.is('selected', !!(selectedDate && selectedDate.getFullYear() === yr)),
-                  ns.is('current', new Date().getFullYear() === yr),
-                  ns.is('disabled', isDateDisabled(new Date(yr, 0, 1))),
-                ]"
-                @click.stop="!isDateDisabled(new Date(yr, 0, 1)) && selectYear(yr)"
-              >
-                {{ yr }}
-              </div>
-            </div>
-
-            <!-- Month panel -->
-            <div v-else-if="panelMode === 'month'" :class="ns.e('month-grid')">
-              <div
-                v-for="(m, idx) in MONTHS"
-                :key="idx"
-                :class="[
-                  ns.e('month-cell'),
-                  ns.is(
-                    'selected',
-                    !!(
-                      selectedDate &&
-                      isSameMonth(selectedDate, new Date(viewDate.getFullYear(), idx, 1))
-                    )
-                  ),
-                  ns.is(
-                    'current',
-                    isSameMonth(new Date(), new Date(viewDate.getFullYear(), idx, 1))
-                  ),
-                  ns.is('disabled', isDateDisabled(new Date(viewDate.getFullYear(), idx, 1))),
-                ]"
-                @click.stop="
-                  !isDateDisabled(new Date(viewDate.getFullYear(), idx, 1)) && selectMonth(idx)
-                "
-              >
-                {{ m }}
-              </div>
-            </div>
-
-            <!-- Date panel (default) -->
-            <template v-else>
-              <!-- Weekday headers -->
-              <div :class="ns.e('weekdays')">
-                <span v-for="day in WEEKDAYS" :key="day" :class="ns.e('weekday')">{{ day }}</span>
-              </div>
-
-              <!-- Days grid -->
-              <div :class="ns.e('days')">
-                <div
-                  v-for="(cell, i) in calendarCells"
-                  :key="i"
-                  :class="[
-                    ns.e('day'),
-                    ns.is('other-month', !cell.isCurrentMonth),
-                    ns.is('today', cell.isToday),
-                    ns.is('disabled', cell.isDisabled),
-                    ns.is('selected', !isWeek && isSameDay(selectedDate, cell.date)),
-                    ns.is(
-                      'week-selected',
-                      !!(isWeek && selectedDate && isSameWeek(selectedDate, cell.date))
-                    ),
-                    ns.is('range-start', isRangeStart(cell.date)),
-                    ns.is('range-end', isRangeEnd(cell.date)),
-                    ns.is('in-range', isInRange(cell.date)),
-                  ]"
-                  @click.stop="selectDate(cell)"
-                  @mouseenter="handleCellHover(cell)"
+            <!-- Calendar -->
+            <div :class="ns.e('calendar')">
+              <!-- Header -->
+              <div :class="ns.e('header')">
+                <button
+                  :class="ns.e('prev-year')"
+                  type="button"
+                  @click.stop="panelMode === 'year' ? prevYearRange() : prevYear()"
                 >
-                  {{ cell.date.getDate() }}
+                  «
+                </button>
+                <button :class="ns.e('prev-month')" type="button" @click.stop="prevMonth">‹</button>
+                <span
+                  :class="[ns.e('header-label'), { 'is-clickable': panelMode !== 'year' }]"
+                  @click.stop="
+                    panelMode === 'date'
+                      ? switchToMonthPanel()
+                      : panelMode === 'month'
+                        ? switchToYearPanel()
+                        : undefined
+                  "
+                  >{{ headerLabel }}</span
+                >
+                <button :class="ns.e('next-month')" type="button" @click.stop="nextMonth">›</button>
+                <button
+                  :class="ns.e('next-year')"
+                  type="button"
+                  @click.stop="panelMode === 'year' ? nextYearRange() : nextYear()"
+                >
+                  »
+                </button>
+              </div>
+
+              <!-- Year panel -->
+              <div v-if="panelMode === 'year'" :class="ns.e('year-grid')">
+                <div
+                  v-for="yr in yearRange"
+                  :key="yr"
+                  :class="[
+                    ns.e('year-cell'),
+                    ns.is('selected', !!(selectedDate && selectedDate.getFullYear() === yr)),
+                    ns.is('current', new Date().getFullYear() === yr),
+                    ns.is('disabled', isDateDisabled(new Date(yr, 0, 1))),
+                  ]"
+                  @click.stop="!isDateDisabled(new Date(yr, 0, 1)) && selectYear(yr)"
+                >
+                  {{ yr }}
                 </div>
               </div>
-            </template>
-          </div>
 
-          <!-- Time panel (for datetime mode) -->
-          <div v-if="isDateTime && selectedDate" :class="ns.e('time-panel')">
-            <div :class="ns.e('time-inputs')">
-              <input
-                v-model.number="selectedHours"
-                type="number"
-                min="0"
-                max="23"
-                :class="ns.e('time-input')"
-                aria-label="Hours"
-              />
-              <span>:</span>
-              <input
-                v-model.number="selectedMinutes"
-                type="number"
-                min="0"
-                max="59"
-                :class="ns.e('time-input')"
-                aria-label="Minutes"
-              />
-              <span>:</span>
-              <input
-                v-model.number="selectedSeconds"
-                type="number"
-                min="0"
-                max="59"
-                :class="ns.e('time-input')"
-                aria-label="Seconds"
-              />
+              <!-- Month panel -->
+              <div v-else-if="panelMode === 'month'" :class="ns.e('month-grid')">
+                <div
+                  v-for="(m, idx) in MONTHS"
+                  :key="idx"
+                  :class="[
+                    ns.e('month-cell'),
+                    ns.is(
+                      'selected',
+                      !!(
+                        selectedDate &&
+                        isSameMonth(selectedDate, new Date(viewDate.getFullYear(), idx, 1))
+                      )
+                    ),
+                    ns.is(
+                      'current',
+                      isSameMonth(new Date(), new Date(viewDate.getFullYear(), idx, 1))
+                    ),
+                    ns.is('disabled', isDateDisabled(new Date(viewDate.getFullYear(), idx, 1))),
+                  ]"
+                  @click.stop="
+                    !isDateDisabled(new Date(viewDate.getFullYear(), idx, 1)) && selectMonth(idx)
+                  "
+                >
+                  {{ m }}
+                </div>
+              </div>
+
+              <!-- Date panel (default) -->
+              <template v-else>
+                <!-- Weekday headers -->
+                <div :class="ns.e('weekdays')">
+                  <span v-for="day in WEEKDAYS" :key="day" :class="ns.e('weekday')">{{ day }}</span>
+                </div>
+
+                <!-- Days grid -->
+                <div :class="ns.e('days')">
+                  <div
+                    v-for="(cell, i) in calendarCells"
+                    :key="i"
+                    :class="[
+                      ns.e('day'),
+                      ns.is('other-month', !cell.isCurrentMonth),
+                      ns.is('today', cell.isToday),
+                      ns.is('disabled', cell.isDisabled),
+                      ns.is('selected', !isWeek && isSameDay(selectedDate, cell.date)),
+                      ns.is(
+                        'week-selected',
+                        !!(isWeek && selectedDate && isSameWeek(selectedDate, cell.date))
+                      ),
+                      ns.is('range-start', isRangeStart(cell.date)),
+                      ns.is('range-end', isRangeEnd(cell.date)),
+                      ns.is('in-range', isInRange(cell.date)),
+                    ]"
+                    @click.stop="selectDate(cell)"
+                    @mouseenter="handleCellHover(cell)"
+                  >
+                    {{ cell.date.getDate() }}
+                  </div>
+                </div>
+              </template>
             </div>
-            <button :class="ns.e('time-confirm')" type="button" @click.stop="confirmDateTime">
-              {{ t('zc.datePicker.confirm') || 'OK' }}
-            </button>
-          </div>
 
-          <!-- Time panel for datetimerange mode -->
-          <div
-            v-if="type === 'datetimerange' && rangeStart && rangeEnd"
-            :class="ns.e('time-panel')"
-          >
-            <div :class="ns.e('time-range')">
+            <!-- Time panel (for datetime mode) -->
+            <div v-if="isDateTime && selectedDate" :class="ns.e('time-panel')">
               <div :class="ns.e('time-inputs')">
                 <input
-                  v-model.number="rangeStartHours"
+                  v-model.number="selectedHours"
                   type="number"
                   min="0"
                   max="23"
                   :class="ns.e('time-input')"
-                  aria-label="Start Hours"
+                  aria-label="Hours"
                 />
                 <span>:</span>
                 <input
-                  v-model.number="rangeStartMinutes"
+                  v-model.number="selectedMinutes"
                   type="number"
                   min="0"
                   max="59"
                   :class="ns.e('time-input')"
-                  aria-label="Start Minutes"
+                  aria-label="Minutes"
                 />
                 <span>:</span>
                 <input
-                  v-model.number="rangeStartSeconds"
+                  v-model.number="selectedSeconds"
                   type="number"
                   min="0"
                   max="59"
                   :class="ns.e('time-input')"
-                  aria-label="Start Seconds"
+                  aria-label="Seconds"
                 />
               </div>
-              <span :class="ns.e('separator')">—</span>
-              <div :class="ns.e('time-inputs')">
-                <input
-                  v-model.number="rangeEndHours"
-                  type="number"
-                  min="0"
-                  max="23"
-                  :class="ns.e('time-input')"
-                  aria-label="End Hours"
-                />
-                <span>:</span>
-                <input
-                  v-model.number="rangeEndMinutes"
-                  type="number"
-                  min="0"
-                  max="59"
-                  :class="ns.e('time-input')"
-                  aria-label="End Minutes"
-                />
-                <span>:</span>
-                <input
-                  v-model.number="rangeEndSeconds"
-                  type="number"
-                  min="0"
-                  max="59"
-                  :class="ns.e('time-input')"
-                  aria-label="End Seconds"
-                />
-              </div>
+              <button :class="ns.e('time-confirm')" type="button" @click.stop="confirmDateTime">
+                {{ t('zc.datePicker.confirm') || 'OK' }}
+              </button>
             </div>
-            <button :class="ns.e('time-confirm')" type="button" @click.stop="confirmDateTimeRange">
-              {{ t('zc.datePicker.confirm') || 'OK' }}
-            </button>
+
+            <!-- Time panel for datetimerange mode -->
+            <div
+              v-if="type === 'datetimerange' && rangeStart && rangeEnd"
+              :class="ns.e('time-panel')"
+            >
+              <div :class="ns.e('time-range')">
+                <div :class="ns.e('time-inputs')">
+                  <input
+                    v-model.number="rangeStartHours"
+                    type="number"
+                    min="0"
+                    max="23"
+                    :class="ns.e('time-input')"
+                    aria-label="Start Hours"
+                  />
+                  <span>:</span>
+                  <input
+                    v-model.number="rangeStartMinutes"
+                    type="number"
+                    min="0"
+                    max="59"
+                    :class="ns.e('time-input')"
+                    aria-label="Start Minutes"
+                  />
+                  <span>:</span>
+                  <input
+                    v-model.number="rangeStartSeconds"
+                    type="number"
+                    min="0"
+                    max="59"
+                    :class="ns.e('time-input')"
+                    aria-label="Start Seconds"
+                  />
+                </div>
+                <span :class="ns.e('separator')">—</span>
+                <div :class="ns.e('time-inputs')">
+                  <input
+                    v-model.number="rangeEndHours"
+                    type="number"
+                    min="0"
+                    max="23"
+                    :class="ns.e('time-input')"
+                    aria-label="End Hours"
+                  />
+                  <span>:</span>
+                  <input
+                    v-model.number="rangeEndMinutes"
+                    type="number"
+                    min="0"
+                    max="59"
+                    :class="ns.e('time-input')"
+                    aria-label="End Minutes"
+                  />
+                  <span>:</span>
+                  <input
+                    v-model.number="rangeEndSeconds"
+                    type="number"
+                    min="0"
+                    max="59"
+                    :class="ns.e('time-input')"
+                    aria-label="End Seconds"
+                  />
+                </div>
+              </div>
+              <button
+                :class="ns.e('time-confirm')"
+                type="button"
+                @click.stop="confirmDateTimeRange"
+              >
+                {{ t('zc.datePicker.confirm') || 'OK' }}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    </transition>
+      </transition>
+    </Teleport>
   </div>
 </template>
 

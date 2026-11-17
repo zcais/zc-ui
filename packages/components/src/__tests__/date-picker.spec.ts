@@ -2,55 +2,59 @@ import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
 import DatePicker from '../date-picker/date-picker.vue'
 
+// The dropdown is teleported to <body> in production so it escapes overflow
+// clipping. In tests, stub Teleport to render the dropdown in place, keeping
+// wrapper.findAll assertions working without attachTo ceremony.
+const globalStubs = { stubs: { teleport: true } }
+
 describe('ZcDatePicker', () => {
   it('renders with zc-date-picker class', () => {
-    const wrapper = mount(DatePicker)
+    const wrapper = mount(DatePicker, { global: globalStubs })
     expect(wrapper.classes()).toContain('zc-date-picker')
   })
 
   it('displays placeholder text', () => {
     const wrapper = mount(DatePicker, {
+      global: globalStubs,
       props: { placeholder: 'Select a date' },
     })
     expect(wrapper.find('input').attributes('placeholder')).toBe('Select a date')
   })
 
   it('shows default placeholder when not provided', () => {
-    const wrapper = mount(DatePicker)
+    const wrapper = mount(DatePicker, { global: globalStubs })
     expect(wrapper.find('input').attributes('placeholder')).toBe('请选择日期')
   })
 
   it('applies disabled class', () => {
-    const wrapper = mount(DatePicker, {
-      props: { disabled: true },
-    })
+    const wrapper = mount(DatePicker, { global: globalStubs, props: { disabled: true } })
     expect(wrapper.classes()).toContain('is-disabled')
   })
 
   it('applies size classes', () => {
-    const large = mount(DatePicker, { props: { size: 'large' } })
+    const large = mount(DatePicker, { global: globalStubs, props: { size: 'large' } })
     expect(large.classes()).toContain('zc-date-picker--large')
 
-    const small = mount(DatePicker, { props: { size: 'small' } })
+    const small = mount(DatePicker, { global: globalStubs, props: { size: 'small' } })
     expect(small.classes()).toContain('zc-date-picker--small')
   })
 
   it('opens panel on click', async () => {
-    const wrapper = mount(DatePicker)
+    const wrapper = mount(DatePicker, { global: globalStubs })
     expect(wrapper.find('.zc-date-picker__panel').exists()).toBe(false)
     await wrapper.trigger('click')
     expect(wrapper.find('.zc-date-picker__panel').exists()).toBe(true)
   })
 
   it('renders calendar header with year and month', async () => {
-    const wrapper = mount(DatePicker)
+    const wrapper = mount(DatePicker, { global: globalStubs })
     await wrapper.trigger('click')
     const header = wrapper.find('.zc-date-picker__header-label')
     expect(header.text()).toMatch(/\d{4} 年/)
   })
 
   it('renders weekday headers', async () => {
-    const wrapper = mount(DatePicker)
+    const wrapper = mount(DatePicker, { global: globalStubs })
     await wrapper.trigger('click')
     const weekdays = wrapper.findAll('.zc-date-picker__weekday')
     expect(weekdays).toHaveLength(7)
@@ -59,7 +63,7 @@ describe('ZcDatePicker', () => {
   })
 
   it('renders 42 calendar cells', async () => {
-    const wrapper = mount(DatePicker)
+    const wrapper = mount(DatePicker, { global: globalStubs })
     await wrapper.trigger('click')
     const days = wrapper.findAll('.zc-date-picker__day')
     expect(days).toHaveLength(42)
@@ -67,6 +71,7 @@ describe('ZcDatePicker', () => {
 
   it('renders shortcuts when provided', async () => {
     const wrapper = mount(DatePicker, {
+      global: globalStubs,
       props: {
         shortcuts: [
           { text: '今天', value: () => new Date() },
@@ -81,30 +86,24 @@ describe('ZcDatePicker', () => {
   })
 
   it('does not open when disabled', async () => {
-    const wrapper = mount(DatePicker, {
-      props: { disabled: true },
-    })
+    const wrapper = mount(DatePicker, { global: globalStubs, props: { disabled: true } })
     await wrapper.trigger('click')
     expect(wrapper.find('.zc-date-picker__panel').exists()).toBe(false)
   })
 
   it('renders two inputs in range mode', () => {
-    const wrapper = mount(DatePicker, {
-      props: { type: 'daterange' },
-    })
+    const wrapper = mount(DatePicker, { global: globalStubs, props: { type: 'daterange' } })
     const inputs = wrapper.findAll('input')
     expect(inputs).toHaveLength(2)
   })
 
   it('applies range class in daterange mode', () => {
-    const wrapper = mount(DatePicker, {
-      props: { type: 'daterange' },
-    })
+    const wrapper = mount(DatePicker, { global: globalStubs, props: { type: 'daterange' } })
     expect(wrapper.classes()).toContain('is-range')
   })
 
   it('navigates to previous month', async () => {
-    const wrapper = mount(DatePicker)
+    const wrapper = mount(DatePicker, { global: globalStubs })
     await wrapper.trigger('click')
     const initialHeader = wrapper.find('.zc-date-picker__header-label').text()
     await wrapper.find('.zc-date-picker__prev-month').trigger('click')
@@ -113,7 +112,7 @@ describe('ZcDatePicker', () => {
   })
 
   it('navigates to next month', async () => {
-    const wrapper = mount(DatePicker)
+    const wrapper = mount(DatePicker, { global: globalStubs })
     await wrapper.trigger('click')
     const initialHeader = wrapper.find('.zc-date-picker__header-label').text()
     await wrapper.find('.zc-date-picker__next-month').trigger('click')
@@ -122,7 +121,7 @@ describe('ZcDatePicker', () => {
   })
 
   it('selects a date and closes panel', async () => {
-    const wrapper = mount(DatePicker)
+    const wrapper = mount(DatePicker, { global: globalStubs })
     await wrapper.trigger('click')
     const days = wrapper.findAll('.zc-date-picker__day')
     // Click a day in the current month (not other-month)
@@ -140,6 +139,7 @@ describe('ZcDatePicker', () => {
   describe('valueFormat', () => {
     it('emits a formatted string instead of a Date when valueFormat is set', async () => {
       const wrapper = mount(DatePicker, {
+        global: globalStubs,
         props: { modelValue: '', valueFormat: 'YYYY-MM-DD' },
       })
       await wrapper.find('input').trigger('click') // open the panel
@@ -157,6 +157,7 @@ describe('ZcDatePicker', () => {
 
     it('parses a value-format string modelValue into the panel', async () => {
       const wrapper = mount(DatePicker, {
+        global: globalStubs,
         props: { modelValue: '2026-03-15', valueFormat: 'YYYY-MM-DD' },
       })
       await wrapper.find('input').trigger('click') // open the panel
@@ -167,6 +168,7 @@ describe('ZcDatePicker', () => {
 
     it('emits an empty string on clear with valueFormat', async () => {
       const wrapper = mount(DatePicker, {
+        global: globalStubs,
         props: { modelValue: '2026-03-15', valueFormat: 'YYYY-MM-DD', clearable: true },
       })
       await wrapper.find('input').trigger('click') // open the panel (clear shows when open)
@@ -179,17 +181,15 @@ describe('ZcDatePicker', () => {
   // ---- editable manual input ----
   describe('editable', () => {
     it('input is writable by default and readonly when editable=false', () => {
-      const writable = mount(DatePicker)
+      const writable = mount(DatePicker, { global: globalStubs })
       expect(writable.find('input').attributes('readonly')).toBeUndefined()
 
-      const readonly = mount(DatePicker, { props: { editable: false } })
+      const readonly = mount(DatePicker, { global: globalStubs, props: { editable: false } })
       expect(readonly.find('input').attributes('readonly')).toBeDefined()
     })
 
     it('commits a typed date on Enter and emits the parsed value', async () => {
-      const wrapper = mount(DatePicker, {
-        props: { modelValue: '' },
-      })
+      const wrapper = mount(DatePicker, { global: globalStubs, props: { modelValue: '' } })
       const input = wrapper.find('input')
       ;(input.element as HTMLInputElement).value = '2026-03-15'
       await input.trigger('input')
@@ -206,6 +206,7 @@ describe('ZcDatePicker', () => {
 
     it('restores the display value when the typed text is invalid', async () => {
       const wrapper = mount(DatePicker, {
+        global: globalStubs,
         props: { modelValue: new Date(2026, 2, 15) },
       })
       const input = wrapper.find('input')
@@ -220,6 +221,7 @@ describe('ZcDatePicker', () => {
 
     it('clears the value when the input is emptied and committed', async () => {
       const wrapper = mount(DatePicker, {
+        global: globalStubs,
         props: { modelValue: new Date(2026, 2, 15), clearable: true },
       })
       const input = wrapper.find('input')

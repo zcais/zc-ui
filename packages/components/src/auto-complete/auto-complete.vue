@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed, ref, shallowRef, onBeforeUnmount } from 'vue'
+import { computed, ref, shallowRef, onBeforeUnmount, type CSSProperties } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
-import { useClickOutside } from '@zc-ui/hooks'
+import { useClickOutside, useZIndex } from '@zc-ui/hooks'
 import { useLocale } from '@zc-ui/locale'
 import { usePopper } from '../popper/usePopper'
 import { useFormDisabled, useFormSize, useFormItem } from '../form/use-form'
@@ -73,23 +73,38 @@ const loading = ref(false)
 const suggestions = ref<AutoCompleteOption[]>([])
 const activeIndex = ref(-1)
 
-// ---- Dropdown positioning (usePopper absolute strategy) ----
+// ---- Dropdown positioning ----
+// Teleported to body with fixed strategy so the suggestions dropdown is never
+// clipped by ancestor `overflow: hidden` containers.
 const { styles: dropdownStyles } = usePopper({
   reference: containerRef,
   popper: dropdownRef,
   placement: 'bottom-start',
   offset: 4,
-  strategy: 'absolute',
+  strategy: 'fixed',
   visible,
 })
 
+// ---- Layering: allocate from the shared z-index manager on every open ----
+const { nextZIndex } = useZIndex()
+const dropdownZIndex = ref<number>()
+const dropdownStyle = computed<CSSProperties>(() => ({
+  ...dropdownStyles.value,
+  zIndex: dropdownZIndex.value,
+  width: containerRef.value ? `${containerRef.value.getBoundingClientRect().width}px` : undefined,
+}))
+
 let debounceTimer: ReturnType<typeof setTimeout> | null = null
 
-useClickOutside(containerRef, () => {
-  if (visible.value) {
-    visible.value = false
-  }
-})
+useClickOutside(
+  containerRef,
+  () => {
+    if (visible.value) {
+      visible.value = false
+    }
+  },
+  { ignore: [dropdownRef] }
+)
 
 const classes = computed(() => [
   ns.b(),
@@ -115,6 +130,7 @@ async function loadSuggestions(query: string) {
     suggestions.value = result || []
     activeIndex.value = props.highlightFirstItem && suggestions.value.length > 0 ? 0 : -1
     visible.value = suggestions.value.length > 0
+    if (visible.value) dropdownZIndex.value = nextZIndex()
   } catch {
     suggestions.value = []
   } finally {
@@ -236,27 +252,30 @@ onBeforeUnmount(() => {
         </svg>
       </span>
     </div>
-    <transition name="zc-auto-complete-dropdown">
-      <div v-show="visible" ref="dropdownRef" :style="dropdownStyles" :class="ns.e('suggestions')">
-        <ul v-if="suggestions.length > 0" :class="ns.e('list')">
-          <li
-            v-for="(item, index) in suggestions"
-            :key="index"
-            :class="[
-              ns.e('item'),
-              ns.is('active', activeIndex === index),
-              ns.is('disabled', item.disabled === true),
-            ]"
-            @click="selectItem(item)"
-            @mouseenter="activeIndex = index"
-          >
-            <slot :item="item" :index="index">{{ getDisplayValue(item) }}</slot>
-          </li>
-        </ul>
-        <div v-else-if="!loading" :class="ns.e('empty')">{{ noDataTextComputed }}</div>
-        <div v-if="loading" :class="ns.e('loading')">{{ searchingText }}</div>
-      </div>
-    </transition>
+    <!-- Suggestions dropdown (teleported to body so it is not clipped by overflow ancestors) -->
+    <Teleport to="body">
+      <transition name="zc-auto-complete-dropdown">
+        <div v-show="visible" ref="dropdownRef" :style="dropdownStyle" :class="ns.e('suggestions')">
+          <ul v-if="suggestions.length > 0" :class="ns.e('list')">
+            <li
+              v-for="(item, index) in suggestions"
+              :key="index"
+              :class="[
+                ns.e('item'),
+                ns.is('active', activeIndex === index),
+                ns.is('disabled', item.disabled === true),
+              ]"
+              @click="selectItem(item)"
+              @mouseenter="activeIndex = index"
+            >
+              <slot :item="item" :index="index">{{ getDisplayValue(item) }}</slot>
+            </li>
+          </ul>
+          <div v-else-if="!loading" :class="ns.e('empty')">{{ noDataTextComputed }}</div>
+          <div v-if="loading" :class="ns.e('loading')">{{ searchingText }}</div>
+        </div>
+      </transition>
+    </Teleport>
   </div>
 </template>
 
@@ -378,8 +397,11 @@ onBeforeUnmount(() => {
 
 /* Suggestions dropdown */
 .zc-auto-complete__suggestions {
+  /* Re-declare here: the dropdown is teleported to <body>, outside the
+     .zc-auto-complete subtree, so root component vars no longer cascade. */
+  --zc-auto-complete-dropdown-bg-color: var(--color-zc-white, #fff);
+  --zc-auto-complete-item-hover-bg-color: var(--color-zc-fill-light, #f5f7fa);
   position: absolute;
-  width: 100%;
   z-index: var(--z-zc-dropdown, 1000);
   background: var(--zc-auto-complete-dropdown-bg-color);
 

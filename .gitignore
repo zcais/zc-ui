@@ -71,3 +71,6 @@ docs/.vitepress/cache
 /zc-ui-resolver-1.0.0.tgz
 /zc-ui-theme-1.0.0.tgz
 /zc-ui-utils-1.0.0.tgz
+/.tmp-chrome-profile/
+/.tmp-*.sh
+/.tmp-*.mjs

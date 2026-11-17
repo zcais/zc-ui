@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed, ref, shallowRef, watch } from 'vue'
+import { computed, ref, shallowRef, watch, type CSSProperties } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
-import { useClickOutside } from '@zc-ui/hooks'
+import { useClickOutside, useZIndex } from '@zc-ui/hooks'
 import { useLocale } from '@zc-ui/locale'
 import { usePopper } from '../popper/usePopper'
 import { useFormDisabled, useFormSize, useFormItem } from '../form/use-form'
@@ -57,19 +57,33 @@ const visible = ref(false)
 const color = ref({ h: 220, s: 100, v: 100, a: 1 })
 const history = ref<string[]>([])
 
-// ---- Dropdown positioning (usePopper absolute strategy) ----
+// ---- Dropdown positioning ----
+// Teleported to body with fixed strategy so the panel is never clipped
+// by ancestor `overflow: hidden` containers.
 const { styles: dropdownStyles } = usePopper({
   reference: containerRef,
   popper: dropdownRef,
   placement: 'bottom-start',
   offset: 4,
-  strategy: 'absolute',
+  strategy: 'fixed',
   visible,
 })
 
-useClickOutside(containerRef, () => {
-  if (visible.value) closePicker()
-})
+// ---- Layering: allocate from the shared z-index manager on every open ----
+const { nextZIndex } = useZIndex()
+const dropdownZIndex = ref<number>()
+const dropdownStyle = computed<CSSProperties>(() => ({
+  ...dropdownStyles.value,
+  zIndex: dropdownZIndex.value,
+}))
+
+useClickOutside(
+  containerRef,
+  () => {
+    if (visible.value) closePicker()
+  },
+  { ignore: [dropdownRef] }
+)
 
 // ---- Color conversions ----
 function hsvToRgb(h: number, s: number, v: number) {
@@ -352,6 +366,7 @@ function closePicker() {
 function togglePicker() {
   if (isDisabled.value) return
   visible.value = !visible.value
+  if (visible.value) dropdownZIndex.value = nextZIndex()
 }
 
 function selectPredefine(c: string) {
@@ -386,68 +401,70 @@ defineExpose({
       <div :class="ns.e('color')" :style="{ background: displayColor }"></div>
     </div>
 
-    <!-- Dropdown panel -->
-    <transition name="zc-color-picker-dropdown">
-      <div v-show="visible" ref="dropdownRef" :style="dropdownStyles" :class="ns.e('panel')">
-        <!-- Saturation-Value panel -->
-        <div
-          ref="svRef"
-          :class="ns.e('sv-panel')"
-          :style="{ background: svBackground }"
-          @mousedown="handleSVMouseDown"
-        >
+    <!-- Dropdown panel (teleported to body so it is not clipped by overflow ancestors) -->
+    <Teleport to="body">
+      <transition name="zc-color-picker-dropdown">
+        <div v-show="visible" ref="dropdownRef" :style="dropdownStyle" :class="ns.e('panel')">
+          <!-- Saturation-Value panel -->
           <div
-            :class="ns.e('sv-cursor')"
-            :style="{
-              left: color.s + '%',
-              top: 100 - color.v + '%',
-            }"
-          ></div>
-        </div>
+            ref="svRef"
+            :class="ns.e('sv-panel')"
+            :style="{ background: svBackground }"
+            @mousedown="handleSVMouseDown"
+          >
+            <div
+              :class="ns.e('sv-cursor')"
+              :style="{
+                left: color.s + '%',
+                top: 100 - color.v + '%',
+              }"
+            ></div>
+          </div>
 
-        <!-- Hue slider -->
-        <div :class="ns.e('hue')" @click="handleHueChange">
-          <div :class="ns.e('hue-thumb')" :style="{ left: (color.h / 360) * 100 + '%' }"></div>
-        </div>
+          <!-- Hue slider -->
+          <div :class="ns.e('hue')" @click="handleHueChange">
+            <div :class="ns.e('hue-thumb')" :style="{ left: (color.h / 360) * 100 + '%' }"></div>
+          </div>
 
-        <!-- Alpha slider -->
-        <div v-if="showAlpha" :class="ns.e('alpha')" @click="handleAlphaChange">
-          <div
-            :class="ns.e('alpha-track')"
-            :style="{ background: `linear-gradient(to right, transparent, ${hueColor})` }"
-          ></div>
-          <div :class="ns.e('alpha-thumb')" :style="{ left: color.a * 100 + '%' }"></div>
-        </div>
+          <!-- Alpha slider -->
+          <div v-if="showAlpha" :class="ns.e('alpha')" @click="handleAlphaChange">
+            <div
+              :class="ns.e('alpha-track')"
+              :style="{ background: `linear-gradient(to right, transparent, ${hueColor})` }"
+            ></div>
+            <div :class="ns.e('alpha-thumb')" :style="{ left: color.a * 100 + '%' }"></div>
+          </div>
 
-        <!-- Input + buttons -->
-        <div :class="ns.e('footer')">
-          <input :class="ns.e('input')" :value="displayColor" @input="handleInputChange" />
-          <button :class="ns.e('btn')" @click="confirmColor">{{ t('common.confirm') }}</button>
-        </div>
+          <!-- Input + buttons -->
+          <div :class="ns.e('footer')">
+            <input :class="ns.e('input')" :value="displayColor" @input="handleInputChange" />
+            <button :class="ns.e('btn')" @click="confirmColor">{{ t('common.confirm') }}</button>
+          </div>
 
-        <!-- Predefine colors -->
-        <div v-if="predefine.length > 0" :class="ns.e('predefine')">
-          <span
-            v-for="(c, i) in predefine"
-            :key="i"
-            :class="ns.e('predefine-item')"
-            :style="{ background: c }"
-            @click="selectPredefine(c)"
-          ></span>
-        </div>
+          <!-- Predefine colors -->
+          <div v-if="predefine.length > 0" :class="ns.e('predefine')">
+            <span
+              v-for="(c, i) in predefine"
+              :key="i"
+              :class="ns.e('predefine-item')"
+              :style="{ background: c }"
+              @click="selectPredefine(c)"
+            ></span>
+          </div>
 
-        <!-- History -->
-        <div v-if="history.length > 0" :class="ns.e('history')">
-          <span
-            v-for="(c, i) in history"
-            :key="i"
-            :class="ns.e('history-item')"
-            :style="{ background: c }"
-            @click="selectPredefine(c)"
-          ></span>
+          <!-- History -->
+          <div v-if="history.length > 0" :class="ns.e('history')">
+            <span
+              v-for="(c, i) in history"
+              :key="i"
+              :class="ns.e('history-item')"
+              :style="{ background: c }"
+              @click="selectPredefine(c)"
+            ></span>
+          </div>
         </div>
-      </div>
-    </transition>
+      </transition>
+    </Teleport>
   </div>
 </template>
 
@@ -515,6 +532,10 @@ defineExpose({
 
 /* Panel */
 .zc-color-picker__panel {
+  /* Re-declare here: panel is teleported to <body>, outside the
+     .zc-color-picker subtree, so root component vars no longer cascade. */
+  --zc-color-picker-swatch-border-color: var(--color-zc-border-light, #e4e7ed);
+  --zc-color-picker-swatch-border-radius: var(--radius-zc-sm, 2px);
   position: absolute;
   z-index: var(--z-zc-dropdown, 1000);
   width: 240px;

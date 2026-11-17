@@ -3,9 +3,15 @@ import { mount } from '@vue/test-utils'
 import ZcSelect from '../select/select.vue'
 import ZcCascader from '../cascader/cascader.vue'
 
+// The dropdown is teleported to <body> in production so it escapes overflow
+// clipping. In tests, stub Teleport to render the dropdown in place, keeping
+// wrapper.findAll assertions working without attachTo ceremony.
+const globalStubs = { stubs: { teleport: true } }
+
 describe('Accessibility: Select', () => {
   it('should have role="combobox" on trigger (non-filterable)', () => {
     const wrapper = mount(ZcSelect, {
+      global: globalStubs,
       props: { options: [{ label: 'A', value: 'a' }] },
     })
     expect(wrapper.attributes('role')).toBe('combobox')
@@ -13,6 +19,7 @@ describe('Accessibility: Select', () => {
 
   it('should have aria-expanded reflecting visible state', () => {
     const wrapper = mount(ZcSelect, {
+      global: globalStubs,
       props: { options: [{ label: 'A', value: 'a' }] },
     })
     expect(wrapper.attributes('aria-expanded')).toBe('false')
@@ -20,6 +27,7 @@ describe('Accessibility: Select', () => {
 
   it('should have aria-haspopup="listbox"', () => {
     const wrapper = mount(ZcSelect, {
+      global: globalStubs,
       props: { options: [{ label: 'A', value: 'a' }] },
     })
     expect(wrapper.attributes('aria-haspopup')).toBe('listbox')
@@ -27,6 +35,7 @@ describe('Accessibility: Select', () => {
 
   it('should have aria-disabled when disabled', () => {
     const wrapper = mount(ZcSelect, {
+      global: globalStubs,
       props: { options: [{ label: 'A', value: 'a' }], disabled: true },
     })
     expect(wrapper.attributes('aria-disabled')).toBe('true')
@@ -34,6 +43,7 @@ describe('Accessibility: Select', () => {
 
   it('should have tabindex 0 when not disabled (non-filterable)', () => {
     const wrapper = mount(ZcSelect, {
+      global: globalStubs,
       props: { options: [{ label: 'A', value: 'a' }] },
     })
     expect(wrapper.attributes('tabindex')).toBe('0')
@@ -41,6 +51,7 @@ describe('Accessibility: Select', () => {
 
   it('should have tabindex -1 when disabled', () => {
     const wrapper = mount(ZcSelect, {
+      global: globalStubs,
       props: { options: [{ label: 'A', value: 'a' }], disabled: true },
     })
     expect(wrapper.attributes('tabindex')).toBe('-1')
@@ -48,6 +59,7 @@ describe('Accessibility: Select', () => {
 
   it('should have role="listbox" on options container', () => {
     const wrapper = mount(ZcSelect, {
+      global: globalStubs,
       props: { options: [{ label: 'A', value: 'a' }] },
     })
     // Open dropdown
@@ -58,6 +70,7 @@ describe('Accessibility: Select', () => {
 
   it('should have aria-multiselectable on listbox when multiple', () => {
     const wrapper = mount(ZcSelect, {
+      global: globalStubs,
       props: {
         options: [
           { label: 'A', value: 'a' },
@@ -73,6 +86,7 @@ describe('Accessibility: Select', () => {
 
   it('should have role="option" on each option', () => {
     const wrapper = mount(ZcSelect, {
+      global: globalStubs,
       props: {
         options: [
           { label: 'A', value: 'a' },
@@ -87,6 +101,7 @@ describe('Accessibility: Select', () => {
 
   it('should have aria-selected on options', () => {
     const wrapper = mount(ZcSelect, {
+      global: globalStubs,
       props: {
         options: [{ label: 'A', value: 'a' }],
         modelValue: 'a',
@@ -99,6 +114,7 @@ describe('Accessibility: Select', () => {
 
   it('should have aria-disabled on disabled options', () => {
     const wrapper = mount(ZcSelect, {
+      global: globalStubs,
       props: {
         options: [{ label: 'A', value: 'a', disabled: true }],
       },
@@ -110,6 +126,7 @@ describe('Accessibility: Select', () => {
 
   it('should support ArrowDown to open dropdown', async () => {
     const wrapper = mount(ZcSelect, {
+      global: globalStubs,
       props: { options: [{ label: 'A', value: 'a' }] },
     })
     await wrapper.trigger('keydown', { key: 'ArrowDown' })
@@ -118,6 +135,7 @@ describe('Accessibility: Select', () => {
 
   it('should support Escape to close dropdown', async () => {
     const wrapper = mount(ZcSelect, {
+      global: globalStubs,
       props: { options: [{ label: 'A', value: 'a' }] },
     })
     wrapper.vm.openDropdown()
@@ -128,6 +146,7 @@ describe('Accessibility: Select', () => {
 
   it('should support Enter to select option', async () => {
     const wrapper = mount(ZcSelect, {
+      global: globalStubs,
       props: {
         options: [
           { label: 'A', value: 'a' },
@@ -146,6 +165,7 @@ describe('Accessibility: Select', () => {
 describe('Accessibility: Cascader', () => {
   it('should have role="combobox"', () => {
     const wrapper = mount(ZcCascader, {
+      global: globalStubs,
       props: {
         options: [{ label: 'A', value: 'a', children: [{ label: 'A1', value: 'a1' }] }],
       },
@@ -155,6 +175,7 @@ describe('Accessibility: Cascader', () => {
 
   it('should have aria-haspopup="listbox"', () => {
     const wrapper = mount(ZcCascader, {
+      global: globalStubs,
       props: {
         options: [{ label: 'A', value: 'a', children: [{ label: 'A1', value: 'a1' }] }],
       },
@@ -164,6 +185,7 @@ describe('Accessibility: Cascader', () => {
 
   it('should have aria-expanded reflecting visible state', () => {
     const wrapper = mount(ZcCascader, {
+      global: globalStubs,
       props: {
         options: [{ label: 'A', value: 'a' }],
       },
@@ -173,6 +195,7 @@ describe('Accessibility: Cascader', () => {
 
   it('should have aria-label', () => {
     const wrapper = mount(ZcCascader, {
+      global: globalStubs,
       props: {
         options: [{ label: 'A', value: 'a' }],
         placeholder: '请选择',
@@ -183,6 +206,7 @@ describe('Accessibility: Cascader', () => {
 
   it('should have aria-disabled when disabled', () => {
     const wrapper = mount(ZcCascader, {
+      global: globalStubs,
       props: {
         options: [{ label: 'A', value: 'a' }],
         disabled: true,
@@ -193,6 +217,7 @@ describe('Accessibility: Cascader', () => {
 
   it('should have tabindex 0 when not disabled', () => {
     const wrapper = mount(ZcCascader, {
+      global: globalStubs,
       props: { options: [{ label: 'A', value: 'a' }] },
     })
     expect(wrapper.attributes('tabindex')).toBe('0')
@@ -200,6 +225,7 @@ describe('Accessibility: Cascader', () => {
 
   it('should have tabindex -1 when disabled', () => {
     const wrapper = mount(ZcCascader, {
+      global: globalStubs,
       props: { options: [{ label: 'A', value: 'a' }], disabled: true },
     })
     expect(wrapper.attributes('tabindex')).toBe('-1')
@@ -207,6 +233,7 @@ describe('Accessibility: Cascader', () => {
 
   it('should have aria-label on clear button', () => {
     const wrapper = mount(ZcCascader, {
+      global: globalStubs,
       props: {
         options: [{ label: 'A', value: 'a' }],
         clearable: true,
@@ -220,6 +247,7 @@ describe('Accessibility: Cascader', () => {
 
   it('should support Escape to close dropdown', async () => {
     const wrapper = mount(ZcCascader, {
+      global: globalStubs,
       props: { options: [{ label: 'A', value: 'a' }] },
     })
     await wrapper.trigger('keydown', { key: 'Escape' })

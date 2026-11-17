@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed, ref, shallowRef, type Ref } from 'vue'
+import { computed, ref, shallowRef, type CSSProperties, type Ref } from 'vue'
 import { useNamespace, useVirtualList } from '@zc-ui/hooks'
-import { useClickOutside } from '@zc-ui/hooks'
+import { useClickOutside, useZIndex } from '@zc-ui/hooks'
 import { useLocale } from '@zc-ui/locale'
 import { usePopper } from '../popper/usePopper'
 import { useFormDisabled, useFormSize, useFormItem } from '../form/use-form'
@@ -69,21 +69,39 @@ const visible = ref(false)
 const isFocused = ref(false)
 const expandedPaths = ref<(string | number)[][]>([])
 
-// ---- Dropdown positioning (usePopper absolute strategy) ----
+// ---- Dropdown positioning ----
+// Teleported to body with fixed strategy so the dropdown is never clipped
+// by ancestor `overflow: hidden` containers.
 const { styles: dropdownStyles } = usePopper({
   reference: containerRef,
   popper: dropdownRef,
   placement: 'bottom-start',
   offset: 4,
-  strategy: 'absolute',
+  strategy: 'fixed',
   visible,
 })
+
+// ---- Layering: allocate from the shared z-index manager on every open ----
+const { nextZIndex } = useZIndex()
+const dropdownZIndex = ref<number>()
+// No forced width: the dropdown shrink-wraps its panels (fixed-position
+// elements use shrink-to-fit sizing) and grows column-by-column as the
+// user drills down, instead of stretching to the trigger width.
+const dropdownStyle = computed<CSSProperties>(() => ({
+  ...dropdownStyles.value,
+  zIndex: dropdownZIndex.value,
+}))
+
 const activePath = ref<(string | number)[]>([])
 const searchText = ref('')
 
-useClickOutside(containerRef, () => {
-  if (visible.value) closeDropdown()
-})
+useClickOutside(
+  containerRef,
+  () => {
+    if (visible.value) closeDropdown()
+  },
+  { ignore: [dropdownRef] }
+)
 
 // ---- Helpers ----
 function getLabel(option: CascaderOption): string {
@@ -99,13 +117,18 @@ function isOptionDisabled(option: CascaderOption): boolean {
 }
 
 // ---- Panels ----
+// Lazy drill-down: only the root panel renders initially; a child panel
+// appears once its parent node is expanded (activePath drives this).
 const panels = computed<CascaderOption[][]>(() => {
   const result: CascaderOption[][] = [props.options]
-  for (const pathValue of activePath.value) {
+  for (let i = 0; i < activePath.value.length; i++) {
+    const pathValue = activePath.value[i]
     const parentOption = findOptionByPath(result[result.length - 1], pathValue)
     if (parentOption?.children?.length) {
       result.push(parentOption.children)
     } else {
+      // Path points at a leaf (or a node whose children were removed):
+      // drop it so no empty trailing panel is rendered.
       break
     }
   }
@@ -287,6 +310,7 @@ function toggleDropdown() {
   } else {
     visible.value = true
     isFocused.value = true
+    dropdownZIndex.value = nextZIndex()
   }
 }
 
@@ -442,150 +466,154 @@ defineExpose({
       </span>
     </div>
 
-    <!-- Dropdown -->
-    <transition name="zc-cascader-dropdown">
-      <div v-show="visible" ref="dropdownRef" :style="dropdownStyles" :class="ns.e('dropdown')">
-        <!-- Search input -->
-        <div v-if="filterable" :class="ns.e('search')">
-          <input
-            :class="ns.e('search-input')"
-            type="text"
-            :placeholder="placeholderText"
-            :value="searchText"
-            @input="handleSearchInput"
-            @focus="handleFocus"
-            @blur="handleBlur"
-          />
-        </div>
+    <!-- Dropdown (teleported to body so it is not clipped by overflow ancestors) -->
+    <Teleport to="body">
+      <transition name="zc-cascader-dropdown">
+        <div v-show="visible" ref="dropdownRef" :style="dropdownStyle" :class="ns.e('dropdown')">
+          <!-- Search input -->
+          <div v-if="filterable" :class="ns.e('search')">
+            <input
+              :class="ns.e('search-input')"
+              type="text"
+              :placeholder="placeholderText"
+              :value="searchText"
+              @input="handleSearchInput"
+              @focus="handleFocus"
+              @blur="handleBlur"
+            />
+          </div>
 
-        <!-- Filtered results -->
-        <div v-if="showFilterPanel" :class="ns.e('menu')">
-          <div :class="ns.e('menu-list')">
-            <div
-              v-for="option in filteredOptions"
-              :key="String(option.value)"
-              :class="[ns.e('node'), ns.is('disabled', isOptionDisabled(option))]"
-              @click="selectFilteredOption(option)"
-            >
-              {{ getLabel(option) }}
+          <!-- Filtered results -->
+          <div v-if="showFilterPanel" :class="ns.e('menu')">
+            <div :class="ns.e('menu-list')">
+              <div
+                v-for="option in filteredOptions"
+                :key="String(option.value)"
+                :class="[ns.e('node'), ns.is('disabled', isOptionDisabled(option))]"
+                @click="selectFilteredOption(option)"
+              >
+                {{ getLabel(option) }}
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- Normal panels -->
-        <div v-else :class="ns.e('panels')">
-          <!-- Virtual scroll mode -->
-          <template v-if="virtualScroll">
-            <div v-for="(_panel, panelIdx) in panels" :key="panelIdx" :class="ns.e('menu')">
-              <div
-                v-if="virtualPanels[panelIdx]"
-                :ref="(virtualPanels[panelIdx] as any).containerRef"
-                :class="ns.e('menu-list')"
-                style="height: 260px; overflow-y: auto"
-              >
+          <!-- Normal panels -->
+          <div v-else :class="ns.e('panels')">
+            <!-- Virtual scroll mode -->
+            <template v-if="virtualScroll">
+              <div v-for="(_panel, panelIdx) in panels" :key="panelIdx" :class="ns.e('menu')">
                 <div
-                  :style="{
-                    height: `${(virtualPanels[panelIdx] as any).totalHeight}px`,
-                    position: 'relative',
-                  }"
+                  v-if="virtualPanels[panelIdx]"
+                  :ref="(virtualPanels[panelIdx] as any).containerRef"
+                  :class="ns.e('menu-list')"
+                  style="height: 260px; overflow-y: auto"
                 >
                   <div
                     :style="{
-                      transform: `translateY(${(virtualPanels[panelIdx] as any).offsetY}px)`,
+                      height: `${(virtualPanels[panelIdx] as any).totalHeight}px`,
+                      position: 'relative',
                     }"
                   >
                     <div
-                      v-for="option in (virtualPanels[panelIdx] as any).visibleData"
-                      :key="String(option.value)"
-                      :class="[
-                        ns.e('node'),
-                        ns.is('active', activePath[panelIdx] === option.value),
-                        ns.is('disabled', isOptionDisabled(option)),
-                        ns.is('expand', !!getChildren(option)?.length),
-                      ]"
-                      @click="selectNode(option, panelIdx)"
-                      @mouseenter="handleNodeHover(option, panelIdx)"
+                      :style="{
+                        transform: `translateY(${(virtualPanels[panelIdx] as any).offsetY}px)`,
+                      }"
                     >
-                      <span :class="ns.e('node-label')">{{ getLabel(option) }}</span>
-                      <span v-if="getChildren(option)?.length" :class="ns.e('node-arrow')">›</span>
+                      <div
+                        v-for="option in (virtualPanels[panelIdx] as any).visibleData"
+                        :key="String(option.value)"
+                        :class="[
+                          ns.e('node'),
+                          ns.is('active', activePath[panelIdx] === option.value),
+                          ns.is('disabled', isOptionDisabled(option)),
+                          ns.is('expand', !!getChildren(option)?.length),
+                        ]"
+                        @click="selectNode(option, panelIdx)"
+                        @mouseenter="handleNodeHover(option, panelIdx)"
+                      >
+                        <span :class="ns.e('node-label')">{{ getLabel(option) }}</span>
+                        <span v-if="getChildren(option)?.length" :class="ns.e('node-arrow')"
+                          >›</span
+                        >
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </template>
-          <!-- Normal mode -->
-          <template v-else>
-            <div v-for="(panel, panelIdx) in panels" :key="panelIdx" :class="ns.e('menu')">
-              <div :class="ns.e('menu-list')">
-                <div
-                  v-for="option in panel"
-                  :key="String(option.value)"
-                  :class="[
-                    ns.e('node'),
-                    ns.is('active', activePath[panelIdx] === option.value),
-                    ns.is('disabled', isOptionDisabled(option)),
-                    ns.is('expand', !!getChildren(option)?.length),
-                  ]"
-                  role="option"
-                  :aria-selected="activePath[panelIdx] === option.value"
-                  :aria-disabled="isOptionDisabled(option)"
-                  :aria-level="panelIdx + 1"
-                  :aria-label="getLabel(option)"
-                  :tabindex="isOptionDisabled(option) ? -1 : 0"
-                  @click="selectNode(option, panelIdx)"
-                  @keydown.enter.prevent="selectNode(option, panelIdx)"
-                  @mouseenter="handleNodeHover(option, panelIdx)"
-                >
-                  <!-- Multiple checkbox -->
-                  <span
-                    v-if="multiple"
-                    :class="ns.e('node-checkbox')"
-                    @click.stop="selectNode(option, panelIdx)"
+            </template>
+            <!-- Normal mode -->
+            <template v-else>
+              <div v-for="(panel, panelIdx) in panels" :key="panelIdx" :class="ns.e('menu')">
+                <div :class="ns.e('menu-list')">
+                  <div
+                    v-for="option in panel"
+                    :key="String(option.value)"
+                    :class="[
+                      ns.e('node'),
+                      ns.is('active', activePath[panelIdx] === option.value),
+                      ns.is('disabled', isOptionDisabled(option)),
+                      ns.is('expand', !!getChildren(option)?.length),
+                    ]"
+                    role="option"
+                    :aria-selected="activePath[panelIdx] === option.value"
+                    :aria-disabled="isOptionDisabled(option)"
+                    :aria-level="panelIdx + 1"
+                    :aria-label="getLabel(option)"
+                    :tabindex="isOptionDisabled(option) ? -1 : 0"
+                    @click="selectNode(option, panelIdx)"
+                    @keydown.enter.prevent="selectNode(option, panelIdx)"
+                    @mouseenter="handleNodeHover(option, panelIdx)"
                   >
-                    <svg
-                      viewBox="0 0 24 24"
-                      width="14"
-                      height="14"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
+                    <!-- Multiple checkbox -->
+                    <span
+                      v-if="multiple"
+                      :class="ns.e('node-checkbox')"
+                      @click.stop="selectNode(option, panelIdx)"
                     >
-                      <rect x="3" y="3" width="18" height="18" rx="3" />
-                      <path
-                        v-if="
-                          modelValue.some(
-                            (p: (string | number)[]) =>
-                              JSON.stringify([...activePath.slice(0, panelIdx), option.value]) ===
-                              JSON.stringify(p)
-                          )
-                        "
-                        d="M7 12l3 3 7-7"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                  </span>
-                  <span :class="ns.e('node-label')">{{ getLabel(option) }}</span>
-                  <span v-if="getChildren(option)?.length" :class="ns.e('node-arrow')">
-                    <svg
-                      viewBox="0 0 24 24"
-                      width="12"
-                      height="12"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                  </span>
+                      <svg
+                        viewBox="0 0 24 24"
+                        width="14"
+                        height="14"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <rect x="3" y="3" width="18" height="18" rx="3" />
+                        <path
+                          v-if="
+                            modelValue.some(
+                              (p: (string | number)[]) =>
+                                JSON.stringify([...activePath.slice(0, panelIdx), option.value]) ===
+                                JSON.stringify(p)
+                            )
+                          "
+                          d="M7 12l3 3 7-7"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+                    <span :class="ns.e('node-label')">{{ getLabel(option) }}</span>
+                    <span v-if="getChildren(option)?.length" :class="ns.e('node-arrow')">
+                      <svg
+                        viewBox="0 0 24 24"
+                        width="12"
+                        height="12"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          </template>
+            </template>
+          </div>
         </div>
-      </div>
-    </transition>
+      </transition>
+    </Teleport>
   </div>
 </template>
 
@@ -710,13 +738,16 @@ defineExpose({
 /* Dropdown */
 .zc-cascader__dropdown {
   position: absolute;
-  min-width: 100%;
   z-index: var(--z-zc-dropdown, 1000);
   background: var(--color-zc-white, #fff);
   border: 1px solid var(--color-zc-border-light, #e4e7ed);
   border-radius: var(--radius-zc-base, 4px);
   box-shadow: var(--shadow-zc-md, 0 4px 12px 0 rgba(0, 0, 0, 0.1));
   box-sizing: border-box;
+  /* Teleported with position: fixed — shrink-to-fit sizing keeps the
+     dropdown compact; it grows by one column per expanded level. */
+  width: max-content;
+  max-width: 100vw;
 }
 
 /* Search */
@@ -744,10 +775,15 @@ defineExpose({
 /* Panels */
 .zc-cascader__panels {
   display: flex;
+  align-items: stretch;
 }
 
+/* Fixed-position dropdown children have no ancestor width to inherit;
+  each column measures its own longest label. */
 .zc-cascader__menu {
-  min-width: 180px;
+  width: max-content;
+  min-width: 160px;
+  max-width: 240px;
   max-height: 260px;
   border-right: 1px solid var(--color-zc-border-lighter, #ebeef5);
 }
@@ -766,12 +802,13 @@ defineExpose({
   display: flex;
   align-items: center;
   height: 34px;
-  padding: 0 20px 0 10px;
+  padding: 0 12px;
   cursor: pointer;
   color: var(--color-zc-text-regular, #606266);
   font-size: var(--text-zc-sm, 13px);
   transition: background var(--transition-duration-zc-fast, 0.15s);
   box-sizing: border-box;
+  white-space: nowrap;
 }
 
 .zc-cascader__node:hover {

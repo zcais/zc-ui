@@ -60,7 +60,7 @@ const props = withDefaults(
     blurBehavior: 'clear',
     split: false,
     maxHeight: 240,
-    teleport: false,
+    teleport: true,
   }
 )
 
@@ -447,7 +447,7 @@ function scrollActiveIntoView() {
     if (!dropdown) return
     const activeEl = document.getElementById(getOptionId(activeIndex.value))
     if (activeEl) {
-      activeEl.scrollIntoView({ block: 'nearest' })
+      activeEl.scrollIntoView?.({ block: 'nearest' })
     }
   })
 }

@@ -120,13 +120,15 @@ const query = ref('')
 const internalLoading = ref(props.loading)
 const internalOptions = ref<SelectOption[]>([])
 
-// ---- Dropdown positioning (usePopper absolute strategy) ----
+// ---- Dropdown positioning ----
+// Teleported to body with fixed strategy so the dropdown is never clipped
+// by ancestor `overflow: hidden` containers.
 const { styles: dropdownStyles } = usePopper({
   reference: triggerRef,
   popper: dropdownRef,
   placement: 'bottom-start',
   offset: 4,
-  strategy: 'absolute',
+  strategy: 'fixed',
   visible,
 })
 
@@ -136,6 +138,7 @@ const dropdownZIndex = ref<number>()
 const dropdownStyle = computed<CSSProperties>(() => ({
   ...dropdownStyles.value,
   zIndex: dropdownZIndex.value,
+  width: triggerRef.value ? `${triggerRef.value.getBoundingClientRect().width}px` : undefined,
 }))
 
 // ---- Sync external loading prop ----
@@ -162,10 +165,14 @@ watch(
   { immediate: true, deep: true }
 )
 
-// ---- Click outside ----
-useClickOutside(triggerRef, () => {
-  if (visible.value) closeDropdown()
-})
+// ---- Click outside (dropdown is teleported, so ignore it explicitly) ----
+useClickOutside(
+  triggerRef,
+  () => {
+    if (visible.value) closeDropdown()
+  },
+  { ignore: [dropdownRef] }
+)
 
 // ---- Filter helper ----
 function matchesFilter(opt: SelectOption): boolean {
@@ -681,101 +688,193 @@ defineExpose({
       </span>
     </div>
 
-    <!-- Dropdown menu -->
-    <transition name="zc-select-dropdown">
-      <div v-show="visible" ref="dropdownRef" :style="dropdownStyle" :class="dropdownClasses">
-        <!-- Loading -->
-        <div v-if="loading || internalLoading" :class="ns.e('loading')">
-          <svg class="zc-select__loading-icon" viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" opacity="0.25" />
-            <path
-              d="M12 2a10 10 0 0 1 10 10"
-              stroke="currentColor"
-              stroke-width="3"
-              stroke-linecap="round"
-            />
-          </svg>
-          <span>{{ loadingText || t('zc.select.loading') }}</span>
-        </div>
-
-        <template v-else>
-          <!-- Select-all bar (multiple mode only) -->
-          <div
-            v-if="multiple && selectableOptions.length > 0"
-            :class="ns.e('select-all')"
-            role="checkbox"
-            :aria-checked="isAllSelected ? 'true' : isIndeterminate ? 'mixed' : 'false'"
-            :aria-label="isAllSelected ? t('zc.select.deselectAll') : t('zc.select.selectAll')"
-            tabindex="0"
-            @click.stop="toggleSelectAll"
-            @keydown.enter.prevent="toggleSelectAll"
-          >
-            <span
-              :class="[
-                ns.e('check-all'),
-                ns.is('checked', isAllSelected),
-                ns.is('indeterminate', isIndeterminate),
-              ]"
-            >
-              <svg
-                v-if="isAllSelected"
-                viewBox="0 0 24 24"
-                width="14"
-                height="14"
-                fill="none"
+    <!-- Dropdown menu (teleported to body so it is not clipped by overflow ancestors) -->
+    <Teleport to="body">
+      <transition name="zc-select-dropdown">
+        <div v-show="visible" ref="dropdownRef" :style="dropdownStyle" :class="dropdownClasses">
+          <!-- Loading -->
+          <div v-if="loading || internalLoading" :class="ns.e('loading')">
+            <svg class="zc-select__loading-icon" viewBox="0 0 24 24" fill="none">
+              <circle
+                cx="12"
+                cy="12"
+                r="10"
                 stroke="currentColor"
                 stroke-width="3"
-              >
-                <path d="M5 12l5 5L20 7" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-              <svg
-                v-else-if="isIndeterminate"
-                viewBox="0 0 24 24"
-                width="14"
-                height="14"
-                fill="none"
+                opacity="0.25"
+              />
+              <path
+                d="M12 2a10 10 0 0 1 10 10"
                 stroke="currentColor"
                 stroke-width="3"
-              >
-                <path d="M5 12h14" stroke-linecap="round" />
-              </svg>
-            </span>
-            <span>{{ isAllSelected ? t('zc.select.deselectAll') : t('zc.select.selectAll') }}</span>
+                stroke-linecap="round"
+              />
+            </svg>
+            <span>{{ loadingText || t('zc.select.loading') }}</span>
           </div>
 
-          <!-- Virtual scroll mode -->
-          <div
-            v-if="virtualScroll && renderItems.length > 0"
-            ref="virtualContainerRef"
-            :class="ns.e('virtual-list')"
-          >
-            <div :style="{ height: virtualTotalHeight + 'px', position: 'relative' }">
-              <div :style="{ transform: `translateY(${virtualOffsetY}px)` }">
-                <div
-                  v-for="(item, vi) in virtualVisibleData"
-                  :key="item.key"
+          <template v-else>
+            <!-- Select-all bar (multiple mode only) -->
+            <div
+              v-if="multiple && selectableOptions.length > 0"
+              :class="ns.e('select-all')"
+              role="checkbox"
+              :aria-checked="isAllSelected ? 'true' : isIndeterminate ? 'mixed' : 'false'"
+              :aria-label="isAllSelected ? t('zc.select.deselectAll') : t('zc.select.selectAll')"
+              tabindex="0"
+              @click.stop="toggleSelectAll"
+              @keydown.enter.prevent="toggleSelectAll"
+            >
+              <span
+                :class="[
+                  ns.e('check-all'),
+                  ns.is('checked', isAllSelected),
+                  ns.is('indeterminate', isIndeterminate),
+                ]"
+              >
+                <svg
+                  v-if="isAllSelected"
+                  viewBox="0 0 24 24"
+                  width="14"
+                  height="14"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3"
+                >
+                  <path d="M5 12l5 5L20 7" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <svg
+                  v-else-if="isIndeterminate"
+                  viewBox="0 0 24 24"
+                  width="14"
+                  height="14"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3"
+                >
+                  <path d="M5 12h14" stroke-linecap="round" />
+                </svg>
+              </span>
+              <span>{{
+                isAllSelected ? t('zc.select.deselectAll') : t('zc.select.selectAll')
+              }}</span>
+            </div>
+
+            <!-- Virtual scroll mode -->
+            <div
+              v-if="virtualScroll && renderItems.length > 0"
+              ref="virtualContainerRef"
+              :class="ns.e('virtual-list')"
+            >
+              <div :style="{ height: virtualTotalHeight + 'px', position: 'relative' }">
+                <div :style="{ transform: `translateY(${virtualOffsetY}px)` }">
+                  <div
+                    v-for="(item, vi) in virtualVisibleData"
+                    :key="item.key"
+                    :class="[
+                      ns.e('option'),
+                      ns.is('group-title', item.type === 'header'),
+                      ns.is('selected', isItemSelected(item)),
+                      ns.is('disabled', item.disabled),
+                      ns.is('hover', hoveringIndex === virtualStartIndex + vi),
+                      ns.is('create', item.type === 'create'),
+                    ]"
+                    :style="{ height: virtualItemHeight + 'px' }"
+                    :role="item.type === 'header' ? 'presentation' : 'option'"
+                    :aria-selected="isItemSelected(item)"
+                    :aria-disabled="item.disabled"
+                    @click.stop="onItemClick(item)"
+                    @mouseenter="hoveringIndex = virtualStartIndex + vi"
+                  >
+                    <span :class="ns.e('option-label')">
+                      <template v-if="item.type === 'create'">
+                        <span :class="ns.e('create-prefix')">+</span>
+                        {{ item.label }}
+                      </template>
+                      <slot
+                        v-else-if="item.option"
+                        name="option"
+                        :option="item.option"
+                        :selected="isItemSelected(item)"
+                        :disabled="item.disabled"
+                      >
+                        {{ item.label }}
+                      </slot>
+                      <template v-else>
+                        {{ item.label }}
+                      </template>
+                    </span>
+                    <span v-if="isItemSelected(item)" :class="ns.e('check')">
+                      <svg
+                        viewBox="0 0 24 24"
+                        width="14"
+                        height="14"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="3"
+                      >
+                        <path d="M5 12l5 5L20 7" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Normal (non-virtual) mode -->
+            <ul
+              v-else-if="renderItems.length > 0"
+              id="zc-select-listbox"
+              :class="ns.e('options')"
+              role="listbox"
+              :aria-multiselectable="multiple ? 'true' : undefined"
+            >
+              <template v-for="(item, index) in renderItems" :key="item.key">
+                <!-- Group header -->
+                <li
+                  v-if="item.type === 'header'"
+                  :class="[ns.e('group-title'), ns.is('disabled', item.disabled)]"
+                >
+                  {{ item.label }}
+                </li>
+
+                <!-- Create-option entry -->
+                <li
+                  v-else-if="item.type === 'create'"
                   :class="[
                     ns.e('option'),
-                    ns.is('group-title', item.type === 'header'),
+                    ns.is('create', true),
+                    ns.is('hover', hoveringIndex === index),
+                  ]"
+                  role="option"
+                  @click.stop="onItemClick(item)"
+                  @mouseenter="hoveringIndex = index"
+                >
+                  <span :class="ns.e('option-label')">
+                    <span :class="ns.e('create-prefix')">+</span>
+                    {{ item.label }}
+                  </span>
+                </li>
+
+                <!-- Regular option -->
+                <li
+                  v-else
+                  :id="`zc-select-option-${index}`"
+                  :class="[
+                    ns.e('option'),
                     ns.is('selected', isItemSelected(item)),
                     ns.is('disabled', item.disabled),
-                    ns.is('hover', hoveringIndex === virtualStartIndex + vi),
-                    ns.is('create', item.type === 'create'),
+                    ns.is('hover', hoveringIndex === index),
                   ]"
-                  :style="{ height: virtualItemHeight + 'px' }"
-                  :role="item.type === 'header' ? 'presentation' : 'option'"
+                  role="option"
                   :aria-selected="isItemSelected(item)"
                   :aria-disabled="item.disabled"
                   @click.stop="onItemClick(item)"
-                  @mouseenter="hoveringIndex = virtualStartIndex + vi"
+                  @mouseenter="hoveringIndex = index"
                 >
                   <span :class="ns.e('option-label')">
-                    <template v-if="item.type === 'create'">
-                      <span :class="ns.e('create-prefix')">+</span>
-                      {{ item.label }}
-                    </template>
                     <slot
-                      v-else-if="item.option"
+                      v-if="item.option"
                       name="option"
                       :option="item.option"
                       :selected="isItemSelected(item)"
@@ -783,9 +882,7 @@ defineExpose({
                     >
                       {{ item.label }}
                     </slot>
-                    <template v-else>
-                      {{ item.label }}
-                    </template>
+                    <template v-else>{{ item.label }}</template>
                   </span>
                   <span v-if="isItemSelected(item)" :class="ns.e('check')">
                     <svg
@@ -799,97 +896,18 @@ defineExpose({
                       <path d="M5 12l5 5L20 7" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                   </span>
-                </div>
-              </div>
+                </li>
+              </template>
+            </ul>
+
+            <!-- No data / Empty slot -->
+            <div v-else :class="ns.e('empty')">
+              <slot name="empty">{{ noDataTextComputed }}</slot>
             </div>
-          </div>
-
-          <!-- Normal (non-virtual) mode -->
-          <ul
-            v-else-if="renderItems.length > 0"
-            id="zc-select-listbox"
-            :class="ns.e('options')"
-            role="listbox"
-            :aria-multiselectable="multiple ? 'true' : undefined"
-          >
-            <template v-for="(item, index) in renderItems" :key="item.key">
-              <!-- Group header -->
-              <li
-                v-if="item.type === 'header'"
-                :class="[ns.e('group-title'), ns.is('disabled', item.disabled)]"
-              >
-                {{ item.label }}
-              </li>
-
-              <!-- Create-option entry -->
-              <li
-                v-else-if="item.type === 'create'"
-                :class="[
-                  ns.e('option'),
-                  ns.is('create', true),
-                  ns.is('hover', hoveringIndex === index),
-                ]"
-                role="option"
-                @click.stop="onItemClick(item)"
-                @mouseenter="hoveringIndex = index"
-              >
-                <span :class="ns.e('option-label')">
-                  <span :class="ns.e('create-prefix')">+</span>
-                  {{ item.label }}
-                </span>
-              </li>
-
-              <!-- Regular option -->
-              <li
-                v-else
-                :id="`zc-select-option-${index}`"
-                :class="[
-                  ns.e('option'),
-                  ns.is('selected', isItemSelected(item)),
-                  ns.is('disabled', item.disabled),
-                  ns.is('hover', hoveringIndex === index),
-                ]"
-                role="option"
-                :aria-selected="isItemSelected(item)"
-                :aria-disabled="item.disabled"
-                @click.stop="onItemClick(item)"
-                @mouseenter="hoveringIndex = index"
-              >
-                <span :class="ns.e('option-label')">
-                  <slot
-                    v-if="item.option"
-                    name="option"
-                    :option="item.option"
-                    :selected="isItemSelected(item)"
-                    :disabled="item.disabled"
-                  >
-                    {{ item.label }}
-                  </slot>
-                  <template v-else>{{ item.label }}</template>
-                </span>
-                <span v-if="isItemSelected(item)" :class="ns.e('check')">
-                  <svg
-                    viewBox="0 0 24 24"
-                    width="14"
-                    height="14"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="3"
-                  >
-                    <path d="M5 12l5 5L20 7" stroke-linecap="round" stroke-linejoin="round" />
-                  </svg>
-                </span>
-              </li>
-            </template>
-          </ul>
-
-          <!-- No data / Empty slot -->
-          <div v-else :class="ns.e('empty')">
-            <slot name="empty">{{ noDataTextComputed }}</slot>
-          </div>
-        </template>
-      </div>
-    </transition>
+          </template>
+        </div>
+      </transition>
+    </Teleport>
   </div>
 </template>
 
@@ -1086,8 +1104,19 @@ defineExpose({
 
 /* ---- Dropdown ---- */
 .zc-select__dropdown {
+  /* Re-declare here: the dropdown is teleported to <body>, outside the
+     .zc-select subtree, so component vars defined on the root no longer
+     cascade down. Keep values in sync with the root declarations. */
+  --zc-select-dropdown-bg-color: var(--color-zc-white, #fff);
+  --zc-select-dropdown-border-color: var(--color-zc-border-light, #e4e7ed);
+  --zc-select-dropdown-border-radius: var(--radius-zc-base, 4px);
+  --zc-select-option-hover-bg-color: var(--color-zc-fill-light, #f5f7fa);
+  --zc-select-option-selected-text-color: var(--color-zc-primary-500, #409eff);
+  --zc-select-font-size: var(--text-zc-base, 14px);
+  --zc-select-border-color: var(--color-zc-border-base, #dcdfe6);
+  --zc-select-icon-color: var(--color-zc-text-secondary, #909399);
+  --zc-select-disabled-text-color: var(--color-zc-text-placeholder, #a8abb2);
   position: absolute;
-  width: 100%;
   z-index: var(--z-zc-dropdown, 1000);
   background: var(--zc-select-dropdown-bg-color);
   border: 1px solid var(--zc-select-dropdown-border-color);

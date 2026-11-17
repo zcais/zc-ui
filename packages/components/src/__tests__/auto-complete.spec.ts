@@ -3,6 +3,11 @@ import { mount } from '@vue/test-utils'
 import { nextTick } from 'vue'
 import AutoComplete from '../auto-complete/auto-complete.vue'
 
+// The dropdown is teleported to <body> in production so it escapes overflow
+// clipping. In tests, stub Teleport to render the dropdown in place, keeping
+// wrapper.findAll assertions working without attachTo ceremony.
+const globalStubs = { stubs: { teleport: true } }
+
 describe('ZcAutoComplete', () => {
   beforeEach(() => {
     vi.useFakeTimers()
@@ -12,41 +17,43 @@ describe('ZcAutoComplete', () => {
     vi.useRealTimers()
   })
   it('renders with default props', () => {
-    const wrapper = mount(AutoComplete)
+    const wrapper = mount(AutoComplete, { global: globalStubs })
     expect(wrapper.find('.zc-auto-complete').exists()).toBe(true)
     expect(wrapper.find('.zc-auto-complete__inner').exists()).toBe(true)
   })
 
   it('applies placeholder', () => {
-    const wrapper = mount(AutoComplete, { props: { placeholder: 'Search...' } })
+    const wrapper = mount(AutoComplete, {
+      global: globalStubs,
+      props: { placeholder: 'Search...' },
+    })
     expect(wrapper.find('.zc-auto-complete__inner').attributes('placeholder')).toBe('Search...')
   })
 
   it('applies size class', () => {
-    const wrapper = mount(AutoComplete, { props: { size: 'large' } })
+    const wrapper = mount(AutoComplete, { global: globalStubs, props: { size: 'large' } })
     expect(wrapper.find('.zc-auto-complete').classes()).toContain('zc-auto-complete--large')
   })
 
   it('applies small size class', () => {
-    const wrapper = mount(AutoComplete, { props: { size: 'small' } })
+    const wrapper = mount(AutoComplete, { global: globalStubs, props: { size: 'small' } })
     expect(wrapper.find('.zc-auto-complete').classes()).toContain('zc-auto-complete--small')
   })
 
   it('applies disabled class', () => {
-    const wrapper = mount(AutoComplete, { props: { disabled: true } })
+    const wrapper = mount(AutoComplete, { global: globalStubs, props: { disabled: true } })
     expect(wrapper.find('.zc-auto-complete').classes()).toContain('is-disabled')
     expect(wrapper.find('.zc-auto-complete__inner').attributes('disabled')).toBeDefined()
   })
 
   it('v-model binding', () => {
-    const wrapper = mount(AutoComplete, {
-      props: { modelValue: 'hello' },
-    })
+    const wrapper = mount(AutoComplete, { global: globalStubs, props: { modelValue: 'hello' } })
     expect(wrapper.find('.zc-auto-complete__inner').attributes('value')).toBe('hello')
   })
 
   it('emits update:modelValue on input', async () => {
     const wrapper = mount(AutoComplete, {
+      global: globalStubs,
       props: {
         modelValue: '',
         fetchSuggestions: (q: string) => [{ value: q }],
@@ -59,6 +66,7 @@ describe('ZcAutoComplete', () => {
 
   it('shows suggestions after input with fetchSuggestions', async () => {
     const wrapper = mount(AutoComplete, {
+      global: globalStubs,
       props: {
         modelValue: '',
         fetchSuggestions: () => [{ value: 'abc' }, { value: 'abd' }],
@@ -76,6 +84,7 @@ describe('ZcAutoComplete', () => {
 
   it('shows no data text when suggestions empty', async () => {
     const wrapper = mount(AutoComplete, {
+      global: globalStubs,
       props: {
         modelValue: '',
         fetchSuggestions: () => [],
@@ -92,6 +101,7 @@ describe('ZcAutoComplete', () => {
 
   it('customizes noDataText', async () => {
     const wrapper = mount(AutoComplete, {
+      global: globalStubs,
       props: {
         modelValue: '',
         fetchSuggestions: () => [],
@@ -108,6 +118,7 @@ describe('ZcAutoComplete', () => {
 
   it('emits select when clicking suggestion', async () => {
     const wrapper = mount(AutoComplete, {
+      global: globalStubs,
       props: {
         modelValue: '',
         fetchSuggestions: () => [{ value: 'option1' }],
@@ -126,6 +137,7 @@ describe('ZcAutoComplete', () => {
 
   it('applies disabled class to disabled suggestion items', async () => {
     const wrapper = mount(AutoComplete, {
+      global: globalStubs,
       props: {
         modelValue: '',
         fetchSuggestions: () => [{ value: 'opt', disabled: true }],
@@ -140,25 +152,26 @@ describe('ZcAutoComplete', () => {
   })
 
   it('emits focus event', async () => {
-    const wrapper = mount(AutoComplete)
+    const wrapper = mount(AutoComplete, { global: globalStubs })
     await wrapper.find('.zc-auto-complete__inner').trigger('focus')
     expect(wrapper.emitted('focus')).toBeTruthy()
   })
 
   it('emits blur event', async () => {
-    const wrapper = mount(AutoComplete)
+    const wrapper = mount(AutoComplete, { global: globalStubs })
     await wrapper.find('.zc-auto-complete__inner').trigger('blur')
     expect(wrapper.emitted('blur')).toBeTruthy()
   })
 
   it('applies focused class on focus', async () => {
-    const wrapper = mount(AutoComplete)
+    const wrapper = mount(AutoComplete, { global: globalStubs })
     await wrapper.find('.zc-auto-complete__inner').trigger('focus')
     expect(wrapper.find('.zc-auto-complete').classes()).toContain('is-focused')
   })
 
   it('renders prefix slot', () => {
     const wrapper = mount(AutoComplete, {
+      global: globalStubs,
       slots: { prefix: '<span class="custom-prefix">🔍</span>' },
     })
     expect(wrapper.find('.custom-prefix').exists()).toBe(true)
@@ -166,6 +179,7 @@ describe('ZcAutoComplete', () => {
 
   it('renders suffix slot', () => {
     const wrapper = mount(AutoComplete, {
+      global: globalStubs,
       slots: { suffix: '<span class="custom-suffix">✓</span>' },
     })
     expect(wrapper.find('.custom-suffix').exists()).toBe(true)
@@ -175,6 +189,7 @@ describe('ZcAutoComplete', () => {
   it('clears pending debounce timer on unmount', async () => {
     const fetchSuggestions = vi.fn(() => [{ value: 'test' }])
     const wrapper = mount(AutoComplete, {
+      global: globalStubs,
       props: {
         modelValue: '',
         fetchSuggestions,

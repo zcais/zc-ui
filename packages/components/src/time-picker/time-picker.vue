@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { computed, ref, shallowRef, watch, onBeforeUnmount } from 'vue'
+import { computed, ref, shallowRef, watch, onBeforeUnmount, type CSSProperties } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
-import { useClickOutside } from '@zc-ui/hooks'
+import { useClickOutside, useZIndex } from '@zc-ui/hooks'
+import { usePopper } from '../popper/usePopper'
+import type { PopperPlacement } from '../popper/types'
 import { useLocale } from '@zc-ui/locale'
 import { useFormDisabled, useFormSize, useFormItem } from '../form/use-form'
 
@@ -58,17 +60,42 @@ const effectiveSize = computed<'large' | 'medium' | 'small'>(() => {
 
 const placeholderText = computed(() => props.placeholder || t('zc.timePicker.placeholder'))
 const containerRef = shallowRef<HTMLElement>()
+const panelRef = shallowRef<HTMLElement>()
 const visible = ref(false)
 const isFocused = ref(false)
+
+// ---- Panel positioning ----
+// Teleported to body with fixed strategy so the panel is never clipped
+// by ancestor `overflow: hidden` containers.
+const { styles: panelStyles } = usePopper({
+  reference: containerRef,
+  popper: panelRef,
+  placement: 'bottom-start' as PopperPlacement,
+  offset: 4,
+  strategy: 'fixed',
+  visible,
+})
+
+// ---- Layering: allocate from the shared z-index manager on every open ----
+const { nextZIndex } = useZIndex()
+const panelZIndex = ref<number>()
+const panelStyle = computed<CSSProperties>(() => ({
+  ...panelStyles.value,
+  zIndex: panelZIndex.value,
+}))
+
+useClickOutside(
+  containerRef,
+  () => {
+    if (visible.value) closePanel()
+  },
+  { ignore: [panelRef] }
+)
 
 // Current panel selection
 const currentHour = ref(0)
 const currentMinute = ref(0)
 const currentSecond = ref(0)
-
-useClickOutside(containerRef, () => {
-  if (visible.value) closePanel()
-})
 
 // ---- Helpers ----
 function parseTime(str: string): { h: number; m: number; s: number } {
@@ -183,6 +210,7 @@ function togglePanel() {
   if (isDisabled.value || props.readonly) return
   visible.value = !visible.value
   isFocused.value = visible.value
+  if (visible.value) panelZIndex.value = nextZIndex()
 }
 
 function handleClear(event: Event) {
@@ -216,7 +244,7 @@ onBeforeUnmount(() => {
 })
 
 function scrollToSelected(type: 'hour' | 'minute' | 'second') {
-  const el = containerRef.value?.querySelector(`.zc-time-picker__spinner--${type}`)
+  const el = panelRef.value?.querySelector(`.zc-time-picker__spinner--${type}`)
   if (!el) return
   const selected = el.querySelector('.is-selected') as HTMLElement
   if (selected) {
@@ -277,62 +305,65 @@ defineExpose({
       </span>
     </div>
 
-    <transition name="zc-time-picker-dropdown">
-      <div v-show="visible" :class="ns.e('panel')">
-        <div :class="ns.e('content')">
-          <!-- Hours -->
-          <div :class="[ns.e('spinner'), ns.em('spinner', 'hour')]">
-            <div
-              v-for="item in hours"
-              :key="item.value"
-              :class="[
-                ns.e('spinner-item'),
-                ns.is('selected', currentHour === item.value),
-                ns.is('disabled', item.disabled),
-              ]"
-              @click="selectHour(item.value)"
-            >
-              {{ String(item.value).padStart(2, '0') }}
+    <!-- Panel (teleported to body so it is not clipped by overflow ancestors) -->
+    <Teleport to="body">
+      <transition name="zc-time-picker-dropdown">
+        <div v-show="visible" ref="panelRef" :style="panelStyle" :class="ns.e('panel')">
+          <div :class="ns.e('content')">
+            <!-- Hours -->
+            <div :class="[ns.e('spinner'), ns.em('spinner', 'hour')]">
+              <div
+                v-for="item in hours"
+                :key="item.value"
+                :class="[
+                  ns.e('spinner-item'),
+                  ns.is('selected', currentHour === item.value),
+                  ns.is('disabled', item.disabled),
+                ]"
+                @click="selectHour(item.value)"
+              >
+                {{ String(item.value).padStart(2, '0') }}
+              </div>
+            </div>
+            <!-- Minutes -->
+            <div :class="[ns.e('spinner'), ns.em('spinner', 'minute')]">
+              <div
+                v-for="item in minutes"
+                :key="item.value"
+                :class="[
+                  ns.e('spinner-item'),
+                  ns.is('selected', currentMinute === item.value),
+                  ns.is('disabled', item.disabled),
+                ]"
+                @click="selectMinute(item.value)"
+              >
+                {{ String(item.value).padStart(2, '0') }}
+              </div>
+            </div>
+            <!-- Seconds -->
+            <div :class="[ns.e('spinner'), ns.em('spinner', 'second')]">
+              <div
+                v-for="item in seconds"
+                :key="item.value"
+                :class="[
+                  ns.e('spinner-item'),
+                  ns.is('selected', currentSecond === item.value),
+                  ns.is('disabled', item.disabled),
+                ]"
+                @click="selectSecond(item.value)"
+              >
+                {{ String(item.value).padStart(2, '0') }}
+              </div>
             </div>
           </div>
-          <!-- Minutes -->
-          <div :class="[ns.e('spinner'), ns.em('spinner', 'minute')]">
-            <div
-              v-for="item in minutes"
-              :key="item.value"
-              :class="[
-                ns.e('spinner-item'),
-                ns.is('selected', currentMinute === item.value),
-                ns.is('disabled', item.disabled),
-              ]"
-              @click="selectMinute(item.value)"
-            >
-              {{ String(item.value).padStart(2, '0') }}
-            </div>
-          </div>
-          <!-- Seconds -->
-          <div :class="[ns.e('spinner'), ns.em('spinner', 'second')]">
-            <div
-              v-for="item in seconds"
-              :key="item.value"
-              :class="[
-                ns.e('spinner-item'),
-                ns.is('selected', currentSecond === item.value),
-                ns.is('disabled', item.disabled),
-              ]"
-              @click="selectSecond(item.value)"
-            >
-              {{ String(item.value).padStart(2, '0') }}
-            </div>
+          <div :class="ns.e('footer')">
+            <button :class="ns.e('confirm-btn')" @click="handleConfirm">
+              {{ t('common.confirm') }}
+            </button>
           </div>
         </div>
-        <div :class="ns.e('footer')">
-          <button :class="ns.e('confirm-btn')" @click="handleConfirm">
-            {{ t('common.confirm') }}
-          </button>
-        </div>
-      </div>
-    </transition>
+      </transition>
+    </Teleport>
   </div>
 </template>
 
@@ -437,9 +468,12 @@ defineExpose({
 
 /* Panel */
 .zc-time-picker__panel {
+  /* Re-declare here: panel is teleported to <body>, outside the
+     .zc-time-picker subtree, so root component vars no longer cascade. */
+  --zc-time-picker-panel-bg-color: var(--color-zc-white, #fff);
+  --zc-time-picker-item-text-color: var(--color-zc-text-regular, #606266);
+  --zc-time-picker-border-radius: var(--radius-zc-base, 4px);
   position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
   z-index: var(--z-zc-dropdown, 1000);
   background: var(--zc-time-picker-panel-bg-color);
   border: 1px solid var(--color-zc-border-light, #e4e7ed);

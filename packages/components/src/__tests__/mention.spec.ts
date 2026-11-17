@@ -4,6 +4,11 @@ import { nextTick } from 'vue'
 import Mention from '../mention/mention.vue'
 import type { MentionOption, MentionOptionGroup } from '../mention/types'
 
+// The dropdown is teleported to <body> in production so it escapes overflow
+// clipping. In tests, stub Teleport to render the dropdown in place, keeping
+// wrapper.findAll assertions working without attachTo ceremony.
+const globalStubs = { stubs: { teleport: true } }
+
 const mockOptions: MentionOption[] = [
   { value: 'alice', label: 'Alice Johnson' },
   { value: 'bob', label: 'Bob Smith' },
@@ -16,68 +21,60 @@ const mockOptions: MentionOption[] = [
 
 describe('ZcMention — basic rendering', () => {
   it('renders with default props', () => {
-    const wrapper = mount(Mention)
+    const wrapper = mount(Mention, { global: globalStubs })
     expect(wrapper.find('.zc-mention').exists()).toBe(true)
     expect(wrapper.find('.zc-mention__textarea').exists()).toBe(true)
   })
 
   it('applies disabled class', () => {
-    const wrapper = mount(Mention, { props: { disabled: true } })
+    const wrapper = mount(Mention, { global: globalStubs, props: { disabled: true } })
     expect(wrapper.find('.zc-mention').classes()).toContain('is-disabled')
     expect(wrapper.find('.zc-mention__textarea').attributes('disabled')).toBeDefined()
   })
 
   it('applies placeholder', () => {
-    const wrapper = mount(Mention, {
-      props: { placeholder: 'Type here...' },
-    })
-    expect(wrapper.find('.zc-mention__textarea').attributes('placeholder')).toBe(
-      'Type here...',
-    )
+    const wrapper = mount(Mention, { global: globalStubs, props: { placeholder: 'Type here...' } })
+    expect(wrapper.find('.zc-mention__textarea').attributes('placeholder')).toBe('Type here...')
   })
 
   it('applies default placeholder', () => {
-    const wrapper = mount(Mention)
-    expect(wrapper.find('.zc-mention__textarea').attributes('placeholder')).toBe(
-      '请输入内容',
-    )
+    const wrapper = mount(Mention, { global: globalStubs })
+    expect(wrapper.find('.zc-mention__textarea').attributes('placeholder')).toBe('请输入内容')
   })
 
   it('applies focused class on focus', async () => {
-    const wrapper = mount(Mention)
+    const wrapper = mount(Mention, { global: globalStubs })
     await wrapper.find('.zc-mention__textarea').trigger('focus')
     expect(wrapper.find('.zc-mention').classes()).toContain('is-focused')
   })
 
   it('emits focus event', async () => {
-    const wrapper = mount(Mention)
+    const wrapper = mount(Mention, { global: globalStubs })
     await wrapper.find('.zc-mention__textarea').trigger('focus')
     expect(wrapper.emitted('focus')).toBeTruthy()
   })
 
   it('emits blur event', async () => {
-    const wrapper = mount(Mention)
+    const wrapper = mount(Mention, { global: globalStubs })
     await wrapper.find('.zc-mention__textarea').trigger('blur')
     expect(wrapper.emitted('blur')).toBeTruthy()
   })
 
   it('v-model binding', () => {
-    const wrapper = mount(Mention, {
-      props: { modelValue: 'Hello @alice' },
-    })
-    expect(
-      (wrapper.find('.zc-mention__textarea').element as HTMLTextAreaElement).value,
-    ).toBe('Hello @alice')
+    const wrapper = mount(Mention, { global: globalStubs, props: { modelValue: 'Hello @alice' } })
+    expect((wrapper.find('.zc-mention__textarea').element as HTMLTextAreaElement).value).toBe(
+      'Hello @alice'
+    )
   })
 
   it('emits update:modelValue on input', async () => {
-    const wrapper = mount(Mention, { props: { modelValue: '' } })
+    const wrapper = mount(Mention, { global: globalStubs, props: { modelValue: '' } })
     await wrapper.find('.zc-mention__textarea').setValue('Hello')
     expect(wrapper.emitted('update:modelValue')?.[0]).toEqual(['Hello'])
   })
 
   it('does not show suggestions initially', () => {
-    const wrapper = mount(Mention, { props: { options: mockOptions } })
+    const wrapper = mount(Mention, { global: globalStubs, props: { options: mockOptions } })
     expect(wrapper.find('.zc-mention__suggestions').isVisible()).toBe(false)
   })
 })
@@ -88,19 +85,18 @@ describe('ZcMention — basic rendering', () => {
 
 describe('ZcMention — multi-trigger support', () => {
   it('accepts string trigger (backward compat)', () => {
-    const wrapper = mount(Mention, { props: { trigger: '#' } })
+    const wrapper = mount(Mention, { global: globalStubs, props: { trigger: '#' } })
     expect(wrapper.find('.zc-mention__textarea').exists()).toBe(true)
   })
 
   it('accepts array trigger', () => {
-    const wrapper = mount(Mention, {
-      props: { trigger: ['@', '#'] },
-    })
+    const wrapper = mount(Mention, { global: globalStubs, props: { trigger: ['@', '#'] } })
     expect(wrapper.find('.zc-mention__textarea').exists()).toBe(true)
   })
 
   it('emits search with correct trigger char for @', async () => {
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: { modelValue: '', trigger: ['@', '#'], options: mockOptions },
     })
     const textarea = wrapper.find('.zc-mention__textarea')
@@ -113,6 +109,7 @@ describe('ZcMention — multi-trigger support', () => {
 
   it('emits search with correct trigger char for #', async () => {
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: { modelValue: '', trigger: ['@', '#'], options: mockOptions },
     })
     const textarea = wrapper.find('.zc-mention__textarea')
@@ -130,13 +127,13 @@ describe('ZcMention — multi-trigger support', () => {
 
 describe('ZcMention — input mode', () => {
   it('renders textarea by default', () => {
-    const wrapper = mount(Mention)
+    const wrapper = mount(Mention, { global: globalStubs })
     expect(wrapper.find('.zc-mention__textarea').exists()).toBe(true)
     expect(wrapper.find('.zc-mention__input').exists()).toBe(false)
   })
 
   it('renders input element when type="input"', () => {
-    const wrapper = mount(Mention, { props: { type: 'input' } })
+    const wrapper = mount(Mention, { global: globalStubs, props: { type: 'input' } })
     expect(wrapper.find('.zc-mention__input').exists()).toBe(true)
     expect(wrapper.find('.zc-mention__textarea').exists()).toBe(false)
     expect(wrapper.find('.zc-mention__input').element.tagName).toBe('INPUT')
@@ -144,6 +141,7 @@ describe('ZcMention — input mode', () => {
 
   it('input mode supports v-model', async () => {
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: { type: 'input', modelValue: 'test' },
     })
     const input = wrapper.find('.zc-mention__input')
@@ -161,6 +159,7 @@ describe('ZcMention — input mode', () => {
 describe('ZcMention — #option slot', () => {
   it('renders default option template when no slot provided', async () => {
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: { modelValue: '', options: mockOptions },
     })
     await wrapper.find('.zc-mention__textarea').setValue('@')
@@ -171,6 +170,7 @@ describe('ZcMention — #option slot', () => {
 
   it('renders custom option slot content', async () => {
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: { modelValue: '', options: mockOptions },
       slots: {
         option: '<span class="custom-option">{{ params.option.value }}</span>',
@@ -188,6 +188,7 @@ describe('ZcMention — #option slot', () => {
 describe('ZcMention — custom filter', () => {
   it('uses built-in includes filter by default', async () => {
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: { modelValue: '', options: mockOptions },
     })
     await wrapper.find('.zc-mention__textarea').setValue('@ali')
@@ -200,6 +201,7 @@ describe('ZcMention — custom filter', () => {
     const customFilter = (opt: MentionOption, keyword: string) =>
       (opt.value ?? '').startsWith(keyword)
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: {
         modelValue: '',
         options: mockOptions,
@@ -217,6 +219,7 @@ describe('ZcMention — custom filter', () => {
     const customFilter = (opt: MentionOption, keyword: string) =>
       (opt.label ?? '').toLowerCase().endsWith(keyword)
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: {
         modelValue: '',
         options: mockOptions,
@@ -238,6 +241,7 @@ describe('ZcMention — custom filter', () => {
 describe('ZcMention — async loading', () => {
   it('shows loading indicator when loading=true', async () => {
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: { modelValue: '', options: [], loading: true },
     })
     await wrapper.find('.zc-mention__textarea').setValue('@test')
@@ -246,6 +250,7 @@ describe('ZcMention — async loading', () => {
 
   it('shows custom loading text', async () => {
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: { modelValue: '', options: [], loading: true, loadingText: 'Searching...' },
     })
     await wrapper.find('.zc-mention__textarea').setValue('@test')
@@ -254,6 +259,7 @@ describe('ZcMention — async loading', () => {
 
   it('shows default loading text from locale', async () => {
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: { modelValue: '', options: [], loading: true },
     })
     await wrapper.find('.zc-mention__textarea').setValue('@test')
@@ -262,6 +268,7 @@ describe('ZcMention — async loading', () => {
 
   it('renders #loading slot', async () => {
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: { modelValue: '', options: [], loading: true },
       slots: {
         loading: '<div class="custom-loading">Custom Spinner</div>',
@@ -289,6 +296,7 @@ describe('ZcMention — option grouping', () => {
 
   it('renders group headers when optionGroups provided', async () => {
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: {
         modelValue: '',
         options: groupedOptions,
@@ -305,6 +313,7 @@ describe('ZcMention — option grouping', () => {
 
   it('options appear under correct group', async () => {
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: {
         modelValue: '',
         options: groupedOptions,
@@ -321,6 +330,7 @@ describe('ZcMention — option grouping', () => {
 
   it('filters options within groups', async () => {
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: {
         modelValue: '',
         options: groupedOptions,
@@ -342,6 +352,7 @@ describe('ZcMention — option grouping', () => {
 describe('ZcMention — empty state', () => {
   it('shows default empty text when no results', async () => {
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: { modelValue: '', options: mockOptions },
     })
     await wrapper.find('.zc-mention__textarea').setValue('@zzznomatch')
@@ -351,6 +362,7 @@ describe('ZcMention — empty state', () => {
 
   it('renders #empty slot content', async () => {
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: { modelValue: '', options: mockOptions },
       slots: {
         empty: '<div class="custom-empty">No users found</div>',
@@ -369,6 +381,7 @@ describe('ZcMention — blur behavior', () => {
   it('clears search on blur by default (blurBehavior="clear")', async () => {
     vi.useFakeTimers()
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: { modelValue: '', options: mockOptions },
     })
     const textarea = wrapper.find('.zc-mention__textarea')
@@ -383,6 +396,7 @@ describe('ZcMention — blur behavior', () => {
 
   it('keeps dropdown open when blurBehavior="keep-open"', async () => {
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: { modelValue: '', options: mockOptions, blurBehavior: 'keep-open' },
     })
     const textarea = wrapper.find('.zc-mention__textarea')
@@ -394,6 +408,7 @@ describe('ZcMention — blur behavior', () => {
 
   it('selects first option when blurBehavior="select-first"', async () => {
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: { modelValue: '', options: mockOptions, blurBehavior: 'select-first' },
     })
     const textarea = wrapper.find('.zc-mention__textarea')
@@ -415,6 +430,7 @@ describe('ZcMention — blur behavior', () => {
 describe('ZcMention — maxHeight', () => {
   it('applies default maxHeight of 240px', async () => {
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: { modelValue: '', options: mockOptions },
     })
     await wrapper.find('.zc-mention__textarea').setValue('@')
@@ -424,6 +440,7 @@ describe('ZcMention — maxHeight', () => {
 
   it('applies custom numeric maxHeight', async () => {
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: { modelValue: '', options: mockOptions, maxHeight: 300 },
     })
     await wrapper.find('.zc-mention__textarea').setValue('@')
@@ -433,6 +450,7 @@ describe('ZcMention — maxHeight', () => {
 
   it('applies custom string maxHeight', async () => {
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: { modelValue: '', options: mockOptions, maxHeight: '50vh' },
     })
     await wrapper.find('.zc-mention__textarea').setValue('@')
@@ -447,7 +465,7 @@ describe('ZcMention — maxHeight', () => {
 
 describe('ZcMention — ARIA accessibility', () => {
   it('textarea has correct ARIA attributes', () => {
-    const wrapper = mount(Mention)
+    const wrapper = mount(Mention, { global: globalStubs })
     const textarea = wrapper.find('.zc-mention__textarea')
     expect(textarea.attributes('role')).toBe('combobox')
     expect(textarea.attributes('aria-haspopup')).toBe('listbox')
@@ -457,6 +475,7 @@ describe('ZcMention — ARIA accessibility', () => {
 
   it('aria-expanded becomes true when dropdown is visible', async () => {
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: { modelValue: '', options: mockOptions },
     })
     await wrapper.find('.zc-mention__textarea').setValue('@')
@@ -466,16 +485,16 @@ describe('ZcMention — ARIA accessibility', () => {
 
   it('dropdown has role="listbox"', async () => {
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: { modelValue: '', options: mockOptions },
     })
     await wrapper.find('.zc-mention__textarea').setValue('@')
-    expect(wrapper.find('.zc-mention__suggestions').attributes('role')).toBe(
-      'listbox',
-    )
+    expect(wrapper.find('.zc-mention__suggestions').attributes('role')).toBe('listbox')
   })
 
   it('option items have role="option"', async () => {
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: { modelValue: '', options: mockOptions },
     })
     await wrapper.find('.zc-mention__textarea').setValue('@')
@@ -487,6 +506,7 @@ describe('ZcMention — ARIA accessibility', () => {
 
   it('option items have aria-selected attribute', async () => {
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: { modelValue: '', options: mockOptions },
     })
     await wrapper.find('.zc-mention__textarea').setValue('@')
@@ -497,7 +517,7 @@ describe('ZcMention — ARIA accessibility', () => {
   })
 
   it('input mode also has ARIA attributes', () => {
-    const wrapper = mount(Mention, { props: { type: 'input' } })
+    const wrapper = mount(Mention, { global: globalStubs, props: { type: 'input' } })
     const input = wrapper.find('.zc-mention__input')
     expect(input.attributes('role')).toBe('combobox')
     expect(input.attributes('aria-autocomplete')).toBe('list')
@@ -511,6 +531,7 @@ describe('ZcMention — ARIA accessibility', () => {
 describe('ZcMention — keyboard navigation', () => {
   it('ArrowDown moves active index', async () => {
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: { modelValue: '', options: mockOptions },
     })
     const textarea = wrapper.find('.zc-mention__textarea')
@@ -525,6 +546,7 @@ describe('ZcMention — keyboard navigation', () => {
 
   it('ArrowUp moves active index', async () => {
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: { modelValue: '', options: mockOptions },
     })
     const textarea = wrapper.find('.zc-mention__textarea')
@@ -541,6 +563,7 @@ describe('ZcMention — keyboard navigation', () => {
 
   it('Escape closes dropdown', async () => {
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: { modelValue: '', options: mockOptions },
     })
     const textarea = wrapper.find('.zc-mention__textarea')
@@ -555,6 +578,7 @@ describe('ZcMention — keyboard navigation', () => {
 
   it('Enter selects active option', async () => {
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: { modelValue: '', options: mockOptions },
     })
     const textarea = wrapper.find('.zc-mention__textarea')
@@ -578,6 +602,7 @@ describe('ZcMention — keyboard navigation', () => {
 describe('ZcMention — select option', () => {
   it('emits select event with option data', async () => {
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: { modelValue: '', options: mockOptions },
     })
     await wrapper.find('.zc-mention__textarea').setValue('@')
@@ -589,6 +614,7 @@ describe('ZcMention — select option', () => {
 
   it('inserts mention text into value on select', async () => {
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: { modelValue: '', options: mockOptions },
     })
     await wrapper.find('.zc-mention__textarea').setValue('@')
@@ -606,6 +632,7 @@ describe('ZcMention — select option', () => {
       { value: 'bob', label: 'Bob' },
     ]
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: { modelValue: '', options: optionsWithDisabled },
     })
     await wrapper.find('.zc-mention__textarea').setValue('@')
@@ -627,12 +654,13 @@ describe('ZcMention — avatar', () => {
       { value: 'alice', label: 'Alice', avatar: 'https://example.com/alice.jpg' },
     ]
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: { modelValue: '', options: optionsWithAvatar },
     })
     await wrapper.find('.zc-mention__textarea').setValue('@')
     expect(wrapper.find('.zc-mention__item-avatar').exists()).toBe(true)
     expect(wrapper.find('.zc-mention__item-avatar').attributes('src')).toBe(
-      'https://example.com/alice.jpg',
+      'https://example.com/alice.jpg'
     )
   })
 })
@@ -644,6 +672,7 @@ describe('ZcMention — avatar', () => {
 describe('ZcMention — placement', () => {
   it('applies is-top class when placement="top"', async () => {
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: { modelValue: '', options: mockOptions, placement: 'top' },
     })
     await wrapper.find('.zc-mention__textarea').setValue('@')
@@ -652,12 +681,11 @@ describe('ZcMention — placement', () => {
 
   it('does not have is-top class by default', async () => {
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: { modelValue: '', options: mockOptions },
     })
     await wrapper.find('.zc-mention__textarea').setValue('@')
-    expect(wrapper.find('.zc-mention__suggestions').classes()).not.toContain(
-      'is-top',
-    )
+    expect(wrapper.find('.zc-mention__suggestions').classes()).not.toContain('is-top')
   })
 })
 
@@ -667,27 +695,19 @@ describe('ZcMention — placement', () => {
 
 describe('ZcMention — split mode', () => {
   it('renders contenteditable div in split mode', () => {
-    const wrapper = mount(Mention, {
-      props: { split: true },
-    })
+    const wrapper = mount(Mention, { global: globalStubs, props: { split: true } })
     expect(wrapper.find('.zc-mention__editable').exists()).toBe(true)
-    expect(wrapper.find('.zc-mention__editable').attributes('contenteditable')).toBe(
-      'true',
-    )
+    expect(wrapper.find('.zc-mention__editable').attributes('contenteditable')).toBe('true')
     expect(wrapper.find('.zc-mention__textarea').exists()).toBe(false)
   })
 
   it('has is-split class in split mode', () => {
-    const wrapper = mount(Mention, {
-      props: { split: true },
-    })
+    const wrapper = mount(Mention, { global: globalStubs, props: { split: true } })
     expect(wrapper.find('.zc-mention').classes()).toContain('is-split')
   })
 
   it('contenteditable has ARIA attributes', () => {
-    const wrapper = mount(Mention, {
-      props: { split: true },
-    })
+    const wrapper = mount(Mention, { global: globalStubs, props: { split: true } })
     const editable = wrapper.find('.zc-mention__editable')
     expect(editable.attributes('role')).toBe('combobox')
     expect(editable.attributes('aria-haspopup')).toBe('listbox')
@@ -696,15 +716,14 @@ describe('ZcMention — split mode', () => {
 
   it('renders initial value with mention tags', () => {
     const wrapper = mount(Mention, {
+      global: globalStubs,
       props: { split: true, modelValue: 'Hello @alice', trigger: '@' },
     })
     expect(wrapper.find('.zc-mention__tag').exists()).toBe(true)
   })
 
   it('emits update:modelValue on editable input', async () => {
-    const wrapper = mount(Mention, {
-      props: { split: true, modelValue: '' },
-    })
+    const wrapper = mount(Mention, { global: globalStubs, props: { split: true, modelValue: '' } })
     const editable = wrapper.find('.zc-mention__editable')
     // Simulate user typing in contenteditable by setting innerText
     const el = editable.element as HTMLElement
@@ -721,9 +740,10 @@ describe('ZcMention — split mode', () => {
 // ============================================================
 
 describe('ZcMention — Teleport', () => {
-  it('renders dropdown inside container by default (no teleport)', async () => {
+  it('renders dropdown inside container when teleport=false', async () => {
     const wrapper = mount(Mention, {
-      props: { modelValue: '', options: mockOptions },
+      global: globalStubs,
+      props: { modelValue: '', options: mockOptions, teleport: false },
     })
     await wrapper.find('.zc-mention__textarea').setValue('@')
     // Dropdown should be inside the .zc-mention container
@@ -731,6 +751,7 @@ describe('ZcMention — Teleport', () => {
   })
 
   it('teleports dropdown to body when teleport=true', async () => {
+    // No teleport stub here: this test verifies the real teleport behavior.
     const wrapper = mount(Mention, {
       props: {
         modelValue: '',
@@ -741,7 +762,8 @@ describe('ZcMention — Teleport', () => {
     })
     await wrapper.find('.zc-mention__textarea').setValue('@')
     await nextTick()
-    // Suggestions should be teleported to body
+    // Suggestions should be teleported to body, NOT inside the component
+    expect(wrapper.find('.zc-mention .zc-mention__suggestions').exists()).toBe(false)
     const bodySuggestions = document.body.querySelectorAll('.zc-mention__suggestions')
     expect(bodySuggestions.length).toBeGreaterThan(0)
     wrapper.unmount()
@@ -754,20 +776,20 @@ describe('ZcMention — Teleport', () => {
 
 describe('ZcMention — exposed API', () => {
   it('exposes closeSuggestions method', () => {
-    const wrapper = mount(Mention, { props: { options: mockOptions } })
+    const wrapper = mount(Mention, { global: globalStubs, props: { options: mockOptions } })
     const vm = wrapper.vm as any
     expect(typeof vm.closeSuggestions).toBe('function')
   })
 
   it('exposes visible ref', () => {
-    const wrapper = mount(Mention, { props: { options: mockOptions } })
+    const wrapper = mount(Mention, { global: globalStubs, props: { options: mockOptions } })
     const vm = wrapper.vm as any
     expect(vm.visible).toBeDefined()
     expect(vm.visible).toBe(false)
   })
 
   it('exposes filteredOptions computed', () => {
-    const wrapper = mount(Mention, { props: { options: mockOptions } })
+    const wrapper = mount(Mention, { global: globalStubs, props: { options: mockOptions } })
     const vm = wrapper.vm as any
     expect(vm.filteredOptions).toBeDefined()
     expect(Array.isArray(vm.filteredOptions)).toBe(true)

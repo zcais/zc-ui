@@ -2,6 +2,11 @@ import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
 import Cascader from '../cascader/cascader.vue'
 
+// The dropdown is teleported to <body> in production so it escapes overflow
+// clipping. In tests, stub Teleport to render the dropdown in place, keeping
+// wrapper.findAll assertions working without attachTo ceremony.
+const globalStubs = { stubs: { teleport: true } }
+
 const mockOptions = [
   {
     value: 'zhejiang',
@@ -32,34 +37,35 @@ const mockOptions = [
 
 describe('ZcCascader', () => {
   it('renders with default props', () => {
-    const wrapper = mount(Cascader)
+    const wrapper = mount(Cascader, { global: globalStubs })
     expect(wrapper.find('.zc-cascader').exists()).toBe(true)
     expect(wrapper.find('.zc-cascader__wrapper').exists()).toBe(true)
   })
 
   it('applies size class', () => {
-    const wrapper = mount(Cascader, { props: { size: 'large' } })
+    const wrapper = mount(Cascader, { global: globalStubs, props: { size: 'large' } })
     expect(wrapper.find('.zc-cascader').classes()).toContain('zc-cascader--large')
   })
 
   it('applies small size class', () => {
-    const wrapper = mount(Cascader, { props: { size: 'small' } })
+    const wrapper = mount(Cascader, { global: globalStubs, props: { size: 'small' } })
     expect(wrapper.find('.zc-cascader').classes()).toContain('zc-cascader--small')
   })
 
   it('applies disabled class', () => {
-    const wrapper = mount(Cascader, { props: { disabled: true } })
+    const wrapper = mount(Cascader, { global: globalStubs, props: { disabled: true } })
     expect(wrapper.find('.zc-cascader').classes()).toContain('is-disabled')
   })
 
   it('shows placeholder when no value', () => {
-    const wrapper = mount(Cascader, { props: { placeholder: '请选择地区' } })
+    const wrapper = mount(Cascader, { global: globalStubs, props: { placeholder: '请选择地区' } })
     expect(wrapper.find('.zc-cascader__display').text()).toBe('请选择地区')
     expect(wrapper.find('.zc-cascader__display').classes()).toContain('is-placeholder')
   })
 
   it('displays selected value labels', () => {
     const wrapper = mount(Cascader, {
+      global: globalStubs,
       props: { modelValue: [['zhejiang', 'hangzhou', 'xihu']], options: mockOptions },
     })
     expect(wrapper.find('.zc-cascader__display').text()).toBe('浙江 / 杭州 / 西湖区')
@@ -67,6 +73,7 @@ describe('ZcCascader', () => {
 
   it('does not show placeholder class when has value', () => {
     const wrapper = mount(Cascader, {
+      global: globalStubs,
       props: { modelValue: [['zhejiang', 'hangzhou', 'xihu']], options: mockOptions },
     })
     expect(wrapper.find('.zc-cascader__display').classes()).not.toContain('is-placeholder')
@@ -76,7 +83,7 @@ describe('ZcCascader', () => {
   // NOTE: virtualScroll rendering has a known architectural issue (useVirtualList
   // called inside computed). These tests verify prop handling only.
   it('virtualScroll defaults to false', () => {
-    const wrapper = mount(Cascader)
+    const wrapper = mount(Cascader, { global: globalStubs })
     expect(wrapper.vm.virtualScroll).toBe(false)
   })
 
@@ -87,6 +94,7 @@ describe('ZcCascader', () => {
       children: [],
     }))
     const wrapper = mount(Cascader, {
+      global: globalStubs,
       props: { options: bigOptions, virtualScroll: false },
     })
     expect(wrapper.vm.virtualScroll).toBe(false)
@@ -94,7 +102,7 @@ describe('ZcCascader', () => {
   })
 
   it('opens dropdown on click', async () => {
-    const wrapper = mount(Cascader, { props: { options: mockOptions } })
+    const wrapper = mount(Cascader, { global: globalStubs, props: { options: mockOptions } })
     await wrapper.find('.zc-cascader__wrapper').trigger('click')
     expect(wrapper.find('.zc-cascader__dropdown').exists()).toBe(true)
     // First level menu should have 2 options
@@ -103,21 +111,24 @@ describe('ZcCascader', () => {
   })
 
   it('applies focused and open class when visible', async () => {
-    const wrapper = mount(Cascader, { props: { options: mockOptions } })
+    const wrapper = mount(Cascader, { global: globalStubs, props: { options: mockOptions } })
     await wrapper.find('.zc-cascader__wrapper').trigger('click')
     expect(wrapper.find('.zc-cascader').classes()).toContain('is-focused')
     expect(wrapper.find('.zc-cascader').classes()).toContain('is-open')
   })
 
   it('does not open panel when disabled', async () => {
-    const wrapper = mount(Cascader, { props: { options: mockOptions, disabled: true } })
+    const wrapper = mount(Cascader, {
+      global: globalStubs,
+      props: { options: mockOptions, disabled: true },
+    })
     await wrapper.find('.zc-cascader__wrapper').trigger('click')
     // v-show doesn't remove from DOM; check visibility state
     expect(wrapper.find('.zc-cascader').classes()).not.toContain('is-open')
   })
 
   it('expands next level on node click', async () => {
-    const wrapper = mount(Cascader, { props: { options: mockOptions } })
+    const wrapper = mount(Cascader, { global: globalStubs, props: { options: mockOptions } })
     await wrapper.find('.zc-cascader__wrapper').trigger('click')
     const firstNode = wrapper.findAll('.zc-cascader__node')[0]
     await firstNode.trigger('click')
@@ -128,6 +139,7 @@ describe('ZcCascader', () => {
 
   it('shows search input when filterable', async () => {
     const wrapper = mount(Cascader, {
+      global: globalStubs,
       props: { options: mockOptions, filterable: true },
     })
     await wrapper.find('.zc-cascader__wrapper').trigger('click')
@@ -137,6 +149,7 @@ describe('ZcCascader', () => {
 
   it('shows clear button when clearable and has value', () => {
     const wrapper = mount(Cascader, {
+      global: globalStubs,
       props: {
         modelValue: [['zhejiang', 'hangzhou', 'xihu']],
         options: mockOptions,
@@ -148,6 +161,7 @@ describe('ZcCascader', () => {
 
   it('emits change on clear', async () => {
     const wrapper = mount(Cascader, {
+      global: globalStubs,
       props: {
         modelValue: [['zhejiang', 'hangzhou', 'xihu']],
         options: mockOptions,
@@ -159,12 +173,13 @@ describe('ZcCascader', () => {
   })
 
   it('renders arrow icon', () => {
-    const wrapper = mount(Cascader)
+    const wrapper = mount(Cascader, { global: globalStubs })
     expect(wrapper.find('.zc-cascader__arrow').exists()).toBe(true)
   })
 
   it('shows tags in multiple mode', () => {
     const wrapper = mount(Cascader, {
+      global: globalStubs,
       props: {
         modelValue: [
           ['zhejiang', 'hangzhou', 'xihu'],
