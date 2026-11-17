@@ -3,4 +3,4 @@
 /test-results/
 /blob-report/
 /playwright/.cache/
-/e2e/tests/**/*.spec.ts-snapshots/
+/tests/**/*.spec.ts-snapshots/
