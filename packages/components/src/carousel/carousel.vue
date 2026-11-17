@@ -14,7 +14,7 @@ const props = withDefaults(
     trigger?: 'click' | 'hover'
     autoplay?: boolean
     interval?: number
-    indicatorPosition?: 'outside' | 'none'
+    indicatorPosition?: 'inside' | 'outside' | 'none'
     arrow?: 'always' | 'hover' | 'never'
     type?: '' | 'card'
     loop?: boolean
@@ -192,7 +192,12 @@ const showArrows = computed(() => {
 
 const hasContent = computed(() => items.value.length > 0)
 
-const classes = computed(() => [ns.b(), ns.m(props.direction), props.type ? ns.m(props.type) : ''])
+const classes = computed(() => [
+  ns.b(),
+  ns.m(props.direction),
+  props.type ? ns.m(props.type) : '',
+  isVertical.value && props.indicatorPosition === 'outside' ? 'is-vertical-outside' : '',
+])
 
 // ==================== Provide ====================
 provide(CAROUSEL_KEY, {
@@ -242,7 +247,6 @@ defineExpose({
 <template>
   <div
     :class="classes"
-    :style="{ height: heightStyle }"
     role="region"
     :aria-roledescription="t('zc.carousel.label')"
     @mouseenter="handleMouseEnter"
@@ -265,49 +269,49 @@ defineExpose({
       <div :class="[ns.e('track'), isCard ? ns.em('track', 'card') : '']" :style="trackStyle">
         <slot />
       </div>
-    </div>
 
-    <!-- Arrow buttons -->
-    <template v-if="arrow !== 'never'">
-      <button
-        v-show="showArrows"
-        :class="[ns.e('arrow'), ns.em('arrow', isVertical ? 'up' : 'left')]"
-        :aria-label="t('zc.carousel.prev')"
-        type="button"
-        @click="prev"
-      >
-        <svg
-          viewBox="0 0 24 24"
-          width="24"
-          height="24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
+      <!-- Arrow buttons (inside container so they are positioned against the slide area) -->
+      <template v-if="arrow !== 'never'">
+        <button
+          v-show="showArrows"
+          :class="[ns.e('arrow'), ns.em('arrow', isVertical ? 'up' : 'left')]"
+          :aria-label="t('zc.carousel.prev')"
+          type="button"
+          @click="prev"
         >
-          <polyline v-if="isVertical" points="18 15 12 9 6 15" />
-          <polyline v-else points="15 18 9 12 15 6" />
-        </svg>
-      </button>
-      <button
-        v-show="showArrows"
-        :class="[ns.e('arrow'), ns.em('arrow', isVertical ? 'down' : 'right')]"
-        :aria-label="t('zc.carousel.next')"
-        type="button"
-        @click="next"
-      >
-        <svg
-          viewBox="0 0 24 24"
-          width="24"
-          height="24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
+          <svg
+            viewBox="0 0 24 24"
+            width="24"
+            height="24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <polyline v-if="isVertical" points="18 15 12 9 6 15" />
+            <polyline v-else points="15 18 9 12 15 6" />
+          </svg>
+        </button>
+        <button
+          v-show="showArrows"
+          :class="[ns.e('arrow'), ns.em('arrow', isVertical ? 'down' : 'right')]"
+          :aria-label="t('zc.carousel.next')"
+          type="button"
+          @click="next"
         >
-          <polyline v-if="isVertical" points="6 9 12 15 18 9" />
-          <polyline v-else points="9 6 15 12 9 18" />
-        </svg>
-      </button>
-    </template>
+          <svg
+            viewBox="0 0 24 24"
+            width="24"
+            height="24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <polyline v-if="isVertical" points="6 9 12 15 18 9" />
+            <polyline v-else points="9 6 15 12 9 18" />
+          </svg>
+        </button>
+      </template>
+    </div>
 
     <!-- Indicators -->
     <div
@@ -351,16 +355,21 @@ defineExpose({
   --zc-carousel-card-scale: 0.83;
 
   position: relative;
-  overflow: hidden;
-}
-
-.zc-carousel--horizontal {
   width: 100%;
 }
 
 .zc-carousel__container {
   position: relative;
   overflow: hidden;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Vertical + outside indicators: row layout so indicators sit on the right */
+.zc-carousel.is-vertical-outside {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .zc-carousel__track {
@@ -382,6 +391,7 @@ defineExpose({
 .zc-carousel--card .zc-carousel__container {
   overflow: visible;
   height: 100%;
+  min-height: 200px;
 }
 
 /* Card mode track — no bulk translate; items position themselves */
@@ -495,9 +505,7 @@ defineExpose({
   margin-top: 0;
   margin-left: 12px;
   flex-direction: column;
-  align-self: center;
 }
-
 .zc-carousel--vertical .zc-carousel__indicator.is-active {
   width: var(--zc-carousel-indicator-active-height);
   height: var(--zc-carousel-indicator-active-width);

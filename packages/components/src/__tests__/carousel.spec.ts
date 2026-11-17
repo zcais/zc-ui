@@ -21,14 +21,26 @@ describe('ZcCarousel', () => {
     expect(wrapper.find('.zc-carousel').exists()).toBe(true)
   })
 
-  it('applies height style', () => {
-    const wrapper = mount(Carousel, { props: { height: 200 } })
-    expect(wrapper.find('.zc-carousel').attributes('style')).toContain('height: 200px')
+  it('applies height style', async () => {
+    const wrapper = mountCarousel({
+      props: { height: 200 },
+      slots: {
+        default: '<carousel-item>A</carousel-item><carousel-item>B</carousel-item>',
+      },
+    })
+    await nextTick()
+    expect(wrapper.find('.zc-carousel__container').attributes('style')).toContain('height: 200px')
   })
 
-  it('applies string height', () => {
-    const wrapper = mount(Carousel, { props: { height: '300px' } })
-    expect(wrapper.find('.zc-carousel').attributes('style')).toContain('height: 300px')
+  it('applies string height', async () => {
+    const wrapper = mountCarousel({
+      props: { height: '300px' },
+      slots: {
+        default: '<carousel-item>A</carousel-item><carousel-item>B</carousel-item>',
+      },
+    })
+    await nextTick()
+    expect(wrapper.find('.zc-carousel__container').attributes('style')).toContain('height: 300px')
   })
 
   it('renders carousel items', async () => {
@@ -70,6 +82,16 @@ describe('ZcCarousel', () => {
     expect(wrapper.find('.zc-carousel').classes()).toContain('zc-carousel--vertical')
   })
 
+  it('uses row flex layout for vertical with outside indicators', () => {
+    const wrapper = mount(Carousel, { props: { direction: 'vertical' } })
+    expect(wrapper.find('.zc-carousel').classes()).toContain('is-vertical-outside')
+  })
+
+  it('does not apply vertical-outside class in horizontal mode', () => {
+    const wrapper = mount(Carousel, { props: { direction: 'horizontal' } })
+    expect(wrapper.find('.zc-carousel').classes()).not.toContain('is-vertical-outside')
+  })
+
   it('hides indicators with none position', async () => {
     const wrapper = mountCarousel({
       props: { indicatorPosition: 'none' },
@@ -79,6 +101,26 @@ describe('ZcCarousel', () => {
     })
     await nextTick()
     expect(wrapper.find('.zc-carousel__indicators').exists()).toBe(false)
+  })
+
+  it('renders inside indicators with modifier class', async () => {
+    const wrapper = mountCarousel({
+      props: { indicatorPosition: 'inside' },
+      slots: {
+        default: '<carousel-item>A</carousel-item><carousel-item>B</carousel-item>',
+      },
+    })
+    await nextTick()
+    const indicators = wrapper.find('.zc-carousel__indicators')
+    expect(indicators.exists()).toBe(true)
+    expect(indicators.classes()).toContain('zc-carousel__indicators--inside')
+  })
+
+  it('does not use vertical-outside layout for inside indicators', () => {
+    const wrapper = mount(Carousel, {
+      props: { direction: 'vertical', indicatorPosition: 'inside' },
+    })
+    expect(wrapper.find('.zc-carousel').classes()).not.toContain('is-vertical-outside')
   })
 
   it('emits change event on navigation', async () => {
