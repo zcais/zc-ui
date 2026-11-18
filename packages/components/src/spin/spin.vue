@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, useSlots } from 'vue'
+import { computed, ref, useSlots, watch } from 'vue'
 import { useNamespace } from '@zc-ui/hooks'
 
 defineOptions({ name: 'ZcSpin' })
@@ -37,6 +37,32 @@ const props = withDefaults(
 const ns = useNamespace('spin')
 const slots = useSlots()
 
+// ---- Delayed spinning state (matches Element Plus Spin/Spin behavior) ----
+const effectiveSpinning = ref(props.spinning)
+let delayTimer: ReturnType<typeof setTimeout> | null = null
+
+watch(
+  () => props.spinning,
+  (val) => {
+    if (props.delay && val) {
+      // Delay showing the spinner
+      if (delayTimer) clearTimeout(delayTimer)
+      delayTimer = setTimeout(() => {
+        effectiveSpinning.value = true
+        delayTimer = null
+      }, props.delay)
+    } else {
+      // Hide immediately; show immediately when no delay
+      if (delayTimer) {
+        clearTimeout(delayTimer)
+        delayTimer = null
+      }
+      effectiveSpinning.value = val
+    }
+  },
+  { immediate: true }
+)
+
 const containerClasses = computed(() => [ns.b(), ns.is('fullscreen', props.fullscreen)])
 
 const spinnerClasses = computed(() => [ns.e('spinner'), ns.m(props.size)])
@@ -47,12 +73,12 @@ const spinnerStyle = computed(() => ({
 
 const hasContent = computed(() => !!slots.default)
 
-const wrapperClasses = computed(() => [ns.e('wrapper'), ns.is('spinning', props.spinning)])
+const wrapperClasses = computed(() => [ns.e('wrapper'), ns.is('spinning', effectiveSpinning.value)])
 </script>
 
 <template>
   <!-- Fullscreen mode -->
-  <div v-if="fullscreen && spinning" :class="[ns.e('fullscreen-overlay')]">
+  <div v-if="fullscreen && effectiveSpinning" :class="[ns.e('fullscreen-overlay')]">
     <div :class="containerClasses">
       <div :class="spinnerClasses" :style="spinnerStyle" role="status" aria-live="polite">
         <span class="sr-only">Loading</span>
@@ -65,7 +91,7 @@ const wrapperClasses = computed(() => [ns.e('wrapper'), ns.is('spinning', props.
   <div v-else-if="hasContent" :class="wrapperClasses">
     <slot />
     <transition :name="ns.e('fade')">
-      <div v-if="spinning" :class="[ns.e('mask'), ns.is('overlay', overlay)]">
+      <div v-if="effectiveSpinning" :class="[ns.e('mask'), ns.is('overlay', overlay)]">
         <div :class="containerClasses">
           <div :class="spinnerClasses" :style="spinnerStyle" role="status" aria-live="polite">
             <span class="sr-only">Loading</span>
@@ -77,7 +103,7 @@ const wrapperClasses = computed(() => [ns.e('wrapper'), ns.is('spinning', props.
   </div>
 
   <!-- Standalone spinner -->
-  <div v-else-if="spinning" :class="containerClasses">
+  <div v-else-if="effectiveSpinning" :class="containerClasses">
     <div :class="spinnerClasses" :style="spinnerStyle" role="status" aria-live="polite">
       <span class="sr-only">Loading</span>
     </div>

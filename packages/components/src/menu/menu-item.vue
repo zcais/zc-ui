@@ -84,6 +84,11 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .zc-menu__item {
+  /* Component-level CSS variables (global token defaults) */
+  --zc-menu-hover-bg-color: var(--color-zc-fill-light, #f5f7fa);
+  --zc-menu-hover-text-color: var(--color-zc-text-primary, #303133);
+  --zc-menu-active-color: var(--color-zc-primary-500, #409eff);
+
   display: flex;
   align-items: center;
   height: 56px;

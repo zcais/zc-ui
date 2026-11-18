@@ -160,6 +160,12 @@ const showCrossIcon = computed(() => currentStatus.value === 'error')
  * ============================================================ */
 
 .zc-step {
+  /* Component-level CSS variables (global token defaults) */
+  --zc-step-active-color: var(--color-zc-primary-500, #409eff);
+  --zc-step-wait-color: var(--color-zc-text-placeholder, #a8abb2);
+  --zc-step-text-color: var(--color-zc-text-primary, #303133);
+  --zc-step-error-color: var(--color-zc-danger-500, #f56c6c);
+
   position: relative;
   flex: 1;
   display: flex;

@@ -285,7 +285,7 @@ function isActive(page: number | string) {
 .zc-pagination__total {
   white-space: nowrap;
   margin-right: var(--spacing-zc-xs, 4px);
-  color: var(--zc-pagination-total-text-color);
+  color: var(--zc-pagination-total-text-color, var(--color-zc-text-regular, #606266));
 }
 
 .zc-pagination__btn {

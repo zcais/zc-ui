@@ -278,6 +278,12 @@ const displayText = computed(() => {
  * ============================================================ */
 
 .zc-rate {
+  /* Component-level CSS variables (global token defaults) */
+  --zc-rate-gap: var(--spacing-zc-xs, 8px);
+  --zc-rate-text-color: var(--color-zc-text-primary, #303133);
+  --zc-rate-text-font-size: var(--text-zc-sm, 13px);
+  --zc-rate-star-disabled-color: var(--color-zc-text-placeholder, #a8abb2);
+
   display: inline-flex;
   align-items: center;
   gap: 2px;

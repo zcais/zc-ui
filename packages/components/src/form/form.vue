@@ -242,6 +242,6 @@ defineExpose({
 
 .zc-form.is-inline .zc-form-item {
   display: inline-flex;
-  margin-right: var(--zc-form-inline-gap);
+  margin-right: var(--zc-form-inline-gap, var(--spacing-zc-md, 16px));
 }
 </style>

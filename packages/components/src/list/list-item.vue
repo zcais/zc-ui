@@ -67,6 +67,10 @@ const ns = useNamespace('list-item')
 .zc-list-item__avatar {
   flex-shrink: 0;
   margin-right: 12px;
+  /* Fallbacks for variables defined on parent .zc-list */
+  --zc-list-font-size: var(--text-zc-base, 14px);
+  --zc-list-text-color: var(--color-zc-text-primary, #303133);
+  --zc-list-meta-color: var(--color-zc-text-secondary, #909399);
 }
 
 .zc-list-item__avatar img {

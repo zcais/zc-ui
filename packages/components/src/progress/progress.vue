@@ -202,6 +202,14 @@ const circlePath = computed(() => {
  * ============================================================ */
 
 .zc-progress {
+  /* Component-level CSS variables (global token defaults) */
+  --zc-progress-border-radius: 100px;
+  --zc-progress-font-size: var(--text-zc-sm, 13px);
+  --zc-progress-text-color: var(--color-zc-text-primary, #303133);
+  --zc-progress-success-color: var(--color-zc-success-500, #67c23a);
+  --zc-progress-warning-color: var(--color-zc-warning-500, #e6a23c);
+  --zc-progress-danger-color: var(--color-zc-danger-500, #f56c6c);
+
   display: flex;
   align-items: center;
   font-size: var(--text-zc-base, 14px);

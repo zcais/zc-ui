@@ -69,6 +69,13 @@ function onClick(e: MouseEvent) {
 <style scoped>
 .zc-anchor__link-item {
   position: relative;
+  /* Component-level CSS variables (global token defaults) */
+  --zc-anchor-ink-width: 2px;
+  --zc-anchor-link-padding: 4px 0 4px 12px;
+  --zc-anchor-font-size: var(--text-zc-sm, 13px);
+  --zc-anchor-text-color: var(--color-zc-text-regular, #606266);
+  --zc-anchor-hover-color: var(--color-zc-text-primary, #303133);
+  --zc-anchor-active-color: var(--color-zc-primary-500, #409eff);
 }
 
 .zc-anchor__link {

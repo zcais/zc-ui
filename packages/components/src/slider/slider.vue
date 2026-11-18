@@ -401,6 +401,15 @@ onBeforeUnmount(() => {
  * ============================================================ */
 
 .zc-slider {
+  /* Component-level CSS variables (global token defaults) */
+  --zc-slider-height: 6px;
+  --zc-slider-track-bg-color: var(--color-zc-fill-light, #e4e7ed);
+  --zc-slider-bar-bg-color: var(--color-zc-primary-500, #409eff);
+  --zc-slider-button-size: 20px;
+  --zc-slider-button-border-radius: 50%;
+  --zc-slider-button-bg-color: var(--color-zc-white, #fff);
+  --zc-slider-button-border-color: var(--color-zc-primary-500, #409eff);
+
   display: inline-flex;
   align-items: center;
   width: 100%;

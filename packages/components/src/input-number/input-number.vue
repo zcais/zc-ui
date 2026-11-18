@@ -153,7 +153,7 @@ function handleChange(event: Event) {
 }
 
 function handleStep(step: number) {
-if (isDisabled.value || props.readonly) return
+  if (isDisabled.value || props.readonly) return
   const current = getCurrentValue() ?? Math.max(props.min, 0)
   let next = toPrecision(current + step)
   next = clampValue(next)
@@ -253,7 +253,13 @@ defineExpose({ focus, blur, increase, decrease })
         stroke="currentColor"
         stroke-width="2"
       >
-        <path d="M5 12h14" stroke-linecap="round" />
+        <path
+          v-if="controlsPosition === 'right'"
+          d="M12 19V5M5 12l7-7 7 7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path v-else d="M5 12h14" stroke-linecap="round" />
       </svg>
     </span>
 
@@ -291,7 +297,13 @@ defineExpose({ focus, blur, increase, decrease })
         stroke="currentColor"
         stroke-width="2"
       >
-        <path d="M12 5v14M5 12h14" stroke-linecap="round" />
+        <path
+          v-if="controlsPosition === 'right'"
+          d="M12 5v14M19 12l-7 7-7-7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path v-else d="M12 5v14M5 12h14" stroke-linecap="round" />
       </svg>
     </span>
   </div>
